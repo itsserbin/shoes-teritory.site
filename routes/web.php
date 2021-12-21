@@ -111,21 +111,27 @@ Route::get('images_sitemap.xml', [HomeController::class, 'imagesSitemap'])
 Route::get('robots.txt', [HomeController::class, 'robots'])
     ->name('robots');
 
-/**
- * Открыть товарный фид для фейсбука.
- *
- * GET /xml/fb/feed/products
- */
-Route::get('xml/fb/feed/products', [HomeController::class, 'fbProductFeed'])
-    ->name('fb.product.feed');
 
-/**
- * Открыть товарный фид для prom.ua.
- *
- * GET /xml/prom/feed/products
- */
-Route::get('xml/prom/feed/products', [HomeController::class, 'promProductFeed'])
-    ->name('prom.product.feed');
+
+Route::prefix('xml')->group(function(){
+
+    Route::prefix('fb')->group(function(){
+
+        Route::get('underwear', [HomeController::class, 'xmlFbUnderwear'])
+            ->name('xml.fb.underwear');
+
+        Route::get('swimwear-and-tunics', [HomeController::class, 'xmlFbSwimwearAndTunics'])
+            ->name('xml.fb.swimwear-and-tunics');
+
+        Route::get('top-swimwear-and-tunics', [HomeController::class, 'xmlFbTopSwimwearAndTunics'])
+            ->name('xml.fb.top-swimwear-and-tunics');
+    });
+
+
+    Route::get('xml/prom/feed/products', [HomeController::class, 'promProductFeed'])
+        ->name('prom.product.feed');
+});
+
 
 /**
  * Показать страницу благодарности после отправки заявки.
