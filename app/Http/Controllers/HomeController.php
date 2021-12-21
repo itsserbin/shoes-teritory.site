@@ -247,7 +247,17 @@ class HomeController extends Controller
         $products = Products::whereHas('categories', function ($q) {
             $q->where('id', 7);
         })
-            ->where('published', 1)
+            ->where([
+                ['published', 1],
+                ['id', '!=', 139],
+                ['id', '!=', 137],
+                ['id', '!=', 124],
+                ['id', '!=', 126],
+                ['id', '!=', 134],
+                ['id', '!=', 141],
+                ['id', '!=', 133],
+                ['id', '!=', 127],
+            ])
             ->orderBy('created_at', 'desc')
             ->get();
 
