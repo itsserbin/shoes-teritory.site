@@ -4,9 +4,9 @@
         <title>Dabango Products Feed</title>
         <description>Product Feed for Facebook</description>
         <link>{{asset('/')}}</link>
-        @if(Request::is('xml.fb.underwear'))
+        @if(\Illuminate\Support\Facades\Route::is('xml.fb.underwear'))
             <atom:link href="{{route('xml.fb.underwear')}}" rel="self" type="application/rss+xml"/>
-        @elseif(Request::is('xml.fb.swimwear-and-tunics'))
+        @elseif(\Illuminate\Support\Facades\Route::is('xml.fb.swimwear-and-tunics'))
             <atom:link href="{{route('xml.fb.swimwear-and-tunics')}}" rel="self" type="application/rss+xml"/>
         @else
             <atom:link href="{{route('xml.fb.top-swimwear-and-tunics')}}" rel="self" type="application/rss+xml"/>

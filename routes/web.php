@@ -128,7 +128,7 @@ Route::prefix('xml')->group(function(){
     });
 
 
-    Route::get('xml/prom/feed/products', [HomeController::class, 'promProductFeed'])
+    Route::get('prom/feed/products', [HomeController::class, 'promProductFeed'])
         ->name('prom.product.feed');
 });
 
