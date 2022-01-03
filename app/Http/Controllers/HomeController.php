@@ -237,11 +237,16 @@ class HomeController extends Controller
         ]);
     }
 
-    /**
-     * Открыть товарный фид для фейсбука.
-     *
-     * @return Response
-     */
+   public function xmlFbAll(){
+       $products = Products::where('published',1)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->view('xml.fb-product-feed', [
+            'products' => $products
+        ])->header('Content-Type', 'application/xml');
+   }
+    
     public function xmlFbUnderwear()
     {
         $products = Products::whereHas('categories', function ($q) {
