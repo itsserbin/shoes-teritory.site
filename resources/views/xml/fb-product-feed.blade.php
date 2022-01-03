@@ -8,6 +8,8 @@
             <atom:link href="{{route('xml.fb.underwear')}}" rel="self" type="application/rss+xml"/>
         @elseif(\Illuminate\Support\Facades\Route::is('xml.fb.swimwear-and-tunics'))
             <atom:link href="{{route('xml.fb.swimwear-and-tunics')}}" rel="self" type="application/rss+xml"/>
+        @elseif(\Illuminate\Support\Facades\Route::is('xml.fb.all'))
+            <atom:link href="{{route('xml.fb.all')}}" rel="self" type="application/rss+xml"/>
         @else
             <atom:link href="{{route('xml.fb.top-swimwear-and-tunics')}}" rel="self" type="application/rss+xml"/>
         @endif
