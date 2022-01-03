@@ -117,6 +117,9 @@ Route::prefix('xml')->group(function(){
 
     Route::prefix('fb')->group(function(){
 
+        Route::get('all', [HomeController::class, 'xmlFbAll'])
+            ->name('xml.fb.all');
+        
         Route::get('underwear', [HomeController::class, 'xmlFbUnderwear'])
             ->name('xml.fb.underwear');
 
