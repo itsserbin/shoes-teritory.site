@@ -33,9 +33,9 @@ class UserSeeder extends Seeder
 //
 
         $user4 = new User();
-        $user4->name = 'Manager2';
-        $user4->email = 'Ftor1315@gmail.com';
-        $user4->password = bcrypt('secret');
+        $user4->name = 'Karina';
+        $user4->email = 'karina.dabango@gmail.com';
+        $user4->password = bcrypt('ld3ms94m22ksss');
         $user4->save();
         $user4->roles()->attach($administrator);
         $user4->permissions()->attach($admin);
