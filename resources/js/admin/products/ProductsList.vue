@@ -152,7 +152,7 @@
                         <td>{{ product.id }}</td>
                         <td class="w-25">
                             <img class="w-25"
-                                 :src="product.preview ? product.preview : '/storage/no_image.png'"
+                                 :src="product.preview ? '/storage/products/55/' + product.preview : '/storage/no_image.png'"
                                  :alt="product.title"></td>
                         <td><a :href="'/admin/products/edit/' + product.id">{{ product.h1 }}</a></td>
                         <td>{{ publishedStatus(product.published) }}</td>

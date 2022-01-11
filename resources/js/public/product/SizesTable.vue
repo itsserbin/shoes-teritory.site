@@ -24,7 +24,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <table v-if="this.sizeTable === 'null'" class="table sizes-table">
+                            <table v-if="!this.sizeTable.length" class="table sizes-table">
                                 <tr>
                                     <th>Размеры</th>
                                     <th>Чашка</th>
@@ -55,14 +55,8 @@
                                     <td>94-97</td>
                                     <td>101-105</td>
                                 </tr>
-                                <tr>
-                                    <th>XXL</th>
-                                    <td>Lorem</td>
-                                    <td>Lorem</td>
-                                    <td>Lorem</td>
-                                </tr>
                             </table>
-                            <div v-if="this.sizeTable !== 'null'" class="sizes-table">
+                            <div v-if="this.sizeTable.length" class="sizes-table">
                                 <div v-html="sizeTable"></div>
                             </div>
                         </div>
@@ -87,6 +81,7 @@ export default {
         showModalSizesFunction() {
             this.showModalSizes = !this.showModalSizes;
         }
+
     }
 }
 </script>
