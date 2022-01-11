@@ -162,7 +162,7 @@ Route::middleware('auth:api')->group(function () {
 
         /** POST /api/orders/mass */
         Route::post('mass', [OrdersController::class, 'massActions'])
-            ->name('api.clients.mass');
+            ->name('api.orders.mass');
     });
 
     /** Группа маршрутов для элементов заказа */
