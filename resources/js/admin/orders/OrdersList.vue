@@ -138,6 +138,22 @@
                                         </a>
                                     </div>
                                 </th>
+                                <th v-if="activeItem === statusTransferredToSupplier">
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <div class="mr-1">ТТН</div>
+                                        <a href="javascript:" class="text-dark" @click="sort('waybill','asc')">
+                                            <arrow-up-icon></arrow-up-icon>
+                                        </a>
+                                        <a href="javascript:" class="text-dark" @click="sort('waybill','desc')">
+                                            <arrow-down-icon></arrow-down-icon>
+                                        </a>
+                                    </div>
+                                </th>
+                                <th v-if="activeItem === statusCanceled">
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <div class="mr-1">Комментарий</div>
+                                    </div>
+                                </th>
                                 <th>
                                     <div class="d-flex align-items-center justify-content-center">
                                         <div class="mr-1">Створено</div>
@@ -184,6 +200,8 @@
                                 <td>{{ order.status }}</td>
                                 <td><a :href="'/admin/orders/edit/' + order.id">{{ order.name }}</a></td>
                                 <td><a :href="'tel:' + order.phone">{{ order.phone }}</a></td>
+                                <td v-if="activeItem === statusTransferredToSupplier">{{ order.waybill }}</td>
+                                <td v-if="activeItem === statusCanceled" class="w-25">{{ order.comment.substr(0, 30) + '...' }}</td>
                                 <td>
                                     {{ dateFormat(order.created_at) }}
                                     <hr class="m-1">
@@ -261,6 +279,7 @@ export default {
             perPage: 1,
             total: 1,
             search: null,
+            activeItem: null,
         }
     },
     mounted() {
@@ -269,6 +288,8 @@ export default {
     methods: {
         filter(value) {
             this.isLoading = true;
+            this.activeItem = value;
+
             axios.get('/api/orders/filter', {
                 params:
                     {
