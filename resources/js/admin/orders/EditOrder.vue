@@ -226,27 +226,29 @@ export default {
     },
     methods: {
         sendWaybill(phone, waybill) {
-            axios.post('/admin/notify-waybill', {
-                phone: phone,
-                waybill: waybill
-            })
-                .then(({data}) => {
-                    if (data.success === true) {
-                        this.$swal({
-                            'icon': 'success',
-                            'title': 'Отправлено!',
-                            'text': 'Номер накладной был успешно отправлен клиенту',
-                        })
-                    }
+            if (this.order.waybill !== null){
+                axios.post('/admin/notify-waybill', {
+                    phone: phone,
+                    waybill: waybill
                 })
-                .catch((response) => {
-                    this.$swal({
-                        'icon': 'error',
-                        'title': 'Ошибка',
-                        'text': 'Обратитесь к администратору',
+                    .then(({data}) => {
+                        if (data.success === true) {
+                            this.$swal({
+                                'icon': 'success',
+                                'title': 'Отправлено!',
+                                'text': 'Номер накладной успешно отправлен клиенту',
+                            })
+                        }
                     })
-                    console.log(response)
-                });
+                    .catch((response) => {
+                        this.$swal({
+                            'icon': 'error',
+                            'title': 'Ошибка',
+                            'text': 'Обратитесь к администратору',
+                        })
+                        console.log(response)
+                    });
+            }
         },
         onEdit(product_id, index) {
             this.showEditProductItem = true;
