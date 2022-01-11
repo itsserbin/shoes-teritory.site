@@ -95,7 +95,7 @@
                                        target="_blank">{{ item.product.h1 }}</a>
                                 </td>
                                 <td>
-                                    <img :src="item.product.preview"
+                                    <img :src="'/storage/products/55/' + item.product.preview"
                                          :alt="item.product.h1"
                                          class="w-50"
                                     >

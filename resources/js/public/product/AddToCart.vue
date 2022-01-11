@@ -3,7 +3,7 @@
         <div class="row mb-4">
             <div class="shop__price d-flex align-items-center">
                 <div class="col-6">
-                    <div v-if="discountPrice" class="d-flex align-items-center justify-content-evenly">
+                    <div v-if="discountPrice" class="d-flex align-items-center justify-content-evenly flex-column">
                         <div class="shop__old-price">{{ price }} грн.</div>
                         <div class="shop__actual-price">{{ discountPrice }} грн.</div>
                     </div>

@@ -20,7 +20,7 @@
     &__title {
         margin: 0 0 3px 0;
         font-weight: bold;
-        font-size: 38px;
+        font-size: 26px;
         text-transform: uppercase;
         color: #000000;
     }
@@ -68,21 +68,19 @@
     }
 
     &__actual-price {
-        grid-column: 1/2;
         font-weight: bold;
-        font-size: 36px;
+        font-size: 24px;
         color: #ff0000;
     }
 
     &__old-price {
         font-weight: 500;
-        font-size: 20px;
+        font-size: 16px;
         text-decoration-line: line-through;
         color: #A5A5A5;
     }
 
     &__price-without-discount {
-        grid-row: 1/3;
         align-self: center;
         font-weight: bold;
         font-size: 24px;
@@ -309,6 +307,16 @@
 
 @media(min-width: 768px) {
     .shop {
+        &__title {
+            font-size: 38px;
+        }
+        &__old-price{
+            font-size: 20px;
+        }
+
+        &__actual-price{
+            font-size: 36px;
+        }
         &__row {
             display: grid;
             grid-template-columns: 3fr 2fr;
