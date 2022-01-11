@@ -132,7 +132,7 @@ class ProductRepository extends CoreRepository
 
     public function getImages($id)
     {
-        return $this->model::where('id', $id)->select('id')->with('images')->first();
+        return $this->model::where('id', $id)->select('id', 'preview')->with('images')->first();
     }
 
     public function getReviews($id)
@@ -145,6 +145,7 @@ class ProductRepository extends CoreRepository
         $product = $this->model::where('id', $id)->with('categories')->first();
 
         return $this->model::where('id', '!=', $id)
+            ->where('published', 1)
             ->select(
                 'id',
                 'h1',
