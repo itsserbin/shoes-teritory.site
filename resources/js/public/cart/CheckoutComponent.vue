@@ -6,7 +6,7 @@
                     <div class="d-flex">
                         <div class="order-img w-25 d-flex">
                             <img class="w-100" :alt="item.name"
-                                 :src="item.image ? item.image : '/images/no-image.png'"
+                                 :src="item.image ? '/storage/products/350/' + item.image : '/images/no-image.png'"
                                  style="object-fit: cover;">
                         </div>
                         <div class="order-content d-flex flex-column p-3 w-100">
@@ -99,15 +99,12 @@
                         <span v-if="errors.postal_office"
                               class="has-error text-danger">Укажите отделение НоваПошта</span>
                     </div>
-                    <div class="row justify-content-center justify-content-md-end mb-5 text-center text-md-between">
-                        <div class="col-6">
-                            <button
-                                type="submit"
-                                class="btn btn-outline-success">
-                                Оформить заказ
-                            </button>
-                        </div>
-                    </div>
+                        <button
+                            type="submit"
+                            class="btn btn-outline-success btn-lg w-100"
+                        >
+                            Оформить заказ
+                        </button>
                 </form>
 
             </div>
