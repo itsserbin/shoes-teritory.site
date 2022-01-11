@@ -311,7 +311,7 @@ export default {
                     .then(({data}) => {
                         this.getProductsListSuccessResponse(data);
                         this.isLoading = false;
-                        this.endpoint = '/api/products/search/' + this.search + '?page=';
+                        this.endpoint = '/api/products/search=' + this.search + '?page=';
                     })
                     .catch((response) => this.getProductsListErrorResponse(response));
             }
