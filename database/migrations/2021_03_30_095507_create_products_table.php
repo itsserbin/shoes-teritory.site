@@ -41,6 +41,7 @@ class CreateProductsTable extends Migration
             $table->string('vendor_code')->nullable();
             $table->string('preview')->nullable();
             $table->integer('total_sales')->nullable();
+            $table->integer('sort')->nullable()->unsigned();
 
             $table->integer('viewed')->nullable();
             $table->foreignId('provider_id')

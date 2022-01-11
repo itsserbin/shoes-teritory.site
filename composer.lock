@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0addf6129bd90ec324bfed198d81fe77",
+    "content-hash": "fa5a2e0e52e2c3fdacfc26841aae131d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -194,6 +194,64 @@
                 }
             ],
             "time": "2021-09-13T08:41:34+00:00"
+        },
+        {
+            "name": "daaner/turbosms",
+            "version": "1.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/daaner/turbosms.git",
+                "reference": "31de032e0f36e7328aefb898eac9f767df6a16dc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/daaner/turbosms/zipball/31de032e0f36e7328aefb898eac9f767df6a16dc",
+                "reference": "31de032e0f36e7328aefb898eac9f767df6a16dc",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": ">=7.0",
+                "php": ">=7.2.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Daaner\\TurboSMS\\TurboSMSServiceProvider"
+                    ],
+                    "aliases": {
+                        "TurboSMS": "Daaner\\TurboSMS\\Facades\\TurboSMS"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Daaner\\TurboSMS\\Facades\\": "src/Facades",
+                    "Daaner\\TurboSMS\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daan",
+                    "email": "daan@ukr.net"
+                }
+            ],
+            "description": "TurboSMS for Laravel 7+",
+            "keywords": [
+                "daaner",
+                "laravel-sms",
+                "sms",
+                "turbosms"
+            ],
+            "support": {
+                "issues": "https://github.com/daaner/turbosms/issues",
+                "source": "https://github.com/daaner/turbosms/tree/1.11"
+            },
+            "time": "2021-04-07T12:18:29+00:00"
         },
         {
             "name": "defuse/php-encryption",

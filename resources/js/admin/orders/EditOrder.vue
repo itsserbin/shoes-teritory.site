@@ -7,9 +7,9 @@
                     <div class="form-group my-3">
                         <label class="form-label">Статус клиента:</label>
                         <select class="form-control" id="status" v-model="order.status">
-                            <option :value="statusNew">{{statusNew}}</option>
-                            <option :value="statusAwaitingDispatch">{{statusAwaitingDispatch}}</option>
-                            <option :value="statusAwaitingPrepayment">{{statusAwaitingPrepayment}}</option>
+                            <option :value="statusNew">{{ statusNew }}</option>
+                            <option :value="statusAwaitingDispatch">{{ statusAwaitingDispatch }}</option>
+                            <option :value="statusAwaitingPrepayment">{{ statusAwaitingPrepayment }}</option>
                             <option :value="statusCanceled">{{ statusCanceled }}</option>
                             <option :value="statusAtThePostOffice">{{ statusAtThePostOffice }}</option>
                             <option :value="statusDone">{{ statusDone }}</option>
@@ -56,6 +56,8 @@
                         <input type="text" class="form-control" id="waybill" name="waybill"
                                v-model="order.waybill">
                     </div>
+                    <a href="javascript:" @click.prevent="sendWaybill(order.phone,order.waybill)">Отправить ТТН
+                        клиенту</a>
                 </div>
 
                 <div class="col-12 col-md-6">
@@ -223,6 +225,29 @@ export default {
             .catch((response) => this.getOrderErrorResponse(response));
     },
     methods: {
+        sendWaybill(phone, waybill) {
+            axios.post('/admin/notify-waybill', {
+                phone: phone,
+                waybill: waybill
+            })
+                .then(({data}) => {
+                    if (data.success === true) {
+                        this.$swal({
+                            'icon': 'success',
+                            'title': 'Отправлено!',
+                            'text': 'Номер накладной был успешно отправлен клиенту',
+                        })
+                    }
+                })
+                .catch((response) => {
+                    this.$swal({
+                        'icon': 'error',
+                        'title': 'Ошибка',
+                        'text': 'Обратитесь к администратору',
+                    })
+                    console.log(response)
+                });
+        },
         onEdit(product_id, index) {
             this.showEditProductItem = true;
             this.product.id = product_id;

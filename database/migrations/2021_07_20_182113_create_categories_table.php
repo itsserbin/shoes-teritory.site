@@ -23,6 +23,7 @@ class CreateCategoriesTable extends Migration
             $table->tinyInteger('published')->nullable();
             $table->integer('created_by')->nullable();
             $table->integer('modified_by')->nullable();
+            $table->integer('sort')->nullable()->unsigned();
 
             $table->string('meta_title')->nullable();
             $table->string('meta_description')->nullable();
