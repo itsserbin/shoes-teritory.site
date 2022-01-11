@@ -97,6 +97,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
 
         Route::get('/edit/{id}', [OrdersController::class, 'edit'])
             ->name('admin.orders.edit');
+
+        Route::get('export', [OrdersController::class, 'export'])
+            ->name('admin.orders.export');
     });
 
     Route::group(['prefix' => '/bookkeeping'], function () {
