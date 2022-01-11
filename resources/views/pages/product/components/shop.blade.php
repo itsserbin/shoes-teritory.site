@@ -50,7 +50,9 @@
             @if(isset($product->characteristics))
                 <div class="col-12 col-md-6">
                     <div id="specifications" class="shop__specifications-title block-title">Характеристики</div>
-                    {!! $product->characteristics !!}
+                   <div class="characteristics-table">
+                       {!! $product->characteristics !!}
+                   </div>
                 </div>
             @endif
             <div class="col-12 col-md-6">
