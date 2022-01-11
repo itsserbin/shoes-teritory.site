@@ -1,17 +1,19 @@
 <?php
 
-use App\Http\Controllers\Api\AdminController;
-use App\Http\Controllers\Api\Bookkeeping\DailyStatisticsController;
-use App\Http\Controllers\Api\Bookkeeping\SupplierPaymentsController;
-use App\Http\Controllers\Api\CartController;
-use App\Http\Controllers\Api\CategoriesController;
-use App\Http\Controllers\Api\OrderItemsController;
-use App\Http\Controllers\Api\OrdersController;
-use App\Http\Controllers\Api\ProductsController;
-use App\Http\Controllers\Api\UploadController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Admin\Api\AdminController;
+use App\Http\Controllers\Admin\Api\Bookkeeping\DailyStatisticsController;
+use App\Http\Controllers\Admin\Api\Bookkeeping\SupplierPaymentsController;
+use App\Http\Controllers\Admin\Api\CategoriesController;
+use App\Http\Controllers\Admin\Api\ColorsController;
+use App\Http\Controllers\Admin\Api\OrderItemsController;
+use App\Http\Controllers\Admin\Api\OrdersController;
+use App\Http\Controllers\Admin\Api\ProductsController;
+use App\Http\Controllers\Admin\Api\ProvidersController;
+use App\Http\Controllers\Admin\Api\ReviewsController;
+use App\Http\Controllers\Admin\Api\UploadController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\ClientsController;
+use App\Http\Controllers\Admin\Api\ClientsController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -35,32 +37,82 @@ Route::middleware('auth:api')->group(function () {
     Route::get('dashboard', [AdminController::class, 'dashboard'])
         ->name('api.dashboard');
 
+    Route::prefix('products')->group(function () {
+
+        Route::get('/', [ProductsController::class, 'index'])
+            ->name('api.products.index');
+
+        Route::get('edit/{id}', [ProductsController::class, 'edit'])
+            ->name('api.products.edit');
+
+        Route::put('update/{id}', [ProductsController::class, 'update'])
+            ->name('api.products.update');
+
+        Route::post('create', [ProductsController::class, 'create'])
+            ->name('api.products.create');
+
+        Route::delete('destroy/{id}', [ProductsController::class, 'destroy'])
+            ->name('api.products.destroy');
+
+        Route::get('search={search}', [ProductsController::class, 'search'])
+            ->name('api.products.search');
+
+        Route::post('update-sort/{id}', [ProductsController::class, 'updateSort'])
+            ->name('api.products.updateSort');
+
+        Route::post('mass', [ProductsController::class, 'massActions'])
+            ->name('api.products.mass');
+
+        Route::prefix('colors')->group(function () {
+
+            Route::get('get/{id}', [ProductsController::class, 'getProductColors'])
+                ->name('api.products.colors.get');
+
+            Route::post('attach/{id}', [ProductsController::class, 'attachColor'])
+                ->name('api.products.colors.add');
+
+            Route::post('detach/{id}', [ProductsController::class, 'detachColor'])
+                ->name('api.products.colors.detach');
+        });
+
+        Route::prefix('images')->group(function () {
+            Route::post('upload', [UploadController::class, 'uploadProductImages'])
+                ->name('api.products.images.upload');
+        });
+
+    });
+
+    Route::prefix('colors')->group(function () {
+        Route::get('list', [ColorsController::class, 'list'])
+            ->name('api.colors.list');
+    });
+
     /** Группа маршрутов для клиентского раздела */
     Route::prefix('clients')->group(function () {
 
-        /**
-         * Получить всех клиентов.
-         *
-         * GET /api/clients
-         */
+        /** GET /api/clients */
         Route::get('/', [ClientsController::class, 'index'])
             ->name('api.clients.index');
 
-        /**
-         * Поиск клиентов по базе
-         *
-         * POST /api/clients/search/{search}
-         */
-        Route::post('/search/{search}', [ClientsController::class, 'search'])
+        /** GET /api/clients/edit/{id} */
+        Route::get('edit/{id}', [ClientsController::class, 'edit'])
+            ->name('api.clients.edit');
+
+        /** GET /api/clients/update/{id} */
+        Route::put('update/{id}', [ClientsController::class, 'update'])
+            ->name('api.clients.update');
+
+        /** POST /api/clients/search={search} */
+        Route::get('search={search}', [ClientsController::class, 'search'])
             ->name('api.clients.search');
 
-        /**
-         * Удаление клиента по ID.
-         *
-         * DELETE /api/clients/destroy/{id}
-         */
+        /** DELETE /api/clients/destroy/{id} */
         Route::delete('/destroy/{id}', [ClientsController::class, 'destroy'])
             ->name('api.clients.destroy');
+
+        /** POST /api/clients/mass */
+        Route::post('mass', [ClientsController::class, 'massActions'])
+            ->name('api.clients.mass');
     });
 
     /** Группа маршрутов для заказов */
@@ -74,12 +126,14 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/', [OrdersController::class, 'index'])
             ->name('api.orders.index');
 
+        Route::get('filter', [OrdersController::class, 'filter'])
+            ->name('api.orders.filter');
         /**
          * Поиск клиентов по базе
          *
-         * POST /api/orders/search/{search}
+         * POST /api/orders/search={search}
          */
-        Route::post('/search/{search}', [OrdersController::class, 'search'])
+        Route::get('/search={search}', [OrdersController::class, 'search'])
             ->name('api.orders.search');
 
         /**
@@ -105,6 +159,10 @@ Route::middleware('auth:api')->group(function () {
          */
         Route::put('/update/{id}', [OrdersController::class, 'update'])
             ->name('api.orders.update');
+
+        /** POST /api/orders/mass */
+        Route::post('mass', [OrdersController::class, 'massActions'])
+            ->name('api.clients.mass');
     });
 
     /** Группа маршрутов для элементов заказа */
@@ -149,6 +207,11 @@ Route::middleware('auth:api')->group(function () {
          */
         Route::get('/edit/{id}', [OrderItemsController::class, 'edit'])
             ->name('api.order-items.edit');
+    });
+
+    Route::prefix('providers')->group(function () {
+        Route::get('list', [ProvidersController::class, 'list'])
+            ->name('api.providers.list');
     });
 
     /** Группа маршрутов для бухгалтерии */
@@ -261,129 +324,62 @@ Route::middleware('auth:api')->group(function () {
          */
         Route::delete('destroy/{id}', [CategoriesController::class, 'destroy'])
             ->name('api.categories.destroy');
+
+        Route::get('search={search}', [CategoriesController::class, 'search'])
+            ->name('api.categories.search');
+
+        Route::post('update-sort/{id}', [CategoriesController::class, 'updateSort'])
+            ->name('api.categories.updateSort');
+
+        Route::post('mass', [CategoriesController::class, 'massActions'])
+            ->name('api.categories.mass');
+    });
+
+    Route::prefix('reviews')->group(function () {
+
+        Route::get('/', [ReviewsController::class, 'index'])
+            ->name('api.reviews.index');
+
+        Route::get('edit/{id}', [ReviewsController::class, 'edit'])
+            ->name('api.reviews.edit');
+
+        Route::put('update/{id}', [ReviewsController::class, 'update'])
+            ->name('api.reviews.update');
+
+        Route::delete('destroy/{id}', [ReviewsController::class, 'destroy'])
+            ->name('api.reviews.destroy');
+
+        Route::post('accept/{id}', [ReviewsController::class, 'accept'])
+            ->name('api.reviews.accept');
+
+        Route::get('search={search}', [ReviewsController::class, 'search'])
+            ->name('api.reviews.search');
+
+        Route::post('mass', [ReviewsController::class, 'massActions'])
+            ->name('api.reviews.mass');
     });
 
     /** Группа маргрутов для изображений */
     Route::prefix('images')->group(function () {
 
-        /** Группа маршрутов для превью */
-        Route::prefix('preview-update')->group(function () {
+        Route::delete('destroy/{id}', [UploadController::class, 'destroyImage'])
+            ->name('api.images.destroy');
 
-            /**
-             * Загрузить превью для категорий.
-             *
-             * POST /api/images/preview-update/categories
-             */
-            Route::post('categories', [UploadController::class, 'uploadCategoryPreview'])
-                ->name('api.images.upload.preview');
-        });
+        Route::post('preview-upload', [UploadController::class, 'uploadPreview'])
+            ->name('api.images.uploadPreview');
+
+//        /** Группа маршрутов для превью */
+//        Route::prefix('preview-update')->group(function () {
+//
+//            /**
+//             * Загрузить превью для категорий.
+//             *
+//             * POST /api/images/preview-update/categories
+//             */
+//            Route::post('categories', [UploadController::class, 'uploadCategoryPreview'])
+//                ->name('api.images.upload.preview');
+//        });
     });
 });
 
-/** Группа маршрутов API для неавторизованных пользователей */
-Route::middleware('api')->group(function () {
-
-    /** Группа маршрутов для товаров */
-    Route::prefix('product')->group(function () {
-
-        /**
-         * Вывести все товары в пагинации.
-         *
-         * GET /api/product
-         */
-        Route::get('/', [ProductsController::class, 'index'])
-            ->name('api.product.index');
-
-        /**
-         * Получить товар по ID.
-         *
-         * GET /api/product/show/{id}
-         */
-        Route::get('show/{id}', [ProductsController::class, 'showProductApi'])
-            ->name('api.products.show');
-
-        /**
-         * Получить цвета по ID товара.
-         *
-         * GET /api/product/colors/{id}
-         */
-        Route::get('colors/{id}', [ProductsController::class, 'showProductColorsApi'])
-            ->name('api.product.colors.show');
-    });
-
-    /** Группа маршрутов для корзины */
-    Route::prefix('cart')->group(function () {
-
-        /**
-         * Показать товары в корзину.
-         *
-         * GET /api/cart/list
-         */
-        Route::get('list', [CartController::class, 'list'])
-            ->name('api.cart.list');
-
-        /**
-         * Добавить товар в корзину.
-         *
-         * POST /api/cart/add
-         */
-        Route::post('add', [CartController::class, 'add'])
-            ->name('api.cart.add');
-
-        /**
-         * Удалить товар из корзины.
-         *
-         * DELETE /api/cart/delete/{item}
-         */
-        Route::delete('delete/{item}', [CartController::class, 'delete'])
-            ->name('api.cart.delete');
-
-        /**
-         * Обновить инфу в корзине.
-         *
-         * POST /api/cart/update/
-         */
-        Route::post('update', [CartController::class, 'update'])
-            ->name('api.cart.update');
-    });
-
-    /** Группа маршрутов для заказов */
-    Route::prefix('order')->group(function () {
-
-        /**
-         * Создание нового заказа.
-         *
-         * POST /api/order/create
-         */
-        Route::post('create', [OrdersController::class, 'create'])
-            ->name('api.orders.create');
-    });
-
-    /** Группа маршрутов для категорий */
-    Route::prefix('category')->group(function () {
-
-        /**
-         * Получить категории для вывода на продакшн.
-         *
-         * GET /api/category/all-on-prod
-         */
-        Route::get('all-on-prod', [CategoriesController::class, 'getAllOnProd'])
-            ->name('api.category.getAllOnProd');
-
-        /**
-         * Получить отдельную категорию.
-         *
-         * GET /api/category/{slug}
-         */
-        Route::get('{slug}', [CategoriesController::class, 'getCategoryOnProduction'])
-            ->name('api.category.getCategoryOnProduction');
-
-        /**
-         * Получить товары из определенной категории..
-         *
-         * GET /api/category/products/{slug}
-         */
-        Route::get('products/{slug}', [CategoriesController::class, 'getCategoryProductsOnProduction'])
-            ->name('api.category.getCategoryProductsOnProduction');
-    });
-});
+require __DIR__ . '/api-v1.php';

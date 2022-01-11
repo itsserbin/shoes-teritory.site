@@ -33,4 +33,9 @@ class ColorsRepository extends CoreRepository
     {
         return $this->startConditions()->find($id);
     }
+
+    public function getList()
+    {
+        return $this->model->orderBy('created_at', 'desc')->get();
+    }
 }

@@ -4,20 +4,14 @@ namespace App\Repositories;
 
 use App\Models\Clients;
 use App\Models\Clients as Model;
+use App\Models\Enum\MassActions;
 use App\Models\Products;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use PhpParser\Node\Expr\AssignOp\Concat;
 
-/**
- * Class ArticleRepository
- *
- * @package App\Repositories
- */
 class ClientsRepository extends CoreRepository
 {
-    /** @var OrdersRepository */
-    private $OrdersRepository;
 
     /**
      * ClientsController constructor.
@@ -25,7 +19,6 @@ class ClientsRepository extends CoreRepository
     public function __construct()
     {
         parent::__construct();
-        $this->OrdersRepository = app(OrdersRepository::class);
     }
 
     /**
@@ -51,11 +44,13 @@ class ClientsRepository extends CoreRepository
     /**
      * Получить все продукты вывести в пагинации по 15 шт.
      *
-     * @param int|null $perPage
+     * @param string $sort
+     * @param string $param
+     * @param int $perPage
      *
      * @return LengthAwarePaginator
      */
-    public function getAllWithPaginate($perPage = null)
+    public function getAllWithPaginate(string $sort = 'id', string $param = 'desc', int $perPage = 15): LengthAwarePaginator
     {
         $columns = [
             'id',
@@ -72,7 +67,7 @@ class ClientsRepository extends CoreRepository
         return $this
             ->startConditions()
             ->select($columns)
-            ->orderBy('created_at', 'desc')
+            ->orderBy($sort, $param)
             ->paginate($perPage);
     }
 
@@ -181,5 +176,18 @@ class ClientsRepository extends CoreRepository
         $result->update();
 
         return $result;
+    }
+
+    public function massActions($action, $data): bool
+    {
+        if ($action == MassActions::DESTROY) {
+            foreach ($data as $key => $item) {
+                if ($key !== MassActions::DESTROY) {
+                    $this->model::destroy($item);
+                }
+            }
+            return true;
+        }
+        return false;
     }
 }

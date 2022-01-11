@@ -13,11 +13,9 @@ class CreateProductsColors extends Migration
      */
     public function up()
     {
-        Schema::create('products_colors', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('color_id')->references('id')->on('colors')->onDelete('cascade');
-            $table->foreignId('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->timestamps();
+        Schema::create('product_color', function (Blueprint $table) {
+            $table->integer('product_id');
+            $table->integer('color_id');
         });
     }
 
@@ -28,6 +26,6 @@ class CreateProductsColors extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products_colors');
+        Schema::dropIfExists('product_color');
     }
 }

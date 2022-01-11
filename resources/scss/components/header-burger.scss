@@ -3,6 +3,7 @@
     width: 25px !important;
     height: 18px;
     transition: all 0.3s ease 0s;
+    z-index: 51;
     &::before,
     &::after {
         content: '';

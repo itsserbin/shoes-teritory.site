@@ -13,6 +13,7 @@ class Categories extends Model
     protected $fillable = [
         'title',
         'slug',
+        'sort',
         'parent_id',
         'published',
         'preview',

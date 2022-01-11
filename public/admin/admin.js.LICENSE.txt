@@ -35,12 +35,6 @@
  * Date: 2021-03-02T17:08Z
  */
 
-/*!
- * vue-swal v1.0.0
- * (c) 2018 Antério Vieira
- * Released under the MIT License.
- */
-
 /*! @preserve
  * numeral.js
  * version : 2.0.6

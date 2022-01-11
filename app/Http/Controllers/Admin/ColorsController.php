@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Colors;
 use Illuminate\Http\Request;
 
-class ColorsController extends Controller
+class ColorsController extends BaseController
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
    public function index()
    {
        $colors = Colors::all();

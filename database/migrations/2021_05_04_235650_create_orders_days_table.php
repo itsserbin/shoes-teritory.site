@@ -26,6 +26,20 @@ class CreateOrdersDaysTable extends Migration
             $table->string('at_the_post_office')->nullable();
             $table->string('in_process')->nullable();
             $table->string('price_per_application')->nullable();
+            $table->string('transferred_to_supplier')->nullable();
+            $table->string('canceled_orders_rate')->nullable();
+            $table->string('received_parcel_ratio')->nullable();
+            $table->string('client_cost')->nullable();
+            $table->string('profit')->nullable();
+            $table->string('marginality')->nullable();
+            $table->string('investor_profit')->nullable();
+            $table->string('returned_orders_ratio')->nullable();
+            $table->string('manager_salary')->nullable();
+            $table->string('costs')->nullable();
+            $table->string('net_profit')->nullable();
+            $table->string('awaiting_dispatch')->nullable();
+            $table->string('awaiting_prepayment')->nullable();
+            $table->string('on_the_road')->nullable();
             $table->timestamps();
         });
     }

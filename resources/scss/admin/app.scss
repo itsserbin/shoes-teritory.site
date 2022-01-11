@@ -1,0 +1,13 @@
+@import '~sweetalert2/dist/sweetalert2.min.css';
+
+@import '~bootstrap/dist/css/bootstrap.css';
+@import '~bootstrap-vue/dist/bootstrap-vue.css';
+
+@import '@mathieustan/vue-datepicker/dist/vue-datepicker.min.css';
+
+@import "../components/loader";
+
+.active-modal {
+    display: block;
+    background: rgba(0, 0, 0, .9);
+}

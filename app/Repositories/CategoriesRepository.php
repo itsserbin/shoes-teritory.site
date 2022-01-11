@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Categories as Model;
+use App\Models\Enum\MassActions;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
@@ -40,23 +41,26 @@ class CategoriesRepository extends CoreRepository
      */
     public function findFySlug($slug)
     {
-        return $this->startConditions()->where('slug',$slug)->first();
+        return $this->startConditions()->where('slug', $slug)->first();
     }
 
     /**
      * Получить все категории и вывести в пагинации по 15 шт.
      *
-     * @param int|null $perPage
+     * @param string $sort
+     * @param string $param
+     * @param int $perPage
      *
      * @return LengthAwarePaginator
      */
-    public function getAllWithPaginate($perPage = null)
+    public function getAllWithPaginate(string $sort = 'id', string $param = 'desc', int $perPage = 15)
     {
         return $this
             ->model
             ->select(
                 'id',
                 'title',
+                'sort',
                 'slug',
                 'parent_id',
                 'published',
@@ -65,9 +69,9 @@ class CategoriesRepository extends CoreRepository
                 'meta_keyword',
                 'created_at',
                 'updated_at',
-                'modified_by',
+                'preview',
             )
-            ->orderBy('created_at', 'desc')
+            ->orderBy($sort, $param)
             ->paginate($perPage);
     }
 
@@ -124,7 +128,7 @@ class CategoriesRepository extends CoreRepository
             ->startConditions()
             ->select($columns)
             ->where('published', true)
-            ->orderBy('created_at','desc')
+            ->orderBy('created_at', 'desc')
             ->get();
     }
 
@@ -137,15 +141,14 @@ class CategoriesRepository extends CoreRepository
     public function create(array $data)
     {
         $model = new $this->model;
-        $model->title = $data[0]['title'];
-        $model->slug = $data[0]['slug'];
-        $model->parent_id = $data[0]['parent_id'];
-        $model->published = $data[0]['published'];
-        $model->meta_title = $data[0]['meta_title'];
-        $model->meta_description = $data[0]['meta_description'];
-        $model->meta_keyword = $data[0]['meta_keyword'];
-        $model->preview = $data[0]['preview'];
-        $model->created_by = (int)$data[1]['userName'];
+        $model->title = $data['title'];
+        $model->slug = $data['slug'];
+        $model->parent_id = $data['parent_id'];
+        $model->published = $data['published'];
+        $model->meta_title = $data['meta_title'];
+        $model->meta_description = $data['meta_description'];
+        $model->meta_keyword = $data['meta_keyword'];
+        $model->preview = $data['preview'];
 
         return $model->save();
     }
@@ -160,15 +163,14 @@ class CategoriesRepository extends CoreRepository
     public function update(int $id, array $data)
     {
         return $this->model->find($id)->update([
-            'title' => $data[0]['title'],
-            'slug' => $data[0]['slug'],
-            'parent_id' => $data[0]['parent_id'],
-            'published' => $data[0]['published'],
-            'meta_title' => $data[0]['meta_title'],
-            'meta_description' => $data[0]['meta_description'],
-            'meta_keyword' => $data[0]['meta_keyword'],
-            'preview' => $data[0]['preview'],
-            'modified_by' => (int)$data[1]['userName'],
+            'title' => $data['title'],
+            'slug' => $data['slug'],
+            'parent_id' => $data['parent_id'],
+            'published' => $data['published'],
+            'meta_title' => $data['meta_title'],
+            'meta_description' => $data['meta_description'],
+            'meta_keyword' => $data['meta_keyword'],
+            'preview' => $data['preview'],
         ]);
     }
 
@@ -215,5 +217,47 @@ class CategoriesRepository extends CoreRepository
             ->first();
 
         return $category->products()->paginate($perPage);
+    }
+
+    public function search($search, $perPage = 15)
+    {
+        return $this->model::where('id', 'LIKE', "%$search%")
+            ->orWhere('title', 'LIKE', "%$search%")
+            ->orWhere('slug', 'LIKE', "%$search%")
+            ->orWhere('meta_title', 'LIKE', "%$search%")
+            ->paginate($perPage);
+    }
+
+    public function updateSort(int $id, $value)
+    {
+        return $this->model::where('id', $id)->update(['sort' => $value ?? null]);
+    }
+
+    public function massActions($action, $data): bool
+    {
+        if ($action == MassActions::NOT_PUBLISHED) {
+            foreach ($data as $key => $item) {
+                if ($key !== MassActions::NOT_PUBLISHED) {
+                    $this->model->where('id', $item)->update(['published' => 0]);
+                }
+            }
+
+            return true;
+        } elseif ($action == MassActions::PUBLISHED) {
+            foreach ($data as $key => $item) {
+                if ($key !== MassActions::PUBLISHED) {
+                    $this->model->where('id', $item)->update(['published' => 1]);
+                }
+            }
+            return true;
+        } elseif ($action == MassActions::DESTROY) {
+            foreach ($data as $key => $item) {
+                if ($key !== MassActions::DESTROY) {
+                    $this->model::destroy($item);
+                }
+            }
+            return true;
+        }
+        return false;
     }
 }

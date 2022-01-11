@@ -100,7 +100,7 @@ class ShoppingCart
                     'id' => $item->product->id,
                     'alias' => route('product', ['alias' => $item->product->alias, 'id' => $item->product->id]),
                     'name' => $item->product->h1,
-                    'image' => asset($item->product->preview),
+                    'image' => $item->product->preview,
                     'count' => $item->count,
                     'size' => $item->size,
                     'color' => $item->color,

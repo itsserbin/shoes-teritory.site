@@ -15,20 +15,40 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->boolean('status');
-            $table->boolean('s')->nullable();
-            $table->boolean('m')->nullable();
-            $table->boolean('l')->nullable();
-            $table->boolean('xl')->nullable();
-            $table->boolean('xxl')->nullable();
-            $table->text('title')->nullable();
+            $table->boolean('published')->default('0');
+            $table->string('status');
+
+            $table->boolean('xs')->nullable();
+            $table->boolean('s')->default('0');
+            $table->boolean('m')->default('0');
+            $table->boolean('l')->default('0');
+            $table->boolean('xl')->default('0');
+            $table->boolean('xxl')->default('0');
+            $table->boolean('xxxl')->default('0');
+
+            $table->string('title')->nullable();
+            $table->string('h1')->nullable();
+
+            $table->text('size_table')->nullable();
+
+            $table->text('price')->nullable();
+            $table->text('discount_price')->nullable();
+            $table->integer('trade_price')->nullable();
+
             $table->text('description')->nullable();
-            $table->text('h1')->nullable();
             $table->text('content')->nullable();
             $table->text('characteristics')->nullable();
-            $table->text('cost')->nullable();
-            $table->text('sale_cost')->nullable();
-            $table->text('preview')->nullable();
+            $table->string('vendor_code')->nullable();
+            $table->string('preview')->nullable();
+            $table->integer('total_sales')->nullable();
+
+            $table->integer('viewed')->nullable();
+            $table->foreignId('provider_id')
+                ->nullable()
+                ->constrained('providers')
+                ->references('id')
+                ->onDelete('set null');
+
             $table->timestamps();
         });
     }

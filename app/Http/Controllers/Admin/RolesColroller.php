@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Permission;
 use App\Models\Role;
-use App\Models\User;
-use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 use App\Traits\HasRolesAndPermissions;
 
-class RolesColroller extends Controller
+class RolesColroller extends BaseController
 {
     use HasRolesAndPermissions;
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function index()
     {
-
-
         $roles = Role::all();
         return view('admin.options.roles.index', [
             'roles' => $roles

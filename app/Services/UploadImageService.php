@@ -12,26 +12,44 @@ use Intervention\Image\Facades\Image;
  */
 class UploadImageService
 {
+
     /**
      * Загрузчик превью товара.
      *
-     * @param $request
+     * @param $data
      * @return string
      */
-    public function uploadCategoryPreview($request)
+    public function uploadCategoryPreview($data)
     {
-        $preview = $request['preview'];
+        $preview = $data['preview'];
         $filename = $preview->getClientOriginalName();
 
+        Image::make($preview)->resize(350, null, function ($constraint) {
+            $constraint->aspectRatio();
+        })->save('storage/preview/' . $filename);
 
+        return asset('/storage/preview/' . $filename);
+    }
 
-        try {
-//            Image::make($preview)->save(public_path('storage/category/') . $filename);
-            $preview->move(public_path().'/storage/category', $filename);
-        } catch (\Throwable $exception) {
-            Log::error($exception->getMessage());
-        }
+    public function uploadProductImages($data)
+    {
+        $image = $data['image'];
+        $filename = $image->getClientOriginalName();
 
-        return asset('storage/category/' . $filename);
+        Image::make($image)->resize(55, null, function ($constraint) {
+            $constraint->aspectRatio();
+        })->save('storage/products/55/' . $filename);
+
+        Image::make($image)->resize(350, null, function ($constraint) {
+            $constraint->aspectRatio();
+        })->save('storage/products/350/' . $filename);
+
+        Image::make($image)->resize(500, null, function ($constraint) {
+            $constraint->aspectRatio();
+        })->save('storage/products/500/' . $filename);
+
+        Image::make($image)->save('storage/products/' . $filename);
+
+        return $filename;
     }
 }

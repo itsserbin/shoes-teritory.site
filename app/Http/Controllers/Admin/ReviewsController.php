@@ -2,49 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Reviews;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 
-class ReviewsController extends Controller
+class ReviewsController extends BaseController
 {
-    public function index()
+    public function __construct()
     {
-        $reviews = Reviews::orderBy('created_at', 'desc')->paginate(15);
-
-        return view('admin.reviews.index',[
-            'reviews' => $reviews,
-        ]);
+        parent::__construct();
     }
 
-    public function edit($id)
+    public function index(): Factory|View|Application
     {
-        $review = Reviews::find($id);
-        return view('admin.reviews.edit',[
-            'review' => $review
-        ]);
+        return view('admin.reviews.index');
     }
 
-    public function update($id, Request $request)
+    public function edit($id): Factory|View|Application
     {
-        $review = Reviews::find($id);
-        $data = $request->all();
-        $review->update($data);
-
-        return back()->with('success', 'Информация успешно сохранена');
-    }
-
-    public function destroy($id)
-    {
-        $review = Reviews::destroy($id);
-
-        return back()->with('success', 'Отзыв успешно удален');
-    }
-
-    public function reviewsAccepted($id)
-    {
-        Reviews::where('id', $id)->update(['status' => true]);
-
-        return back()->with('success', 'Отзыв опубликован');
+        return view('admin.reviews.edit');
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Bookkeeping\Providers;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -22,7 +23,6 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  * @property Reviews $reviews
  * @property Orders $orders
  */
-
 class Products extends Model
 {
     use HasFactory;
@@ -38,6 +38,7 @@ class Products extends Model
         'size_table',
         'price',
         'sale_price',
+        'published',
         'discount_price',
         'preview',
         'images',
@@ -50,7 +51,7 @@ class Products extends Model
      *
      * @return HasMany
      */
-    public function ProductsPhoto()
+    public function images()
     {
         return $this->hasMany('App\Models\ProductsPhoto', 'product_id', 'id');
     }
@@ -62,17 +63,17 @@ class Products extends Model
      */
     public function Providers()
     {
-        return $this->belongsTo(Providers::class,'provider_id');
+        return $this->belongsTo(Providers::class, 'provider_id');
     }
 
     /**
      * Relations with colors.
      *
-     * @return HasMany
+     * @return BelongsToMany
      */
-    public function ProductsColor()
+    public function colors(): BelongsToMany
     {
-        return $this->hasMany(ProductsColor::class, 'product_id');
+        return $this->belongsToMany(Colors::class, 'product_color', 'product_id', 'color_id');
     }
 
     /**
@@ -92,7 +93,7 @@ class Products extends Model
      */
     public function Reviews()
     {
-        return $this->hasMany(Reviews::class,'product_id');
+        return $this->hasMany(Reviews::class, 'product_id');
     }
 
     /**
@@ -102,7 +103,7 @@ class Products extends Model
      */
     public function Order()
     {
-        return $this->hasOne(Orders::class,'product_id');
+        return $this->hasOne(Orders::class, 'product_id');
     }
 
     /**
@@ -112,6 +113,6 @@ class Products extends Model
      */
     public function categories()
     {
-        return $this->morphToMany('App\Models\Categories','categoryables');
+        return $this->morphToMany('App\Models\Categories', 'categoryables');
     }
 }
