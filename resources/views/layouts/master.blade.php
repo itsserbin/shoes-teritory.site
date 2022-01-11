@@ -10,7 +10,20 @@
         <span class="icon-arrow-up2"></span>
     </button>
     <header class="header">
-        @include('components.header')
+        <header-component
+            index-route="{{route('home')}}"
+            exchange-policy-route="{{route('exchange-policy')}}"
+            privacy-policy-route="{{route('privacy-policy')}}"
+            logo-app="{{asset('storage/img/content/logo.png')}}"
+            app-name="{{env('APP_NAME')}}"
+            app-phone="{{$phone}}"
+            app-email="{{$email}}"
+            app-facebook="{{$facebook}}"
+            app-instagram="{{$instagram}}"
+            app-schedule="{!! $schedule !!}"
+            app-telegram="{{$telegram}}"
+            app-viber="{{$viber}}"
+        ></header-component>
     </header>
     <main class="main">
         @include('components.modal-burger-menu')

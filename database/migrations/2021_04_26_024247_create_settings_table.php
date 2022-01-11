@@ -24,9 +24,9 @@ class CreateSettingsTable extends Migration
             $table->string('viber')->nullable();
             $table->string('whatsapp')->nullable();
             $table->string('fb_messenger')->nullable();
-            $table->string('head_scripts')->nullable();
-            $table->string('after_body_scripts')->nullable();
-            $table->string('footer_scripts')->nullable();
+            $table->text('head_scripts')->nullable();
+            $table->text('after_body_scripts')->nullable();
+            $table->text('footer_scripts')->nullable();
             $table->timestamps();
         });
     }

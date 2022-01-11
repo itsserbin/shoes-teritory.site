@@ -44,25 +44,16 @@
 		font-size: 18px;
 		text-decoration-line: line-through;
 		color: #A5A5A5;
-		&:after {
-			content: " ₴";
-		}
 	}
 	&__actual-price {
 		font-weight: bold;
 		font-size: 22px;
 		color: #ff0000;
-		&:after {
-			content: " ₴";
-		}
 	}
 	&__price-without-discount {
 		font-weight: bold;
 		font-size: 18px;
 		color: #000;
-		&::after {
-			content: '₴';
-		}
 	}
 	&__button {
 		display: block;

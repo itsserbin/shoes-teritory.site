@@ -23,7 +23,9 @@ class CreateOrdersTable extends Migration
             $table->string('sizes')->nullable();
             $table->string('colors')->nullable();
             $table->string('city')->nullable();
-            $table->string('nova_poshta')->nullable();
+            $table->string('waybill')->nullable();
+            $table->string('postal_office')->nullable();
+
             $table->text('comment')->nullable();
 
             $table->foreignId('product_id')->nullable()->references('id')->on('products')->onDelete('set null');

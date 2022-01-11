@@ -1,24 +1,15 @@
 require('../bootstrap')
 
 import Vue from "vue";
-import VueSwal from 'vue-swal'
-import Paginate from 'vuejs-paginate'
-
-import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-Vue.use(BootstrapVue)
-Vue.use(IconsPlugin)
-
+import VueSweetalert2 from 'vue-sweetalert2';
+import Pagination from 'vue-pagination-2';
 import VueDatePicker from '@mathieustan/vue-datepicker';
-import '@mathieustan/vue-datepicker/dist/vue-datepicker.min.css';
 
+Vue.use(VueSweetalert2);
 Vue.use(VueDatePicker);
-
-Vue.use(VueSwal)
 Vue.use(require('vue-moment'));
-Vue.component('paginate', Paginate)
 
+Vue.component('pagination', Pagination);
 
 let numeral = require("numeral");
 
@@ -29,27 +20,55 @@ Vue.filter("formatPercent", function (value) {
     return numeral(value).format('0.000%');
 });
 
-
-// require('bootstrap/dist/js/bootstrap.min')
-// require('bootstrap/dist/css/bootstrap.css')
-require('popper.js')
-
+// Get components
 Vue.component('loader', require('../components/LoaderComponent').default);
-Vue.component('admin-dashboard', require('./pages/AdminDashboard').default);
-Vue.component('clients-list', require('./pages/clients/ClientsList.vue').default);
-Vue.component('categories-list', require('./pages/categories/CategoriesList').default);
-Vue.component('category-create', require('./pages/categories/CategoryCreate').default);
-Vue.component('category-edit', require('./pages/categories/EditCategory').default);
-Vue.component('orders-list', require('./pages/orders/OrdersList.vue').default);
-Vue.component('order-edit', require('./pages/orders/EditOrder').default);
-Vue.component('bookkeeping-daily-statistics', require('./pages/bookkeeping/DailyStatistics.vue').default);
-Vue.component('supplier-payments', require('./pages/bookkeeping/SupplierPaymentsList').default);
+
+// Get icons
+Vue.component('arrow-up-icon', require('../components/icons/ArrowUpIcon').default);
+Vue.component('arrow-down-icon', require('../components/icons/ArrowDown').default);
+Vue.component('edit-icon', require('../components/icons/EditIcon').default);
+Vue.component('destroy-icon', require('../components/icons/DestroyIcon').default);
+Vue.component('save-icon', require('../components/icons/SaveIcon').default);
+Vue.component('backspace-icon', require('../components/icons/BackspaceIcon').default);
+Vue.component('arrows-angle-expand-icon', require('../components/icons/ArrowsAngleExpand').default);
+Vue.component('telephone-icon', require('../components/icons/TelephoneIcon').default);
+
+Vue.component('admin-dashboard', require('./AdminDashboard').default);
+
+Vue.component('reviews-list', require('./reviews/ReviewsList').default);
+Vue.component('edit-review', require('./reviews/EditReview').default);
+
+Vue.component('products-list', require('./products/ProductsList').default);
+Vue.component('edit-product', require('./products/EditProduct').default);
+Vue.component('create-product', require('./products/CreateProduct').default);
+
+Vue.component('clients-list', require('./clients/ClientsList.vue').default);
+Vue.component('edit-client', require('./clients/EditClient').default);
+
+Vue.component('categories-list', require('./categories/CategoriesList').default);
+Vue.component('category-create', require('./categories/CategoryCreate').default);
+Vue.component('category-edit', require('./categories/EditCategory').default);
+
+Vue.component('orders-list', require('./orders/OrdersList.vue').default);
+Vue.component('order-edit', require('./orders/EditOrder').default);
+
+Vue.component('bookkeeping-daily-statistics', require('./bookkeeping/DailyStatistics.vue').default);
+Vue.component('supplier-payments', require('./bookkeeping/SupplierPaymentsList').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
+Vue.prototype.$tinyapi = 'ufqphs7puyg4ij1mc3c61o7isu5mxekk5x9yygffpdo89ava';
+Vue.prototype.$tinySettings = {plugins: 'table', height: 300};
+Vue.prototype.$paginateOptions = {
+    theme: 'bootstrap4',
+    texts: {
+        count: 'Показано {from}-{to} / {count} записей|{count} записей|Одна запись'
+    },
+};
 
 const app = new Vue({
     el: '#app',

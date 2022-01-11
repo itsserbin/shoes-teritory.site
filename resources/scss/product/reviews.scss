@@ -6,7 +6,7 @@
 }
 .reviews-slider {
     margin: 30px auto;
-    max-width: 300px;
+    //max-width: 300px;
     &__slide {
         padding: 0 15px;
         position: relative;
@@ -49,6 +49,6 @@
         padding: 0;
     }
     .reviews-slider {
-        width: 250px;
+        width: 100%;
     }
 }

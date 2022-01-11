@@ -11,13 +11,13 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js').vue()
+mix.js('resources/js/public/app.js', 'public/js').vue()
 
     /**
      * Admin JS and CSS.
      */
     .js('resources/js/admin/admin.js', 'public/admin').vue()
-    .sass('resources/scss/admin.scss', 'public/admin')
+    .sass('resources/scss/admin/app.scss', 'public/admin')
 
     /**
      * Production JS and CSS

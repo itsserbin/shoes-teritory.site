@@ -15,10 +15,11 @@ class CreateProfitsTable extends Migration
     {
         Schema::create('profits', function (Blueprint $table) {
             $table->id();
-            $table->text('cost');
-            $table->text('profit');
-            $table->text('marginality');
-            $table->text('turnover');
+            $table->date('date')->nullable();
+            $table->string('cost')->nullable();
+            $table->string('profit')->nullable();
+            $table->string('marginality')->nullable();
+            $table->string('turnover')->nullable();
             $table->timestamps();
         });
     }

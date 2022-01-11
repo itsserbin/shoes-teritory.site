@@ -21,6 +21,7 @@ class CreateCostsTable extends Migration
             $table->text('total');
             $table->text('comment')->nullable();
             $table->foreignId('user_id')->nullable()->references('id')->on('users')->onDelete('set null');
+            $table->date('date')->nullable();
             $table->timestamps();
         });
     }

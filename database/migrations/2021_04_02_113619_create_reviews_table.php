@@ -15,10 +15,16 @@ class CreateReviewsTable extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
+            $table->boolean('status')->default(false);
             $table->text('name');
             $table->text('comment');
-            $table->text('product_id');
-            $table->boolean('status')->default(false);
+
+            $table->unsignedBigInteger('product_id')->unsigned()->nullable();
+
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

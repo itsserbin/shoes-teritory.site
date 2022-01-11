@@ -3,19 +3,11 @@
 @section('header','Карточка клиента')
 
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <form action="{{route('admin.clients.update', $client->id)}}" method="post"
-                      enctype="multipart/form-data"
-                      multiple>
-                    @csrf
-                    @method('PATCH')
-                    {{-- Form include --}}
-                    @include('admin.clients.partials.form')
-                    <button type="submit" class="btn btn-success">Сохранить</button>
-                </form>
-            </div>
-        </div>
-    </div>
+    <edit-client
+        new-status="{{\App\Models\Enum\ClientStatus::NEW_STATUS}}"
+        experienced-status="{{\App\Models\Enum\ClientStatus::EXPERIENCED_STATUS}}"
+        return-status="{{\App\Models\Enum\ClientStatus::RETURN_STATUS}}"
+        top-status="{{\App\Models\Enum\ClientStatus::TOP_STATUS}}"
+        black-list-status="{{\App\Models\Enum\ClientStatus::BLACK_LIST_STATUS}}"
+    ></edit-client>
 @endsection

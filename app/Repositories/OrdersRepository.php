@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Enum\MassActions;
 use App\Models\Orders as Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -35,18 +36,20 @@ class OrdersRepository extends CoreRepository
     {
         return $this
             ->startConditions()
-            ->with('Product', 'items.product')
+            ->with('items.product.providers')
             ->find($id);
     }
 
     /**
      * Вывести все продукты в пагинации по 15 шт.
      *
-     * @param int|null $perPage
+     * @param string $sort
+     * @param string $param
+     * @param int $perPage
      *
      * @return LengthAwarePaginator
      */
-    public function getAllWithPaginate($perPage = null)
+    public function getAllWithPaginate(string $sort = 'id', string $param = 'desc', int $perPage = 15): LengthAwarePaginator
     {
         $columns = [
             'id',
@@ -66,187 +69,16 @@ class OrdersRepository extends CoreRepository
             ->startConditions()
             ->with('Clients', 'Product')
             ->select($columns)
-            ->orderBy('created_at', 'desc')
+            ->orderBy($sort, $param)
             ->paginate($perPage);
     }
 
     /**
-     * Вывести новые заказы в пагинацию по 15 шт.
-     *
-     * @param null $perPage
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     */
-    public function getNewOrdersWithPaginate($perPage = null)
-    {
-        $columns = [
-            'id',
-            'status',
-            'name',
-            'phone',
-            'product_id',
-            'sale_price',
-            'created_at',
-        ];
-
-        return $this
-            ->startConditions()
-            ->where('status', 'Новый')
-            ->with('Product')
-            ->select($columns)
-            ->orderBy('created_at', 'desc')
-            ->paginate($perPage);
-    }
-
-    /**
-     * Вывести заказы в процессе в пагинацию по 15 шт.
-     *
-     * @param null $perPage
+     * @param array $data
+     * @param int $perPage
      * @return mixed
      */
-    public function getProcessOrdersWithPaginate($perPage = null)
-    {
-        $columns = [
-            'id',
-            'status',
-            'name',
-            'phone',
-            'product_id',
-            'sale_price',
-            'created_at',
-        ];
-
-        return $this
-            ->startConditions()
-            ->where('status', 'В процессе')
-            ->with('Clients', 'Product')
-            ->select($columns)
-            ->orderBy('created_at', 'desc')
-            ->paginate($perPage);
-    }
-
-    /**
-     * Вывести заказы переданные поставщику в пагинацию по 15 шт.
-     *
-     * @param null $perPage
-     * @return mixed
-     */
-    public function getTransferredToSupplierOrdersWithPaginate($perPage = null)
-    {
-        $columns = [
-            'id',
-            'status',
-            'name',
-            'phone',
-            'waybill',
-            'product_id',
-            'sale_price',
-            'created_at',
-        ];
-
-        return $this
-            ->startConditions()
-            ->where('status', 'Передан поставщику')
-            ->with('Clients', 'Product')
-            ->select($columns)
-            ->orderBy('created_at', 'desc')
-            ->paginate($perPage);
-    }
-
-    /**
-     * Вывести заказы на почте в пагинацию по 15 шт.
-     *
-     * @param null $perPage
-     * @return mixed
-     */
-    public function getPostOfficeOrdersWithPaginate($perPage = null)
-    {
-        $columns = [
-            'id',
-            'status',
-            'name',
-            'phone',
-            'waybill',
-            'city',
-            'product_id',
-            'sale_price',
-            'updated_at',
-        ];
-
-        return $this
-            ->startConditions()
-            ->where('status', 'На почте')
-            ->with('Clients', 'Product')
-            ->select($columns)
-            ->orderBy('created_at', 'desc')
-            ->paginate($perPage);
-    }
-
-    /**
-     * Вывести выполненные заказы в пагинацию по 15 шт.
-     *
-     * @param null $perPage
-     * @return mixed
-     */
-    public function getDoneOrdersWithPaginate($perPage = null)
-    {
-        $columns = [
-            'id',
-            'status',
-            'name',
-            'phone',
-            'waybill',
-            'pay',
-            'city',
-            'product_id',
-            'sale_price',
-            'created_at',
-        ];
-
-        return $this
-            ->startConditions()
-            ->where('status', 'Выполнен')
-            ->with('Clients', 'Product')
-            ->select($columns)
-            ->orderBy('created_at', 'desc')
-            ->paginate($perPage);
-    }
-
-    /**
-     * Вывести возвращеные заказы в пагинацию по 15 шт.
-     *
-     * @param null $perPage
-     * @return mixed
-     */
-    public function getReturnOrdersWithPaginate($perPage = null)
-    {
-        $columns = [
-            'id',
-            'status',
-            'name',
-            'phone',
-            'comment',
-            'product_id',
-            'sale_price',
-            'created_at',
-            'updated_at',
-        ];
-
-        return $this
-            ->startConditions()
-            ->where('status', 'Возврат')
-            ->with('Clients', 'Product')
-            ->select($columns)
-            ->orderBy('updated_at', 'desc')
-            ->paginate($perPage);
-    }
-
-    /**
-     * Вывести отмененные заказы в пагинацию по 15 шт.
-     *
-     * @param null $perPage
-     * @return mixed
-     */
-    public function getCancelOrdersWithPaginate($perPage = null)
+    public function filter(array $data, int $perPage = 15)
     {
         $columns = [
             'id',
@@ -261,8 +93,7 @@ class OrdersRepository extends CoreRepository
 
         return $this
             ->startConditions()
-            ->where('status', 'Отменен')
-            ->with('Clients', 'Product')
+            ->where('status', $data['by'])
             ->select($columns)
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
@@ -400,6 +231,19 @@ class OrdersRepository extends CoreRepository
      */
     public function getAllPhones()
     {
-        return $this->model::select('phone','created_at')->orderBy('created_at')->get();
+        return $this->model::select('phone', 'created_at')->orderBy('created_at')->get();
+    }
+
+    public function massActions($action, $data): bool
+    {
+        if ($action == MassActions::DESTROY) {
+            foreach ($data as $key => $item) {
+                if ($key !== MassActions::DESTROY) {
+                    $this->model::destroy($item);
+                }
+            }
+            return true;
+        }
+        return false;
     }
 }

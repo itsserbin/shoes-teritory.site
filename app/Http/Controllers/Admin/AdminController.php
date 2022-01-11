@@ -2,17 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Bookkeeping\OrdersDay;
-use App\Models\Clients;
-use App\Models\Orders;
-use App\Repositories\OrdersRepository;
-use Carbon\Carbon;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 
-class AdminController extends Controller
+class AdminController extends BaseController
 {
-    private $OrdersRepository;
-
     /**
      * Display a listing of the resource.
      *
@@ -21,22 +16,10 @@ class AdminController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->OrdersRepository = app(OrdersRepository::class);
     }
 
-    public function index()
+    public function index(): Factory|View|Application
     {
-        $days_orders = OrdersDay::orderBy('date', 'desc')->paginate(15);
-
-        $orders = $this->OrdersRepository->getAllWithPaginate(10);
-        $orders_today = Orders::whereDate('created_at', Carbon::now()->format('Y-m-d'))->count();
-        $clients = Clients::orderBy('updated_at', 'desc')->paginate(10);
-
-        return view('admin.dashboard', [
-            'orders' => $orders,
-            'orders_today' => $orders_today,
-            'clients' => $clients,
-            'days_orders' => $days_orders
-        ]);
+        return view('admin.dashboard');
     }
 }

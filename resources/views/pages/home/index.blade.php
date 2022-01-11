@@ -1,34 +1,15 @@
 @extends('layouts.master')
-@section('title')Купить женские купальники в Украине недорого @endsection
+@section('title')Магазин женского нижнего белья и пляжной одежды@endsection
 @section('description')Женские купальники премиум качества с доставкой по всей Украине ✓ Лучшие коллекции 2021 года ✓ Доступные цены @endsection
 
 @section('content')
     <section class="product-list card pt-3">
         <div class="container">
             <categories-grid></categories-grid>
-            <div class="product-list__title">Трендовые женские купальники 2021</div>
+            <div class="product-list__title">Трендовое женское нижнее белье и пляжная одежда 2022 года</div>
             <product-cards></product-cards>
         </div>
     </section>
     @include('pages.product.components.advantages')
-    @include('pages.product.components.shipping-and-payment')
-    <section id="reviews" class="reviews">
-        <div class="content">
-            <div class="reviews__block-title block-title">Отзывы</div>
-            <div class="reviews-slider">
-                @if(count($reviews))
-                    @foreach($reviews as $review)
-                        @if($review->status)
-                            <div class="reviews-slider__slide">
-                                <div class="reviews-slider__name">{{$review->name}}</div>
-                                <div class="reviews-slider__text">{{$review->comment}}
-                                </div>
-                            </div>
-                        @endif
-                    @endforeach
-                @else Комментарии отсутсвуют! @endif
-            </div>
-        </div>
-    </section>
-
+    <all-reviews-component></all-reviews-component>
 @endsection

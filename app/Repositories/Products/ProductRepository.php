@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Products;
 
+use App\Models\Enum\MassActions;
 use App\Models\Products as Model;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -14,6 +15,14 @@ use PhpParser\Node\Expr\AssignOp\Concat;
  */
 class ProductRepository extends CoreRepository
 {
+    private $productsPhotoRepository;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->productsPhotoRepository = app(ProductsPhotoRepository::class);
+    }
+
     /**
      * @return string
      */
@@ -29,9 +38,9 @@ class ProductRepository extends CoreRepository
      *
      * @return Model
      */
-    public function getById($id)
+    public function getById($id): Model
     {
-        return $this->startConditions()->find($id);
+        return $this->model->where('id', $id)->with('colors', 'categories', 'images')->first();
     }
 
     /**
@@ -49,13 +58,13 @@ class ProductRepository extends CoreRepository
     }
 
     /**
-     * Получить все продукты вывести в пагинации по 15 шт.
-     *
-     * @param int|null $perPage
+     * @param string $sort
+     * @param string $param
+     * @param int $perPage
      *
      * @return LengthAwarePaginator
      */
-    public function getAllWithPaginate($perPage = null)
+    public function getAllWithPaginate(string $sort = 'id', string $param = 'desc', int $perPage = 15): LengthAwarePaginator
     {
         $columns = [
             'id',
@@ -66,15 +75,16 @@ class ProductRepository extends CoreRepository
             'discount_price',
             'preview',
             'h1',
+            'sort',
             'vendor_code',
             'created_at',
             'updated_at',
         ];
 
         return $this
-            ->startConditions()
+            ->model
             ->select($columns)
-            ->orderBy('created_at', 'desc')
+            ->orderBy($sort, $param)
             ->paginate($perPage);
     }
 
@@ -103,7 +113,7 @@ class ProductRepository extends CoreRepository
             ->startConditions()
             ->where('published', '1')
             ->select($columns)
-            ->orderBy('total_sales','desc')
+            ->orderBy('total_sales', 'desc')
             ->paginate($perPage);
     }
 
@@ -115,8 +125,178 @@ class ProductRepository extends CoreRepository
      */
     public function updateProductTotalSales($id)
     {
-        $model = $this->model::where('id',$id)->select('total_sales')->first();
+        $model = $this->model::where('id', $id)->select('total_sales')->first();
 
         return $this->model::where('id', $id)->update(['total_sales' => ++$model->total_sales]);
+    }
+
+    public function getImages($id)
+    {
+        return $this->model::where('id', $id)->select('id')->with('images')->first();
+    }
+
+    public function getReviews($id)
+    {
+        return $this->model::where('id', $id)->select('id')->with('Reviews')->first();
+    }
+
+    public function getRelativeProducts($id, $limit = 10)
+    {
+        $product = $this->model::where('id', $id)->with('categories')->first();
+
+        return $this->model::where('id', '!=', $id)
+            ->select(
+                'id',
+                'h1',
+                'price',
+                'discount_price',
+                'preview'
+            )
+            ->whereHas('categories', function ($q) use ($product) {
+                $q->where('id', $product->categories[0]->id);
+            })
+            ->limit($limit)
+            ->get();
+    }
+
+
+    public function search($search, $perPage = 15)
+    {
+        return $this->model::where('id', 'LIKE', "%$search%")
+            ->orWhere('h1', 'LIKE', "%$search%")
+            ->orWhere('content', 'LIKE', "%$search%")
+            ->orWhere('title', 'LIKE', "%$search%")
+            ->orWhere('description', 'LIKE', "%$search%")
+            ->orWhere('vendor_code', 'LIKE', "%$search%")
+            ->paginate($perPage);
+    }
+
+    public function updateSort(int $id, $value)
+    {
+        return $this->model::where('id', $id)->update(['sort' => $value ?? null]);
+    }
+
+    public function massActions($action, $data): bool
+    {
+        if ($action == MassActions::NOT_PUBLISHED) {
+            foreach ($data as $key => $item) {
+                if ($key !== MassActions::NOT_PUBLISHED) {
+                    $this->model->where('id', $item)->update(['published' => 0]);
+                }
+            }
+
+            return true;
+        } elseif ($action == MassActions::PUBLISHED) {
+            foreach ($data as $key => $item) {
+                if ($key !== MassActions::PUBLISHED) {
+                    $this->model->where('id', $item)->update(['published' => 1]);
+                }
+            }
+            return true;
+        } elseif ($action == MassActions::DESTROY) {
+            foreach ($data as $key => $item) {
+                if ($key !== MassActions::DESTROY) {
+                    $this->model::destroy($item);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public function attachColor($id, $data)
+    {
+        $model = $this->model::where('id', $id)->first();
+        $model->colors()->attach($data['color_id']);
+    }
+
+    public function detachColor($id, $data)
+    {
+        $model = $this->model::where('id', $id)->first();
+        $model->colors()->detach($data['color_id']);
+    }
+
+    public function getProductColors($id)
+    {
+        return $this->model->where('id', $id)->with('colors')->select('id')->first();
+    }
+
+    public function update(int $id, array $data)
+    {
+        $model = $this->model::where('id', $id)->first();
+
+        $model->published = $data['published'];
+        $model->status = $data['status'];
+
+        $model->xs = $data['xs'];
+        $model->s = $data['s'];
+        $model->m = $data['m'];
+        $model->l = $data['l'];
+        $model->xl = $data['xl'];
+        $model->xxl = $data['xxl'];
+        $model->xxxl = $data['xxxl'];
+
+        $model->h1 = $data['h1'];
+        $model->title = $data['title'];
+        $model->description = $data['description'];
+        $model->content = $data['content'];
+        $model->characteristics = $data['characteristics'];
+        $model->size_table = $data['size_table'];
+
+        $model->price = $data['price'];
+        $model->discount_price = $data['discount_price'];
+        $model->provider_id = $data['provider_id'];
+        $model->trade_price = $data['trade_price'];
+        $model->vendor_code = $data['vendor_code'];
+        $model->preview = $data['preview'];
+        $model->update();
+        $model->categories()->sync($data['categories']);
+        $this->productsPhotoRepository->create($model->id, $data['images']);
+    }
+
+    public function create($data)
+    {
+        $model = new $this->model;
+
+        $model->published = $data['published'];
+        $model->status = $data['status'];
+
+        $model->xs = $data['xs'];
+        $model->s = $data['s'];
+        $model->m = $data['m'];
+        $model->l = $data['l'];
+        $model->xl = $data['xl'];
+        $model->xxl = $data['xxl'];
+        $model->xxxl = $data['xxxl'];
+
+        $model->h1 = $data['h1'];
+        $model->title = $data['title'];
+        $model->description = $data['description'];
+        $model->content = $data['content'];
+        $model->characteristics = $data['characteristics'];
+        $model->size_table = $data['size_table'];
+
+        $model->price = $data['price'];
+        $model->discount_price = $data['discount_price'];
+        $model->provider_id = $data['provider_id'];
+        $model->trade_price = $data['trade_price'];
+        $model->vendor_code = $data['vendor_code'];
+        $model->preview = $data['preview'];
+        $model->save();
+
+        if (count($data['colors'])) {
+            foreach ($data['colors'] as $color) {
+                $model->colors()->attach($color['id']);
+            }
+        }
+        if (count($data['categories'])) {
+            $model->categories()->sync($data['categories']);
+        }
+        $this->productsPhotoRepository->create($model->id, $data['images']);
+    }
+
+    public function destroy(int $id)
+    {
+        return $this->model::destroy($id);
     }
 }

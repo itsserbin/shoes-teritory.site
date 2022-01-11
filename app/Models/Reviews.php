@@ -19,7 +19,7 @@ class Reviews extends Model
         'status',
     ];
 
-    public function Products()
+    public function products()
     {
         return $this->belongsTo(Products::class,'product_id');
     }

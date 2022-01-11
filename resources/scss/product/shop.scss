@@ -20,7 +20,7 @@
     &__title {
         margin: 0 0 3px 0;
         font-weight: bold;
-        font-size: 24px;
+        font-size: 38px;
         text-transform: uppercase;
         color: #000000;
     }
@@ -70,12 +70,8 @@
     &__actual-price {
         grid-column: 1/2;
         font-weight: bold;
-        font-size: 26px;
+        font-size: 36px;
         color: #ff0000;
-
-        &::after {
-            content: '₴';
-        }
     }
 
     &__old-price {
@@ -83,10 +79,6 @@
         font-size: 20px;
         text-decoration-line: line-through;
         color: #A5A5A5;
-
-        &::after {
-            content: '₴';
-        }
     }
 
     &__price-without-discount {
@@ -129,6 +121,7 @@
 
     &__description-title {
         margin: 0 0 10px 0;
+        text-align: left !important;
     }
 
     &__description {
@@ -211,107 +204,108 @@
 }
 
 
-.shop-products-slider-big {
-    margin: 0 auto 0 0;
-    width: 100%;
-    max-width: 230px;
-
-    .slick-track {
-        display: flex;
-        align-items: center;
-    }
-
-    &__image {
-        img {
-            width: 100%;
-        }
-    }
-}
-
-.shop-products-slider-small {
-    position: relative;
-    align-self: center;
-
-    &__image {
-        margin: 0 auto;
-        width: 40px;
-
-        img {
-            width: 100%;
-        }
-    }
-
-    .arrow-prev,
-    .arrow-next {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 20px;
-    }
-
-    .arrow-prev {
-        top: -28px;
-    }
-
-    .arrow-next {
-        bottom: -28px;
-    }
-
-    .slick-track {
-        transform: translate3d(0) !important;
-    }
-}
-
-.shop-products-slider-small.slick-vertical .slick-slide {
-    margin-bottom: 10px;
-    width: 55px !important;
-}
-
-.shop-products-slider-small.slick-vertical .slick-slide.slick-current {
-    border: 1px solid #38AF44;
-}
-
-@media(min-width: 360px) {
-    .shop-products-slider-big {
-        max-width: 280px;
-    }
-}
-
-@media(min-width: 400px) {
-    .shop {
-        &__col {
-            &:first-child {
-                grid-template-columns: 55px 300px;
-                justify-content: center;
-            }
-        }
-    }
-    .shop-products-slider-big {
-        max-width: 300px;
-
-        &__image {
-            max-width: 300px;
-        }
-    }
-}
-
-@media(min-width: 500px) {
-    .shop {
-        &__col {
-            &:first-child {
-                grid-template-columns: 55px 400px;
-                justify-content: center;
-            }
-        }
-    }
-    .shop-products-slider-big {
-        max-width: 400px;
-
-        &__image {
-            max-width: 400px;
-        }
-    }
-}
+//.shop-products-slider-big {
+//    margin: 0 auto 0 0;
+//    width: 100%;
+//    max-width: 230px;
+//
+//    .slick-track {
+//        display: flex;
+//        align-items: center;
+//    }
+//
+//    &__image {
+//        text-align: center;
+//        img {
+//            width: 100%;
+//        }
+//    }
+//}
+//
+//.shop-products-slider-small {
+//    position: relative;
+//    align-self: center;
+//
+//    &__image {
+//        margin: 0 auto;
+//        width: 40px;
+//
+//        img {
+//            width: 100%;
+//        }
+//    }
+//
+//    .arrow-prev,
+//    .arrow-next {
+//        position: absolute;
+//        left: 50%;
+//        transform: translateX(-50%);
+//        font-size: 20px;
+//    }
+//
+//    .arrow-prev {
+//        top: -28px;
+//    }
+//
+//    .arrow-next {
+//        bottom: -28px;
+//    }
+//
+//    .slick-track {
+//        transform: translate3d(0) !important;
+//    }
+//}
+//
+//.shop-products-slider-small.slick-vertical .slick-slide {
+//    margin-bottom: 10px;
+//    width: 55px !important;
+//}
+//
+//.shop-products-slider-small.slick-vertical .slick-slide.slick-current {
+//    border: 1px solid #38AF44;
+//}
+//
+//@media(min-width: 360px) {
+//    .shop-products-slider-big {
+//        max-width: 280px;
+//    }
+//}
+//
+//@media(min-width: 400px) {
+//    .shop {
+//        &__col {
+//            &:first-child {
+//                grid-template-columns: 55px 300px;
+//                justify-content: center;
+//            }
+//        }
+//    }
+//    .shop-products-slider-big {
+//        max-width: 300px;
+//
+//        &__image {
+//            max-width: 300px;
+//        }
+//    }
+//}
+//
+//@media(min-width: 500px) {
+//    .shop {
+//        &__col {
+//            &:first-child {
+//                grid-template-columns: 55px 400px;
+//                justify-content: center;
+//            }
+//        }
+//    }
+//    .shop-products-slider-big {
+//        max-width: 600px;
+//
+//        &__image {
+//            max-width: 600px;
+//        }
+//    }
+//}
 
 @media(min-width: 768px) {
     .shop {

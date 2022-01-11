@@ -45,7 +45,7 @@ class ProvidersRepository extends CoreRepository
     {
         return $this
             ->startConditions()
-            ->select('id','name')
+            ->select('id', 'name')
             ->get();
     }
 
@@ -95,5 +95,10 @@ class ProvidersRepository extends CoreRepository
     public function destroy(int $id)
     {
         return $this->model::destroy($id);
+    }
+
+    public function list()
+    {
+        return $this->model->select('id', 'name')->orderBy('id', 'desc')->get();
     }
 }

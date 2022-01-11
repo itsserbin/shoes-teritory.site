@@ -1,0 +1,45 @@
+<template>
+    <section id="reviews" class="reviews">
+        <div class="content">
+            <div class="reviews__block-title block-title">Отзывы</div>
+            <VueSlickCarousel class="reviews-slider" v-bind="settings" v-if="reviews.length">
+                <div v-for="review in reviews" class="reviews-slider__slide">
+                    <div class="reviews-slider__name">{{ review.name }}</div>
+                    <div class="reviews-slider__text">{{ review.comment }}</div>
+                </div>
+            </VueSlickCarousel>
+            <h3 v-else-if="reviews.length === 0">Отзывы отсутствуют</h3>
+        </div>
+    </section>
+</template>
+
+<script>
+import VueSlickCarousel from 'vue-slick-carousel'
+
+import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
+
+export default {
+    components: {VueSlickCarousel},
+    data() {
+        return {
+            reviews: [],
+            settings: {
+                "lazyLoad": "ondemand",
+                "dots": true,
+                "dotsClass": "slick-dots custom-dot-class",
+                "edgeFriction": 0.35,
+                "infinite": true,
+                "speed": 500,
+                "slidesToShow": 3,
+                "slidesToScroll": 2
+            }
+        }
+    },
+    mounted() {
+        axios.get('/api/v1/reviews/list')
+            .then(({data}) => this.reviews = data.result)
+            .catch((response) => console.log(response));
+
+    }
+}
+</script>
