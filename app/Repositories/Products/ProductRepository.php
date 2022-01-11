@@ -104,6 +104,7 @@ class ProductRepository extends CoreRepository
             'discount_price',
             'preview',
             'total_sales',
+            'sort',
             'h1',
             'created_at',
             'updated_at'
@@ -111,9 +112,9 @@ class ProductRepository extends CoreRepository
 
         return $this
             ->startConditions()
-            ->where('published', '1')
+            ->where('published', 1)
             ->select($columns)
-            ->orderBy('total_sales', 'desc')
+            ->orderBy('sort', 'desc')
             ->paginate($perPage);
     }
 
