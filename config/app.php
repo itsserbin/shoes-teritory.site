@@ -179,6 +179,8 @@ return [
 
         Intervention\Image\ImageServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Daaner\TurboSMS\TurboSMSServiceProvider::class,
+
 
     ],
 
@@ -236,6 +238,7 @@ return [
 
         'Image' => Intervention\Image\Facades\Image::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'TurboSMS' => Daaner\TurboSMS\Facades\TurboSMS::class,
 
 
     ],

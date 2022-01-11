@@ -147,6 +147,5 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
         Route::resource('roles', RolesColroller::class)->names('admin.roles');
     });
 
-    Route::post('img-upload', [ProductsController::class, 'store'])->name('uploads.photo.post');
-    Route::post('del-img', [ProductsController::class, 'destroyImage'])->name('destroy.image');
+    Route::post('notify-waybill', [\App\Http\Controllers\SmsController::class, 'notifyWaybill'])->name('notifyWaybill');
 });
