@@ -348,6 +348,8 @@ export default {
         getOrders() {
             this.search = null;
             this.isLoading = true;
+            this.activeItem = null;
+
             axios.get('/api/orders')
                 .then(({data}) => {
                     this.getOrdersListSuccessResponse(data);
