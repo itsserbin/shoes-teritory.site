@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class UpdatePreviewProducts extends Migration
+class UpdatePreviewProducts1 extends Migration
 {
     /**
      * Run the migrations.
@@ -20,10 +20,8 @@ class UpdatePreviewProducts extends Migration
 
 
         foreach ($result_products as $item) {
-
-            $str = ltrim($item->preview, '/');
-
-            DB::table('products')->where('id', $item->id)->update(['preview' => $str]);
+            $value = '/' . $item->preview;
+            DB::table('products')->where('id', $item->id)->update(['preview' => $value]);
         }
     }
 
