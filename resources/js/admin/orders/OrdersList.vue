@@ -81,6 +81,14 @@
                             >{{ statusTransferredToSupplier }}</a>
                         </li>
                     </ul>
+                    <hr>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active"
+                               href="/admin/orders/export"
+                            >Экспортировать заказы</a>
+                        </li>
+                    </ul>
                 </div>
                 <div class="col-12 col-md-10">
                     <div class="table-responsive">

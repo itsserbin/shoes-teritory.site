@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\OrdersExport;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
  * Class OrdersController
@@ -40,5 +43,10 @@ class OrdersController extends BaseController
     public function edit(): View|Factory|Application
     {
         return view('admin.orders.edit');
+    }
+
+    public function export()
+    {
+        return Excel::download(new OrdersExport(), 'list.xlsx');
     }
 }
