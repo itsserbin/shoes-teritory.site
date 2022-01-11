@@ -11,7 +11,7 @@
                     <a v-bind:href="host + '/product/' + product.id" class="text-decoration-none">
 
                         <div class="card__image">
-                            <img :src="product.preview" :alt="product.h1" style="object-fit: cover">
+                            <img :src="'/storage/products/350/' + product.preview" :alt="product.h1" style="object-fit: cover">
                         </div>
 
                         <div class="card__body">

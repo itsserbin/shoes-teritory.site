@@ -11,7 +11,7 @@
                 >
 
                     <div class="card__image">
-                        <img :src="product.preview" :alt="product.h1">
+                        <img :src="'/storage/products/350/' + product.preview" :alt="product.h1">
                     </div>
 
                     <div class="card__body">

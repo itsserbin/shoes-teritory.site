@@ -33,9 +33,13 @@ export default {
 
         axios.get('/api/v1/product/get-images/' + id)
             .then(({data}) => {
+                this.images.push({
+                    'src': '/storage/products/500/' + data.result.preview,
+                    'thumbnail': '/storage/products/55/' + data.result.preview,
+                    'largeViewSrc': '/storage/products/' + data.result.preview,
+                })
                 data.result.images.forEach(item => {
                     this.images.push({
-                        'id': item.id,
                         'src': '/storage/products/500/' + item.image,
                         'thumbnail': '/storage/products/55/' + item.image,
                         'largeViewSrc': '/storage/products/' + item.image,

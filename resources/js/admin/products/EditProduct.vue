@@ -23,7 +23,7 @@
                          class="row justify-content-center text-center"
                     >
                         <label class="form-label">Головне зображення</label>
-                        <img :src="product.preview" :alt="product.title" class="w-50">
+                        <img :src="'/storage/products/350/' + product.preview" :alt="product.title" class="w-50">
                         <div>
                             <button class="btn" @click="deletePreview">
                                 <edit-icon></edit-icon>
@@ -446,9 +446,9 @@ export default {
         },
         uploadPreview(event) {
             let formData = new FormData();
-            formData.append('preview', event.target.files[0]);
+            formData.append('image', event.target.files[0]);
             formData.append('type', 'banners');
-            axios.post('/api/images/preview-upload', formData, {
+            axios.post('/api/products/images/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
