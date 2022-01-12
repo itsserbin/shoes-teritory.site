@@ -58,9 +58,15 @@ export default {
     mounted() {
         axios.get('/api/options/scripts')
             .then(({data}) => {
-                this.options.head_scripts = data.result.head_scripts.value;
-                this.options.after_body_scripts = data.result.after_body_scripts.value;
-                this.options.footer_scripts = data.result.footer_scripts.value;
+                if (data.result.head_scripts) {
+                    this.options.head_scripts = data.result.head_scripts.value;
+                }
+                if (data.result.after_body_scripts) {
+                    this.options.after_body_scripts = data.result.after_body_scripts.value;
+                }
+                if (data.result.footer_scripts) {
+                    this.options.footer_scripts = data.result.footer_scripts.value;
+                }
                 this.isLoading = false;
             })
             .catch((response) => console.log(response))
