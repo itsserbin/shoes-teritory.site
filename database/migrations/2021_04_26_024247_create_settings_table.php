@@ -15,18 +15,8 @@ class CreateSettingsTable extends Migration
     {
         Schema::create('options', function (Blueprint $table) {
             $table->id();
-            $table->string('schedule')->nullable();
-            $table->string('phone')->nullable();
-            $table->string('email')->nullable();
-            $table->string('facebook')->nullable();
-            $table->string('instagram')->nullable();
-            $table->string('telegram')->nullable();
-            $table->string('viber')->nullable();
-            $table->string('whatsapp')->nullable();
-            $table->string('fb_messenger')->nullable();
-            $table->text('head_scripts')->nullable();
-            $table->text('after_body_scripts')->nullable();
-            $table->text('footer_scripts')->nullable();
+            $table->string('name');
+            $table->text('value')->nullable();
             $table->timestamps();
         });
     }

@@ -31,11 +31,7 @@ class OptionsController extends BaseController
      */
     public function index()
     {
-        $options = $this->OptionsRepository->getIndex();
-
-        return view('admin.options.index', [
-            'options' => $options
-        ]);
+        return view('admin.options.index');
     }
 
     /**
@@ -45,23 +41,6 @@ class OptionsController extends BaseController
      */
     public function scripts()
     {
-        $options = $this->OptionsRepository->getScripts();
-
-        return view('admin.options.scripts.index', [
-            'options' => $options
-        ]);
-    }
-
-    /**
-     * Обновить настройки.
-     *
-     * @param Request $request
-     * @return RedirectResponse
-     */
-    public function update($id, Request $request)
-    {
-        $this->OptionsRepository->update($id,$request);
-
-        return back()->with('success', 'Настройки успешно обновлены!');
+        return view('admin.options.scripts.index');
     }
 }

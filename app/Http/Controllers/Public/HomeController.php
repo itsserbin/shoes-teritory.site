@@ -8,6 +8,7 @@ use App\Models\ProductsPhoto;
 use App\Models\Reviews;
 use App\Models\Options;
 use App\Repositories\CategoriesRepository;
+use App\Repositories\OptionsRepository;
 use App\Repositories\Products\ProductRepository;
 use App\Services\OrderCheckout;
 use App\Services\ShoppingCart;
@@ -30,6 +31,7 @@ class HomeController extends BaseController
 
     /** @var CategoriesRepository */
     private $CategoriesRepository;
+    private $optionsRepository;
 
     /**
      * Display a listing of the resource.
@@ -45,120 +47,43 @@ class HomeController extends BaseController
         parent::__construct();
         $this->ProductRepository = app(ProductRepository::class);
         $this->CategoriesRepository = app(CategoriesRepository::class);
+        $this->optionsRepository = app(OptionsRepository::class);
         $this->OrderCheckout = $orderCheckout;
         $this->ShoppingCart = $shoppingCart;
     }
 
-    public function index()
+    /**
+     * @return Factory|View|Application
+     */
+    public function index(): Factory|View|Application
     {
-        $settings = Options::find(1)->get();
-        foreach ($settings as $setting) {
-            $phone = $setting->phone;
-            $email = $setting->email;
-            $facebook = $setting->facebook;
-            $instagram = $setting->instagram;
-            $schedule = $setting->schedule;
-            $telegram = $setting->telegram;
-            $viber = $setting->viber;
-            $head_scripts = $setting->head_scripts;
-            $after_body_scripts = $setting->after_body_scripts;
-            $footer_scripts = $setting->footer_scripts;
-        }
-
-        $products = $this->ProductRepository->getItemsWithPaginateOnProduction(15);
-        $reviews = Reviews::orderBy('created_at')->get();
-        $cartCount = $this->cartCount();
-
         return view('pages.home.index', [
-            'phone' => $phone,
-            'email' => $email,
-            'facebook' => $facebook,
-            'instagram' => $instagram,
-            'schedule' => $schedule,
-            'telegram' => $telegram,
-            'viber' => $viber,
-            'head_scripts' => $head_scripts,
-            'after_body_scripts' => $after_body_scripts,
-            'footer_scripts' => $footer_scripts,
-
-            'options' => $settings,
-            'products' => $products,
-            'reviews' => $reviews,
-            'cartCount' => $cartCount,
+            'options' => $this->getOptions(),
+            'products' => $this->ProductRepository->getItemsWithPaginateOnProduction(15),
         ]);
     }
 
-    public function product($id)
+    /**
+     * @param $id
+     * @return Factory|View|Application
+     */
+    public function product($id): Factory|View|Application
     {
-        $settings = Options::find(1)->get();
-        foreach ($settings as $setting) {
-            $phone = $setting->phone;
-            $email = $setting->email;
-            $facebook = $setting->facebook;
-            $instagram = $setting->instagram;
-            $schedule = $setting->schedule;
-            $telegram = $setting->telegram;
-            $viber = $setting->viber;
-            $head_scripts = $setting->head_scripts;
-            $after_body_scripts = $setting->after_body_scripts;
-            $footer_scripts = $setting->footer_scripts;
-        }
-
         $product = $this->ProductRepository->getProduct($id);
-        $products = $this->ProductRepository->getItemsWithPaginateOnProduction(30);
-        $productsPhoto = ProductsPhoto::where('product_id', '=', $id)->get();
-        $cartCount = $this->cartCount();
 
         return view('pages.product.index', [
-            'phone' => $phone,
-            'email' => $email,
-            'facebook' => $facebook,
-            'instagram' => $instagram,
-            'schedule' => $schedule,
-            'telegram' => $telegram,
-            'viber' => $viber,
-            'head_scripts' => $head_scripts,
-            'after_body_scripts' => $after_body_scripts,
-            'footer_scripts' => $footer_scripts,
-
+            'options' => $this->getOptions(),
             'product' => $product,
-            'productsPhoto' => $productsPhoto,
-            'products' => $products,
-            'cartCount' => $cartCount,
-
         ]);
     }
 
+    /**
+     * @return Application|Factory|View
+     */
     public function send_form_get()
     {
-        $settings = Options::find(1)->get();
-        $cartCount = $this->cartCount();
-
-        foreach ($settings as $setting) {
-            $phone = $setting->phone;
-            $email = $setting->email;
-            $facebook = $setting->facebook;
-            $instagram = $setting->instagram;
-            $schedule = $setting->schedule;
-            $telegram = $setting->telegram;
-            $viber = $setting->viber;
-            $head_scripts = $setting->head_scripts;
-            $after_body_scripts = $setting->after_body_scripts;
-            $footer_scripts = $setting->footer_scripts;
-        }
-
         return view('pages.order.index', [
-            'phone' => $phone,
-            'email' => $email,
-            'facebook' => $facebook,
-            'instagram' => $instagram,
-            'schedule' => $schedule,
-            'telegram' => $telegram,
-            'viber' => $viber,
-            'head_scripts' => $head_scripts,
-            'after_body_scripts' => $after_body_scripts,
-            'footer_scripts' => $footer_scripts,
-            'cartCount' => $cartCount,
+            'options' => $this->getOptions(),
         ]);
     }
 
@@ -169,173 +94,36 @@ class HomeController extends BaseController
         $reviews->create($data);
     }
 
-    public function checkout()
+    /**
+     * @return Application|Factory|View
+     */
+    public function checkout(): View|Factory|Application
     {
-        $settings = Options::find(1)->get();
-        $cartCount = $this->cartCount();
-
-        foreach ($settings as $setting) {
-            $phone = $setting->phone;
-            $email = $setting->email;
-            $facebook = $setting->facebook;
-            $instagram = $setting->instagram;
-            $schedule = $setting->schedule;
-            $telegram = $setting->telegram;
-            $viber = $setting->viber;
-            $head_scripts = $setting->head_scripts;
-            $after_body_scripts = $setting->after_body_scripts;
-            $footer_scripts = $setting->footer_scripts;
-        }
-
         return view('pages.checkout.index', [
-            'phone' => $phone,
-            'email' => $email,
-            'facebook' => $facebook,
-            'instagram' => $instagram,
-            'schedule' => $schedule,
-            'telegram' => $telegram,
-            'viber' => $viber,
-            'head_scripts' => $head_scripts,
-            'after_body_scripts' => $after_body_scripts,
-            'footer_scripts' => $footer_scripts,
-            'cartCount' => $cartCount,
+            'options' => $this->getOptions(),
         ]);
-    }
-
-    public function category($slug)
-    {
-        $settings = Options::find(1)->get();
-        $cartCount = $this->cartCount();
-        $category = $this->CategoriesRepository->findFySlug($slug);
-
-        foreach ($settings as $setting) {
-            $phone = $setting->phone;
-            $email = $setting->email;
-            $facebook = $setting->facebook;
-            $instagram = $setting->instagram;
-            $schedule = $setting->schedule;
-            $telegram = $setting->telegram;
-            $viber = $setting->viber;
-            $head_scripts = $setting->head_scripts;
-            $after_body_scripts = $setting->after_body_scripts;
-            $footer_scripts = $setting->footer_scripts;
-        }
-
-        return view('pages.category.index', [
-            'phone' => $phone,
-            'email' => $email,
-            'facebook' => $facebook,
-            'instagram' => $instagram,
-            'schedule' => $schedule,
-            'telegram' => $telegram,
-            'viber' => $viber,
-            'head_scripts' => $head_scripts,
-            'after_body_scripts' => $after_body_scripts,
-            'footer_scripts' => $footer_scripts,
-            'cartCount' => $cartCount,
-            'category' => $category
-        ]);
-    }
-
-   public function xmlFbAll(){
-       $products = Products::where('published',1)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return response()->view('xml.fb-product-feed', [
-            'products' => $products
-        ])->header('Content-Type', 'application/xml');
-   }
-    
-    public function xmlFbUnderwear()
-    {
-        $products = Products::whereHas('categories', function ($q) {
-            $q->where('id', 7);
-        })
-            ->where([
-                ['published', 1],
-                ['id', '!=', 139],
-                ['id', '!=', 137],
-                ['id', '!=', 124],
-                ['id', '!=', 126],
-                ['id', '!=', 134],
-                ['id', '!=', 141],
-                ['id', '!=', 133],
-                ['id', '!=', 127],
-            ])
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return response()->view('xml.fb-product-feed', [
-            'products' => $products
-        ])->header('Content-Type', 'application/xml');
-    }
-
-    public function xmlFbSwimwearAndTunics()
-    {
-        $products = Products::whereHas('categories', function ($q) {
-            $q->where('id', 6);
-            $q->orWhere('id', 5);
-            $q->orWhere('id', 3);
-        })
-            ->where('published', 1)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return response()->view('xml.fb-product-feed', [
-            'products' => $products
-        ])->header('Content-Type', 'application/xml');
-    }
-
-    public function xmlFbTopSwimwearAndTunics()
-    {
-        $products = Products::where('id', 119)
-            ->orWhere('id', 118)
-            ->orWhere('id', 116)
-            ->orWhere('id', 109)
-            ->orWhere('id', 103)
-            ->orWhere('id', 101)
-            ->orWhere('id', 104)
-            ->orWhere('id', 105)
-            ->orWhere('id', 98)
-            ->orWhere('id', 97)
-            ->orWhere('id', 96)
-            ->orWhere('id', 95)
-            ->orWhere('id', 80)
-            ->orWhere('id', 78)
-            ->orWhere('id', 74)
-            ->orWhere('id', 73)
-            ->orWhere('id', 70)
-            ->orWhere('id', 72)
-            ->orWhere('id', 71)
-            ->orWhere('id', 48)
-            ->orWhere('id', 39)
-            ->orWhere('id', 37)
-            ->orWhere('id', 29)
-            ->orWhere('id', 28)
-            ->orWhere('id', 25)
-            ->orWhere('id', 20)
-            ->orWhere('id', 12)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return response()->view('xml.fb-product-feed', [
-            'products' => $products
-        ])->header('Content-Type', 'application/xml');
     }
 
     /**
-     * Открыть товарный фид для prom.ua.
-     *
-     * @return Response
+     * @param $slug
+     * @return Application|Factory|View
      */
+    public function category($slug): View|Factory|Application
+    {
+        $category = $this->CategoriesRepository->findFySlug($slug);
+
+        return view('pages.category.index', [
+            'options' => $this->getOptions(),
+            'category' => $category
+        ]);
+    }
 
     /**
      * Открыть карту сайта XML.
      *
      * @return Response
      */
-    public function sitemap()
+    public function sitemap(): Response
     {
         $products = $this->ProductRepository->getAll();
         $categories = $this->CategoriesRepository->getAllToFeed();
@@ -351,7 +139,7 @@ class HomeController extends BaseController
      *
      * @return Response
      */
-    public function imagesSitemap()
+    public function imagesSitemap(): Response
     {
         $products = $this->ProductRepository->getAll();
 
@@ -363,36 +151,10 @@ class HomeController extends BaseController
     /**
      * Открыть политику конфеденциальности
      */
-    public function privacyPolicy()
+    public function privacyPolicy(): Factory|View|Application
     {
-        $settings = Options::find(1)->get();
-        $cartCount = $this->cartCount();
-
-        foreach ($settings as $setting) {
-            $phone = $setting->phone;
-            $email = $setting->email;
-            $facebook = $setting->facebook;
-            $instagram = $setting->instagram;
-            $schedule = $setting->schedule;
-            $telegram = $setting->telegram;
-            $viber = $setting->viber;
-            $head_scripts = $setting->head_scripts;
-            $after_body_scripts = $setting->after_body_scripts;
-            $footer_scripts = $setting->footer_scripts;
-        }
-
         return view('pages.privacy-policy', [
-            'phone' => $phone,
-            'email' => $email,
-            'facebook' => $facebook,
-            'instagram' => $instagram,
-            'schedule' => $schedule,
-            'telegram' => $telegram,
-            'viber' => $viber,
-            'head_scripts' => $head_scripts,
-            'after_body_scripts' => $after_body_scripts,
-            'footer_scripts' => $footer_scripts,
-            'cartCount' => $cartCount,
+            'options' => $this->getOptions(),
         ]);
     }
 
@@ -401,36 +163,10 @@ class HomeController extends BaseController
      *
      * @return Application|Factory|View
      */
-    public function exchangePolicy()
+    public function exchangePolicy(): View|Factory|Application
     {
-        $settings = Options::find(1)->get();
-        $cartCount = $this->cartCount();
-
-        foreach ($settings as $setting) {
-            $phone = $setting->phone;
-            $email = $setting->email;
-            $facebook = $setting->facebook;
-            $instagram = $setting->instagram;
-            $schedule = $setting->schedule;
-            $telegram = $setting->telegram;
-            $viber = $setting->viber;
-            $head_scripts = $setting->head_scripts;
-            $after_body_scripts = $setting->after_body_scripts;
-            $footer_scripts = $setting->footer_scripts;
-        }
-
         return view('pages.exchange-policy', [
-            'phone' => $phone,
-            'email' => $email,
-            'facebook' => $facebook,
-            'instagram' => $instagram,
-            'schedule' => $schedule,
-            'telegram' => $telegram,
-            'viber' => $viber,
-            'head_scripts' => $head_scripts,
-            'after_body_scripts' => $after_body_scripts,
-            'footer_scripts' => $footer_scripts,
-            'cartCount' => $cartCount,
+            'options' => $this->getOptions(),
         ]);
     }
 
@@ -439,18 +175,16 @@ class HomeController extends BaseController
      *
      * @return Response
      */
-    public function robots()
+    public function robots(): Response
     {
         return response()->view('robots')->header('Content-Type', 'text/plain');
     }
 
     /**
-     * Получить кол-во товаров в корзине.
-     *
      * @return mixed
      */
-    public function cartCount()
+    public function getOptions()
     {
-        return $this->ShoppingCart->cartList()['totalCount'];
+        return $this->optionsRepository->getToProd();
     }
 }

@@ -71,9 +71,9 @@
                 </div>
                 <div class="row">
 
-                    <!--                    <div v-if="appSchedule" class="burger-menu__schedule schedule text-center">-->
-                    <!--                        <span>{{appSchedule}}</span>-->
-                    <!--                    </div>-->
+                    <div v-if="appSchedule" class="burger-menu__schedule schedule text-center">
+                        <div v-html="appSchedule"></div>
+                    </div>
 
                     <div class="burger-menu__messengers messengers">
                         <a v-if="appTelegram" :href="appTelegram" target="_blank">
@@ -113,18 +113,18 @@ export default {
         appTelegram: String,
         appViber: String,
     },
-    created () {
+    created() {
         window.addEventListener('scroll', this.handleSCroll);
 
     },
-    destroyed () {
+    destroyed() {
         window.removeEventListener('scroll', this.handleSCroll);
     },
     methods: {
         showBurgerMenu() {
             this.showBurger = !this.showBurger;
         },
-        handleSCroll (event) {
+        handleSCroll(event) {
             let header = document.querySelector(".header");
             if (window.scrollY > 50 && !header.className.includes('shadow')) {
                 header.classList.add('shadow');

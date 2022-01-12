@@ -96,9 +96,9 @@ Route::get('robots.txt', [HomeController::class, 'robots'])
     ->name('robots');
 
 
-Route::prefix('xml')->group(function(){
+Route::prefix('xml')->group(function () {
 
-    Route::prefix('fb')->group(function(){
+    Route::prefix('fb')->group(function () {
 
         Route::get('all', [XmlController::class, 'xmlFbAll'])
             ->name('xml.fb.all');
@@ -118,6 +118,8 @@ Route::prefix('xml')->group(function(){
         ->name('prom.product.feed');
 });
 
+Route::get('send-form', [HomeController::class, 'send_form_get'])
+    ->name('send.form.get');
 /**
  * Отправить форму отзыва.
  *

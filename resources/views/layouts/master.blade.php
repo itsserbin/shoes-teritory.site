@@ -2,9 +2,9 @@
 <html lang="RU">
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# product: http://ogp.me/ns/product#">
 @include('components.head')
-{!! $head_scripts !!}
+{!! $options['head_scripts']->value !!}
 <body>
-{!! $after_body_scripts !!}
+{!! $options['after_body_scripts']->value !!}
 <div id="app" class="wrapper">
     <button onclick="topFunction()" id="myBtn" class="arrow-to-top">
         <span class="icon-arrow-up2"></span>
@@ -16,17 +16,16 @@
             privacy-policy-route="{{route('privacy-policy')}}"
             logo-app="{{asset('storage/img/content/logo.png')}}"
             app-name="{{env('APP_NAME')}}"
-            app-phone="{{$phone}}"
-            app-email="{{$email}}"
-            app-facebook="{{$facebook}}"
-            app-instagram="{{$instagram}}"
-            app-schedule="{!! $schedule !!}"
-            app-telegram="{{$telegram}}"
-            app-viber="{{$viber}}"
+            app-phone="{{$options['phone']->value}}"
+            app-email="{{$options['email']->value}}"
+            app-facebook="{{$options['facebook']->value}}"
+            app-instagram="{{$options['instagram']->value}}"
+            app-schedule="{!! $options['schedule']->value !!}"
+            app-telegram="{{$options['telegram']->value}}"
+            app-viber="{{$options['viber']->value}}"
         ></header-component>
     </header>
     <main class="main">
-        @include('components.modal-burger-menu')
         @yield('content')
     </main>
     <footer class="footer">
@@ -55,6 +54,6 @@
 </script>
 <script src="https://unpkg.com/smoothscroll-anchor-polyfill"></script>
 @include('components.footer-scripts')
-{!! $footer_scripts !!}
+{!! $options['footer_scripts']->value !!}
 </body>
 </html>

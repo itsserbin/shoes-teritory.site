@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\Api\Bookkeeping\DailyStatisticsController;
 use App\Http\Controllers\Admin\Api\Bookkeeping\SupplierPaymentsController;
 use App\Http\Controllers\Admin\Api\CategoriesController;
 use App\Http\Controllers\Admin\Api\ColorsController;
+use App\Http\Controllers\Admin\Api\OptionsController;
 use App\Http\Controllers\Admin\Api\OrderItemsController;
 use App\Http\Controllers\Admin\Api\OrdersController;
 use App\Http\Controllers\Admin\Api\ProductsController;
@@ -368,17 +369,24 @@ Route::middleware('auth:api')->group(function () {
         Route::post('preview-upload', [UploadController::class, 'uploadPreview'])
             ->name('api.images.uploadPreview');
 
-//        /** Группа маршрутов для превью */
-//        Route::prefix('preview-update')->group(function () {
-//
-//            /**
-//             * Загрузить превью для категорий.
-//             *
-//             * POST /api/images/preview-update/categories
-//             */
-//            Route::post('categories', [UploadController::class, 'uploadCategoryPreview'])
-//                ->name('api.images.upload.preview');
-//        });
+    });
+
+    Route::prefix('options')->group(function () {
+        Route::prefix('main')->group(function () {
+            Route::get('/', [OptionsController::class, 'getMainOptions'])
+                ->name('api.options.main.get');
+
+            Route::put('update', [OptionsController::class, 'updateMainOptions'])
+                ->name('api.options.main.update');
+        });
+
+        Route::prefix('scripts')->group(function () {
+            Route::get('/', [OptionsController::class, 'getScriptsOptions'])
+                ->name('api.options.scripts.get');
+
+            Route::put('update', [OptionsController::class, 'updateScriptsOptions'])
+                ->name('api.options.scripts.update');
+        });
     });
 });
 

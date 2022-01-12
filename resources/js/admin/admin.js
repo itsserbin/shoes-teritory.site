@@ -49,6 +49,9 @@ Vue.component('categories-list', require('./categories/CategoriesList').default)
 Vue.component('category-create', require('./categories/CategoryCreate').default);
 Vue.component('category-edit', require('./categories/EditCategory').default);
 
+Vue.component('main-options-list', require('./options/MainOptionsList').default);
+Vue.component('scripts-options-list', require('./options/ScriptsOptionsList').default);
+
 Vue.component('orders-list', require('./orders/OrdersList.vue').default);
 Vue.component('order-edit', require('./orders/EditOrder').default);
 
