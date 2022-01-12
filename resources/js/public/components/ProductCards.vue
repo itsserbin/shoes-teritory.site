@@ -23,6 +23,7 @@
                             <div class="card__actual-price">{{ product.discount_price }} грн.</div>
                         </div>
                     </div>
+                    <span class="card__button">Подробнее</span>
                 </div>
             </a>
         </div>
