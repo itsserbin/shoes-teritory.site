@@ -4,7 +4,15 @@
         <title>Dabango Products Feed</title>
         <description>Product Feed for Facebook</description>
         <link>{{asset('/')}}</link>
-        <atom:link href="{{route('fb.product.feed')}}" rel="self" type="application/rss+xml"/>
+        @if(\Illuminate\Support\Facades\Route::is('xml.fb.underwear'))
+            <atom:link href="{{route('xml.fb.underwear')}}" rel="self" type="application/rss+xml"/>
+        @elseif(\Illuminate\Support\Facades\Route::is('xml.fb.swimwear-and-tunics'))
+            <atom:link href="{{route('xml.fb.swimwear-and-tunics')}}" rel="self" type="application/rss+xml"/>
+        @elseif(\Illuminate\Support\Facades\Route::is('xml.fb.all'))
+            <atom:link href="{{route('xml.fb.all')}}" rel="self" type="application/rss+xml"/>
+        @else
+            <atom:link href="{{route('xml.fb.top-swimwear-and-tunics')}}" rel="self" type="application/rss+xml"/>
+        @endif
         @if (!empty($products))
             @foreach ($products as $item)
                 <item>
@@ -24,8 +32,8 @@
                     <link>{{asset(route('product',$item->id))}}</link>
                     <image_link>{{asset($item->preview)}}</image_link>
                     <additional_image_link>
-                        @foreach($item->ProductsPhoto as $item)
-                            {{asset($item->image).',' }}
+                        @foreach($item->images as $item)
+                            {{asset('/storage/products/'.$item->image).',' }}
                         @endforeach
                     </additional_image_link>
                     <gender>female</gender>

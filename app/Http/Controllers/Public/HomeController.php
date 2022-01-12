@@ -237,36 +237,6 @@ class HomeController extends BaseController
     }
 
     /**
-     * Открыть товарный фид для фейсбука.
-     *
-     * @return Response
-     */
-    public function fbProductFeed()
-    {
-        $products = $this->ProductRepository->getAll();
-
-        return response()->view('xml.fb-product-feed', [
-            'products' => $products
-        ])->header('Content-Type', 'application/xml');
-    }
-
-    /**
-     * Открыть товарный фид для prom.ua.
-     *
-     * @return Response
-     */
-    public function promProductFeed()
-    {
-        $products = $this->ProductRepository->getAll();
-        $categories = $this->CategoriesRepository->getAllToFeed();
-
-        return response()->view('xml.prom-product-feed', [
-            'products' => $products,
-            'categories' => $categories,
-        ])->header('Content-Type', 'application/xml');
-    }
-
-    /**
      * Открыть карту сайта XML.
      *
      * @return Response
