@@ -32,8 +32,8 @@
                     <link>{{asset(route('product',$item->id))}}</link>
                     <image_link>{{asset($item->preview)}}</image_link>
                     <additional_image_link>
-                        @foreach($item->ProductsPhoto as $item)
-                            {{asset($item->image).',' }}
+                        @foreach($item->images as $item)
+                            {{asset('/storage/products/'.$item->image).',' }}
                         @endforeach
                     </additional_image_link>
                     <gender>female</gender>

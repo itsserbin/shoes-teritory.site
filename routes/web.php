@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Public\CartController;
 use App\Http\Controllers\Public\HomeController;
+use App\Http\Controllers\Public\XmlController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -95,37 +96,27 @@ Route::get('robots.txt', [HomeController::class, 'robots'])
     ->name('robots');
 
 
-
 Route::prefix('xml')->group(function(){
 
     Route::prefix('fb')->group(function(){
 
-        Route::get('all', [HomeController::class, 'xmlFbAll'])
+        Route::get('all', [XmlController::class, 'xmlFbAll'])
             ->name('xml.fb.all');
-        
-        Route::get('underwear', [HomeController::class, 'xmlFbUnderwear'])
+
+        Route::get('underwear', [XmlController::class, 'xmlFbUnderwear'])
             ->name('xml.fb.underwear');
 
-        Route::get('swimwear-and-tunics', [HomeController::class, 'xmlFbSwimwearAndTunics'])
+        Route::get('swimwear-and-tunics', [XmlController::class, 'xmlFbSwimwearAndTunics'])
             ->name('xml.fb.swimwear-and-tunics');
 
-        Route::get('top-swimwear-and-tunics', [HomeController::class, 'xmlFbTopSwimwearAndTunics'])
+        Route::get('top-swimwear-and-tunics', [XmlController::class, 'xmlFbTopSwimwearAndTunics'])
             ->name('xml.fb.top-swimwear-and-tunics');
     });
 
 
-    Route::get('prom/feed/products', [HomeController::class, 'promProductFeed'])
+    Route::get('prom/feed/products', [XmlController::class, 'promProductFeed'])
         ->name('prom.product.feed');
 });
-
-
-/**
- * Показать страницу благодарности после отправки заявки.
- *
- * GET /send-form
- */
-Route::get('send-form', [HomeController::class, 'send_form_get'])
-    ->name('send.form.get');
 
 /**
  * Отправить форму отзыва.

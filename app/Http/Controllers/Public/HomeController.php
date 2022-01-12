@@ -329,16 +329,6 @@ class HomeController extends BaseController
      *
      * @return Response
      */
-    public function promProductFeed()
-    {
-        $products = $this->ProductRepository->getAll();
-        $categories = $this->CategoriesRepository->getAllToFeed();
-
-        return response()->view('xml.prom-product-feed', [
-            'products' => $products,
-            'categories' => $categories,
-        ])->header('Content-Type', 'application/xml');
-    }
 
     /**
      * Открыть карту сайта XML.
