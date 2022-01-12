@@ -3,34 +3,25 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Requests\ReviewCreateRequest;
-use App\Models\Products;
-use App\Models\ProductsPhoto;
 use App\Models\Reviews;
-use App\Models\Options;
 use App\Repositories\CategoriesRepository;
 use App\Repositories\OptionsRepository;
-use App\Repositories\Products\ProductRepository;
+use App\Repositories\Products\productRepository;
 use App\Services\OrderCheckout;
 use App\Services\ShoppingCart;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class HomeController extends BaseController
 {
-    /** @var ProductRepository */
-    private $ProductRepository;
+    /** @var productRepository */
+    private $productRepository;
 
-    /** @var OrderCheckout */
-    private $OrderCheckout;
+    /** @var categoriesRepository */
+    private $categoriesRepository;
 
-    /** @var ShoppingCart */
-    private $ShoppingCart;
-
-    /** @var CategoriesRepository */
-    private $CategoriesRepository;
     private $optionsRepository;
 
     /**
@@ -38,18 +29,12 @@ class HomeController extends BaseController
      *
      * @return Response
      */
-    public function __construct(
-        OrderCheckout $orderCheckout,
-        ShoppingCart  $shoppingCart
-
-    )
+    public function __construct()
     {
         parent::__construct();
-        $this->ProductRepository = app(ProductRepository::class);
-        $this->CategoriesRepository = app(CategoriesRepository::class);
+        $this->productRepository = app(productRepository::class);
+        $this->categoriesRepository = app(categoriesRepository::class);
         $this->optionsRepository = app(OptionsRepository::class);
-        $this->OrderCheckout = $orderCheckout;
-        $this->ShoppingCart = $shoppingCart;
     }
 
     /**
@@ -59,7 +44,7 @@ class HomeController extends BaseController
     {
         return view('pages.home.index', [
             'options' => $this->getOptions(),
-            'products' => $this->ProductRepository->getItemsWithPaginateOnProduction(15),
+            'products' => $this->productRepository->getItemsWithPaginateOnProduction(15),
         ]);
     }
 
@@ -69,11 +54,11 @@ class HomeController extends BaseController
      */
     public function product($id): Factory|View|Application
     {
-        $product = $this->ProductRepository->getProduct($id);
+        $this->productRepository->updateProductViewed($id);
 
         return view('pages.product.index', [
             'options' => $this->getOptions(),
-            'product' => $product,
+            'product' => $this->productRepository->getProduct($id),
         ]);
     }
 
@@ -110,7 +95,7 @@ class HomeController extends BaseController
      */
     public function category($slug): View|Factory|Application
     {
-        $category = $this->CategoriesRepository->findFySlug($slug);
+        $category = $this->categoriesRepository->findFySlug($slug);
 
         return view('pages.category.index', [
             'options' => $this->getOptions(),
@@ -125,8 +110,8 @@ class HomeController extends BaseController
      */
     public function sitemap(): Response
     {
-        $products = $this->ProductRepository->getAll();
-        $categories = $this->CategoriesRepository->getAllToFeed();
+        $products = $this->productRepository->getAll();
+        $categories = $this->categoriesRepository->getAllToFeed();
 
         return response()->view('xml.sitemap', [
             'products' => $products,
@@ -141,7 +126,7 @@ class HomeController extends BaseController
      */
     public function imagesSitemap(): Response
     {
-        $products = $this->ProductRepository->getAll();
+        $products = $this->productRepository->getAll();
 
         return response()->view('xml.images-sitemap', [
             'products' => $products,

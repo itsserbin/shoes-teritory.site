@@ -26,7 +26,7 @@ class ProductsController extends BaseController
      */
     public function index(): JsonResponse
     {
-        $result = $this->productRepository->getItemsWithPaginateOnProduction(15);
+        $result = $this->productRepository->getItemsWithPaginateOnProduction(8);
 
         return $this->returnResponse([
             'success' => true,
@@ -101,6 +101,19 @@ class ProductsController extends BaseController
     public function getRelativeProducts($id): JsonResponse
     {
         $result = $this->productRepository->getRelativeProducts($id);
+
+        return $this->returnResponse([
+            'success' => true,
+            'result' => $result,
+        ]);
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getBestSellingProducts(): JsonResponse
+    {
+        $result = $this->productRepository->getBestSellingProducts();
 
         return $this->returnResponse([
             'success' => true,

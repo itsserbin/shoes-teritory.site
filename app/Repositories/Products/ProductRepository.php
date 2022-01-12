@@ -77,6 +77,8 @@ class ProductRepository extends CoreRepository
             'h1',
             'sort',
             'vendor_code',
+            'viewed',
+            'total_sales',
             'created_at',
             'updated_at',
         ];
@@ -97,24 +99,19 @@ class ProductRepository extends CoreRepository
     {
         $columns = [
             'id',
-            'status',
-            'description',
             'price',
             'published',
             'discount_price',
             'preview',
-            'total_sales',
             'sort',
             'h1',
-            'created_at',
-            'updated_at'
         ];
 
         return $this
             ->startConditions()
             ->where('published', 1)
             ->select($columns)
-            ->orderBy('total_sales', 'desc')
+            ->orderBy('sort', 'desc')
             ->paginate($perPage);
     }
 
@@ -129,6 +126,13 @@ class ProductRepository extends CoreRepository
         $model = $this->model::where('id', $id)->select('total_sales')->first();
 
         return $this->model::where('id', $id)->update(['total_sales' => ++$model->total_sales]);
+    }
+
+    public function updateProductViewed($id)
+    {
+        $model = $this->model::where('id', $id)->select('viewed')->first();
+
+        return $this->model::where('id', $id)->update(['viewed' => ++$model->viewed]);
     }
 
     public function getImages($id)
@@ -300,5 +304,25 @@ class ProductRepository extends CoreRepository
     public function destroy(int $id)
     {
         return $this->model::destroy($id);
+    }
+
+    public function getBestSellingProducts($perPage = 8)
+    {
+        $columns = [
+            'id',
+            'price',
+            'published',
+            'discount_price',
+            'preview',
+            'total_sales',
+            'h1',
+        ];
+
+        return $this
+            ->startConditions()
+            ->where('published', 1)
+            ->select($columns)
+            ->orderBy('total_sales', 'desc')
+            ->paginate($perPage);
     }
 }

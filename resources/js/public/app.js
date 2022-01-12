@@ -42,7 +42,9 @@ Vue.component('checkout', require('./cart/CheckoutComponent').default);
 /**
  * Vue Product components
  */
-Vue.component('product-cards', require('./product/ProductCart').default);
+Vue.component('best-selling-products', require('./home/BestSelling').default);
+Vue.component('all-products', require('./home/AllProducts').default);
+Vue.component('product-cards', require('./components/ProductCards').default);
 Vue.component('sizes-table', require('./product/SizesTable').default);
 Vue.component('review-form', require('./product/ReviewForm').default);
 Vue.component('images-slider', require('./product/ImagesSlider').default);

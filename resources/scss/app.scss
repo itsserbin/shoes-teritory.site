@@ -42,6 +42,7 @@ body {
 body.lock,
 body.menu-lock {
     overflow: hidden;
+
     .arrow-to-top {
         display: none !important;
     }
@@ -51,10 +52,12 @@ body.menu-lock {
     display: none;
 }
 
-ol,ul {
+ol, ul {
     margin-left: 25px;
+
     li {
         margin: 0 0 5px 0;
+
         &::marker {
             font-size: 16px;
         }
@@ -65,6 +68,7 @@ ul {
     li {
         margin: 0 0 5px 0;
         list-style-type: revert;
+
         &::marker {
             color: #E02424;
         }
@@ -104,6 +108,7 @@ ul {
     a {
         display: inline-block;
     }
+
     img {
         width: 55px;
     }
@@ -117,6 +122,7 @@ ul {
         &_red {
             background: #E02424;
         }
+
         &_green {
             background: #38AF44;
         }
@@ -128,10 +134,23 @@ ul {
         }
     }
 }
+
+.load-more__button {
+    cursor: pointer;
+    border-radius: 10px;
+    width: 250px;
+    height: 50px;
+    color: #FFFFFF;
+    background: #E02424;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
 .button-wrapper {
     display: flex;
     justify-content: center;
 }
+
 .order-button,
 .order-button-modal {
     border-radius: 10px;
@@ -139,11 +158,13 @@ ul {
     height: 50px;
     font-size: 22px;
 }
+
 .order-button,
 .order-button-modal,
 .review-button,
 .review-button-modal {
     position: relative;
+
     &:hover {
         span {
             &:first-child {
@@ -151,6 +172,7 @@ ul {
             }
         }
     }
+
     span {
         &:first-child {
             position: absolute;
@@ -162,6 +184,7 @@ ul {
         }
     }
 }
+
 .order-button {
     &:hover {
         span {
@@ -171,6 +194,7 @@ ul {
         }
     }
 }
+
 .order-button-modal,
 .review-button-modal {
     &:hover {
@@ -189,12 +213,14 @@ ul {
         }
     }
 }
+
 .review-button,
 .review-button-modal {
     border-radius: 10px;
     width: 250px;
     height: 50px;
 }
+
 .review-button {
     &:hover {
         span {
@@ -205,6 +231,7 @@ ul {
         }
     }
 }
+
 .arrow-to-top {
     position: fixed;
     bottom: 5%;
@@ -217,40 +244,48 @@ ul {
     height: 50px;
     background: rgba(196, 196, 196, 0.5);
     border-radius: 50%;
+
     span {
         font-size: 18px;
         color: #000;
     }
 }
+
 .arrow-prev,
 .arrow-next {
     cursor: pointer;
     padding: 5px;
 }
+
 .social-buttons,
 .messengers {
     display: flex;
     justify-content: center;
+
     a {
         display: flex;
         justify-content: center;
         align-items: center;
+
         &:not(:last-child) {
             margin: 0 10px 0 0;
         }
     }
 }
+
 .schedule {
     display: flex;
     flex-direction: column;
     text-transform: uppercase;
     color: #fff;
+
     span {
         &:not(:last-child) {
             margin: 0 0 5px 0;
         }
     }
 }
+
 @media (min-width: 864px) {
     .content {
         width: 830px;

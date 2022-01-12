@@ -18,12 +18,12 @@
                             <h5 class="card__label">{{ product.h1 }}</h5>
                             <div class="card__price">
                                 <div v-if="product.discount_price === null"
-                                     class="card__price-without-discount">{{ product.price }}
+                                     class="card__price-without-discount">{{ product.price }} грн.
                                 </div>
 
                                 <div v-if="product.discount_price > null">
-                                    <div class="card__old-price">{{ product.price }}</div>
-                                    <div class="card__actual-price">{{ product.discount_price }}</div>
+                                    <div class="card__old-price">{{ product.price }} грн.</div>
+                                    <div class="card__actual-price">{{ product.discount_price }} грн.</div>
                                 </div>
 
 

@@ -53,6 +53,9 @@ Route::prefix('v1')->middleware('api')->group(function () {
 
         Route::get('relative/{id}', [ProductsController::class, 'getRelativeProducts'])
             ->name('api.public.products.relative.get');
+
+        Route::get('best-selling', [ProductsController::class, 'getBestSellingProducts'])
+            ->name('api.public.products.best-selling');
     });
 
     /** Группа маршрутов для корзины */

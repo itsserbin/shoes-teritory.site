@@ -48,7 +48,7 @@
                         </th>
                         <th>
                             <div class="d-flex align-items-center justify-content-center">
-                                <div class="mr-1">Назва</div>
+                                <div class="mr-1">Название</div>
                                 <a href="javascript:" class="text-dark" @click="sort('h1','asc')">
                                     <arrow-up-icon></arrow-up-icon>
                                 </a>
@@ -81,7 +81,7 @@
                         </th>
                         <th>
                             <div class="d-flex align-items-center justify-content-center">
-                                <div class="mr-1">Ціна</div>
+                                <div class="mr-1">Цена</div>
                                 <a href="javascript:" class="text-dark" @click="sort('price','asc')">
                                     <arrow-up-icon></arrow-up-icon>
                                 </a>
@@ -92,7 +92,18 @@
                         </th>
                         <th>
                             <div class="d-flex align-items-center justify-content-center">
-                                <div class="mr-1">Сотування</div>
+                                <div class="mr-1">Скидочная цена</div>
+                                <a href="javascript:" class="text-dark" @click="sort('discount_price','asc')">
+                                    <arrow-up-icon></arrow-up-icon>
+                                </a>
+                                <a href="javascript:" class="text-dark" @click="sort('discount_price','desc')">
+                                    <arrow-down-icon></arrow-down-icon>
+                                </a>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="d-flex align-items-center justify-content-center">
+                                <div class="mr-1">Сортировка</div>
                                 <a href="javascript:" class="text-dark" @click="sort('sort','asc')">
                                     <arrow-up-icon></arrow-up-icon>
                                 </a>
@@ -103,7 +114,28 @@
                         </th>
                         <th>
                             <div class="d-flex align-items-center justify-content-center">
-                                <div class="mr-1">Створено</div>
+                                <div class="mr-1">Просмотров</div>
+                                <a href="javascript:" class="text-dark" @click="sort('viewed','asc')">
+                                    <arrow-up-icon></arrow-up-icon>
+                                </a>
+                                <a href="javascript:" class="text-dark" @click="sort('viewed','desc')">
+                                    <arrow-down-icon></arrow-down-icon>
+                                </a>
+                            </div>
+                            <hr class="m-1">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <div class="mr-1">Покупок</div>
+                                <a href="javascript:" class="text-dark" @click="sort('total_sales','asc')">
+                                    <arrow-up-icon></arrow-up-icon>
+                                </a>
+                                <a href="javascript:" class="text-dark" @click="sort('total_sales','desc')">
+                                    <arrow-down-icon></arrow-down-icon>
+                                </a>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="d-flex align-items-center justify-content-center">
+                                <div class="mr-1">Создано</div>
                                 <a href="javascript:" class="text-dark" @click="sort('created_at','asc')">
                                     <arrow-up-icon></arrow-up-icon>
                                 </a>
@@ -113,7 +145,7 @@
                             </div>
                             <hr class="m-1">
                             <div class="d-flex align-items-center justify-content-center">
-                                <div class="mr-1">Оновлено</div>
+                                <div class="mr-1">Обновлено</div>
                                 <a href="javascript:" class="text-dark" @click="sort('updated_at','asc')">
                                     <arrow-up-icon></arrow-up-icon>
                                 </a>
@@ -122,19 +154,19 @@
                                 </a>
                             </div>
                         </th>
-                        <th>Дії</th>
+                        <th>Действия</th>
                     </tr>
                     </thead>
                     <tbody class="text-center">
                     <tr v-if="products.length === 0">
                         <td colspan="10">
                             <div class="row justify-content-center flex-column align-content-center">
-                                <div class="h2">Товари ще не створені</div>
+                                <div class="h2">Товары еще не созданы</div>
                                 <button
                                     @click="createProduct"
                                     class="btn btn-primary w-25 m-auto"
                                 >
-                                    Додати товар
+                                    Добавить товар
                                 </button>
                             </div>
                         </td>
@@ -151,13 +183,14 @@
                         </td>
                         <td>{{ product.id }}</td>
                         <td class="w-25">
-                            <img class="w-25"
-                                 :src="product.preview ? '/storage/products/55/' + product.preview : '/storage/no_image.png'"
+                            <img
+                                :src="product.preview ? '/storage/products/55/' + product.preview : '/storage/no_image.png'"
                                  :alt="product.title"></td>
-                        <td><a :href="'/admin/products/edit/' + product.id">{{ product.h1 }}</a></td>
+                        <td><a :href="'/product/' + product.id" target="_blank">{{ product.h1 }}</a></td>
                         <td>{{ publishedStatus(product.published) }}</td>
                         <td>{{ product.vendor_code }}</td>
                         <td>{{ product.price }}</td>
+                        <td>{{ product.discount_price }}</td>
                         <td>
                             <form class="d-flex justify-content-center"
                                   @submit.prevent="updateProductSort(product.id,product.sort)">
@@ -166,6 +199,11 @@
                                     <save-icon></save-icon>
                                 </button>
                             </form>
+                        </td>
+                        <td>
+                            {{ product.viewed }}
+                            <hr class="m-1">
+                            {{ product.total_sales }}
                         </td>
                         <td>
                             {{ dateFormat(product.created_at) }}

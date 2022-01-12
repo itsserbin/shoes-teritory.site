@@ -5,9 +5,14 @@
 @section('content')
     <section class="product-list card pt-3">
         <div class="container">
-            <categories-grid></categories-grid>
             <div class="product-list__title">Трендовое женское нижнее белье и пляжная одежда 2022 года</div>
-            <product-cards></product-cards>
+            <categories-grid></categories-grid>
+            <div class="product-list__title">Самые продаваемые</div>
+            <best-selling-products></best-selling-products>
+            <div class="mt-5">
+                <div class="product-list__title">Все товары</div>
+                <all-products></all-products>
+            </div>
         </div>
     </section>
     @include('pages.product.components.advantages')
