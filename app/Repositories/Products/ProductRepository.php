@@ -115,6 +115,29 @@ class ProductRepository extends CoreRepository
             ->paginate($perPage);
     }
 
+    public function getWhereCategorySlugInProduction($slug, $perPage = null)
+    {
+        $columns = [
+            'id',
+            'price',
+            'published',
+            'discount_price',
+            'preview',
+            'sort',
+            'h1',
+        ];
+
+        return $this
+            ->startConditions()
+            ->where('published', 1)
+            ->whereHas('categories', function ($q) use ($slug) {
+                $q->where('slug', $slug);
+            })
+            ->select($columns)
+            ->orderBy('total_sales', 'desc')
+            ->paginate($perPage);
+    }
+
     /**
      * Увеличить кол-во покупок товара на 1.
      *

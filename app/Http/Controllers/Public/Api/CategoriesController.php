@@ -37,22 +37,6 @@ class CategoriesController extends Controller
     }
 
     /**
-     * Получить товары из категории по Slug для вывода на продакшн.
-     *
-     * @param $slug
-     * @return JsonResponse
-     */
-    public function getCategoryProducts($slug): JsonResponse
-    {
-        $result = $this->categoriesRepository->getCategoryProductsOnProduction($slug, 15);
-
-        return $this->returnResponse([
-            'success' => true,
-            'result' => $result,
-        ]);
-    }
-
-    /**
      * Получить категории для вывода на прод.
      *
      * @return JsonResponse

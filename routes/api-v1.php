@@ -56,6 +56,9 @@ Route::prefix('v1')->middleware('api')->group(function () {
 
         Route::get('best-selling', [ProductsController::class, 'getBestSellingProducts'])
             ->name('api.public.products.best-selling');
+
+        Route::get('category/{slug}', [ProductsController::class, 'getWhereCategorySlug'])
+            ->name('api.public.products.category');
     });
 
     /** Группа маршрутов для корзины */
@@ -130,7 +133,7 @@ Route::prefix('v1')->middleware('api')->group(function () {
          *
          * GET /api/category/products/{slug}
          */
-        Route::get('products/{slug}', [CategoriesController::class, 'getCategoryProducts'])
-            ->name('api.category.getCategoryProductsOnProduction');
+//        Route::get('products/{slug}', [CategoriesController::class, 'getCategoryProducts'])
+//            ->name('api.category.getCategoryProductsOnProduction');
     });
 });

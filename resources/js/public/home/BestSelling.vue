@@ -2,7 +2,7 @@
     <div>
         <loader v-if="isLoading"></loader>
         <product-cards v-if="!isLoading" :products="products"></product-cards>
-        <div class="row d-flex justify-content-center">
+        <div class="row d-flex justify-content-center" v-if="showLoadMore">
             <loader v-if="isLoadingMore"></loader>
             <button class="load-more__button" type="button" v-if="!isLoadingMore" @click="fetch">
                 <span>Загрузить еще</span>
@@ -17,6 +17,7 @@ export default {
         return {
             isLoading: true,
             isLoadingMore: false,
+            showLoadMore: true,
             products: [],
             currentPage: 1,
             total: 1,
@@ -34,6 +35,7 @@ export default {
             this.products = data.result.data;
             this.total = data.result.total;
             this.currentPage = data.result.current_page;
+            this.showLoadMore = (data.result.to !== data.result.total);
         },
         deleteCartListErrorResponse(response) {
             console.log(response);

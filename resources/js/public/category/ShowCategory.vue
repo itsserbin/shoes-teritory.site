@@ -1,55 +1,14 @@
 <template>
     <div>
-        <section class="product-list card">
-            <div class="product-list__title">{{ category.title }}</div>
-            <loader v-if="isLoading"></loader>
-            <div class="row justify-content-center" v-if="!isLoading">
-                <div v-for="product in products"
-                     v-if="product.published === 1"
-                     class="card__product my-3"
-                >
-                    <a v-bind:href="host + '/product/' + product.id" class="text-decoration-none">
-
-                        <div class="card__image">
-                            <img :src="'/storage/products/350/' + product.preview" :alt="product.h1" style="object-fit: cover">
-                        </div>
-
-                        <div class="card__body">
-                            <h5 class="card__label">{{ product.h1 }}</h5>
-                            <div class="card__price">
-                                <div v-if="product.discount_price === null"
-                                     class="card__price-without-discount">{{ product.price }} грн.
-                                </div>
-
-                                <div v-if="product.discount_price > null">
-                                    <div class="card__old-price">{{ product.price }} грн.</div>
-                                    <div class="card__actual-price">{{ product.discount_price }} грн.</div>
-                                </div>
-
-
-                            </div>
-                            <span class="card__button">Подробнее</span>
-                        </div>
-                    </a>
-                </div>
-
-            </div>
-            <div class="row">
-                <div class="col">
-                    <paginate
-                        :page-count="pageCount"
-                        :page-range="3"
-                        :margin-pages="2"
-                        :click-handler="fetch"
-                        :prev-text="'<'"
-                        :next-text="'>'"
-                        :container-class="'pagination justify-content-center'"
-                        :page-link-class="'page-link'"
-                        :prev-link-class="'page-link'"
-                        :next-link-class="'page-link'"
-                        :page-class="'page-item'">
-                    </paginate>
-                </div>
+        <loader v-if="isLoading"></loader>
+        <section v-if="!isLoading" class="product-list card">
+            <div class="product-list__title">{{ categoryTitle }}</div>
+            <product-cards :products="products"></product-cards>
+            <div class="row d-flex justify-content-center" v-if="showLoadMore">
+                <loader v-if="isLoadingMore"></loader>
+                <button class="load-more__button" type="button" v-if="!isLoadingMore" @click="fetch">
+                    <span>Загрузить еще</span>
+                </button>
             </div>
         </section>
     </div>
@@ -59,64 +18,49 @@
 export default {
     data() {
         return {
-            category: '',
+            category: null,
             products: [],
             isLoading: false,
-            host: window.location.origin,
-            pageCount: 1,
-            showingFrom: 1,
-            showingTo: 1,
+            isLoadingMore: false,
+            showLoadMore: true,
+            currentPage: 1,
             total: 1,
-            endpoint: `/api/v1/category/products/?page=`
+            endpoint: `/api/v1/product/category/?page=`
         }
     },
     mounted() {
-        let str = window.location.pathname;
-        let n = str.lastIndexOf('/');
-        let slug = str.substring(n + 1);
-
         this.isLoading = true;
-        this.endpoint = `/api/v1/category/products/${slug}?page=`;
+        this.endpoint = '/api/v1/product/category/' + this.categorySlug + '?page=';
 
-        axios.get('/api/v1/category/' + slug)
-            .then(({data}) => this.getCategorySuccessResponse(data))
-            .catch((response) => this.getCategoryErrorResponse(response));
-
-        axios.get('/api/v1/category/products/' + slug)
+        axios.get('/api/v1/product/category/' + this.categorySlug)
             .then(({data}) => this.getCategoryProductSuccessResponse(data))
             .catch((response) => this.getCategoryProductErrorResponse(response));
     },
+    props: {
+        categoryId: String,
+        categoryTitle: String,
+        categorySlug: String,
+    },
     methods: {
-        getCategorySuccessResponse(data) {
-            this.category = data.result;
-            this.isLoading = false;
-        },
-        getCategoryErrorResponse(response) {
-            this.isLoading = false;
-            console.log(response);
-        },
         getCategoryProductSuccessResponse(data) {
             this.isLoading = false;
             this.products = data.result.data;
             this.total = data.result.total;
-            this.showingFrom = data.result.from;
-            this.showingTo = data.result.to;
-            this.pageCount = data.result.last_page;
+            this.currentPage = data.result.current_page;
+            this.showLoadMore = (data.result.to !== data.result.total);
         },
         getCategoryProductErrorResponse(response) {
             this.isLoading = false;
             console.log(response);
         },
-        fetch(page = 1) {
-            this.isLoading = true;
-            axios.get(this.endpoint + page)
+        fetch() {
+            this.isLoadingMore = true;
+            axios.get(this.endpoint + (this.currentPage + 1))
                 .then(({data}) => {
-                    this.isLoading = false;
-                    this.products = data.result.data;
-                    this.total = data.result.total;
-                    this.showingFrom = data.result.from;
-                    this.showingTo = data.result.to;
-                    this.pageCount = data.result.last_page;
+                    this.isLoadingMore = false;
+                    this.currentPage = data.result.current_page;
+                    this.products = this.products.concat(data.result.data);
+                    this.showLoadMore = (data.result.to !== data.result.total);
                 });
         },
     }

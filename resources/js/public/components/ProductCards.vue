@@ -31,14 +31,8 @@
 
 <script>
 export default {
-    data() {
-        return {}
-    },
     props: {
         products: Array,
-    },
-    mounted() {
-        console.log(this.products)
     }
 }
 </script>

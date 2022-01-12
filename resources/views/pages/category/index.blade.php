@@ -7,7 +7,11 @@
 
     <div class="container">
         <div class="row">
-            <category></category>
+            <category
+                category-id="{{$category->id}}"
+                category-title="{{$category->title}}"
+                category-slug="{{$category->slug}}"
+            ></category>
         </div>
     </div>
 @endsection

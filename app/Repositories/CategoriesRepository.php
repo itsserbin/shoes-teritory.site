@@ -201,23 +201,6 @@ class CategoriesRepository extends CoreRepository
     }
 
 
-    /**
-     * Получить продукты из опеределенной категории.
-     * Поиск по Slug.
-     *
-     * @param $slug
-     * @param $perPage
-     * @return mixed
-     */
-    public function getCategoryProductsOnProduction($slug, $perPage)
-    {
-        $category = $this
-            ->startConditions()
-            ->where('slug', $slug)
-            ->first();
-
-        return $category->products()->paginate($perPage);
-    }
 
     public function search($search, $perPage = 15)
     {

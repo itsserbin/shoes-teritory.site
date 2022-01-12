@@ -120,4 +120,14 @@ class ProductsController extends BaseController
             'result' => $result,
         ]);
     }
+
+    public function getWhereCategorySlug($slug): JsonResponse
+    {
+        $result = $this->productRepository->getWhereCategorySlugInProduction($slug, 12);
+
+        return $this->returnResponse([
+            'success' => true,
+            'result' => $result,
+        ]);
+    }
 }
