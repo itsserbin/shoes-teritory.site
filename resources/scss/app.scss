@@ -1,3 +1,5 @@
+@import "_variables";
+@import "mixin";
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
 @import "~bootstrap/dist/css/bootstrap.css";
 @import '~vue-slick-carousel/dist/vue-slick-carousel.css';
@@ -14,6 +16,7 @@
 @import "components/footer.scss";
 @import "components/card.scss";
 @import "components/product-list.scss";
+@import "components/promocode";
 @import "components/sizes-table.scss";
 @import "components/characteristics-table.scss";
 @import "components/loader";
@@ -21,7 +24,11 @@
 @import "product/advantages.scss";
 @import "product/shipping-and-payment.scss";
 @import "product/reviews.scss";
+@import "pages/cart";
+@import "pages/checkout";
 @import "product/relative.scss";
+
+
 
 html {
     height: 100%;
@@ -154,9 +161,13 @@ ul {
 .order-button,
 .order-button-modal {
     border-radius: 10px;
-    width: 170px;
+    width: 130px;
     height: 50px;
     font-size: 22px;
+
+    @include adaptive($md){
+        width: 170px;
+    }
 }
 
 .order-button,
@@ -283,6 +294,35 @@ ul {
         &:not(:last-child) {
             margin: 0 0 5px 0;
         }
+    }
+}
+
+.cart-link{
+    position: relative;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: $red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .25s;
+    border: 1px solid $red;
+
+    .count{
+        position: absolute;
+        left: 100%;
+        bottom: 100%;
+        transform: translate(-66%,66%);
+        background-color: #ccc;
+        border-radius: 50%;
+        color: $red;
+        font-weight: 600;
+        font-size: .75rem;
+        padding: 5px;
+        width: 20px;
+        height: 20px;
+        text-align: center;
     }
 }
 

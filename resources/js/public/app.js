@@ -20,6 +20,8 @@ if (token) {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
+Vue.component('loader', require('../components/LoaderComponent').default);
+
 Vue.component('cart-icon', require('../components/icons/CartIcon').default);
 Vue.component('facebook-icon', require('../components/icons/FacebookIcon').default);
 Vue.component('instagram-icon', require('../components/icons/InstagramIcon').default);
@@ -29,15 +31,14 @@ Vue.component('viber-icon', require('../components/icons/ViberIcon').default);
 Vue.component('header-component', require('./components/Header').default);
 Vue.component('all-reviews-component', require('./components/AllReviews').default);
 Vue.component('delivery-and-return-accordion', require('./components/DeliveryAndReturnAccordion').default);
+
 /**
  * Vue Cart components
  */
-Vue.component('loader', require('../components/LoaderComponent').default);
-Vue.component('cart', require('./cart/CartComponent').default);
-Vue.component('cart-list', require('./cart/CartTableComponent').default);
-// Vue.component('cart-total', require('./components/cart/CartTotalComponent').default);
+Vue.component('cart-icon-component', require('./cart/CartIconComponent').default);
 Vue.component('add-to-cart', require('./product/AddToCart').default);
 Vue.component('checkout', require('./cart/CheckoutComponent').default);
+Vue.component('cart-component', require('./cart/Cart').default);
 
 /**
  * Vue Product components

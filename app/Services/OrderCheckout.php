@@ -41,11 +41,11 @@ class OrderCheckout
     private $cookie;
 
     public function __construct(
-        CartRepository $cartRepository,
-        ProductRepository $productRepository,
-        ClientsRepository $clientsRepository,
-        CartItemsRepository $cartItemsRepository,
-        OrdersRepository $ordersRepository,
+        CartRepository       $cartRepository,
+        ProductRepository    $productRepository,
+        ClientsRepository    $clientsRepository,
+        CartItemsRepository  $cartItemsRepository,
+        OrdersRepository     $ordersRepository,
         OrderItemsRepository $orderItemsRepository
     )
     {
@@ -63,26 +63,38 @@ class OrderCheckout
         $cart = $this->findCart();
 
         $name = $data['name'];
-        $phone = $data['phone'];
         $phone = preg_replace('/[^0-9]/', '', $data['phone']);
-        $phone = '+' . $phone;
+        $email = $data['email'];
+        $last_name = $data['last_name'];
 
         $client = $this->clientsRepository->checkByPhone($phone);
 
         if ($cart) {
             $items = $this->findCartItems($cart->id);
-
             if (!isset($client)) {
-                $client = $this->clientsRepository->createClient($name, $phone);
+                $client = $this->clientsRepository->createClient(
+                    $name,
+                    $phone,
+                    $email,
+                    $last_name,
+                    $cart->items,
+                    $cart->promo_code
+                );
             } else {
-                $client = $this->clientsRepository->updateClient($client->id);
+                $client = $this->clientsRepository->updateClient($client->id, $cart->items,$cart->promo_code);
             }
 
-            $order = $this->ordersRepository->create($data, $client->id);
+            $order = $this->ordersRepository->create(
+                $data['city'],
+                $data['postal_office'],
+                $client->id,
+                $cart->promo_code,
+                $cart->items
+            );
 
 
-            if ($this->orderItemsRepository->create($items, $order->id)) {
-                foreach ($items as $item){
+            if ($this->orderItemsRepository->create($items, $order->id,$cart->promo_code)) {
+                foreach ($items as $item) {
                     $this->productRepository->updateProductTotalSales($item->product_id);
                 }
                 $this->deleteCartItems($cart->id);

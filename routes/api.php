@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\Api\OptionsController;
 use App\Http\Controllers\Admin\Api\OrderItemsController;
 use App\Http\Controllers\Admin\Api\OrdersController;
 use App\Http\Controllers\Admin\Api\ProductsController;
+use App\Http\Controllers\Admin\Api\PromoCodesController;
 use App\Http\Controllers\Admin\Api\ProvidersController;
 use App\Http\Controllers\Admin\Api\ReviewsController;
 use App\Http\Controllers\Admin\Api\UploadController;
@@ -387,6 +388,30 @@ Route::middleware('auth:api')->group(function () {
             Route::put('update', [OptionsController::class, 'updateScriptsOptions'])
                 ->name('api.options.scripts.update');
         });
+    });
+
+    Route::prefix('promo-codes')->group(function () {
+
+        Route::get('/', [PromoCodesController::class, 'index'])
+            ->name('api.promo-codes.index');
+
+        Route::get('edit/{id}', [PromoCodesController::class, 'edit'])
+            ->name('api.promo-codes.edit');
+
+        Route::post('create', [PromoCodesController::class, 'create'])
+            ->name('api.promo-codes.create');
+
+        Route::put('update/{id}', [PromoCodesController::class, 'update'])
+            ->name('api.promo-codes.update');
+
+        Route::get('search={search}', [PromoCodesController::class, 'search'])
+            ->name('api.promo-codes.search');
+
+        Route::delete('/destroy/{id}', [PromoCodesController::class, 'destroy'])
+            ->name('api.promo-codes.destroy');
+
+        Route::post('mass', [PromoCodesController::class, 'massActions'])
+            ->name('api.promo-codes.mass');
     });
 });
 

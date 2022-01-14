@@ -17,6 +17,14 @@ use PhpParser\Node\Expr\AssignOp\Concat;
 class OrdersRepository extends CoreRepository
 {
 
+    private $promoCodesRepository;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->promoCodesRepository = app(PromoCodesRepository::class);
+    }
+
     /**
      * @return string
      */
@@ -36,7 +44,7 @@ class OrdersRepository extends CoreRepository
     {
         return $this
             ->startConditions()
-            ->with('items.product.providers')
+            ->with('items.product.providers', 'client')
             ->find($id);
     }
 
@@ -54,21 +62,18 @@ class OrdersRepository extends CoreRepository
         $columns = [
             'id',
             'status',
-            'name',
-            'phone',
             'waybill',
             'client_id',
-            'product_id',
-            'city',
             'comment',
-            'sale_price',
+            'total_count',
+            'total_price',
             'updated_at',
             'created_at',
         ];
 
         return $this
             ->startConditions()
-            ->with('Clients', 'Product')
+            ->with('client')
             ->select($columns)
             ->orderBy($sort, $param)
             ->paginate($perPage);
@@ -107,20 +112,38 @@ class OrdersRepository extends CoreRepository
      * @param $data
      * @return mixed
      */
-    public function create($data, $client_id)
+    public function create($city, $postalOffice, $client_id, $promoCode, $items)
     {
         $order = new $this->model;
 
-        $order->name = $data['name'];
-        $order->phone = $data['phone'];
-        $order->city = $data['city'];
-        $order->postal_office = $data['postal_office'];
+        $order->city = $city;
+        $order->postal_office = $postalOffice;
         $order->client_id = $client_id;
-        $order->product_name = '-';
-        $order->trade_price = '-';
-        $order->sale_price = '-';
-        $order->profit = '-';
         $order->status = 'Новый';
+        $order->promo_code = $promoCode;
+
+        $totalPrice = 0;
+        $totalCount = 0;
+
+        foreach ($items as $item) {
+            if ($item->product) {
+                $totalPrice += ($item->product->discount_price ?: $item->product->price) * $item->count;
+                $totalCount += $item->count;
+            }
+        }
+
+        if ($promoCode) {
+            $discount = $this->promoCodesRepository->getDiscount($promoCode);
+
+            if ($discount->discount_in_hryvnia) {
+                $totalPrice -= $discount->discount_in_hryvnia;
+            } elseif ($discount->percent_discount) {
+                $totalPrice = $totalPrice * (100 - $discount->percent_discount) / 100;
+            }
+        }
+
+        $order->total_count = $totalCount;
+        $order->total_price = $totalPrice;
 
         $order->save();
 
@@ -143,8 +166,6 @@ class OrdersRepository extends CoreRepository
     {
         return $this->model::where('id', $id)->update([
             'status' => $request[0]['status'],
-            'name' => $request[0]['name'],
-            'phone' => $request[0]['phone'],
             'comment' => $request[0]['comment'],
             'city' => $request[0]['city'],
             'waybill' => $request[0]['waybill'],
@@ -190,12 +211,9 @@ class OrdersRepository extends CoreRepository
     {
         $columns = [
             'id',
-            'name',
-            'phone',
             'status',
             'product_id',
             'client_id',
-            'sale_price',
             'created_at',
             'updated_at',
         ];
@@ -203,9 +221,9 @@ class OrdersRepository extends CoreRepository
         return $this
             ->startConditions()
             ->select($columns)
-            ->where('name', 'LIKE', "%$search%")
-            ->orWhere('phone', 'LIKE', "%$search%")
+            ->where('waybill', 'LIKE', "%$search%")
             ->orWhere('id', 'LIKE', "%$search%")
+            ->orWhere('comment', 'LIKE', "%$search%")
             ->orderBy('created_at', 'desc')
             ->with('product')
             ->paginate($perPage);
@@ -247,5 +265,10 @@ class OrdersRepository extends CoreRepository
             return true;
         }
         return false;
+    }
+
+    public function updateSmsWaybillStatus($id)
+    {
+        return $this->model::where('id', $id)->update(['sms_waybill_status' => 1]);
     }
 }

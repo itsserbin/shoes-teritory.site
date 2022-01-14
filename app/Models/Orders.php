@@ -15,21 +15,12 @@ class Orders extends Model
     protected $fillable = [
         'id',
         'status',
-        'name',
-        'phone',
-        'sizes',
-        'colors',
         'city',
         'waybill',
         'postal_office',
+        'sms_waybill_status',
         'comment',
-        'product_id',
         'client_id',
-        'product_name',
-        'trade_price',
-        'sale_price',
-        'pay',
-        'profit',
         'created_at',
         'updated_at',
         'modified_by',
@@ -41,21 +32,11 @@ class Orders extends Model
     ];
 
     /**
-     * Relation with Products.
-     *
-     * @return BelongsTo
-     */
-    public function Product()
-    {
-        return $this->belongsTo(Products::class);
-    }
-
-    /**
      * Relation with Clients.
      *
      * @return BelongsTo
      */
-    public function Clients()
+    public function client(): BelongsTo
     {
         return $this->belongsTo(Clients::class,'client_id');
     }

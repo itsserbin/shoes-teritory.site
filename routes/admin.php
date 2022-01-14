@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ClientsController;
 use App\Http\Controllers\Admin\ColorsController;
 use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\Admin\ProductsController;
+use App\Http\Controllers\Admin\PromoCodesController;
 use App\Http\Controllers\Admin\ReviewsController;
 use App\Http\Controllers\Admin\RolesColroller;
 use App\Http\Controllers\Admin\UsersController;
@@ -82,6 +83,19 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
         Route::get('create', [ReviewsController::class, 'create'])
             ->name('admin.reviews.create');
     });
+
+    Route::prefix('promo-codes')->group(function () {
+
+        Route::get('/', [PromoCodesController::class, 'index'])
+            ->name('admin.promo-codes.index');
+
+        Route::get('edit/{id}', [PromoCodesController::class, 'edit'])
+            ->name('admin.promo-codes.edit');
+
+        Route::get('create', [PromoCodesController::class, 'create'])
+            ->name('admin.promo-codes.create');
+    });
+
 
     Route::prefix('clients')->group(function () {
         Route::get('/', [ClientsController::class, 'index'])

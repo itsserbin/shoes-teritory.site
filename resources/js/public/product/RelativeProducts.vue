@@ -51,6 +51,7 @@ export default {
             settings: {
                 "lazyLoad": "ondemand",
                 "dots": true,
+                "arrows": false,
                 "dotsClass": "slick-dots",
                 "edgeFriction": 0.35,
                 "infinite": true,

@@ -41,6 +41,11 @@
                        href="{{route('admin.options.index')}}">Настройки</a>
                 @endif
 
+                @if(Gate::allows('edit-options') OR Gate::allows('admin'))
+                    <a class="nav-link {{ request()->routeIs('admin.promo-codes.index') ? 'active' : null }}"
+                       href="{{route('admin.promo-codes.index')}}">Промо-коды</a>
+                @endif
+
 
                 @endrole
 

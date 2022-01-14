@@ -82,4 +82,42 @@ class CartController extends BaseController
             'success' => true,
         ]);
     }
+
+    public function updateDecrement($id): JsonResponse
+    {
+        $this->shoppingCart->updateDecrement($id);
+
+        return $this->returnResponse([
+            'success' => true,
+        ]);
+    }
+
+    public function updateIncrement($id): JsonResponse
+    {
+        $this->shoppingCart->updateIncrement($id);
+
+        return $this->returnResponse([
+            'success' => true,
+        ]);
+    }
+
+    public function activatePromoCode(Request $request): JsonResponse
+    {
+        $result = $this->shoppingCart->activatePromoCode($request->get('promo_code'));
+
+        return $this->returnResponse([
+            'success' => true,
+            'result' => $result
+        ]);
+    }
+
+    public function deactivatePromoCode(): JsonResponse
+    {
+        $result = $this->shoppingCart->deactivatePromoCode();
+
+        return $this->returnResponse([
+            'success' => true,
+            'result' => $result
+        ]);
+    }
 }

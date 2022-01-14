@@ -23,16 +23,42 @@
                 <div class="col-12 col-md-3">
                     <div class="form-group my-3">
                         <label class="form-label" for="name">Имя</label>
-                        <input type="text" class="form-control" id="name" name="name"
-                               v-model="order.name">
+                        <input type="text"
+                               class="form-control"
+                               id="name"
+                               v-model="order.client.name"
+                               disabled
+                        >
                     </div>
                 </div>
                 <div class="col-12 col-md-3">
                     <div class="form-group my-3">
                         <label class="form-label" for="phone">Номер телефона</label>
-                        <input type="text" class="form-control" id="phone" name="phone"
-                               v-model="order.phone">
+                        <div class="d-flex">
+                            <input type="text"
+                                   class="form-control"
+                                   id="phone"
+                                   v-model="order.client.phone"
+                                   disabled
+                            >
+                            <a :href="'tel:' + order.client.phone">
+                                <button type="button" class="btn btn-danger">
+                                    <telephone-icon></telephone-icon>
+                                </button>
+                            </a>
+                        </div>
                     </div>
+                </div>
+                <div class="col-12 col-md-3">
+                    <div class="form-group my-3">
+                        <label class="form-label w-100">&nbsp;</label>
+                        <a :href="'/admin/clients/edit/' + order.client_id" target="_blank">
+                            <button type="button" class="btn btn-danger">
+                                Редактировать данные клиента
+                            </button>
+                        </a>
+                    </div>
+
                 </div>
             </div>
             <hr>
@@ -56,8 +82,17 @@
                         <input type="text" class="form-control" id="waybill" name="waybill"
                                v-model="order.waybill">
                     </div>
-                    <a href="javascript:" @click.prevent="sendWaybill(order.phone,order.waybill)">Отправить ТТН
-                        клиенту</a>
+                    <div v-if="!order.sms_waybill_status" v-show="order.waybill !== null">
+                        <a
+                            href="javascript:"
+                            @click.prevent="sendWaybill(order.client.phone,order.waybill)"
+                        >Отправить ТТН клиенту</a>
+                    </div>
+                    <div v-if="order.sms_waybill_status">
+                        ТТН отправлена (<a href="javascript:"
+                                           @click.prevent="sendWaybill(order.client.phone,order.waybill)"
+                    >Отправить повторно</a>)
+                    </div>
                 </div>
 
                 <div class="col-12 col-md-6">
@@ -66,7 +101,6 @@
                         <textarea rows="8"
                                   class="form-control"
                                   id="comment"
-                                  name="comment"
                                   v-model="order.comment">
                         </textarea>
                     </div>
@@ -103,7 +137,7 @@
                                     >
                                 </td>
                                 <td>{{ item.count }}</td>
-                                <td>{{ item.sale_price }}</td>
+                                <td>{{ item.sale_price | formatMoney}} грн.</td>
                                 <td><span v-for="color in item.color">{{ color }}</span></td>
                                 <td><span v-for="size in item.size">{{ size }}</span></td>
                                 <td>{{ item.product.vendor_code }}</td>
@@ -167,6 +201,18 @@
 
                 </div>
             </div>
+            <div class="row text-center mb-3">
+                <div class="col-12 col-md-4">
+                    <b>Товаров: </b> {{ order.total_count }}
+                </div>
+                <div class="col-12 col-md-4">
+                    <b>Общая сумма: </b> {{ order.total_price | formatMoney }}
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <b>Промо-код: </b> {{ order.promo_code ? order.promo_code : 'Отсутствует' }}
+                </div>
+            </div>
             <button type="submit" class="btn btn-danger">Сохранить</button>
 
         </form>
@@ -181,8 +227,6 @@ export default {
             order: {
                 id: null,
                 status: null,
-                name: null,
-                phone: null,
                 city: null,
                 postal_office: null,
                 waybill: null,
@@ -220,16 +264,20 @@ export default {
         let n = str.lastIndexOf('/');
         let id = str.substring(n + 1);
 
-        axios.get('/api/orders/edit/' + id)
-            .then(({data}) => this.getOrderSuccessResponse(data))
-            .catch((response) => this.getOrderErrorResponse(response));
+        this.getOrder(id);
     },
     methods: {
-        sendWaybill(phone, waybill) {
-            if (this.order.waybill !== null){
+        getOrder(id) {
+            axios.get('/api/orders/edit/' + id)
+                .then(({data}) => this.getOrderSuccessResponse(data))
+                .catch((response) => this.getOrderErrorResponse(response));
+        },
+        sendWaybill(phone) {
+            if (this.order.waybill !== null) {
                 axios.post('/admin/notify-waybill', {
                     phone: phone,
-                    waybill: waybill
+                    waybill: this.order.waybill,
+                    order_id: this.order.id
                 })
                     .then(({data}) => {
                         if (data.success === true) {
@@ -238,7 +286,15 @@ export default {
                                 'title': 'Отправлено!',
                                 'text': 'Номер накладной успешно отправлен клиенту',
                             })
+                        } else {
+                            this.$swal({
+                                'icon': 'error',
+                                'title': 'Ошибка',
+                                'text': 'Обратитесь к администратору',
+                            })
                         }
+                        axios.put('/api/orders/update/' + this.order.id, [this.order, {userName: this.userName}])
+                        this.getOrder(this.order.id);
                     })
                     .catch((response) => {
                         this.$swal({

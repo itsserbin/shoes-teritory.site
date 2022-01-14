@@ -13,12 +13,15 @@ use PhpParser\Node\Expr\AssignOp\Concat;
 class ClientsRepository extends CoreRepository
 {
 
+    private $promoCodesRepository;
+
     /**
      * ClientsController constructor.
      */
     public function __construct()
     {
         parent::__construct();
+        $this->promoCodesRepository = app(PromoCodesRepository::class);
     }
 
     /**
@@ -38,7 +41,7 @@ class ClientsRepository extends CoreRepository
      */
     public function getById($id)
     {
-        return $this->startConditions()->find($id);
+        return $this->startConditions()->with('orders')->find($id);
     }
 
     /**
@@ -55,6 +58,7 @@ class ClientsRepository extends CoreRepository
         $columns = [
             'id',
             'name',
+            'last_name',
             'phone',
             'status',
             'number_of_purchases',
@@ -83,6 +87,7 @@ class ClientsRepository extends CoreRepository
         $columns = [
             'id',
             'name',
+            'last_name',
             'phone',
             'status',
             'number_of_purchases',
@@ -96,6 +101,7 @@ class ClientsRepository extends CoreRepository
             ->startConditions()
             ->select($columns)
             ->where('name', 'LIKE', "%$search%")
+            ->orWhere('last_name', 'LIKE', "%$search%")
             ->orWhere('phone', 'LIKE', "%$search%")
             ->orWhere('id', 'LIKE', "%$search%")
             ->orderBy('created_at', 'desc')
@@ -113,6 +119,8 @@ class ClientsRepository extends CoreRepository
     {
         return $this->model::where('id', $id)->update([
             'name' => $request['name'],
+            'last_name' => $request['last_name'],
+            'email' => $request['email'],
             'status' => $request['status'],
             'comment' => $request['comment'],
             'city' => $request['city'],
@@ -146,15 +154,40 @@ class ClientsRepository extends CoreRepository
      * @param $phone
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public function createClient($name, $phone)
+    public function createClient($name, $phone, $email, $last_name, $items, $promoCode)
     {
         $client = new Clients();
         $client->name = $name;
+        $client->email = $email;
+        $client->last_name = $last_name;
         $client->status = 'Новый';
         $client->phone = $phone;
         $client->number_of_purchases = 1;
-        $client->whole_check = '-';
-        $client->average_check = '-';
+
+        $totalPrice = 0;
+        $totalCount = 0;
+
+        foreach ($items as $item) {
+            if ($item->product) {
+                $totalPrice += ($item->product->discount_price ?: $item->product->price) * $item->count;
+                $totalCount += $item->count;
+            }
+        }
+
+        if ($promoCode) {
+            $discount = $this->promoCodesRepository->getDiscount($promoCode);
+
+            if ($discount->discount_in_hryvnia) {
+                $totalPrice -= $discount->discount_in_hryvnia;
+            } elseif ($discount->percent_discount) {
+                $totalPrice = $totalPrice * (100 - $discount->percent_discount) / 100;
+            }
+        }
+
+        $client->whole_check = $totalPrice;
+        $client->purchased_goods = $totalCount;
+        $client->average_check = $totalPrice / $totalCount;
+
         $client->save();
 
         return $client;
@@ -166,13 +199,37 @@ class ClientsRepository extends CoreRepository
      * @param $client
      * @return mixed
      */
-    public function updateClient($client)
+    public function updateClient($client, $items, $promoCode)
     {
         $result = $this->startConditions()->where('id', $client)->first();
 
         ++$result->number_of_purchases;
-        $result->whole_check = '-';
-        $result->average_check = '-';
+
+        $totalPrice = $result->whole_check;
+        $totalCount = $result->purchased_goods;
+
+        foreach ($items as $item) {
+            if ($item->product) {
+                $totalPrice += ($item->product->discount_price ?: $item->product->price) * $item->count;
+                $totalCount += $item->count;
+            }
+        }
+
+        if ($promoCode) {
+            $discount = $this->promoCodesRepository->getDiscount($promoCode);
+
+            if ($discount->discount_in_hryvnia) {
+                $totalPrice -= $discount->discount_in_hryvnia;
+            } elseif ($discount->percent_discount) {
+                $totalPrice = $totalPrice * (100 - $discount->percent_discount) / 100;
+            }
+        }
+
+        $result->whole_check = $totalPrice;
+        $result->purchased_goods = $totalCount;
+        $result->average_check = $totalPrice / $totalCount;
+
+
         $result->update();
 
         return $result;

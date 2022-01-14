@@ -1,114 +1,194 @@
 <template>
     <div>
-        <div class="row">
+        <loader v-if="isLoading"></loader>
+        <div class="row" v-if="!isLoading">
             <div class="col-12 col-md-6 mb-3">
-                <div class="order-card border rounded m-2 " v-for="item in cart.list" :key="item.id">
-                    <div class="d-flex">
-                        <div class="order-img w-25 d-flex">
-                            <img class="w-100" :alt="item.name"
-                                 :src="item.image ? '/storage/products/350/' + item.image : '/images/no-image.png'"
-                                 style="object-fit: cover;">
+                <div class="ordering-item">
+                    <div class="ordering-item__title">
+                        <h3>Персональные данные</h3>
+                    </div>
+                    <div class="data-list">
+                        <div class="input data-list__item">
+                            <label> Имя<span class="required">*</span>
+                                <input type="text" v-model="order.name" placeholder="Введите имя">
+                            </label>
                         </div>
-                        <div class="order-content d-flex flex-column p-3 w-100">
-                            <div class="h5">
-                                <a v-bind:href="item.alias" class="text-dark text-decoration-none"
-                                   target="_blank">{{ item.name }}</a>
-                            </div>
-                            <div>Цвет: <span v-for="color in item.color">{{ color }}</span></div>
-                            <div>Размер: <span v-for="size in item.size">{{ size }}</span></div>
-                            <div>Цена: ₴ {{ item.price }}</div>
-                            <div>Кол-во: {{ item.count }}</div>
-                            <div>Итого: ₴ {{ item.price * item.count }}</div>
+                        <div class="input data-list__item">
+                            <label> Фамилия
+                                <input type="text" v-model="order.last_name" placeholder="Введите фамилию">
+                            </label>
                         </div>
-                        <div class="d-flex">
-                            <button type="button"
-                                    class="btn"
-                                    @click.prevent="removeFromCart(item.id)"
-                            >
-                                <destroy-icon></destroy-icon>
-                            </button>
+                        <div class="input data-list__item">
+                            <label> Номер телефона <span class="required">*</span>
+                                <input id="input-phone"
+                                       class="phone"
+                                       type="text"
+                                       placeholder="+38"
+                                       v-model="order.phone"
+                                >
+                            </label>
+                        </div>
+                        <div class="input data-list__item">
+                            <label> Email
+                                <input type="email" v-model="order.email" placeholder="Введіть вашу пошту">
+                            </label>
                         </div>
                     </div>
                 </div>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th colspan="2">Итого</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>Товаров</td>
-                        <td>{{ cart.totalCount }}</td>
-                    </tr>
-                    <tr>
-                        <td><b>К оплате</b></td>
-                        <td><b>₴ {{ cart.totalPrice }}</b></td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div class="ordering-item payment-delivery">
+                    <div class="ordering-item__title">
+                        <h3>Доставка</h3>
+                    </div>
+                    <div class="data-list">
+                        <div class="input data-list__item">
+                            <label> Город<span class="required">*</span>
+                                <input type="text" v-model="order.city" placeholder="Введите город">
+                            </label>
+                        </div>
+                        <div class="input data-list__item">
+                            <label> Отделение НоваяПочта<span class="required">*</span>
+                                <input type="text" v-model="order.postal_office" placeholder="Введите отделение НП">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!--                <div class="ordering-item payment-delivery">-->
+                <!--                    <div class="ordering-item__title">-->
+                <!--                        <h3>Оплата</h3>-->
+                <!--                    </div>-->
+                <!--                    <div class="data-list w100 mb-4">-->
+                <!--                        <div-->
+                <!--                            class="data-list__item d-sm-flex align-items-sm-center justify-content-sm-between radio-btn">-->
+                <!--                            <label class="me-sm-2">-->
+                <!--                                <input type="radio"-->
+                <!--                                       v-model="order.payment_method"-->
+                <!--                                       name="payment"-->
+                <!--                                       value="Cash"-->
+                <!--                                >-->
+                <!--                                <span></span>-->
+                <!--                                <p class="a-text">Наличные</p>-->
+                <!--                            </label>-->
+                <!--                        </div>-->
+                <!--                        <div-->
+                <!--                            class="data-list__item d-sm-flex align-items-sm-center justify-content-sm-between radio-btn">-->
+                <!--                            <label class="me-sm-2">-->
+                <!--                                <input type="radio"-->
+                <!--                                       v-model="order.payment_method"-->
+                <!--                                       name="payment"-->
+                <!--                                       value="Card"-->
+                <!--                                >-->
+                <!--                                <span></span>-->
+                <!--                                <p class="a-text">Оплата картой</p>-->
+                <!--                            </label>-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+
+
+                <div class="textarea">
+                    <label> Комментарий
+                        <textarea v-model="order.comment" placeholder="Ваш комментарий..."></textarea>
+                    </label>
+                </div>
             </div>
-            <div class="col-12 col-md-6 mb-3 align-items-center justify-content-center d-flex">
-                <loader v-if="isLoading"></loader>
-                <form @submit.stop.prevent="sendOrder" v-if="!isLoading" class="w-100">
-                    <div class="h3">Контактные данные</div>
+            <div class="col-12 col-md-6">
+                <div class="ordering-right__inner">
+                    <div class="ordering-cart">
+                        <div class="ordering-item__title">
+                            <h3>Заказ</h3>
+                        </div>
+                        <div class="ordering-cart__list">
+                            <div class="ordering-cart__item" v-for="item in cart.list" :key="item.id">
+                                <div class="img">
+                                    <div class="img-inner">
+                                        <img
+                                            :src="item.image ? '/storage/products/350/' + item.image : '/images/no-image.png'"
+                                            :alt="item.name">
+                                    </div>
+                                </div>
+                                <div class="line"></div>
+                                <div class="title">{{ item.name }}</div>
+                                <div class="color-size">
+                                    <div v-if="item.color.length || item.size.length">
+                                        <div class="color"
+                                             v-for="color in item.color"
+                                             v-if="item.color.length"
+                                        >{{ color }}
+                                        </div>
+                                        <div class="size"
+                                             v-if="item.size.length"
+                                             v-for="size in item.size"
+                                        >{{ size }}
+                                        </div>
+                                    </div>
+                                    <div v-else>
+                                        <div class="size">Размер и цвет не выбран</div>
+                                    </div>
+                                </div>
+                                <div class="ordering-cart__count"> x<span class="count">{{ item.count }}</span></div>
+                                <div class="product-card__price">
+                                    <div class="price">
+                                        <div class="price" v-if="item.discount_price !== 0">
+                                            <del>
+                                        <span class="amount price-old">{{ item.price }}
+                                            <span class="icon-currency"
+                                                  style="font-size: 0.875rem">грн.
+                                            </span>
+                                        </span>
+                                            </del>
+                                            <ins>
+                                        <span class="amount price-sale">
+                                            {{ item.discount_price }}
+                                            <span class="icon-currency" style="font-size: 0.875rem">
+                                                грн.
+                                            </span>
+                                        </span>
+                                            </ins>
+                                        </div>
 
-                    <label class="form-label">ФИО</label>
-                    <div class="input-group mb-3">
-                        <input
-                            class="form-control"
-                            v-model="order.name"
-                            placeholder="Введите свое ФИО"
-                        >
-                        <span v-if="errors.name" class="has-error text-danger">Введите Ваше ФИО</span>
+                                        <div class="price" v-if="item.discount_price === 0">
+                                            <div style="display: flex;align-items: flex-end;">
+                                                {{ item.price }}&nbsp;
+                                                <span class="icon-currency" style="font-size: 0.875rem">грн.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                    <label class="form-label">Телефон</label>
-                    <div class="input-group mb-3">
-                        <input
-                            class="form-control"
-                            id="input-phone"
-                            v-model="order.phone"
-                            placeholder="Введите свой телефон"
-                        >
-
-                        <span v-if="errors.phone" class="has-error text-danger">Введите Ваш телефон</span>
+                    <div class="payment">
+                        <div class="payment-top">
+                            <div class="sum">
+                                <div class="item discount" v-if="cart.price_without_discount !== 0">
+                                    <div class="label">Цена без скидки</div>
+                                    <div class="value">
+                                        <div class="product-card__price">
+                                            <div class="price">
+                                                <del>
+                                                    <span class="amount price-old"> {{ cart.price_without_discount }} грн. </span>
+                                                </del>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="label">К оплате</div>
+                                    <div class="value">
+                                        <div class="product-card__price">
+                                            <div class="price total">{{ cart.totalPrice }} грн.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="buttons">
+                                <a href="javascript:" class="button-checkout" @click.prevent="sendOrder">Заказать</a>
+                            </div>
+                        </div>
                     </div>
-
-                    <label class="form-label">Город</label>
-                    <div class="input-group mb-3">
-                        <input
-                            class="form-control"
-                            v-model="order.city"
-                            placeholder="Введите город доставки"
-                        >
-
-                        <span v-if="errors.city" class="has-error text-danger">Укажите город доставки</span>
-
-                    </div>
-
-                    <label class="form-label">Отделение НоваПошта</label>
-                    <div class="input-group mb-3">
-                        <input
-                            class="form-control"
-                            v-model="order.postal_office"
-                            placeholder="Введите номер отделение НоваПошта"
-                            aria-describedby="input-postal_office-live-feedback"
-                        >
-
-                        <span v-if="errors.postal_office"
-                              class="has-error text-danger">Укажите отделение НоваПошта</span>
-                    </div>
-                        <button
-                            type="submit"
-                            class="btn btn-outline-success btn-lg w-100"
-                        >
-                            Оформить заказ
-                        </button>
-                </form>
-
+                </div>
             </div>
-
         </div>
     </div>
 
@@ -130,14 +210,19 @@ export default {
             errors: [],
             order: {
                 name: null,
+                last_name: null,
+                email: null,
+                comment: null,
                 phone: null,
                 city: null,
                 postal_office: null,
+                payment_method: null,
             }
         }
     },
     mounted() {
         new Inputmask("+38 (999) 999-99-99").mask(document.getElementById('input-phone'));
+        // this.isLoading = false;
     },
     methods: {
         removeFromCart(id) {
@@ -164,7 +249,7 @@ export default {
                 text: 'Ваша заявка отправлена :)',
                 icon: 'success',
             });
-            window.location.href = '/send-form';
+            // window.location.href = '/send-form';
         },
         sendFormErrorResponse(response) {
             this.errors = response.data;

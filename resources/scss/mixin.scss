@@ -1,0 +1,5 @@
+@mixin adaptive($mw) {
+    @media screen and (min-width: $mw) {
+        @content
+    }
+}

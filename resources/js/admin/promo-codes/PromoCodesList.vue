@@ -2,10 +2,20 @@
     <div>
         <loader v-if="isLoading"></loader>
         <div v-if="!isLoading">
+            <div class="row mb-3" v-if="promo_codes.length !== 0">
+                <div class="col">
+                    <button
+                        @click="createPromoCode"
+                        class="btn btn-danger w-25">
+                        Добавить промо-код
+                    </button>
+                </div>
+            </div>
+
             <div class="row mb-3">
                 <div class="col">
                     <div class="d-flex">
-                        <button class="btn btn-danger" @click.prevent="getClients">Очистить</button>
+                        <button class="btn btn-danger" @click.prevent="getPromoCodes">Очистить</button>
                         <input type="text" v-model="search" class="form-control mx-1">
                         <button @click.prevent="getSearchList" type="submit" class="btn btn-danger">Поиск</button>
                     </div>
@@ -35,84 +45,33 @@
                         </th>
                         <th>
                             <div class="d-flex align-items-center justify-content-center">
-                                <div class="mr-1">Статус</div>
-                                <a href="javascript:" class="text-dark" @click="sort('status','asc')">
+                                <div class="mr-1">Код</div>
+                                <a href="javascript:" class="text-dark" @click="sort('code','asc')">
                                     <arrow-up-icon></arrow-up-icon>
                                 </a>
-                                <a href="javascript:" class="text-dark" @click="sort('status','desc')">
+                                <a href="javascript:" class="text-dark" @click="sort('code','desc')">
                                     <arrow-down-icon></arrow-down-icon>
                                 </a>
                             </div>
                         </th>
+                        <th class="w-25">
+                            Скидка
+                        </th>
                         <th>
                             <div class="d-flex align-items-center justify-content-center">
-                                <div class="mr-1">Имя</div>
-                                <a href="javascript:" class="text-dark" @click="sort('name','asc')">
+                                <div class="mr-1">Время окончания</div>
+                                <a href="javascript:" class="text-dark" @click="sort('end_date','asc')">
                                     <arrow-up-icon></arrow-up-icon>
                                 </a>
-                                <a href="javascript:" class="text-dark" @click="sort('name','desc')">
+                                <a href="javascript:" class="text-dark" @click="sort('end_date','desc')">
                                     <arrow-down-icon></arrow-down-icon>
                                 </a>
                             </div>
                         </th>
+                        <th>Статус</th>
                         <th>
                             <div class="d-flex align-items-center justify-content-center">
-                                <div class="mr-1">Фамилия</div>
-                                <a href="javascript:" class="text-dark" @click="sort('last_name','asc')">
-                                    <arrow-up-icon></arrow-up-icon>
-                                </a>
-                                <a href="javascript:" class="text-dark" @click="sort('last_name','desc')">
-                                    <arrow-down-icon></arrow-down-icon>
-                                </a>
-                            </div>
-                        </th>
-                        <th>
-                            <div class="d-flex align-items-center justify-content-center">
-                                <div class="mr-1">Телефон</div>
-                                <a href="javascript:" class="text-dark" @click="sort('phone','asc')">
-                                    <arrow-up-icon></arrow-up-icon>
-                                </a>
-                                <a href="javascript:" class="text-dark" @click="sort('phone','desc')">
-                                    <arrow-down-icon></arrow-down-icon>
-                                </a>
-                            </div>
-                        </th>
-                        <th>
-                            <div class="d-flex align-items-center justify-content-center">
-                                <div class="mr-1">Кол-во покуполк</div>
-                                <a href="javascript:" class="text-dark" @click="sort('number_of_purchases','asc')">
-                                    <arrow-up-icon></arrow-up-icon>
-                                </a>
-                                <a href="javascript:" class="text-dark" @click="sort('number_of_purchases','desc')">
-                                    <arrow-down-icon></arrow-down-icon>
-                                </a>
-                            </div>
-                        </th>
-                        <th>
-                            <div class="d-flex align-items-center justify-content-center">
-                                <div class="mr-1">Средний чек</div>
-                                <a href="javascript:" class="text-dark" @click="sort('average_check','asc')">
-                                    <arrow-up-icon></arrow-up-icon>
-                                </a>
-                                <a href="javascript:" class="text-dark" @click="sort('average_check','desc')">
-                                    <arrow-down-icon></arrow-down-icon>
-                                </a>
-                            </div>
-                        </th>
-                        <th>
-                            <div class="d-flex align-items-center justify-content-center">
-                                <div class="mr-1">Общий чек</div>
-                                <a href="javascript:" class="text-dark" @click="sort('whole_check','asc')">
-                                    <arrow-up-icon></arrow-up-icon>
-                                </a>
-                                <a href="javascript:" class="text-dark" @click="sort('whole_check','desc')">
-                                    <arrow-down-icon></arrow-down-icon>
-                                </a>
-                            </div>
-                        </th>
-                        <th>
-                            <div class="d-flex align-items-center justify-content-center">
-                                <div class="mr-1">Создан</div>
+                                <div class="mr-1">Создано</div>
                                 <a href="javascript:" class="text-dark" @click="sort('created_at','asc')">
                                     <arrow-up-icon></arrow-up-icon>
                                 </a>
@@ -122,7 +81,7 @@
                             </div>
                             <hr class="m-1">
                             <div class="d-flex align-items-center justify-content-center">
-                                <div class="mr-1">Обновлен</div>
+                                <div class="mr-1">Обновлено</div>
                                 <a href="javascript:" class="text-dark" @click="sort('updated_at','asc')">
                                     <arrow-up-icon></arrow-up-icon>
                                 </a>
@@ -135,47 +94,54 @@
                     </tr>
                     </thead>
                     <tbody class="text-center">
-                    <tr v-if="clients.length === 0">
+                    <tr v-if="promo_codes.length === 0">
                         <td colspan="10">
                             <div class="row justify-content-center flex-column align-content-center">
-                                <div class="h2">Клиенты отсутствуют</div>
+                                <div class="h2">Промокоды еще не созданы</div>
                             </div>
+                            <button
+                                @click="createPromoCode"
+                                class="btn btn-danger w-25 m-auto"
+                            >
+                                Добавить промо-код
+                            </button>
                         </td>
                     </tr>
-                    <tr v-for="client in clients" :key="client.id" style="vertical-align: middle;">
+                    <tr v-for="(promo_code) in promo_codes" :key="promo_code.id" style="vertical-align: middle;">
                         <td>
                             <div class="form-check">
                                 <input class="form-check-input"
                                        type="checkbox"
-                                       :value="client.id"
+                                       :value="promo_code.id"
                                        v-model="checkedItems"
                                 >
                             </div>
                         </td>
-                        <td>{{ client.id }}</td>
-                        <td>{{ client.status }}</td>
-                        <td><a :href="'/admin/clients/edit/' + client.id">{{ client.name }}</a></td>
-                        <td><a :href="'/admin/clients/edit/' + client.id">{{ client.last_name }}</a></td>
-                        <td><a :href="'tel:' + client.phone">{{ client.phone }}</a></td>
-                        <td>{{ client.number_of_purchases }}</td>
-                        <td>{{ client.average_check | formatMoney }} грн.</td>
-                        <td>{{ client.whole_check  | formatMoney}} грн.</td>
+                        <td>{{ promo_code.id }}</td>
+                        <td><a :href="'/admin/promo-codes/edit/' + promo_code.id">{{ promo_code.code }}</a></td>
+                        <td>{{
+                                promo_code.percent_discount ? promo_code.percent_discount + '%' : promo_code.discount_in_hryvnia + 'грн.'
+                            }}
+                        </td>
+                        <td>{{ promo_code.end_date }}</td>
+                        <td>{{ publishedStatus(promo_code.published) }}</td>
                         <td>
-                            {{ dateFormat(client.created_at) }}
+                            {{ dateFormat(promo_code.created_at) }}
                             <hr class="m-1">
-                            {{ dateFormat(client.updated_at) }}
+                            {{ dateFormat(promo_code.updated_at) }}
+
                         </td>
                         <td>
-                            <a v-bind:href="'/admin/clients/edit/' + client.id">
+                            <a v-bind:href="'/admin/promo-codes/edit/' + promo_code.id">
                                 <edit-icon></edit-icon>
                             </a>
-                            <a href="javascript:" @click="onDelete(client.id)">
+                            <a href="javascript:" @click="onDelete(promo_code.id)">
                                 <destroy-icon></destroy-icon>
                             </a>
                         </td>
                     </tr>
                     </tbody>
-                    <tfoot v-if="clients.length !== 0">
+                    <tfoot v-if="promo_codes.length !== 0">
                     <tr>
                         <th colspan="10">
                             <select class="form-select"
@@ -183,6 +149,8 @@
                                     v-model="checkedItemsAction"
                             >
                                 <option :value="null">Виберите действие</option>
+                                <option :value="publishedMassAction">Опубликовать</option>
+                                <option :value="notPublishedMassAction">Снять с публикации</option>
                                 <option :value="destroyMassAction">Удалить</option>
                             </select>
                         </th>
@@ -207,20 +175,19 @@
 
 <script>
 export default {
-    beforeCreate() {
-        this.isLoading = true;
-    },
     props: {
         destroyMassAction: String,
+        publishedMassAction: String,
+        notPublishedMassAction: String,
     },
     data() {
         return {
             checkedItems: [],
             checkedAll: false,
             checkedItemsAction: null,
-            clients: [],
+            promo_codes: [],
             isLoading: true,
-            endpoint: '/api/clients?page=',
+            endpoint: '/api/promo-codes?page=',
             currentPage: 1,
             perPage: 1,
             total: 1,
@@ -228,12 +195,15 @@ export default {
         }
     },
     mounted() {
-        this.getClients();
+        this.getPromoCodes();
     },
     methods: {
+        createPromoCode() {
+            window.location.href = '/admin/promo-codes/create';
+        },
         sort(value, param) {
             this.isLoading = true;
-            axios.get('/api/clients', {
+            axios.get('/api/promo-codes', {
                 params:
                     {
                         sort: value,
@@ -241,73 +211,73 @@ export default {
                     }
             })
                 .then(({data}) => {
-                    this.getClientsListSuccessResponse(data);
+                    this.getMassActionsSuccessData(data);
                     this.isLoading = false;
-                    this.endpoint = '/api/clients?sort=' + value + '&param=' + param + '&page=';
+                    this.endpoint = '/api/promo-codes?sort=' + value + '&param=' + param + '&page=';
                 })
-                .catch((response) => this.getClientsListErrorResponse(response));
+                .catch((response) => this.getReviewsListErrorResponse(response));
         },
         selectedAction() {
             this.isLoading = true;
-            axios.post('/api/clients/mass', this.checkedItems, {
+            axios.post('/api/promo-codes/mass', this.checkedItems, {
                 params:
                     {
                         action: this.checkedItemsAction,
                     }
             })
                 .then(() => this.getMassActionsSuccessData())
-                .catch((response) => this.getClientsListErrorResponse(response));
+                .catch((response) => this.getPromoCodesListErrorResponse(response));
         },
         getMassActionsSuccessData() {
-            this.getClients();
+            this.getPromoCodes();
             this.isLoading = false;
             this.checkedAll = false;
             this.checkedItems = [];
             this.checkedItemsAction = null;
         },
-        getClients() {
+        getPromoCodes() {
             this.search = null;
             this.isLoading = true;
-            axios.get('/api/clients')
+            axios.get('/api/promo-codes')
                 .then(({data}) => {
-                    this.getClientsListSuccessResponse(data);
-                    this.endpoint = '/api/clients?page=';
+                    this.getPromoCodesListSuccessResponse(data);
+                    this.endpoint = '/api/promo-codes?page=';
                 })
-                .catch((response) => this.getClientsListErrorResponse(response));
+                .catch((response) => this.getPromoCodesListErrorResponse(response));
         },
         getSearchList() {
             this.isLoading = true;
             if (this.search == null || this.search.length === 0) {
-                this.getProducts();
+                this.getPromoCodes();
             } else {
-                axios.get('/api/clients/search=' + this.search)
+                axios.get('/api/promo-codes/search=' + this.search)
                     .then(({data}) => {
-                        this.getClientsListSuccessResponse(data);
+                        this.getPromoCodesListSuccessResponse(data);
                         this.isLoading = false;
-                        this.endpoint = '/api/clients/search/' + this.search + '?page=';
+                        this.endpoint = '/api/promo-codes/search/' + this.search + '?page=';
                     })
-                    .catch((response) => this.getClientsListErrorResponse(response));
+                    .catch((response) => this.getPromoCodesListErrorResponse(response));
             }
 
         },
         dateFormat(value) {
             return this.$moment(value).format('DD.MM.YYYY');
         },
-        getClientsListSuccessResponse(data) {
+        getPromoCodesListSuccessResponse(data) {
             this.isLoading = false;
-            this.clients = data.result.data;
+            this.promo_codes = data.result.data;
             this.total = data.result.total;
             this.currentPage = data.result.current_page;
             this.perPage = data.result.per_page;
         },
-        getClientsListErrorResponse(response) {
+        getPromoCodesListErrorResponse(response) {
             console.log(response);
             this.isLoading = false;
         },
         fetch(page = 1) {
             this.isLoading = true;
             axios.get(this.endpoint + page)
-                .then(({data}) => this.getClientsListSuccessResponse(data));
+                .then(({data}) => this.getPromoCodesListErrorResponse(data));
         },
         onDelete(id) {
             this.$swal({
@@ -316,7 +286,7 @@ export default {
                 showCancelButton: true,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    axios.delete('/api/clients/destroy/' + id)
+                    axios.delete('/api/promo-codes/destroy/' + id)
                         .then(() => {
                             this.fetch(1);
                             this.$swal({
@@ -341,10 +311,18 @@ export default {
                 this.checkedItems = [];
             } else {
                 const self = this;
-                this.clients.forEach((key) => {
+                this.promo_codes.forEach((key) => {
                     self.checkedItems.push(key.id);
                 })
                 this.checkedAllActive = !this.checkedAllActive;
+            }
+        },
+        publishedStatus(status) {
+            switch (status) {
+                case 0:
+                    return 'Не опубліковано';
+                case 1:
+                    return 'Опубліковано';
             }
         },
     }

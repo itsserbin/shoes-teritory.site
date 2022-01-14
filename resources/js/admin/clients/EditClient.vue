@@ -19,10 +19,17 @@
             <div class="row">
                 <div class="col-12 col-md-6">
                     <div class="form-group mb-3">
-                        <label class="form-label">Імʼя</label>
+                        <label class="form-label">Имя</label>
                         <input class="form-control"
                                type="text"
                                v-model="client.name"
+                        >
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label">Фамилия</label>
+                        <input class="form-control"
+                               type="text"
+                               v-model="client.last_name"
                         >
                     </div>
                     <div class="form-group mb-3">
@@ -40,10 +47,10 @@
                         </div>
                     </div>
                     <div class="form-group mb-3">
-                        <label class="form-label">Місто</label>
+                        <label class="form-label">Email</label>
                         <input class="form-control"
                                type="text"
-                               v-model="client.city"
+                               v-model="client.email"
                         >
                     </div>
                 </div>
@@ -53,33 +60,50 @@
                         <textarea class="form-control"
                                   type="text"
                                   v-model="client.comment"
-                                  rows="9"
+                                  rows="12"
                         ></textarea>
                     </div>
                 </div>
             </div>
             <div class="row">
+                <div class="h3">Список заказов</div>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
                         <tr class="text-center">
-                            <th>Кіль-сть покупок</th>
-                            <th>Середній чек</th>
-                            <th>Загальний чек</th>
+                            <th>ID</th>
+                            <th>Кол-во товаров</th>
+                            <th>Общая сумма</th>
+                            <th>Статус</th>
+                            <th>Дата создания</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="text-center">
-                            <td>{{client.number_of_purchases}}</td>
-                            <td>{{client.average_check}}</td>
-                            <td>{{client.whole_check}}</td>
+                        <tr class="text-center" v-for="order in client.orders">
+                            <td><a :href="'/admin/orders/edit/' + order.id" target="_blank">{{ order.id }}</a></td>
+                            <td>{{ order.total_count }}</td>
+                            <td>{{ order.total_price | formatMoney }} грн.</td>
+                            <td>{{ order.status }}</td>
+                            <td>{{ dateFormat(order.created_at) }}</td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+            <div class="row text-center my-3">
+                <div class="col-12 col-md-4">
+                    <b>Всего покупок: </b>{{client.number_of_purchases}} грн.
+                </div>
+                <div class="col-12 col-md-4">
+                    <b>Средний чек: </b>{{client.average_check | formatMoney}} грн.
+                </div>
+                <div class="col-12 col-md-4">
+                    <b>Общий чек: </b>{{client.whole_check | formatMoney}} грн.
+
+                </div>
+            </div>
             <button type="submit" class="btn btn-danger">
-                Зберегти
+                Сохранить
             </button>
         </form>
     </div>
@@ -92,6 +116,9 @@ export default {
             isLoading: true,
             client: {
                 name: null,
+                last_name: null,
+                email: null,
+                phone: null,
                 comment: null,
                 status: 0,
                 number_of_purchases: null,
@@ -141,7 +168,10 @@ export default {
                     });
                     this.isLoading = false;
                 })
-        }
+        },
+        dateFormat(value) {
+            return this.$moment(value).format('DD.MM.YYYY');
+        },
     }
 }
 </script>

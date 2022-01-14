@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Public\Api;
 
 use App\Repositories\Products\ProductColorsRepository;
 use App\Repositories\Products\ProductRepository;
+use App\Services\ShoppingCart;
 use Illuminate\Http\JsonResponse;
 
 class ProductsController extends BaseController
 {
     private $productRepository;
+    private $shoppingCartService;
 
     /**
      * ClientsController constructor.
@@ -17,6 +19,7 @@ class ProductsController extends BaseController
     {
         parent::__construct();
         $this->productRepository = app(ProductRepository::class);
+        $this->shoppingCartService = app(ShoppingCart::class);
     }
 
     /**
@@ -124,6 +127,16 @@ class ProductsController extends BaseController
     public function getWhereCategorySlug($slug): JsonResponse
     {
         $result = $this->productRepository->getWhereCategorySlugInProduction($slug, 12);
+
+        return $this->returnResponse([
+            'success' => true,
+            'result' => $result,
+        ]);
+    }
+
+    public function getRecommendProducts(): JsonResponse
+    {
+        $result = $this->productRepository->getRecommendProducts();
 
         return $this->returnResponse([
             'success' => true,

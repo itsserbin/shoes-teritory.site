@@ -5,9 +5,9 @@
             <div class="row mb-3">
                 <div class="col">
                     <div class="d-flex">
-                        <button class="btn btn-danger" @click.prevent="getOrders">Очистити</button>
+                        <button class="btn btn-danger" @click.prevent="getOrders">Очистить</button>
                         <input type="text" v-model="search" class="form-control mx-1">
-                        <button @click.prevent="getSearchList" type="submit" class="btn btn-danger">Пошук</button>
+                        <button @click.prevent="getSearchList" type="submit" class="btn btn-danger">Поиск</button>
                     </div>
                 </div>
             </div>
@@ -124,24 +124,27 @@
                                         </a>
                                     </div>
                                 </th>
+                                <th>Имя</th>
+                                <th>Фамилия</th>
+                                <th>Номер телефона</th>
                                 <th>
                                     <div class="d-flex align-items-center justify-content-center">
-                                        <div class="mr-1">Ім`я</div>
-                                        <a href="javascript:" class="text-dark" @click="sort('name','asc')">
+                                        <div class="mr-1">Кол-во товаров</div>
+                                        <a href="javascript:" class="text-dark" @click="sort('total_count','asc')">
                                             <arrow-up-icon></arrow-up-icon>
                                         </a>
-                                        <a href="javascript:" class="text-dark" @click="sort('name','desc')">
+                                        <a href="javascript:" class="text-dark" @click="sort('total_count','desc')">
                                             <arrow-down-icon></arrow-down-icon>
                                         </a>
                                     </div>
                                 </th>
                                 <th>
                                     <div class="d-flex align-items-center justify-content-center">
-                                        <div class="mr-1">Номер телефону</div>
-                                        <a href="javascript:" class="text-dark" @click="sort('phone','asc')">
+                                        <div class="mr-1">Сумма</div>
+                                        <a href="javascript:" class="text-dark" @click="sort('total_price','asc')">
                                             <arrow-up-icon></arrow-up-icon>
                                         </a>
-                                        <a href="javascript:" class="text-dark" @click="sort('phone','desc')">
+                                        <a href="javascript:" class="text-dark" @click="sort('total_price','desc')">
                                             <arrow-down-icon></arrow-down-icon>
                                         </a>
                                     </div>
@@ -157,14 +160,14 @@
                                         </a>
                                     </div>
                                 </th>
-                                <th v-if="activeItem === statusCanceled">
+                                <th v-if="activeItem === statusCanceled || activeItem === statusTransferredToSupplier">
                                     <div class="d-flex align-items-center justify-content-center">
                                         <div class="mr-1">Комментарий</div>
                                     </div>
                                 </th>
                                 <th>
                                     <div class="d-flex align-items-center justify-content-center">
-                                        <div class="mr-1">Створено</div>
+                                        <div class="mr-1">Создано</div>
                                         <a href="javascript:" class="text-dark" @click="sort('created_at','asc')">
                                             <arrow-up-icon></arrow-up-icon>
                                         </a>
@@ -174,7 +177,7 @@
                                     </div>
                                     <hr class="m-1">
                                     <div class="d-flex align-items-center justify-content-center">
-                                        <div class="mr-1">Оновлено</div>
+                                        <div class="mr-1">Обновлено</div>
                                         <a href="javascript:" class="text-dark" @click="sort('updated_at','asc')">
                                             <arrow-up-icon></arrow-up-icon>
                                         </a>
@@ -183,14 +186,14 @@
                                         </a>
                                     </div>
                                 </th>
-                                <th>Дії</th>
+                                <th>Действия</th>
                             </tr>
                             </thead>
                             <tbody class="text-center">
                             <tr v-if="orders.length === 0">
                                 <td colspan="10">
                                     <div class="row justify-content-center flex-column align-content-center">
-                                        <div class="h2">Заказів ще нема</div>
+                                        <div class="h2">Заказы отсутствуют</div>
                                     </div>
                                 </td>
                             </tr>
@@ -206,10 +209,15 @@
                                 </td>
                                 <td>{{ order.id }}</td>
                                 <td>{{ order.status }}</td>
-                                <td><a :href="'/admin/orders/edit/' + order.id">{{ order.name }}</a></td>
-                                <td><a :href="'tel:' + order.phone">{{ order.phone }}</a></td>
+                                <td><a :href="'/admin/orders/edit/' + order.id">{{ order.client.name }}</a></td>
+                                <td><a :href="'/admin/orders/edit/' + order.id">{{ order.client.last_name }}</a></td>
+                                <td><a :href="'tel:' + order.phone">{{ order.client.phone }}</a></td>
+                                <td>{{ order.total_count }}</td>
+                                <td>{{ order.total_price | formatMoney }} грн.</td>
                                 <td v-if="activeItem === statusTransferredToSupplier">{{ order.waybill }}</td>
-                                <td v-if="activeItem === statusCanceled" class="w-25">{{ order.comment.substr(0, 30) + '...' }}</td>
+                                <td v-if="activeItem === statusCanceled || activeItem === statusTransferredToSupplier"
+                                    class="w-25"
+                                >{{ order.comment.substr(0, 30) + '...' }}</td>
                                 <td>
                                     {{ dateFormat(order.created_at) }}
                                     <hr class="m-1">
@@ -232,8 +240,8 @@
                                             @change="selectedAction"
                                             v-model="checkedItemsAction"
                                     >
-                                        <option :value="null">Виберіть дію</option>
-                                        <option :value="destroyMassAction">Видалити</option>
+                                        <option :value="null">Выберите действия</option>
+                                        <option :value="destroyMassAction">Удалить</option>
                                     </select>
                                 </th>
                             </tr>

@@ -56,4 +56,26 @@ class CartItemsRepository extends CoreRepository
     {
         return $this->model::where('cart_id', $cart_id)->delete();
     }
+
+    public function updateIncrement($cart_id, $id)
+    {
+        $model = $this->model::where('cart_id', $cart_id)->where('product_id', $id)->select('count')->first();
+
+        return $this->model::where('cart_id', $cart_id)->where('product_id', $id)->update([
+            'count' => $model->count + 1
+        ]);
+    }
+
+    public function updateDecrement($cart_id, $id)
+    {
+        $model = $this->model::where('cart_id', $cart_id)->where('product_id', $id)->select('count')->first();
+
+        if ($model->count !== 1) {
+            return $this->model::where('cart_id', $cart_id)->where('product_id', $id)->update([
+                'count' => $model->count - 1
+            ]);
+        } else {
+            return false;
+        }
+    }
 }

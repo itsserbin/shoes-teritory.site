@@ -59,6 +59,9 @@ Route::prefix('v1')->middleware('api')->group(function () {
 
         Route::get('category/{slug}', [ProductsController::class, 'getWhereCategorySlug'])
             ->name('api.public.products.category');
+
+        Route::get('recommend-products', [ProductsController::class, 'getRecommendProducts'])
+            ->name('api.public.products.recommend');
     });
 
     /** Группа маршрутов для корзины */
@@ -95,6 +98,20 @@ Route::prefix('v1')->middleware('api')->group(function () {
          */
         Route::post('update', [CartController::class, 'update'])
             ->name('api.cart.update');
+
+        Route::post('update-decrement/{id}', [CartController::class, 'updateDecrement'])
+            ->name('api.cart.update.decrement');
+
+        Route::post('update-increment/{id}', [CartController::class, 'updateIncrement'])
+            ->name('api.cart.update.increment');
+
+        Route::prefix('promo-code')->group(function () {
+            Route::post('activate', [CartController::class, 'activatePromoCode'])
+                ->name('api.cart.promo.code.activate');
+
+            Route::post('deactivate', [CartController::class, 'deactivatePromoCode'])
+                ->name('api.cart.promo.code.deactivate');
+        });
     });
 
     /** Группа маршрутов для заказов */

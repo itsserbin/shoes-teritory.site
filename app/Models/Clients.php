@@ -31,7 +31,7 @@ class Clients extends Model
         return $this->hasMany(Products::class);
     }
 
-    public function Orders()
+    public function orders()
     {
         return $this->hasMany(Orders::class,'client_id');
     }

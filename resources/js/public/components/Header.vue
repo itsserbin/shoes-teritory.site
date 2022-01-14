@@ -8,7 +8,7 @@
                     </a>
                 </div>
                 <div class="col">
-                    <cart></cart>
+                    <cart-icon-component></cart-icon-component>
                 </div>
                 <div class="header-burger col-1 p-0"
                      @click="showBurgerMenu"

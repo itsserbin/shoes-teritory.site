@@ -42,4 +42,18 @@ class CartRepository extends CoreRepository
     {
         return $this->model::where('hash', $uuid)->delete();
     }
+
+    public function addPromoCode($cart_id, $code)
+    {
+        $model = $this->model::where('id', $cart_id)->first();
+        $model->promo_code = $code;
+        $model->save();
+
+        return true;
+    }
+
+    public function deactivatePromoCode($cart_id)
+    {
+        return $this->model::where('id', $cart_id)->update(['promo_code' => null]);
+    }
 }

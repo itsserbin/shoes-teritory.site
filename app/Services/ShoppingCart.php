@@ -7,6 +7,7 @@ use App\Models\CartItems;
 use App\Repositories\CartRepository;
 use App\Repositories\CartItemsRepository;
 use App\Repositories\Products\ProductRepository;
+use App\Repositories\PromoCodesRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cookie;
@@ -14,40 +15,21 @@ use Illuminate\Support\Facades\Cookie;
 
 class ShoppingCart
 {
-    /**
-     * @var CartRepository
-     */
     private $cartRepository;
 
-    /**
-     * @var CartItemsRepository
-     */
     private $cartItemsRepository;
 
-    /**
-     * @var ProductRepository
-     */
-    private $productRepository;
+    private $promoCodesRepository;
 
-    /**
-     * @var string
-     */
     private $cookie;
 
-    /**
-     * @var string
-     */
     private $uuid;
 
-    public function __construct(
-        CartRepository $cartRepository,
-        CartItemsRepository $cartItemsRepository,
-        ProductRepository $productRepository
-    )
+    public function __construct()
     {
-        $this->cartRepository = $cartRepository;
-        $this->cartItemsRepository = $cartItemsRepository;
-        $this->productRepository = $productRepository;
+        $this->cartRepository = app(CartRepository::class);
+        $this->cartItemsRepository = app(CartItemsRepository::class);
+        $this->promoCodesRepository = app(PromoCodesRepository::class);
         $this->cookie = Cookie::get('cart');
         $this->uuid = (string)Str::uuid();
     }
@@ -62,6 +44,7 @@ class ShoppingCart
         $list = [];
         $total_price = 0;
         $total_quantity = 0;
+        $price_without_discount = 0;
 
         if (!$this->cookie) {
             return [
@@ -93,9 +76,12 @@ class ShoppingCart
         /** @var $item CartItems */
         foreach ($cart->items as $item) {
             if ($item->product) {
-                $total_price += ($item->product->discount_price ? $item->product->discount_price : $item->product->price) * $item->count;
+                $total_price += ($item->product->discount_price ?: $item->product->price) * $item->count;
                 $total_quantity += $item->count;
 
+                if ($item->product->discount_price) {
+                    $price_without_discount += $item->product->price * $item->count;
+                }
                 $list[] = [
                     'id' => $item->product->id,
                     'alias' => route('product', ['alias' => $item->product->alias, 'id' => $item->product->id]),
@@ -104,14 +90,28 @@ class ShoppingCart
                     'count' => $item->count,
                     'size' => $item->size,
                     'color' => $item->color,
-                    'price' => $item->product->discount_price ? $item->product->discount_price : $item->product->price,
+                    'price' => $item->product->price * $item->count,
+                    'discount_price' => $item->product->discount_price * $item->count,
                     'maxcount' => 50,
                 ];
+            }
+
+        }
+
+        if ($cart->promo_code) {
+            $discount = $this->promoCodesRepository->getDiscount($cart->promo_code);
+
+            if ($discount->discount_in_hryvnia) {
+                $total_price -= $discount->discount_in_hryvnia;
+            } elseif ($discount->percent_discount) {
+                $total_price = $total_price * (100 - $discount->percent_discount) / 100;
             }
         }
 
         return [
             'list' => $list,
+            'promo_code' => $cart->promo_code,
+            'price_without_discount' => $price_without_discount,
             'totalCount' => $total_quantity,
             'totalPrice' => number_format($total_price, 2, '.', ''),
         ];
@@ -179,6 +179,54 @@ class ShoppingCart
         /* @var $cart Cart */
         $cart = $this->cartRepository->find($this->cookie);
 
-        $this->cartItemsRepository->destroy($cart->id, $item);
+        return $this->cartItemsRepository->destroy($cart->id, $item);
+    }
+
+    public function updateDecrement($id)
+    {
+        $cart = $this->cartRepository->find($this->cookie);
+
+        return $this->cartItemsRepository->updateDecrement($cart->id, $id);
+    }
+
+
+    public function updateIncrement($id)
+    {
+        $cart = $this->cartRepository->find($this->cookie);
+
+        return $this->cartItemsRepository->updateIncrement($cart->id, $id);
+    }
+
+    public function activatePromoCode($code)
+    {
+        $result = $this->promoCodesRepository->checkPromoCode($code);
+
+        if ($result !== null) {
+            $this->addPromoCode($code);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function deactivatePromoCode()
+    {
+        $cart = $this->cartRepository->find($this->cookie);
+
+        return $this->cartRepository->deactivatePromoCode($cart->id);
+
+    }
+
+    public function addPromoCode($code)
+    {
+        $cart = $this->cartRepository->find($this->cookie);
+
+        return $this->cartRepository->addPromoCode($cart->id, $code);
+    }
+
+    public function getCart()
+    {
+        return $this->cartRepository->find($this->cookie);
+
     }
 }

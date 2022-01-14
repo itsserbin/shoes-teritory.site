@@ -40,10 +40,6 @@
 
     &__price {
         position: relative;
-        display: grid;
-        grid-template-columns: 1fr 4fr;
-        grid-column-gap: 15px;
-        grid-row-gap: 5px;
         margin-bottom: 10px;
 
         &::before {

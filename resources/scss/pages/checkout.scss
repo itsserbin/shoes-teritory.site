@@ -1,0 +1,480 @@
+.ordering {
+    &-item {
+        background-color: #fff;
+        padding: 1.25rem 1rem;
+        border: 0.5px solid hsla(0, 0%, 52.9%, .2);
+        box-sizing: border-box;
+        box-shadow: 0 0 12px hsl(0deg 0% 40% / 6%);
+        border-radius: 15px;
+        margin-bottom: 1.5rem;
+
+        &__title {
+            transition: .25s;
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: #3a3a3a;
+            margin-bottom: 1.5rem;
+
+            @include adaptive($sm) {
+                font-size: 1.25rem;
+            }
+
+            @include adaptive($md) {
+                font-size: 1.375rem;
+            }
+
+            @include adaptive($lg) {
+                font-weight: 400;
+                font-size: 1.5rem;
+            }
+
+            @include adaptive($xl) {
+                font-size: 1.625rem;
+            }
+        }
+
+        .data-list__item {
+            margin-bottom: 1rem;
+
+            label {
+                font-size: .75rem;
+                padding-left: 1rem;
+                font-weight: 500;
+                color: #686868;
+                width: 100%;
+
+                @include adaptive($lg) {
+                    font-size: 1.075rem;
+                }
+
+                .required {
+                    color: #438ead;
+                    font-weight: 500;
+                    font-size: 1rem;
+                }
+
+                input {
+                    margin-top: 0.75rem;
+                    width: 100%;
+                    border: 0.5px solid $transparent-red;
+                    box-sizing: border-box;
+                    border-radius: 10px;
+                    outline: none;
+                    font-size: .875rem;
+                    padding: 1rem;
+
+                    @include adaptive($lg) {
+                        font-size: 1rem;
+                    }
+                }
+            }
+        }
+
+        @include adaptive($md) {
+            .data-list {
+                max-width: 306px;
+            }
+        }
+    }
+
+    &-right__inner {
+        @include adaptive($md) {
+            position: sticky;
+            top: 5.5rem;
+        }
+
+        .payment {
+            border-top: 0;
+            padding: 20px;
+            display: block;
+
+            &-top {
+                padding: 0;
+                background-color: transparent;
+                border: 0;
+                box-shadow: none;
+                box-sizing: border-box;
+                border-radius: 15px;
+                margin-bottom: 1.5rem;
+
+                .sum {
+                    padding-bottom: 0.625rem;
+
+                    .item {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 0.25rem;
+
+                        .label {
+                            font-size: 1.175rem;
+                            color: black;
+                            text-transform: capitalize;
+                            font-weight: 500;
+                        }
+
+                        &:last-child {
+                            margin-bottom: 0;
+                        }
+                    }
+
+                    .item.discount .label {
+                        font-size: .875rem;
+                        color: $red;
+                        text-transform: capitalize;
+                    }
+                }
+
+                .buttons {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+
+                    .button-checkout {
+                        padding: 0.875rem;
+                        border-radius: 0.625rem;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: #fff;
+                        border: 1px solid $red;
+                        background-color: $red;
+                        transition: .25s;
+                        text-decoration: none;
+                        font-size: .75rem;
+                        font-weight: 400;
+                        cursor: pointer;
+                        width: 100%;
+
+                        @include adaptive($sm) {
+                            font-size: .875rem;
+                        }
+
+                        @include adaptive($lg) {
+                            font-size: 1rem;
+                        }
+
+                        &:hover {
+                            color: #cccccc;
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
+    &-cart {
+        @include adaptive($md) {
+            margin-bottom: 1.25rem;
+        }
+
+        @include adaptive($lg) {
+            margin-bottom: 1.625rem;
+        }
+
+        @include adaptive($xl) {
+            margin-bottom: 2rem;
+        }
+
+        &__list {
+            @include adaptive($md) {
+                padding-right: 1rem;
+                overflow: auto;
+                max-height: 360px;
+            }
+
+            @include adaptive($lg) {
+                padding-right: 1.5rem;
+                overflow: auto;
+                max-height: 440px;
+            }
+
+            @include adaptive($xl) {
+                padding-right: 2rem;
+                overflow: auto;
+                max-height: 500px;
+            }
+        }
+
+        &__item {
+            margin-bottom: 1.125rem;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            border: 0.5px solid hsla(0, 0%, 52.9%, .2);
+            box-sizing: border-box;
+            box-shadow: 0 0 12px hsl(0deg 0% 40% / 6%);
+            border-radius: 15px;
+            background-color: #fff;
+            padding: 1.25rem 0.875rem;
+            align-items: center;
+
+            @include adaptive($md) {
+                padding: 0.75rem 0.625rem;
+            }
+
+            @include adaptive($lg) {
+                padding: 1rem;
+            }
+
+            @include adaptive($xl) {
+                padding: 1.25rem;
+            }
+
+            .img {
+                padding-right: 0.375rem;
+                grid-column: span 4;
+                grid-row-start: 1;
+                grid-row-end: 3;
+                max-width: 122px;
+
+                @include adaptive($sm) {
+                    padding-right: 0.375rem;
+                    grid-column: span 3;
+                    grid-row-start: 1;
+                    grid-row-end: 3;
+                }
+
+                @include adaptive($md) {
+                    max-width: 98px;
+                }
+
+                .img-inner {
+                    width: 100%;
+                    padding-bottom: 79.5%;
+                    height: 0;
+                    position: relative;
+
+                    @include adaptive($sm) {
+                        padding-bottom: 81.8%;
+                    }
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        object-fit: contain;
+                    }
+                }
+            }
+
+            .line {
+                margin-top: 1.125rem;
+                margin-bottom: 1.125rem;
+                grid-row-start: 3;
+                grid-row-end: 4;
+                width: 100%;
+                grid-column: span 12;
+                height: 1px;
+                background-color: #c4c4c4;
+
+                @include adaptive($sm) {
+                    display: none;
+                }
+            }
+
+            .title {
+                grid-column: span 8;
+                font-size: .875rem;
+                color: #231f20;
+
+                @include adaptive($sm) {
+                    grid-column: span 4;
+                    font-size: .875rem;
+                    color: #231f20;
+                }
+
+                @include adaptive($md) {
+                    font-size: .75rem;
+                }
+
+                @include adaptive($lg) {
+                    font-size: .875rem;
+                }
+
+                @include adaptive($xl) {
+                    font-size: 1rem;
+                }
+            }
+
+            .color-size {
+                grid-row-start: 4;
+                grid-row-end: 5;
+                grid-column-start: 7;
+                grid-column-end: 13;
+                justify-self: self-end;
+                font-size: .875rem;
+                color: #828282;
+
+                @include adaptive($sm) {
+                    grid-row-start: 2;
+                    grid-row-end: 3;
+                    grid-column-start: 4;
+                    grid-column-end: 11;
+                    justify-self: start;
+                    font-size: .875rem;
+                    color: #828282;
+                }
+            }
+
+            .ordering-cart__count {
+                grid-column: span 8;
+                font-size: .875rem;
+                color: #777;
+                grid-row-start: 2;
+                grid-row-end: 3;
+
+                @include adaptive($sm) {
+                    grid-column-start: 9;
+                    grid-column-end: 10;
+                    font-size: .875rem;
+                    color: #777;
+                    grid-row-start: 1;
+                    grid-row-end: 3;
+                }
+            }
+
+            .product-card__price {
+                grid-column-start: 1;
+                grid-column-end: 7;
+                grid-row-start: 4;
+                grid-row-end: 5;
+
+                @include adaptive($sm) {
+                    grid-column-start: 10;
+                    grid-column-end: 13;
+                    grid-row-start: 1;
+                    grid-row-end: 3;
+                    text-align: end;
+                    height: 100%;
+                    padding-right: 0.75rem;
+                    border-right: 1px solid #c4c4c4;
+                }
+
+                .price {
+                    display: flex;
+                    flex-direction: column;
+                    font-size: 1.5rem;
+                    color: #231f20;
+                    white-space: nowrap;
+                    font-weight: 700;
+
+                    @include adaptive($sm) {
+                        height: 100%;
+                        justify-content: center;
+                    }
+
+                    del {
+                        color: #777;
+                        font-size: 1rem;
+                    }
+
+                    ins {
+                        color: #ff4c3b;
+                        text-decoration: none;
+                        font-weight: 700;
+                        font-size: 1.5rem;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.textarea {
+    label {
+        font-size: .75rem;
+        font-weight: 500;
+        color: #686868;
+        width: 100%;
+
+        @include adaptive($lg) {
+            font-size: .875rem;
+        }
+
+        textarea {
+            font-weight: 350;
+            font-family: $font-family-montserrat;
+            margin-top: 0.75rem;
+            width: 100%;
+            border: 0.5px solid $transparent-red;
+            box-sizing: border-box;
+            border-radius: 10px;
+            outline: none;
+            font-size: .875rem;
+            padding: 1rem;
+            resize: none;
+            height: 100px;
+
+            @include adaptive($lg) {
+                font-size: 1rem;
+            }
+        }
+    }
+}
+
+.radio-btn {
+    label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        input {
+            width: 1px;
+            height: 1px;
+            transform: scale(0);
+            position: absolute;
+            left: -99999px;
+        }
+
+        input + span {
+            transition: .25s;
+            display: block;
+            width: 1.375rem;
+            height: 1.375rem;
+            border: 2px solid #777;
+            margin-right: 0.375rem;
+            border-radius: 50%;
+            position: relative;
+            flex-shrink: 0;
+
+            &:after {
+                position: absolute;
+                content: "";
+                width: 0.625rem;
+                height: 0.625rem;
+                display: block;
+                background-color: $red;
+                transition: .25s;
+                border-radius: 50%;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+        }
+    }
+
+    label input:checked + span {
+        border: 2px solid $red;
+    }
+
+    label input:checked + span:after {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    .a-text {
+        font-size: .875rem;
+        color: #777;
+        font-weight: 350;
+        line-height: 1.5;
+        margin: 0;
+
+        @include adaptive($lg) {
+            font-size: 1rem;
+        }
+    }
+}

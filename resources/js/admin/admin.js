@@ -42,7 +42,7 @@ Vue.component('products-list', require('./products/ProductsList').default);
 Vue.component('edit-product', require('./products/EditProduct').default);
 Vue.component('create-product', require('./products/CreateProduct').default);
 
-Vue.component('clients-list', require('./clients/ClientsList.vue').default);
+Vue.component('clients-list', require('./clients/ClientsList').default);
 Vue.component('edit-client', require('./clients/EditClient').default);
 
 Vue.component('categories-list', require('./categories/CategoriesList').default);
@@ -52,10 +52,14 @@ Vue.component('category-edit', require('./categories/EditCategory').default);
 Vue.component('main-options-list', require('./options/MainOptionsList').default);
 Vue.component('scripts-options-list', require('./options/ScriptsOptionsList').default);
 
-Vue.component('orders-list', require('./orders/OrdersList.vue').default);
+Vue.component('orders-list', require('./orders/OrdersList').default);
 Vue.component('order-edit', require('./orders/EditOrder').default);
 
-Vue.component('bookkeeping-daily-statistics', require('./bookkeeping/DailyStatistics.vue').default);
+Vue.component('promo-codes-list', require('./promo-codes/PromoCodesList').default);
+Vue.component('create-promo-code', require('./promo-codes/CreatePromoCode').default);
+Vue.component('edit-promo-code', require('./promo-codes/EditPromoCode').default);
+
+Vue.component('bookkeeping-daily-statistics', require('./bookkeeping/DailyStatistics').default);
 Vue.component('supplier-payments', require('./bookkeeping/SupplierPaymentsList').default);
 
 /**

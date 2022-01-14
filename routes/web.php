@@ -39,6 +39,9 @@ Route::get('cart', [CartController::class, 'index'])
 Route::get('checkout', [HomeController::class, 'checkout'])
     ->name('checkout');
 
+Route::get('cart', [HomeController::class, 'cart'])
+    ->name('cart');
+
 /**
  * Открыть страницу товара.
  *

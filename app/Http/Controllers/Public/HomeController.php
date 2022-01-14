@@ -88,6 +88,16 @@ class HomeController extends BaseController
     }
 
     /**
+     * @return View|Factory|Application
+     */
+    public function cart(): View|Factory|Application
+    {
+        return view('pages.cart.index', [
+            'options' => $this->getOptions(),
+        ]);
+    }
+
+    /**
      * @param $slug
      * @return Application|Factory|View
      */

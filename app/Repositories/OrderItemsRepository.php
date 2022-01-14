@@ -14,6 +14,14 @@ use Illuminate\Database\Eloquent\Collection;
  */
 class OrderItemsRepository extends CoreRepository
 {
+    private $promoCodesRepository;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->promoCodesRepository = app(PromoCodesRepository::class);
+    }
+
     /**
      * @return string
      */
@@ -27,7 +35,7 @@ class OrderItemsRepository extends CoreRepository
      * @param $orderId
      * @return bool
      */
-    public function create($cartItems, $orderId)
+    public function create($cartItems, $orderId, $promoCode)
     {
         $productRepository = new ProductRepository();
 
@@ -41,10 +49,20 @@ class OrderItemsRepository extends CoreRepository
             $orderItem->size = $item->size;
             $orderItem->color = $item->color;
             $orderItem->trade_price = $product->trade_price;
-            $orderItem->sale_price = $product->discount_price ? $product->discount_price : $product->price;
+            $orderItem->sale_price = $product->discount_price ?: $product->price;
             $orderItem->profit = $orderItem->sale_price - $product->trade_price;
             $orderItem->pay = false;
             $orderItem->provider_id = $product->Providers->id;
+
+            if ($promoCode) {
+                $discount = $this->promoCodesRepository->getDiscount($promoCode);
+
+                if ($discount->discount_in_hryvnia) {
+                    $orderItem->sale_price -= $discount->discount_in_hryvnia;
+                } elseif ($discount->percent_discount) {
+                    $orderItem->sale_price = $orderItem->sale_price * (100 - $discount->percent_discount) / 100;
+                }
+            }
 
             $orderItem->save();
         }

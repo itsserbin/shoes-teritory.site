@@ -348,4 +348,24 @@ class ProductRepository extends CoreRepository
             ->orderBy('total_sales', 'desc')
             ->paginate($perPage);
     }
+
+    public function getRecommendProducts()
+    {
+        $columns = [
+            'id',
+            'price',
+            'published',
+            'discount_price',
+            'preview',
+            'total_sales',
+            'created_at',
+            'h1',
+        ];
+
+        return $this
+            ->model::where('published', 1)
+            ->select($columns)
+            ->orderBy('created_at', 'desc')
+            ->paginate(3);
+    }
 }

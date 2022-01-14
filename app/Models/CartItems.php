@@ -41,13 +41,10 @@ class CartItems extends Model
         'cart_id',
         'product_id',
         'provider_id',
-        'count',
         'color',
         'size',
-        'trade_price',
-        'sale_price',
-        'profit',
         'pay',
+        'count',
         'created_at',
         'updated_at'
     ];

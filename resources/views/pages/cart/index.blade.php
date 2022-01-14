@@ -5,7 +5,7 @@
 @section('content')
     <section class="cart">
         <div class="container">
-            <cart-list></cart-list>
+            <cart-component></cart-component>
         </div>
     </section>
 @endsection
