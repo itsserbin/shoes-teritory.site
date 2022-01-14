@@ -89,12 +89,10 @@ class OrdersRepository extends CoreRepository
         $columns = [
             'id',
             'status',
-            'name',
-            'phone',
             'waybill',
             'comment',
-            'product_id',
-            'sale_price',
+            'total_price',
+            'total_count',
             'updated_at',
         ];
 
@@ -109,7 +107,11 @@ class OrdersRepository extends CoreRepository
     /**
      * Создание нового заказа.
      *
-     * @param $data
+     * @param $city
+     * @param $postalOffice
+     * @param $client_id
+     * @param $promoCode
+     * @param $items
      * @return mixed
      */
     public function create($city, $postalOffice, $client_id, $promoCode, $items)

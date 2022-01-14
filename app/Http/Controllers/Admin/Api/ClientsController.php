@@ -58,6 +58,30 @@ class ClientsController extends BaseController
     }
 
     /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function filter(Request $request): JsonResponse
+    {
+        $result = $this->clientsRepository->filter($request->all());
+
+        return $this->returnResponse([
+            'success' => true,
+            'result' => $result,
+        ]);
+    }
+
+    public function subFilter(Request $request): JsonResponse
+    {
+        $result = $this->clientsRepository->subFilter($request->all());
+
+        return $this->returnResponse([
+            'success' => true,
+            'result' => $result,
+        ]);
+    }
+
+    /**
      * Удаление клиента.
      *
      * @param $id

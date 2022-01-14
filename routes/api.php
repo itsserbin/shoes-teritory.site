@@ -115,6 +115,12 @@ Route::middleware('auth:api')->group(function () {
         /** POST /api/clients/mass */
         Route::post('mass', [ClientsController::class, 'massActions'])
             ->name('api.clients.mass');
+
+        Route::get('filter', [ClientsController::class, 'filter'])
+            ->name('api.clients.filter');
+
+        Route::get('sub-filter', [ClientsController::class, 'subFilter'])
+            ->name('api.clients.subFilter');
     });
 
     /** Группа маршрутов для заказов */

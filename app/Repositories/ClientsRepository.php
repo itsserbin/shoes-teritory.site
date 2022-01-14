@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Clients;
 use App\Models\Clients as Model;
+use App\Models\Enum\ClientStatus;
 use App\Models\Enum\MassActions;
 use App\Models\Products;
 use Illuminate\Database\Eloquent\Collection;
@@ -61,7 +62,9 @@ class ClientsRepository extends CoreRepository
             'last_name',
             'phone',
             'status',
+            'sub_status',
             'number_of_purchases',
+            'comment',
             'whole_check',
             'average_check',
             'created_at',
@@ -90,7 +93,9 @@ class ClientsRepository extends CoreRepository
             'last_name',
             'phone',
             'status',
+            'sub_status',
             'number_of_purchases',
+            'comment',
             'whole_check',
             'average_check',
             'created_at',
@@ -122,8 +127,8 @@ class ClientsRepository extends CoreRepository
             'last_name' => $request['last_name'],
             'email' => $request['email'],
             'status' => $request['status'],
+            'sub_status' => $request['sub_status'],
             'comment' => $request['comment'],
-            'city' => $request['city'],
             'phone' => $request['phone'],
         ]);
     }
@@ -160,7 +165,7 @@ class ClientsRepository extends CoreRepository
         $client->name = $name;
         $client->email = $email;
         $client->last_name = $last_name;
-        $client->status = 'Новый';
+        $client->status = ClientStatus::NEW_STATUS;
         $client->phone = $phone;
         $client->number_of_purchases = 1;
 
@@ -204,6 +209,7 @@ class ClientsRepository extends CoreRepository
         $result = $this->startConditions()->where('id', $client)->first();
 
         ++$result->number_of_purchases;
+        $result->status = ClientStatus::EXPERIENCED_STATUS;
 
         $totalPrice = $result->whole_check;
         $totalCount = $result->purchased_goods;
@@ -246,5 +252,55 @@ class ClientsRepository extends CoreRepository
             return true;
         }
         return false;
+    }
+
+    public function filter(array $data, int $perPage = 15)
+    {
+        $columns = [
+            'id',
+            'name',
+            'last_name',
+            'phone',
+            'status',
+            'sub_status',
+            'number_of_purchases',
+            'comment',
+            'whole_check',
+            'average_check',
+            'created_at',
+            'updated_at',
+        ];
+
+        return $this
+            ->startConditions()
+            ->where('status', $data['by'])
+            ->select($columns)
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
+    }
+
+    public function subFilter(array $data, int $perPage = 15)
+    {
+        $columns = [
+            'id',
+            'name',
+            'last_name',
+            'phone',
+            'status',
+            'sub_status',
+            'number_of_purchases',
+            'comment',
+            'whole_check',
+            'average_check',
+            'created_at',
+            'updated_at',
+        ];
+
+        return $this
+            ->startConditions()
+            ->where('sub_status', $data['by'])
+            ->select($columns)
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
     }
 }

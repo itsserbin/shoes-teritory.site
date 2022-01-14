@@ -18,6 +18,7 @@ class CreateCartTable extends Migration
 
             $table->string('hash')->nullable();
             $table->integer('user_id')->nullable();
+            $table->string('promo_code')->nullable();
 
             $table->timestamps();
 

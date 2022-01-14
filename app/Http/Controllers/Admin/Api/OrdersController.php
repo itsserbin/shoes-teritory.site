@@ -47,6 +47,10 @@ class OrdersController extends BaseController
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function filter(Request $request): JsonResponse
     {
         $result = $this->ordersRepository->filter($request->all());

@@ -17,13 +17,16 @@ class CreateClientsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('phone');
-            $table->string('city')->nullable();
             $table->string('number_of_purchases')->nullable();
             $table->string('whole_check')->nullable();
             $table->string('average_check')->nullable();
             $table->string('status');
             $table->string('modified_by')->nullable();
             $table->text('comment')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('email')->nullable();
+            $table->string('sub_status')->nullable();
+            $table->string('purchased_goods')->nullable();
             $table->timestamps();
         });
     }

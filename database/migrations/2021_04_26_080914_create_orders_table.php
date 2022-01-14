@@ -15,27 +15,24 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+
             $table->string('status');
-
-            $table->string('name');
-            $table->string('phone');
-
-            $table->string('sizes')->nullable();
-            $table->string('colors')->nullable();
             $table->string('city')->nullable();
             $table->string('waybill')->nullable();
             $table->string('postal_office')->nullable();
 
             $table->text('comment')->nullable();
 
-            $table->foreignId('product_id')->nullable()->references('id')->on('products')->onDelete('set null');
-            $table->foreignId('client_id')->nullable()->references('id')->on('clients')->onDelete('set null');
+            $table->foreignId('client_id')
+                ->nullable()
+                ->references('id')
+                ->on('clients')
+                ->onDelete('set null');
 
-            $table->string('product_name');
-            $table->string('trade_price');
-            $table->string('sale_price');
-            $table->string('profit');
-            $table->string('pay')->default('0');
+            $table->integer('total_count');
+            $table->integer('total_price');
+            $table->boolean('sms_waybill_status')->default(0);
+            $table->string('promo_code')->nullable();
 
             $table->string('manager')->nullable();
             $table->string('modified_by')->nullable();
