@@ -203,7 +203,7 @@ export default {
                         denyButtonText: `Продолжить покупки`,
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = '/checkout';
+                            window.location.href = '/cart';
                         }
                     });
                 })

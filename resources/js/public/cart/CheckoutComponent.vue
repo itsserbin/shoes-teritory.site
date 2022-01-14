@@ -249,7 +249,7 @@ export default {
                 text: 'Ваша заявка отправлена :)',
                 icon: 'success',
             });
-            // window.location.href = '/send-form';
+            window.location.href = '/send-form';
         },
         sendFormErrorResponse(response) {
             this.errors = response.data;
