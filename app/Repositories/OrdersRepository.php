@@ -101,6 +101,7 @@ class OrdersRepository extends CoreRepository
             ->where('status', $data['by'])
             ->select($columns)
             ->orderBy('created_at', 'desc')
+            ->with('client')
             ->paginate($perPage);
     }
 
@@ -227,7 +228,7 @@ class OrdersRepository extends CoreRepository
             ->orWhere('id', 'LIKE', "%$search%")
             ->orWhere('comment', 'LIKE', "%$search%")
             ->orderBy('created_at', 'desc')
-            ->with('product')
+            ->with('client')
             ->paginate($perPage);
     }
 
