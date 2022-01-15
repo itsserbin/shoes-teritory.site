@@ -1,5 +1,7 @@
 @extends('layouts.master')
 
+@section('title',$category->title)
+
 @section('content')
     @component('components.breadcrumbs')
         @slot('active'){{$category->title}}@endslot

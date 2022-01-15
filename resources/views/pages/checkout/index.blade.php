@@ -1,5 +1,7 @@
 @extends('layouts.master')
 
+@section('title','Оформление заказа')
+
 @section('content')
     @component('components.breadcrumbs')
         @slot('active')Оформление заказа@endslot
