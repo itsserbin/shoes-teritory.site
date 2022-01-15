@@ -57,6 +57,7 @@ class OrderItemsRepository extends CoreRepository
             $orderItem->trade_price = $product->trade_price;
             $orderItem->sale_price = $product->discount_price ?: $product->price;
             $orderItem->profit = $orderItem->sale_price - $product->trade_price;
+            $orderItem->total_price = $orderItem->sale_price * $orderItem->count;
             $orderItem->pay = false;
             $orderItem->provider_id = $product->Providers->id;
 
