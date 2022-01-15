@@ -97,7 +97,7 @@ class OrderCheckout
                 foreach ($items as $item) {
                     $this->productRepository->updateProductTotalSales($item->product_id);
                 }
-//                $this->deleteCartItems($cart->id);
+                $this->deleteCartItems($cart->id);
             }
 
             try {

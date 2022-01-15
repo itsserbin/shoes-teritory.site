@@ -256,6 +256,9 @@ export default {
             self.fbInitiateCheckout = false;
         }
     },
+    mounted() {
+        new Inputmask("+38 (999) 999-99-99").mask(document.getElementById('input-phone'));
+    },
     methods: {
         removeFromCart(id) {
             axios.delete('/api/v1/cart/delete/' + id)
