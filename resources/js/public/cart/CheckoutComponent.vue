@@ -248,11 +248,10 @@ export default {
                             "currency": "UAH",
                             "num_items": self.cart.totalCount,
                             "content_ids": self.contentIds,
-                            "content_type": "product",
-                        },
+                            "content_type": "product"
+                        }
                     }
-                ],
-                "test_event_code": "TEST31524"
+                ]
             });
             self.fbInitiateCheckout = false;
         }

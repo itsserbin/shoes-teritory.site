@@ -107,11 +107,10 @@ const app = new Vue({
                         "ct": [hash.sha256().update(this.cityName).digest('hex')],
                         "country": [hash.sha256().update(this.countryName).digest('hex')],
                         "client_ip_address": this.ip,
-                        "client_user_agent": this.userAgent,
-                    },
-                },
-            ],
-            "test_event_code": "TEST31524"
+                        "client_user_agent": this.userAgent
+                    }
+                }
+            ]
         });
     }
 });
