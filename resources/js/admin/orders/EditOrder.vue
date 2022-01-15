@@ -2,24 +2,8 @@
     <div>
         <loader v-if="isLoading"></loader>
         <form v-if="!isLoading" @submit.prevent="updateOrder">
+
             <div class="row">
-                <div class="col-12 col-md-3">
-                    <div class="form-group my-3">
-                        <label class="form-label">Статус клиента:</label>
-                        <select class="form-control" id="status" v-model="order.status">
-                            <option :value="statusNew">{{ statusNew }}</option>
-                            <option :value="statusAwaitingDispatch">{{ statusAwaitingDispatch }}</option>
-                            <option :value="statusAwaitingPrepayment">{{ statusAwaitingPrepayment }}</option>
-                            <option :value="statusCanceled">{{ statusCanceled }}</option>
-                            <option :value="statusAtThePostOffice">{{ statusAtThePostOffice }}</option>
-                            <option :value="statusDone">{{ statusDone }}</option>
-                            <option :value="statusOnTheRoad">{{ statusOnTheRoad }}</option>
-                            <option :value="statusProcessed">{{ statusProcessed }}</option>
-                            <option :value="statusReturn">{{ statusReturn }}</option>
-                            <option :value="statusTransferredToSupplier">{{ statusTransferredToSupplier }}</option>
-                        </select>
-                    </div>
-                </div>
                 <div class="col-12 col-md-3">
                     <div class="form-group my-3">
                         <label class="form-label" for="name">Имя</label>
@@ -27,6 +11,17 @@
                                class="form-control"
                                id="name"
                                v-model="order.client.name"
+                               disabled
+                        >
+                    </div>
+                </div>
+                <div class="col-12 col-md-3">
+                    <div class="form-group my-3">
+                        <label class="form-label" for="last_name">Фамилия</label>
+                        <input type="text"
+                               class="form-control"
+                               id="last_name"
+                               v-model="order.client.last_name"
                                disabled
                         >
                     </div>
@@ -59,6 +54,25 @@
                         </a>
                     </div>
 
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group my-3">
+                        <label class="form-label">Статус клиента:</label>
+                        <select class="form-control" id="status" v-model="order.status">
+                            <option :value="statusNew">{{ statusNew }}</option>
+                            <option :value="statusAwaitingDispatch">{{ statusAwaitingDispatch }}</option>
+                            <option :value="statusAwaitingPrepayment">{{ statusAwaitingPrepayment }}</option>
+                            <option :value="statusCanceled">{{ statusCanceled }}</option>
+                            <option :value="statusAtThePostOffice">{{ statusAtThePostOffice }}</option>
+                            <option :value="statusDone">{{ statusDone }}</option>
+                            <option :value="statusOnTheRoad">{{ statusOnTheRoad }}</option>
+                            <option :value="statusProcessed">{{ statusProcessed }}</option>
+                            <option :value="statusReturn">{{ statusReturn }}</option>
+                            <option :value="statusTransferredToSupplier">{{ statusTransferredToSupplier }}</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             <hr>

@@ -209,9 +209,21 @@
                                 </td>
                                 <td>{{ order.id }}</td>
                                 <td>{{ order.status }}</td>
-                                <td><a :href="'/admin/orders/edit/' + order.id">{{ order.client.name }}</a></td>
-                                <td><a :href="'/admin/orders/edit/' + order.id">{{ order.client.last_name }}</a></td>
-                                <td><a :href="'tel:' + order.phone">{{ order.client.phone }}</a></td>
+                                <td>
+                                    <a :href="'/admin/orders/edit/' + order.id">
+                                    {{ order.client ? order.client.name : '-' }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <a :href="'/admin/orders/edit/' + order.id">
+                                        {{ order.client ? order.client.last_name : '-' }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <a :href="'tel:' + order.phone">
+                                        {{ order.client ? order.client.phone : '-' }}
+                                    </a>
+                                </td>
                                 <td>{{ order.total_count }}</td>
                                 <td>{{ order.total_price | formatMoney }} грн.</td>
                                 <td v-if="activeItem === statusTransferredToSupplier">{{ order.waybill }}</td>

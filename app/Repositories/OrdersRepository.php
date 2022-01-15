@@ -72,8 +72,7 @@ class OrdersRepository extends CoreRepository
         ];
 
         return $this
-            ->startConditions()
-            ->with('client')
+            ->model::with('client')
             ->select($columns)
             ->orderBy($sort, $param)
             ->paginate($perPage);
@@ -89,6 +88,7 @@ class OrdersRepository extends CoreRepository
         $columns = [
             'id',
             'status',
+            'client_id',
             'waybill',
             'comment',
             'total_price',
@@ -97,11 +97,10 @@ class OrdersRepository extends CoreRepository
         ];
 
         return $this
-            ->startConditions()
+            ->model::with('client')
             ->where('status', $data['by'])
             ->select($columns)
             ->orderBy('created_at', 'desc')
-            ->with('client')
             ->paginate($perPage);
     }
 

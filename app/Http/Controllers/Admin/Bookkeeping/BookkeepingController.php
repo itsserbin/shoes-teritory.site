@@ -15,21 +15,21 @@ class BookkeepingController extends BaseController
 
     public function index()
     {
-        $costs = Costs::orderBy('created_at', 'DESC')->paginate(15);
-        $CostsInJustAWeek = Costs::orderBy('created_at', 'desc')
-            ->select('total')
-            ->get(7)
-            ->sum('total');
-
-        $CostsInJustAWeek = Costs::orderBy('created_at', 'desc')
-            ->select('total')
-            ->get(7)
-            ->sum('total');
-
-        $orders = Orders::where('status', 'Выполнен')
-            ->orderBy('created_at', 'desc')
-            ->select('id', 'name', 'product_id', 'phone', 'trade_price', 'sale_price', 'updated_at','created_at')
-            ->paginate(15);
+//        $costs = Costs::orderBy('created_at', 'DESC')->paginate(15);
+//        $CostsInJustAWeek = Costs::orderBy('created_at', 'desc')
+//            ->select('total')
+//            ->get(7)
+//            ->sum('total');
+//
+//        $CostsInJustAWeek = Costs::orderBy('created_at', 'desc')
+//            ->select('total')
+//            ->get(7)
+//            ->sum('total');
+//
+//        $orders = Orders::where('status', 'Выполнен')
+//            ->orderBy('created_at', 'desc')
+//            ->select('id', 'name', 'product_id', 'phone', 'trade_price', 'sale_price', 'updated_at','created_at')
+//            ->paginate(15);
 
 //        $SaleSumInJustAThreeDays = Orders::where('status', 'Выполнен')
 //            ->orderBy('created_at', 'desc')
@@ -70,19 +70,12 @@ class BookkeepingController extends BaseController
 //            ->sum('trade_price');
 //        $ProfitOrdersInJustAMonth = $SaleSumInJustAMonth - $TradeSumInJustAMonth;
 
-        $profits = Profit::paginate(15);
-        $ProfitInJustAWeek = Profit::orderBy('created_at', 'desc')
-            ->select('marginality')
-            ->get(7)
-            ->sum('marginality');
+//        $profits = Profit::paginate(15);
+//        $ProfitInJustAWeek = Profit::orderBy('created_at', 'desc')
+//            ->select('marginality')
+//            ->get(7)
+//            ->sum('marginality');
 
-        return view('admin.bookkeeping.index', [
-            'costs' => $costs,
-            'orders' => $orders,
-            'CostsInJustAWeek' => $CostsInJustAWeek,
-
-            'profits' => $profits,
-            'ProfitInJustAWeek' => $ProfitInJustAWeek
-        ]);
+        return view('admin.bookkeeping.index');
     }
 }
