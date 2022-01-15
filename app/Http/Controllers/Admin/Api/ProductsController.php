@@ -147,4 +147,14 @@ class ProductsController extends BaseController
             'result' => $result,
         ]);
     }
+
+    public function list()
+    {
+        $result = $this->productsRepository->list();
+
+        return $this->returnResponse([
+            'success' => true,
+            'result' => $result,
+        ]);
+    }
 }

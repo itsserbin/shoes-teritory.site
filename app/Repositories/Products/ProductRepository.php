@@ -368,4 +368,9 @@ class ProductRepository extends CoreRepository
             ->orderBy('created_at', 'desc')
             ->paginate(3);
     }
+
+    public function list()
+    {
+        return $this->model::select('id', 'h1')->get();
+    }
 }

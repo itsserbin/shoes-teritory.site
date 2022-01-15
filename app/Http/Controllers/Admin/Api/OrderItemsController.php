@@ -9,8 +9,7 @@ use Illuminate\Http\Request;
 
 class OrderItemsController extends Controller
 {
-    /** @var OrderItemsRepository */
-    private $OrderItemsRepository;
+    private $orderItemsRepository;
 
     /**
      * ClientsController constructor.
@@ -18,12 +17,12 @@ class OrderItemsController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->OrderItemsRepository = app(OrderItemsRepository::class);
+        $this->orderItemsRepository = app(OrderItemsRepository::class);
     }
 
-    public function getByOrderId($id)
+    public function getByOrderId($id): JsonResponse
     {
-        $result = $this->OrderItemsRepository->getByOrderId($id);
+        $result = $this->orderItemsRepository->getByOrderId($id);
 
         return $this->returnResponse([
             'success' => true,
@@ -37,9 +36,9 @@ class OrderItemsController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy($item_id,$order_id): JsonResponse
     {
-        $result = $this->OrderItemsRepository->destroy($id);
+        $result = $this->orderItemsRepository->destroy($item_id,$order_id);
 
         return $this->returnResponse([
             'success' => true,
@@ -54,9 +53,9 @@ class OrderItemsController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function updatePayStatus($id, Request $request)
+    public function updatePayStatus($id, Request $request): JsonResponse
     {
-        $result = $this->OrderItemsRepository->updatePayStatus($id, $request->all());
+        $result = $this->orderItemsRepository->updatePayStatus($id, $request->all());
 
         return $this->returnResponse([
             'success' => true,
@@ -70,9 +69,9 @@ class OrderItemsController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function edit($id)
+    public function edit($id): JsonResponse
     {
-        $result = $this->OrderItemsRepository->getById($id);
+        $result = $this->orderItemsRepository->getById($id);
 
         return $this->returnResponse([
             'success' => true,
@@ -80,9 +79,29 @@ class OrderItemsController extends Controller
         ]);
     }
 
-    public function update($id, Request $request)
+    /**
+     * @param $id
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function update($id, Request $request): JsonResponse
     {
-        $result = $this->OrderItemsRepository->update($id,$request->all());
+        $result = $this->orderItemsRepository->update($id, $request->all());
+
+        return $this->returnResponse([
+            'success' => true,
+            'result' => $result,
+        ]);
+    }
+
+    /**
+     * @param $id
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function addItem($id, Request $request): JsonResponse
+    {
+        $result = $this->orderItemsRepository->addItemToOrder($id, $request->all());
 
         return $this->returnResponse([
             'success' => true,

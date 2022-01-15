@@ -16,10 +16,16 @@ class OrderItemsRepository extends CoreRepository
 {
     private $promoCodesRepository;
 
+    private $productRepository;
+
+    private $ordersRepository;
+
     public function __construct()
     {
         parent::__construct();
         $this->promoCodesRepository = app(PromoCodesRepository::class);
+        $this->productRepository = app(ProductRepository::class);
+        $this->ordersRepository = app(OrdersRepository::class);
     }
 
     /**
@@ -37,10 +43,10 @@ class OrderItemsRepository extends CoreRepository
      */
     public function create($cartItems, $orderId, $promoCode)
     {
-        $productRepository = new ProductRepository();
+//        $productRepository = new ProductRepository();
 
         foreach ($cartItems as $item) {
-            $product = $productRepository->getById($item->product_id);
+            $product = $this->productRepository->getById($item->product_id);
 
             $orderItem = new $this->model;
             $orderItem->order_id = $orderId;
@@ -93,6 +99,7 @@ class OrderItemsRepository extends CoreRepository
     {
         return $this->startConditions()
             ->with('product.providers')
+            ->with('product.providers')
             ->where('order_id', $id)
             ->get();
     }
@@ -103,9 +110,12 @@ class OrderItemsRepository extends CoreRepository
      * @param $id
      * @return int
      */
-    public function destroy($id)
+    public function destroy($item_id, $order_id)
     {
-        return $this->model::destroy($id);
+        $model = $this->getById($item_id);
+        $this->ordersRepository->updateOnDestroyOrderTotalPriceAndCount($order_id, $model->count, $model->sale_price);
+
+        return $this->model::destroy($item_id);
     }
 
     /**
@@ -224,10 +234,48 @@ class OrderItemsRepository extends CoreRepository
      */
     public function update($id, $data)
     {
-        return $this->model::where('id', $id)->update([
-            'count' => $data['count'],
-            'size' => json_encode($data['size']),
-            'color' => json_encode($data['color'])
-        ]);
+        $model = $this->getById($id);
+        $model->count = $data['count'];
+        $model->size = json_encode($data['size']);
+        $model->color = json_encode($data['color']);
+        $model->total_price = $data['count'] * $model->sale_price;
+        $model->update();
+
+        return $model;
+
+    }
+
+    public function addItemToOrder($id, $data)
+    {
+        $product = $this->productRepository->getById($data['id']);
+
+        $orderItem = new $this->model;
+        $orderItem->order_id = $id;
+        $orderItem->product_id = $product->id;
+        $orderItem->count = $data['count'];
+        $orderItem->size = $data['size'] ?? null;
+        $orderItem->color = $data['color'] ?? null;
+        $orderItem->pay = false;
+        $orderItem->provider_id = $product->Providers->id;
+
+        $orderItem->trade_price = $product->trade_price;
+        $orderItem->sale_price = ($product->discount_price ?: $product->price);
+
+        if (isset($data['resale'])) {
+            $orderItem->resale = $data['resale'];
+            $orderItem->discount = $data['discount'];
+            $orderItem->total_price = ($product->discount_price ?: $product->price) * (int)$data['count'] - $data['discount'];
+
+
+            $this->ordersRepository->updateOnAddOrderTotalPriceAndCount($id, $data['count'], $orderItem->total_price);
+        } else {
+            $orderItem->total_price = ($product->discount_price ?: $product->price) * (int)$data['count'];
+            $this->ordersRepository->updateOnAddOrderTotalPriceAndCount($id, $data['count'], $orderItem->total_price);
+        }
+        $orderItem->profit = $orderItem->sale_price - $product->trade_price;
+
+        $orderItem->save();
+
+        return $orderItem;
     }
 }

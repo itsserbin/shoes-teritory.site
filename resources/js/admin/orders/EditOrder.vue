@@ -120,8 +120,91 @@
                     </div>
                 </div>
             </div>
-            <hr>
-            <div class="row mt-5 py-3 ">
+            <div class="row text-end">
+                <div class="col-12">
+                    <button class="btn btn-danger" type="button" @click="modalAddProductItem">
+                        Добавить товар
+                    </button>
+                </div>
+                <div class="modal active-modal" v-if="showAddProductItem">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button"
+                                        class="btn-close"
+                                        @click="showAddProductItem = false"
+                                >
+                                </button>
+                            </div>
+                            <div class="modal-body text-start">
+                                <div class="mb-3">
+                                    <model-list-select
+                                        :list="products"
+                                        v-model="item.id"
+                                        option-value="id"
+                                        option-text="h1"
+                                        placeholder="Виберите товар"
+                                    >
+                                    </model-list-select>
+                                </div>
+                                <div class="form-group" v-if="item.id">
+                                    <label for="item_size" class="form-label">Размер</label>
+                                    <input type="text"
+                                           id="item_size"
+                                           v-model="item.size"
+                                           class="form-control">
+
+                                    <label for="item_color" class="form-label mt-3">Цвет</label>
+                                    <input type="text"
+                                           id="item_color"
+                                           v-model="item.color"
+                                           class="form-control">
+
+                                    <label for="item_count" class="form-label mt-3">Количество</label>
+                                    <input type="text"
+                                           id="item_count"
+                                           v-model="item.count"
+                                           class="form-control">
+
+                                    <div class="form-check mt-3">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               id="item_resale"
+                                               v-model="item.resale"
+                                        >
+                                        <label class="form-check-label"
+                                               for="item_resale"
+                                        >
+                                            Допродажа
+                                        </label>
+                                    </div>
+
+                                    <div v-if="item.resale">
+                                        <label for="item_discount" class="form-label mt-3">Сумма скидки (грн.)</label>
+                                        <input type="text"
+                                               id="item_discount"
+                                               v-model="item.discount"
+                                               class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button"
+                                        class="btn btn-secondary"
+                                        @click="showAddProductItem = false"
+                                >Закрыть
+                                </button>
+                                <button type="button"
+                                        @click.prevent="addOrderItems"
+                                        class="btn btn-danger"
+                                >Добавить
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2 ">
                 <div class="col-12">
                     <div class="table-responsive">
                         <table class="table text-center">
@@ -131,8 +214,11 @@
                                 <th>Фото</th>
                                 <th>Количество</th>
                                 <th>Цена</th>
+                                <th>Сумма</th>
                                 <th>Цвет</th>
                                 <th>Размер</th>
+                                <th>Допродажа</th>
+                                <th>Скидка</th>
                                 <th>Артикул</th>
                                 <th>Поставщик</th>
                                 <th>Действия</th>
@@ -151,9 +237,18 @@
                                     >
                                 </td>
                                 <td>{{ item.count }}</td>
-                                <td>{{ item.sale_price | formatMoney}} грн.</td>
+                                <td>{{ item.sale_price | formatMoney }} грн.</td>
+                                <td>{{ item.total_price | formatMoney }} грн.</td>
                                 <td><span v-for="color in item.color">{{ color }}</span></td>
                                 <td><span v-for="size in item.size">{{ size }}</span></td>
+                                <td>
+                                    <span v-if="item.resale !== 0">Да</span>
+                                    <span v-else>Нет</span>
+                                </td>
+                                <td>
+                                    <span v-if="item.resale === 0">Нет</span>
+                                    <span v-else>{{ item.discount }}</span>
+                                </td>
                                 <td>{{ item.product.vendor_code }}</td>
                                 <td>{{ item.product.providers.name }}</td>
                                 <td>
@@ -234,6 +329,9 @@
 </template>
 
 <script>
+import {ModelListSelect} from 'vue-search-select'
+
+
 export default {
     data() {
         return {
@@ -255,9 +353,22 @@ export default {
                 color: null,
                 count: null
             },
+            item: {
+                id: null,
+                size: null,
+                color: null,
+                count: 1,
+                discount: null,
+                resale: 0,
+            },
+            products: [],
             isLoading: true,
             showEditProductItem: false,
+            showAddProductItem: false,
         }
+    },
+    components: {
+        ModelListSelect
     },
     props: {
         userName: String,
@@ -281,6 +392,35 @@ export default {
         this.getOrder(id);
     },
     methods: {
+        addOrderItems() {
+            axios.post('/api/order-items/add/' + this.order.id, this.item)
+                .then(() => {
+                    this.$swal({
+                        'icon': 'success',
+                        'title': 'Добавлено!',
+                        'text': 'Товар успешно добавлен к заказу :)',
+                    });
+                    this.getOrder(this.order.id);
+                    this.item = {};
+                    this.item.count = 1;
+                    this.showAddProductItem = false;
+                })
+                .catch((response) => {
+                    console.log(response);
+                    this.$swal({
+                        'icon': 'error',
+                        'title': 'Ошибка!',
+                        'text': 'Проверьте корректность данных или обратитесь за помощью к администратору',
+                    });
+                })
+        },
+        modalAddProductItem() {
+            this.showAddProductItem = true;
+
+            axios.get('/api/products/list')
+                .then(({data}) => this.products = data.result)
+                .catch((response) => console.log(response));
+        },
         getOrder(id) {
             axios.get('/api/orders/edit/' + id)
                 .then(({data}) => this.getOrderSuccessResponse(data))
@@ -355,11 +495,31 @@ export default {
                 .catch((response) => console.log(response));
         },
         onDelete(id) {
-            if (confirm('Вы точно хотите удалить товар из заказа?')) {
-                axios.delete('/api/order-items/destroy/' + id)
-                    .then(() => this.getItems(this.order.id))
-                    .catch((response) => this.getOrderItemsErrorResponse(response));
-            }
+            this.$swal({
+                title: 'Вы точно хотите удалить товар из заказа?',
+                icon: 'warning',
+                showCancelButton: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete('/api/order-items/destroy/' + id + '/' + this.order.id)
+                        .then(() => {
+                            this.$swal({
+                                title: 'Удалено!',
+                                icon: 'success',
+                                showCancelButton: false,
+                            });
+                            this.getOrder(this.order.id);
+                        })
+                        .catch((response) => {
+                            console.log(response);
+                            this.$swal({
+                                title: 'Ошибка',
+                                icon: 'error',
+                                showCancelButton: false,
+                            });
+                        });
+                }
+            });
         },
         updateOrder() {
             axios.put('/api/orders/update/' + this.order.id, [this.order, {userName: this.userName}])

@@ -82,6 +82,9 @@ Route::middleware('auth:api')->group(function () {
                 ->name('api.products.images.upload');
         });
 
+        Route::get('list', [ProductsController::class, 'list'])
+            ->name('api.products.list');
+
     });
 
     Route::prefix('colors')->group(function () {
@@ -189,7 +192,7 @@ Route::middleware('auth:api')->group(function () {
          *
          * DELETE /api/order-items/destroy/{id}
          */
-        Route::delete('destroy/{id}', [OrderItemsController::class, 'destroy'])
+        Route::delete('destroy/{item_id}/{order_id}', [OrderItemsController::class, 'destroy'])
             ->name('api.order-items.destroy');
 
         /**
@@ -215,6 +218,9 @@ Route::middleware('auth:api')->group(function () {
          */
         Route::get('/edit/{id}', [OrderItemsController::class, 'edit'])
             ->name('api.order-items.edit');
+
+        Route::post('add/{id}', [OrderItemsController::class, 'addItem'])
+            ->name('api.order-items.add');
     });
 
     Route::prefix('providers')->group(function () {

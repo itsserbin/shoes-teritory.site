@@ -273,4 +273,22 @@ class OrdersRepository extends CoreRepository
     {
         return $this->model::where('id', $id)->update(['sms_waybill_status' => 1]);
     }
+
+    public function updateOnAddOrderTotalPriceAndCount($id, $count, $price)
+    {
+        $model = $this->getById($id);
+        $model->total_price += $price;
+        $model->total_count += $count;
+        $model->update();
+        return $model;
+    }
+
+    public function updateOnDestroyOrderTotalPriceAndCount($id, $count, $price)
+    {
+        $model = $this->getById($id);
+        $model->total_price -= $price;
+        $model->total_count -= $count;
+        $model->update();
+        return $model;
+    }
 }
