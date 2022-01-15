@@ -5,6 +5,7 @@ use App\Http\Controllers\Public\Api\CategoriesController;
 use App\Http\Controllers\Public\Api\OrdersController;
 use App\Http\Controllers\Public\Api\ProductsController;
 use App\Http\Controllers\Public\Api\ReviewsController;
+use App\Http\Controllers\Public\Api\UsersController;
 use Illuminate\Support\Facades\Route;
 
 /** Public API */
@@ -152,5 +153,11 @@ Route::prefix('v1')->middleware('api')->group(function () {
          */
 //        Route::get('products/{slug}', [CategoriesController::class, 'getCategoryProducts'])
 //            ->name('api.category.getCategoryProductsOnProduction');
+    });
+
+    Route::prefix('user')->group(function () {
+
+        Route::get('info', [UsersController::class, 'getUserInfo'])
+            ->name('api.user.info');
     });
 });

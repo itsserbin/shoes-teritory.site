@@ -10,8 +10,7 @@
                     <div class="shop__product-name">
                         <div class="shop__title">{{$product->h1}}</div>
                         <div class="d-flex justify-content-between align-items-center">
-                            <div class="shop__product-code text-end">Код: {{$product->vendor_code}}
-                                /{{$product->id}}</div>
+                            <div class="shop__product-code text-end">Код: {{$product->vendor_code}}/{{$product->id}}</div>
                             <div class="shop__product-availability">Товар в наличии</div>
                         </div>
                     </div>
@@ -19,6 +18,8 @@
 
 
                 <add-to-cart
+                    h1="{{$product->h1}}"
+                    category="{{$product->categories[0]->title}}"
                     discount-price="{{ $product->discount_price }}"
                     price="{{ $product->price }}"
                     size-table="{{$product->size_table}}"

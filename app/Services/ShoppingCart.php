@@ -82,10 +82,12 @@ class ShoppingCart
                 if ($item->product->discount_price) {
                     $price_without_discount += $item->product->price * $item->count;
                 }
+
                 $list[] = [
                     'id' => $item->product->id,
                     'alias' => route('product', ['alias' => $item->product->alias, 'id' => $item->product->id]),
                     'name' => $item->product->h1,
+                    'category' => $item->product->categories[0]->title,
                     'image' => $item->product->preview,
                     'count' => $item->count,
                     'size' => $item->size,

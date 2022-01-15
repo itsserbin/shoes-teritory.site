@@ -20,6 +20,7 @@ Vue.filter("formatPercent", function (value) {
     return numeral(value).format('0.000%');
 });
 
+
 // Get components
 Vue.component('loader', require('../components/LoaderComponent').default);
 
@@ -67,6 +68,7 @@ Vue.component('supplier-payments', require('./bookkeeping/SupplierPaymentsList')
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
 
 Vue.prototype.$tinyapi = 'ufqphs7puyg4ij1mc3c61o7isu5mxekk5x9yygffpdo89ava';
 Vue.prototype.$tinySettings = {plugins: 'table', height: 300};

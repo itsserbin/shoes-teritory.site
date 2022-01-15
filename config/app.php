@@ -180,6 +180,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Daaner\TurboSMS\TurboSMSServiceProvider::class,
+        Stevebauman\Location\LocationServiceProvider::class
 
 
     ],

@@ -160,6 +160,8 @@ export default {
         price: String,
         sizeTable: String,
         discountPrice: String,
+        h1: String,
+        category: String,
         xs: String,
         s: String,
         m: String,
@@ -171,6 +173,32 @@ export default {
     created() {
         this.colorsAll = JSON.parse(this.colors);
         this.item.item_id = this.id;
+    },
+    mounted() {
+        axios.post('https://graph.facebook.com/' + this.$fb_api_version + '/' + this.$fb_pixel_id + '/events?access_token=' + this.$fb_api, {
+            "data": [
+                {
+                    "event_name": "ViewContent",
+                    "event_time": Math.floor(Date.now() / 1000),
+                    "action_source": "website",
+                    "event_source_url": window.location.href,
+                    "user_data": {
+                        "ct": [hash.sha256().update(this.cityName).digest('hex')],
+                        "country": [hash.sha256().update(this.countryName).digest('hex')],
+                        "client_ip_address": this.ip,
+                        "client_user_agent": this.userAgent,
+                    },
+                    "custom_data": {
+                        "value": this.discountPrice ? this.discountPrice : this.price,
+                        "currency": "UAH",
+                        "content_type": "product",
+                        "content_ids": [this.item.item_id],
+                        "content_category": this.category,
+                        "content_name": this.h1
+                    }
+                }
+            ]
+        });
     },
     methods: {
         showModalFunction() {
@@ -184,15 +212,33 @@ export default {
                 this.item.count--;
             }
         },
-        buyNow() {
-            axios.post('/api/v1/cart/add', this.item)
-                .then(({data}) => window.location.href = '/checkout')
-                .catch(({response}) => this.setErrorResponse(response));
-        },
         addToCart() {
             axios.post('/api/v1/cart/add', this.item)
                 .then(({data}) => {
                     this.$store.commit('loadCart');
+                    axios.post('https://graph.facebook.com/' + this.$fb_api_version + '/' + this.$fb_pixel_id + '/events?access_token=' + this.$fb_api, {
+                        "data": [
+                            {
+                                "event_name": "AddToCart",
+                                "event_time": Math.floor(Date.now() / 1000),
+                                "action_source": "website",
+                                "event_source_url": window.location.href,
+                                "user_data": {
+                                    "ct": [hash.sha256().update(this.cityName).digest('hex')],
+                                    "country": [hash.sha256().update(this.countryName).digest('hex')],
+                                    "client_ip_address": this.ip,
+                                    "client_user_agent": this.userAgent,
+                                },
+                                "custom_data": {
+                                    "value": this.discountPrice ? this.discountPrice : this.price,
+                                    "currency": "UAH",
+                                    "content_type": "product",
+                                    "content_ids": [this.item.item_id],
+                                    "content_name": this.h1
+                                }
+                            }
+                        ]
+                    });
                     this.$swal({
                         title: 'Добавлено!',
                         text: 'Товар в корзине :)',
