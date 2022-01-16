@@ -286,7 +286,8 @@
                            @change="uploadMultipleImages"
                     >
                 </div>
-                <div class="row" v-if="product.images.length">
+                <loader v-if="isLoadingImages"></loader>
+                <div class="row" v-if="product.images.length" v-show="!isLoadingImages">
                     <div class="w-25" v-for="(image,index) in product.images">
                         <img :src="'/storage/products/350/' + image.image" class="card-img-top">
                         <div class="card-body d-flex justify-content-around">
@@ -317,6 +318,7 @@ export default {
     data() {
         return {
             isLoading: true,
+            isLoadingImages: false,
             product: {
                 xs: null,
                 s: null,
@@ -366,7 +368,6 @@ export default {
             .catch((response) => console.log(response));
 
 
-
         axios.get('/api/providers/list')
             .then(({data}) => this.providers = data.result)
             .catch((response) => console.log(response));
@@ -380,6 +381,7 @@ export default {
         uploadMultipleImages(event) {
             const self = this;
             Array.from(event.target.files).forEach(function (image) {
+                self.isLoadingImages = true;
                 const formData = new FormData();
                 formData.append('image', image);
                 formData.append('type', 'products');
@@ -390,6 +392,7 @@ export default {
                 })
                     .then(({data}) => {
                         self.product.images.push({image: data.url});
+                        self.isLoadingImages = false;
                     })
                     .catch((response) => console.log(response));
             });
@@ -408,7 +411,7 @@ export default {
                     this.isLoading = false;
                 });
         },
-        getColors(){
+        getColors() {
             axios.get('/api/colors/list')
                 .then(({data}) => {
                     this.colors = data.result;
