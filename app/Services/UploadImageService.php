@@ -26,7 +26,7 @@ class UploadImageService
 
         Image::make($preview)->resize(350, null, function ($constraint) {
             $constraint->aspectRatio();
-        })->save('storage/preview/' . $filename);
+        })->save(public_path('storage/preview/' . $filename));
 
         return asset('/storage/preview/' . $filename);
     }
@@ -38,17 +38,17 @@ class UploadImageService
 
         Image::make($image)->resize(55, null, function ($constraint) {
             $constraint->aspectRatio();
-        })->save('storage/products/55/' . $filename);
+        })->save(public_path('storage/products/55/' . $filename));
 
         Image::make($image)->resize(350, null, function ($constraint) {
             $constraint->aspectRatio();
-        })->save('storage/products/350/' . $filename);
+        })->save(public_path('storage/products/350/' . $filename));
 
         Image::make($image)->resize(500, null, function ($constraint) {
             $constraint->aspectRatio();
-        })->save('storage/products/500/' . $filename);
+        })->save(public_path('storage/products/500/' . $filename));
 
-        Image::make($image)->save('storage/products/' . $filename);
+        Image::make($image)->save(public_path('storage/products/' . $filename));
 
         return $filename;
     }
