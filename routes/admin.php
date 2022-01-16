@@ -157,8 +157,19 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
         Route::get('scripts', [OptionsController::class, 'scripts'])->name('admin.options.scripts');
         Route::resource('colors', ColorsController::class)->names('admin.options.colors');
         Route::post('update/{id}', [OptionsController::class, 'update'])->name('admin.options.update');
-        Route::resource('users', UsersController::class)->names('admin.users');
         Route::resource('roles', RolesColroller::class)->names('admin.roles');
+    });
+
+    Route::prefix('users')->group(function () {
+
+        Route::get('/', [UsersController::class, 'index'])
+            ->name('admin.users.index');
+
+        Route::get('edit/{id}', [UsersController::class, 'edit'])
+            ->name('admin.users.edit');
+
+        Route::get('create', [UsersController::class, 'create'])
+            ->name('admin.users.create');
     });
 
     Route::post('notify-waybill', [\App\Http\Controllers\SmsController::class, 'notifyWaybill'])->name('notifyWaybill');

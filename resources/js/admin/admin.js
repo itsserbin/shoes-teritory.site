@@ -23,6 +23,7 @@ Vue.filter("formatPercent", function (value) {
 
 // Get components
 Vue.component('loader', require('../components/LoaderComponent').default);
+Vue.component('input-invalid-feedback', require('../components/InputInvalidFeedback').default);
 
 // Get icons
 Vue.component('arrow-up-icon', require('../components/icons/ArrowUpIcon').default);
@@ -52,6 +53,10 @@ Vue.component('category-edit', require('./categories/EditCategory').default);
 
 Vue.component('main-options-list', require('./options/MainOptionsList').default);
 Vue.component('scripts-options-list', require('./options/ScriptsOptionsList').default);
+
+Vue.component('users-list', require('./users/UsersList').default);
+Vue.component('edit-user', require('./users/EditUser').default);
+Vue.component('create-user', require('./users/CreateUser').default);
 
 Vue.component('orders-list', require('./orders/OrdersList').default);
 Vue.component('order-edit', require('./orders/EditOrder').default);

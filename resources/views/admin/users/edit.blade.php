@@ -10,14 +10,7 @@
                 @include('admin.options.partials.sidebar')
             </div>
             <div class="col-12 col-md-9">
-                <form action="{{route('admin.users.update', $user->id)}}" method="post">
-                    @csrf
-                    @method('PATCH')
-                    {{-- Form include --}}
-                    @include('admin.options.users.partials.form')
-
-                    <button type="submit" class="btn btn-success">Сохранить</button>
-                </form>
+                <edit-user></edit-user>
             </div>
         </div>
     </div>

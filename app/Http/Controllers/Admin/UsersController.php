@@ -6,6 +6,9 @@ use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
 use App\Traits\HasRolesAndPermissions;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class UsersController extends BaseController
@@ -17,44 +20,19 @@ class UsersController extends BaseController
         parent::__construct();
     }
 
-    public function index()
+    public function index(): Factory|View|Application
     {
-        $users = User::paginate(15);
-
-        return view('admin.options.users.index', [
-            'users' => $users,
-        ]);
+        return view('admin.users.index');
     }
 
-    public function edit($id)
+    public function edit(): Factory|View|Application
     {
-        $user = User::find($id);
-        $roles = Role::all();
-        $permissions = Permission::all();
-
-        return view('admin.options.users.edit', [
-            'user' => $user,
-            'roles' => $roles,
-            'permissions' => $permissions
-        ]);
+        return view('admin.users.edit');
     }
 
-    public function update($id, Request $request)
+    public function create(): Factory|View|Application
     {
-        $user = User::find($id);
-        $permissions = $request->input('permissions');
-        $role = $request->input('role');
-        $user->permissions()->detach();
-        $user->roles()->detach();
-        $user->roles()->attach($role);
+        return view('admin.users.create');
 
-        if ($permissions) {
-            foreach ($permissions as $permission) {
-                $user->givePermissionsTo($permission);
-            }
-        }
-        $user->update();
-
-        return back();
     }
 }

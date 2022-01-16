@@ -12,7 +12,9 @@ use App\Http\Controllers\Admin\Api\ProductsController;
 use App\Http\Controllers\Admin\Api\PromoCodesController;
 use App\Http\Controllers\Admin\Api\ProvidersController;
 use App\Http\Controllers\Admin\Api\ReviewsController;
+use App\Http\Controllers\Admin\Api\RolesController;
 use App\Http\Controllers\Admin\Api\UploadController;
+use App\Http\Controllers\Admin\Api\UsersController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\Api\ClientsController;
 
@@ -424,6 +426,32 @@ Route::middleware('auth:api')->group(function () {
 
         Route::post('mass', [PromoCodesController::class, 'massActions'])
             ->name('api.promo-codes.mass');
+    });
+
+    Route::prefix('users')->group(function () {
+
+        Route::get('/', [UsersController::class, 'index'])
+            ->name('api.users.index');
+
+        Route::get('edit/{id}', [UsersController::class, 'edit'])
+            ->name('api.users.edit');
+
+        Route::post('create', [UsersController::class, 'create'])
+            ->name('api.users.create');
+
+        Route::put('update/{id}', [UsersController::class, 'update'])
+            ->name('api.users.update');
+
+        Route::get('search={search}', [UsersController::class, 'search'])
+            ->name('api.users.search');
+
+        Route::delete('/destroy/{id}', [UsersController::class, 'destroy'])
+            ->name('api.users.destroy');
+    });
+
+    Route::prefix('roles')->group(function () {
+        Route::get('list', [RolesController::class, 'list'])
+            ->name('api.roles.list');
     });
 });
 
