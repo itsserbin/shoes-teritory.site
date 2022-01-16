@@ -38,7 +38,7 @@ class Orders extends Model
      */
     public function client(): BelongsTo
     {
-        return $this->belongsTo(Clients::class,'client_id');
+        return $this->belongsTo(Clients::class, 'client_id');
     }
 
     /**
@@ -49,5 +49,10 @@ class Orders extends Model
     public function items()
     {
         return $this->hasMany('App\Models\OrderItems', 'order_id');
+    }
+
+    public function manager(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'manager_id');
     }
 }

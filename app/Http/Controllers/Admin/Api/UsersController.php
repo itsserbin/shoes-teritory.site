@@ -124,4 +124,14 @@ class UsersController extends BaseController
         ]);
     }
 
+    public function getManagersList(): JsonResponse
+    {
+        $result = $this->usersRepository->getManagersList();
+
+        return $this->returnResponse([
+            'success' => true,
+            'result' => $result,
+        ]);
+    }
+
 }

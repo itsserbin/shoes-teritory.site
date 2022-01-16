@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-12">
+                <div class="col-12 col-md-6">
                     <div class="form-group my-3">
                         <label class="form-label">Статус клиента:</label>
                         <select class="form-control" id="status" v-model="order.status">
@@ -71,6 +71,19 @@
                             <option :value="statusProcessed">{{ statusProcessed }}</option>
                             <option :value="statusReturn">{{ statusReturn }}</option>
                             <option :value="statusTransferredToSupplier">{{ statusTransferredToSupplier }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-group my-3">
+                        <label class="form-label">Менеджер клиента:</label>
+                        <select class="form-control" id="status" v-model="order.manager_id">
+                            <option :value="null" disabled>Не выбран</option>
+                            <option :value="manager.id"
+                                    v-for="manager in managers"
+                                    :key="manager.id"
+                            >{{ manager.name }}
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -342,6 +355,7 @@ export default {
                 city: null,
                 postal_office: null,
                 waybill: null,
+                manager_id: null,
                 comment: null,
                 updated_at: null,
                 modified_by: null,
@@ -362,6 +376,7 @@ export default {
                 resale: 0,
             },
             products: [],
+            managers: [],
             isLoading: true,
             showEditProductItem: false,
             showAddProductItem: false,
@@ -390,6 +405,10 @@ export default {
         let id = str.substring(n + 1);
 
         this.getOrder(id);
+
+        axios.get('/api/users/list/managers')
+            .then(({data}) => this.managers = data.result)
+            .catch((response) => console.log(response));
     },
     methods: {
         addOrderItems() {
@@ -447,7 +466,7 @@ export default {
                                 'text': 'Обратитесь к администратору',
                             })
                         }
-                        axios.put('/api/orders/update/' + this.order.id, [this.order, {userName: this.userName}])
+                        axios.put('/api/orders/update/' + this.order.id, this.order)
                         this.getOrder(this.order.id);
                     })
                     .catch((response) => {
@@ -470,6 +489,9 @@ export default {
         },
         getOrderSuccessResponse(data) {
             this.order = data.result;
+            if (data.result.manager) {
+                this.order.manager_id = data.result.manager.id
+            }
             this.isLoading = false;
         },
         getOrderErrorResponse(response) {
@@ -522,7 +544,7 @@ export default {
             });
         },
         updateOrder() {
-            axios.put('/api/orders/update/' + this.order.id, [this.order, {userName: this.userName}])
+            axios.put('/api/orders/update/' + this.order.id, this.order)
                 .then(() => this.$swal({
                     title: 'Обновлено!',
                     text: 'Данные успешно обновлены',

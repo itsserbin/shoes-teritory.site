@@ -57,9 +57,23 @@ class UsersRepository extends CoreRepository
         return $this
             ->model::select(
                 'id',
-                'title',
-                'parent_id'
+                'name',
+                'email'
             )->get();
+    }
+
+    public function getManagersList()
+    {
+        return $this
+            ->model::select(
+                'id',
+                'name',
+                'email'
+            )
+            ->wherehas('roles', function ($q) {
+                $q->where('name', 'manager');
+            })
+            ->get();
     }
 
     public function create(array $data)
@@ -93,4 +107,5 @@ class UsersRepository extends CoreRepository
     {
         return $this->model::destroy($id);
     }
+
 }

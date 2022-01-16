@@ -44,7 +44,7 @@ class OrdersRepository extends CoreRepository
     {
         return $this
             ->startConditions()
-            ->with('items.product.providers', 'client')
+            ->with('items.product.providers', 'client','manager')
             ->find($id);
     }
 
@@ -164,17 +164,18 @@ class OrdersRepository extends CoreRepository
      * @param $request
      * @return mixed
      */
-    public function update(int $id, array $request)
+    public function update(int $id, array $data)
     {
-        return $this->model::where('id', $id)->update([
-            'status' => $request[0]['status'],
-            'comment' => $request[0]['comment'],
-            'city' => $request[0]['city'],
-            'waybill' => $request[0]['waybill'],
-            'postal_office' => $request[0]['postal_office'],
-            'modified_by' => $request[1]['userName'],
-        ]);
+        $model = $this->getById($id);
+        $model->status = $data['status'];
+        $model->comment = $data['comment'];
+        $model->city = $data['city'];
+        $model->waybill = $data['waybill'];
+        $model->postal_office = $data['postal_office'];
+        $model->manager_id = $data['manager_id'];
+        $model->update();
 
+        return $model;
 
     }
 

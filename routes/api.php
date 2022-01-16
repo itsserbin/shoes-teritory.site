@@ -447,6 +447,11 @@ Route::middleware('auth:api')->group(function () {
 
         Route::delete('/destroy/{id}', [UsersController::class, 'destroy'])
             ->name('api.users.destroy');
+
+        Route::prefix('list')->group(function () {
+            Route::get('managers', [UsersController::class, 'getManagersList'])
+                ->name('api.users.list.managers');
+        });
     });
 
     Route::prefix('roles')->group(function () {
