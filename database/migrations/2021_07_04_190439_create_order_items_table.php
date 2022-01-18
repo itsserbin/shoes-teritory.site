@@ -33,6 +33,10 @@ class CreateOrderItemsTable extends Migration
             $table->boolean('pay')->nullable();
             $table->integer('count')->default(1);
 
+            $table->boolean('resale')->default(0);
+            $table->integer('discount')->nullable();
+            $table->integer('total_price');
+
             $table->timestamps();
         });
     }

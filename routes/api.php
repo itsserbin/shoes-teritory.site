@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Api\AdminController;
 use App\Http\Controllers\Admin\Api\Bookkeeping\DailyStatisticsController;
+use App\Http\Controllers\Admin\Api\Bookkeeping\ManagersSalariesController;
 use App\Http\Controllers\Admin\Api\Bookkeeping\SupplierPaymentsController;
 use App\Http\Controllers\Admin\Api\CategoriesController;
 use App\Http\Controllers\Admin\Api\ColorsController;
@@ -287,6 +288,14 @@ Route::middleware('auth:api')->group(function () {
              */
             Route::get('payments-received', [SupplierPaymentsController::class, 'paymentsReceived'])
                 ->name('api.bookkeeping.supplier-payments.paymentsReceived');
+        });
+
+        Route::prefix('managers-salaries')->group(function () {
+            Route::get('/', [ManagersSalariesController::class, 'index'])
+                ->name('api.bookkeeping.managers-salaries.index');
+
+            Route::post('create', [ManagersSalariesController::class, 'create'])
+                ->name('api.bookkeeping.managers-salaries.create');
         });
     });
 

@@ -62,7 +62,6 @@ Vue.component('category', require('./category/ShowCategory').default);
 window.hash = require('hash.js');
 
 
-
 Vue.prototype.$fb_api = 'EAAErmzE35MMBADkZBJgPpKpm836MOGaojDZA8ZBCUuCStZCfj3I2rLY6Dkvwmvj91mRGKKtdsdigMsKIHXsLYt6Fh7yqgL7tVcmY2VJ9MIl5dAtJhQIVE1scJGCa6ykDXDEIO6H6YGnAIDtupLoWx3ESuneoTXkZC6tZAfttiLi8cGWzIMaxYKF8Q8Nd8dHtwZD';
 Vue.prototype.$fb_pixel_id = '2420788534721287';
 Vue.prototype.$fb_api_version = 'v11.0';
@@ -85,6 +84,27 @@ const app = new Vue({
         }
     },
     mounted() {
+        // !function (f, b, e, v, n, t, s) {
+        //     if (f.fbq) return;
+        //     n = f.fbq = function () {
+        //         n.callMethod ?
+        //             n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+        //     };
+        //     if (!f._fbq) f._fbq = n;
+        //     n.push = n;
+        //     n.loaded = !0;
+        //     n.version = '2.0';
+        //     n.queue = [];
+        //     t = b.createElement(e);
+        //     t.async = !0;
+        //     t.src = v;
+        //     s = b.getElementsByTagName(e)[0];
+        //     s.parentNode.insertBefore(t, s)
+        // }(window, document, 'script',
+        //     'https://connect.facebook.net/en_US/fbevents.js');
+        // fbq('init', '2420788534721287');
+        // fbq('track', 'PageView');
+
         axios.get('/api/v1/user/info')
             .then(({data}) => {
                 if (data.location.ip !== '66.102.0.0') {

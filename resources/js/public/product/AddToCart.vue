@@ -199,6 +199,14 @@ export default {
                 }
             ]
         });
+        fbq('track', 'ViewContent', {
+            "value": this.discountPrice ? this.discountPrice : this.price,
+            "currency": "UAH",
+            "content_type": "product",
+            "content_ids": [this.item.item_id],
+            "content_category": this.category,
+            "content_name": this.h1
+        });
     },
     methods: {
         showModalFunction() {
@@ -238,6 +246,13 @@ export default {
                                 }
                             }
                         ]
+                    });
+                    fbq('track', 'AddToCart', {
+                        "value": this.discountPrice ? this.discountPrice : this.price,
+                        "currency": "UAH",
+                        "content_type": "product",
+                        "content_ids": [this.item.item_id],
+                        "content_name": this.h1
                     });
                     this.$swal({
                         title: 'Добавлено!',

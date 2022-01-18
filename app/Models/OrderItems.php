@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OrderItems extends Model
 {
@@ -50,5 +51,10 @@ class OrderItems extends Model
     public function provider()
     {
         return $this->hasOne('App\Models\Bookkeeping\Providers', 'id', 'provider_id');
+    }
+
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Orders::class, 'order_id');
     }
 }

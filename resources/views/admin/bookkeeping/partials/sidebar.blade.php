@@ -1,4 +1,11 @@
 <ul class="navbar-nav">
+
+    <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('admin.bookkeeping.managers-salaries.index') ? 'active' : null }}"
+           aria-current="page"
+           href="{{route('admin.bookkeeping.managers-salaries.index')}}">Статистика для менеджеров</a>
+    </li>
+
     <li class="nav-item">
         <a class="nav-link {{ request()->routeIs('admin.bookkeeping.index') ? 'active' : null }}" aria-current="page"
            href="{{route('admin.bookkeeping.index')}}">Сводка</a>

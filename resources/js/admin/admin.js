@@ -68,6 +68,9 @@ Vue.component('edit-promo-code', require('./promo-codes/EditPromoCode').default)
 Vue.component('bookkeeping-daily-statistics', require('./bookkeeping/DailyStatistics').default);
 Vue.component('supplier-payments', require('./bookkeeping/SupplierPaymentsList').default);
 
+Vue.component('bookkeeping-managers-salaries', require('./bookkeeping/managers-salaries/ManagersSalaries').default);
+Vue.component('bookkeeping-add-day-to-managers-salaries', require('./bookkeeping/managers-salaries/AddDayToManagersSalaries').default);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

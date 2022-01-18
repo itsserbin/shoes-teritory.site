@@ -253,6 +253,13 @@ export default {
                     }
                 ]
             });
+            fbq('track', 'AddToCart', {
+                "value": self.cart.totalPrice,
+                "currency": "UAH",
+                "num_items": self.cart.totalCount,
+                "content_ids": self.contentIds,
+                "content_type": "product"
+            });
             self.fbInitiateCheckout = false;
         }
     },

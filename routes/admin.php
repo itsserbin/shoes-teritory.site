@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\Bookkeeping\BookkeepingController;
 use App\Http\Controllers\Admin\Bookkeeping\CostsController;
+use App\Http\Controllers\Admin\Bookkeeping\ManagersSalariesController;
 use App\Http\Controllers\Admin\Bookkeeping\ProfitController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\ClientsController;
@@ -150,6 +151,15 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
 
         Route::get('supplier-payments', [SupplierPaymentsController::class, 'index'])
             ->name('admin.bookkeeping.supplier-payments.index');
+
+        Route::prefix('managers-salaries')->group(function () {
+            Route::get('/', [ManagersSalariesController::class, 'index'])
+                ->name('admin.bookkeeping.managers-salaries.index');
+
+            Route::get('create', [ManagersSalariesController::class, 'create'])
+                ->name('admin.bookkeeping.managers-salaries.create');
+        });
+
     });
 
     Route::group(['middleware' => 'role:administrator', 'prefix' => '/options'], function () {

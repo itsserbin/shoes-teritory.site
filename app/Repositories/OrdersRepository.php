@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Enum\MassActions;
+use App\Models\Enum\OrderStatus;
 use App\Models\Orders as Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -44,7 +45,7 @@ class OrdersRepository extends CoreRepository
     {
         return $this
             ->startConditions()
-            ->with('items.product.providers', 'client','manager')
+            ->with('items.product.providers', 'client', 'manager')
             ->find($id);
     }
 
@@ -173,6 +174,7 @@ class OrdersRepository extends CoreRepository
         $model->waybill = $data['waybill'];
         $model->postal_office = $data['postal_office'];
         $model->manager_id = $data['manager_id'];
+        $model->parcel_reminder = $data['parcel_reminder'];
         $model->update();
 
         return $model;
@@ -291,5 +293,67 @@ class OrdersRepository extends CoreRepository
         $model->total_count -= $count;
         $model->update();
         return $model;
+    }
+
+    public function sumOrdersCount($date, $manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::whereDate('created_at', $date)->where('manager_id', $manager_id)->count();
+        } else {
+            return $this->model::whereDate('created_at', $date)->count();
+        }
+    }
+
+    public function sumDoneOrdersCount($date, $manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::whereDate('created_at', $date)
+                ->where([
+                    ['status', OrderStatus::STATUS_DONE],
+                    ['manager_id', $manager_id],
+                ])
+                ->count();
+        } else {
+            return $this->model::whereDate('created_at', $date)
+                ->where('status', OrderStatus::STATUS_DONE)
+                ->count();
+        }
+    }
+
+    public function sumCancelOrdersCount($date, $manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::whereDate('created_at', $date)
+                ->where([
+                    ['status', OrderStatus::STATUS_CANCELED],
+                    ['manager_id', $manager_id],
+                ])
+                ->count();
+        } else {
+            return $this->model::whereDate('created_at', $date)
+                ->where('status', OrderStatus::STATUS_CANCELED)
+                ->count();
+        }
+    }
+
+    public function sumAdditionalSales($date, $manager_id = null)
+    {
+        if ($manager_id and $date) {
+            return $this->model::whereDate('created_at', $date)
+                ->where('manager_id', $manager_id)
+                ->whereHas('items', function ($q) {
+                    $q->where('resale', 1);
+                })->count();
+        } elseif ($manager_id) {
+            return $this->model::whereDate('created_at', $date)
+                ->whereHas('items', function ($q) {
+                    $q->where('resale', 1);
+                })->count();
+        } else {
+            return $this->model::whereHas('items', function ($q) {
+                $q->where('resale', 1);
+            })->count();
+        }
+
     }
 }

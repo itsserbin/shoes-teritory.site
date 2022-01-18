@@ -279,4 +279,23 @@ class OrderItemsRepository extends CoreRepository
 
         return $orderItem;
     }
+
+    public function sumAdditionalSalesMarginality($date = null, $manager_id = null)
+    {
+        if ($manager_id and $date) {
+            return $this->model::whereDate('created_at', $date)
+                ->where('resale', 1)
+                ->whereHas('order', function ($q) use ($manager_id) {
+                    $q->where('manager_id', $manager_id);
+                })
+                ->sum('profit');
+        } elseif ($date) {
+            return $this->model::whereDate('created_at', $date)
+                ->where('resale', 1)
+                ->sum('profit');
+        } else {
+            return $this->model::where('resale', 1)
+                ->sum('profit');
+        }
+    }
 }

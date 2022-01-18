@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\SumManagersSalary;
 use App\Models\Bookkeeping\Costs;
 use App\Models\Bookkeeping\OrdersDay;
 use App\Models\Bookkeeping\Profit;
@@ -20,7 +21,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        SumManagersSalary::class
     ];
 
     /**
@@ -31,142 +32,142 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function () {
-            $date_now = Carbon::now()->format('Y-m-d');
-
-            $profit_now = Profit::whereDate('date', $date_now)->get();
-
-            $profit_old = Profit::all();
-
-            foreach ($profit_old as $item) {
-                $created_at = $item->date->format('Y-m-d');
-
-                $item->profit = $ProfitProfit = DB::table('orders')
-                    ->whereDate('orders.created_at', $created_at)
-                    ->where('status', OrderStatus::STATUS_DONE)
-                    ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-                    ->select([
-                        'orders.id',
-                        'order_items.order_id',
-                        'order_items.profit',
-                    ])
-                    ->sum('order_items.profit');
-
-                $item->cost = $ProfitCost = Costs::whereDate('date', $created_at)
-                    ->select('total')
-                    ->sum('total');
-
-                $item->marginality = $ProfitProfit - $ProfitCost;
-
-                $item->turnover = $ProfitProfit + $ProfitCost;
-
-                $item->update();
-            }
-
-            if (count($profit_now)) {
-                foreach ($profit_now as $item) {
-
-                    $item->profit = $ProfitProfit =
-                        DB::table('orders')
-                            ->whereDate('orders.created_at', $date_now)
-                            ->where('status', OrderStatus::STATUS_DONE)
-                            ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-                            ->select([
-                                'orders.id',
-                                'order_items.order_id',
-                                'order_items.profit',
-                            ])
-                            ->sum('order_items.profit');
-
-                    $item->cost = $ProfitCost = Costs::whereDate('date', $date_now)
-                        ->select('total')
-                        ->sum('total');
-
-                    $item->marginality = $ProfitProfit - $ProfitCost;
-                    $item->turnover = $ProfitProfit + $ProfitCost;
-                    $item->update();
-                }
-            } else {
-                $profit = new Profit();
-                $profit->date = $date_now;
-                $profit->cost = $ProfitCost = Costs::whereDate('date', $date_now)
-                    ->select('total')
-                    ->sum('total');
-
-                $profit->profit = $ProfitProfit = DB::table('orders')
-                    ->whereDate('orders.created_at', $date_now)
-                    ->where('status', OrderStatus::STATUS_DONE)
-                    ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-                    ->select([
-                        'orders.id',
-                        'order_items.order_id',
-                        'order_items.profit',
-                    ])
-                    ->sum('order_items.profit');
-
-                $profit->marginality = $ProfitProfit - $ProfitCost;
-                $profit->turnover = $ProfitProfit + $ProfitCost;
-                $profit->save();;
-            }
-
-        })->everyMinute();
+//        $schedule->call(function () {
+//            $date_now = Carbon::now()->format('Y-m-d');
+//
+//            $profit_now = Profit::whereDate('date', $date_now)->get();
+//
+//            $profit_old = Profit::all();
+//
+//            foreach ($profit_old as $item) {
+//                $created_at = $item->date->format('Y-m-d');
+//
+//                $item->profit = $ProfitProfit = DB::table('orders')
+//                    ->whereDate('orders.created_at', $created_at)
+//                    ->where('status', OrderStatus::STATUS_DONE)
+//                    ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+//                    ->select([
+//                        'orders.id',
+//                        'order_items.order_id',
+//                        'order_items.profit',
+//                    ])
+//                    ->sum('order_items.profit');
+//
+//                $item->cost = $ProfitCost = Costs::whereDate('date', $created_at)
+//                    ->select('total')
+//                    ->sum('total');
+//
+//                $item->marginality = $ProfitProfit - $ProfitCost;
+//
+//                $item->turnover = $ProfitProfit + $ProfitCost;
+//
+//                $item->update();
+//            }
+//
+//            if (count($profit_now)) {
+//                foreach ($profit_now as $item) {
+//
+//                    $item->profit = $ProfitProfit =
+//                        DB::table('orders')
+//                            ->whereDate('orders.created_at', $date_now)
+//                            ->where('status', OrderStatus::STATUS_DONE)
+//                            ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+//                            ->select([
+//                                'orders.id',
+//                                'order_items.order_id',
+//                                'order_items.profit',
+//                            ])
+//                            ->sum('order_items.profit');
+//
+//                    $item->cost = $ProfitCost = Costs::whereDate('date', $date_now)
+//                        ->select('total')
+//                        ->sum('total');
+//
+//                    $item->marginality = $ProfitProfit - $ProfitCost;
+//                    $item->turnover = $ProfitProfit + $ProfitCost;
+//                    $item->update();
+//                }
+//            } else {
+//                $profit = new Profit();
+//                $profit->date = $date_now;
+//                $profit->cost = $ProfitCost = Costs::whereDate('date', $date_now)
+//                    ->select('total')
+//                    ->sum('total');
+//
+//                $profit->profit = $ProfitProfit = DB::table('orders')
+//                    ->whereDate('orders.created_at', $date_now)
+//                    ->where('status', OrderStatus::STATUS_DONE)
+//                    ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+//                    ->select([
+//                        'orders.id',
+//                        'order_items.order_id',
+//                        'order_items.profit',
+//                    ])
+//                    ->sum('order_items.profit');
+//
+//                $profit->marginality = $ProfitProfit - $ProfitCost;
+//                $profit->turnover = $ProfitProfit + $ProfitCost;
+//                $profit->save();;
+//            }
+//
+//        })->everyMinute();
 
         /**
          * Интеграция API с НоваПошта
          *
          * Обновление раз в 5 минут.
          */
-        $schedule->call(function () {
-            $orders = Orders::where([
-                ['waybill', '!=', null],
-                ['status', '!=', OrderStatus::STATUS_DONE],
-                ['status', '!=', OrderStatus::STATUS_AWAITING_PREPAYMENT],
-            ])->select('id', 'status', 'waybill')->get();
-
-            foreach ($orders as $item) {
-                $curl = curl_init();
-                curl_setopt_array($curl, array(
-                    CURLOPT_URL => "https://api.novaposhta.ua/v2.0/json/",
-                    CURLOPT_RETURNTRANSFER => True,
-                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_CUSTOMREQUEST => "POST",
-                    CURLOPT_POSTFIELDS => json_encode([
-                        'apiKey' => 'ef9ad9f085a4555623f1513fd91a5892',
-                        'modelName' => 'TrackingDocument',
-                        'calledMethod' => 'getStatusDocuments',
-                        'methodProperties' => [
-                            'Documents' => [
-                                ['DocumentNumber' => $item->waybill],
-                            ]
-                        ]
-                    ]),
-                    CURLOPT_HTTPHEADER => array("content-type: application/json",),
-                ));
-                $response = curl_exec($curl);
-                $err = curl_error($curl);
-                curl_close($curl);
-
-                if ($err) {
-                    echo "cURL Error #:" . $err;
-                } else {
-                    $result = json_decode($response, true);
-
-                    if ((int)$result['data'][0]['StatusCode'] === 1) {
-                        $item->status = OrderStatus::STATUS_AWAITING_DISPATCH;
-                    } elseif (in_array((int)$result['data'][0]['StatusCode'], [102, 103, 108], true)) {
-                        $item->status = OrderStatus::STATUS_RETURN;
-                    } elseif (in_array((int)$result['data'][0]['StatusCode'], [7, 8], true)) {
-                        $item->status = OrderStatus::STATUS_AT_THE_POST_OFFICE;
-                    } elseif (in_array((int)$result['data'][0]['StatusCode'], [5, 6, 101], true)) {
-                        $item->status = OrderStatus::STATUS_ON_THE_ROAD;
-                    } elseif (in_array((int)$result['data'][0]['StatusCode'], [9, 10, 11], true)) {
-                        $item->status = OrderStatus::STATUS_DONE;
-                    }
-                    $item->update();
-                }
-            }
-
-        })->everyMinute();
+//        $schedule->call(function () {
+//            $orders = Orders::where([
+//                ['waybill', '!=', null],
+//                ['status', '!=', OrderStatus::STATUS_DONE],
+//                ['status', '!=', OrderStatus::STATUS_AWAITING_PREPAYMENT],
+//            ])->select('id', 'status', 'waybill')->get();
+//
+//            foreach ($orders as $item) {
+//                $curl = curl_init();
+//                curl_setopt_array($curl, array(
+//                    CURLOPT_URL => "https://api.novaposhta.ua/v2.0/json/",
+//                    CURLOPT_RETURNTRANSFER => True,
+//                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+//                    CURLOPT_CUSTOMREQUEST => "POST",
+//                    CURLOPT_POSTFIELDS => json_encode([
+//                        'apiKey' => 'ef9ad9f085a4555623f1513fd91a5892',
+//                        'modelName' => 'TrackingDocument',
+//                        'calledMethod' => 'getStatusDocuments',
+//                        'methodProperties' => [
+//                            'Documents' => [
+//                                ['DocumentNumber' => $item->waybill],
+//                            ]
+//                        ]
+//                    ]),
+//                    CURLOPT_HTTPHEADER => array("content-type: application/json",),
+//                ));
+//                $response = curl_exec($curl);
+//                $err = curl_error($curl);
+//                curl_close($curl);
+//
+//                if ($err) {
+//                    echo "cURL Error #:" . $err;
+//                } else {
+//                    $result = json_decode($response, true);
+//
+//                    if ((int)$result['data'][0]['StatusCode'] === 1) {
+//                        $item->status = OrderStatus::STATUS_AWAITING_DISPATCH;
+//                    } elseif (in_array((int)$result['data'][0]['StatusCode'], [102, 103, 108], true)) {
+//                        $item->status = OrderStatus::STATUS_RETURN;
+//                    } elseif (in_array((int)$result['data'][0]['StatusCode'], [7, 8], true)) {
+//                        $item->status = OrderStatus::STATUS_AT_THE_POST_OFFICE;
+//                    } elseif (in_array((int)$result['data'][0]['StatusCode'], [5, 6, 101], true)) {
+//                        $item->status = OrderStatus::STATUS_ON_THE_ROAD;
+//                    } elseif (in_array((int)$result['data'][0]['StatusCode'], [9, 10, 11], true)) {
+//                        $item->status = OrderStatus::STATUS_DONE;
+//                    }
+//                    $item->update();
+//                }
+//            }
+//
+//        })->everyMinute();
 
         /**
          * Подсчет дневной статистики.
@@ -409,6 +410,8 @@ class Kernel extends ConsoleKernel
             }
 
         })->everyMinute();
+
+        $schedule->command('managers_salary:sum')->everyMinute();
     }
 
     /**

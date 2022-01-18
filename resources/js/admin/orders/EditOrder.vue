@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-md-4">
                     <div class="form-group my-3">
                         <label class="form-label">Статус клиента:</label>
                         <select class="form-control" id="status" v-model="order.status">
@@ -74,7 +74,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-md-4">
                     <div class="form-group my-3">
                         <label class="form-label">Менеджер клиента:</label>
                         <select class="form-control" id="status" v-model="order.manager_id">
@@ -85,6 +85,19 @@
                             >{{ manager.name }}
                             </option>
                         </select>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="form-group d-flex align-items-center h-100 mt-3">
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   v-model="order.parcel_reminder"
+                            >
+                            <label class="form-check-label">
+                                Дожим до выкупа
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -359,6 +372,7 @@ export default {
                 comment: null,
                 updated_at: null,
                 modified_by: null,
+                parcel_reminder: 0,
                 items: [],
             },
             product: {

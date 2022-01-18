@@ -29,12 +29,17 @@ class CreateOrdersTable extends Migration
                 ->on('clients')
                 ->onDelete('set null');
 
+            $table->foreignId('manager_id')
+                ->nullable()
+                ->references('id')
+                ->on('users')
+                ->onDelete('set null');
+
             $table->integer('total_count');
             $table->integer('total_price');
             $table->boolean('sms_waybill_status')->default(0);
             $table->string('promo_code')->nullable();
 
-            $table->string('manager')->nullable();
             $table->string('modified_by')->nullable();
             $table->timestamps();
         });
