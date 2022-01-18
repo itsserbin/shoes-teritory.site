@@ -336,24 +336,5 @@ class OrdersRepository extends CoreRepository
         }
     }
 
-    public function sumAdditionalSales($date, $manager_id = null)
-    {
-        if ($manager_id and $date) {
-            return $this->model::whereDate('created_at', $date)
-                ->where('manager_id', $manager_id)
-                ->whereHas('items', function ($q) {
-                    $q->where('resale', 1);
-                })->count();
-        } elseif ($manager_id) {
-            return $this->model::whereDate('created_at', $date)
-                ->whereHas('items', function ($q) {
-                    $q->where('resale', 1);
-                })->count();
-        } else {
-            return $this->model::whereHas('items', function ($q) {
-                $q->where('resale', 1);
-            })->count();
-        }
 
-    }
 }

@@ -23,19 +23,17 @@ class CreateManagerSalariesTable extends Migration
                 ->on('users')
                 ->onDelete('set null');
 
-            $table->integer('applications')->nullable();
-            $table->integer('additional_sales')->nullable();
+            $table->integer('count_applications')->nullable();
+            $table->integer('count_additional_sales')->nullable();
+
             $table->integer('canceled_applications')->nullable();
             $table->integer('done_applications')->nullable();
-            $table->integer('sum_price_applications')->nullable();
-            $table->integer('sum_additional_sales')->nullable();
-            $table->integer('count_additional_sales')->nullable();
-            $table->integer('sum_price_additional_sales')->nullable();
-            $table->integer('total_price')->nullable();
-        });
 
-        Schema::table('orders', function (Blueprint $table) {
-            $table->boolean('parcel_reminder')->default(0);
+            $table->integer('sum_additional_sales')->nullable();
+            $table->integer('sum_price_applications')->nullable();
+            $table->integer('sum_price_additional_sales')->nullable();
+
+            $table->integer('total_price')->nullable();
         });
     }
 

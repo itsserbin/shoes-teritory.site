@@ -38,6 +38,7 @@ class CreateOrdersTable extends Migration
             $table->integer('total_count');
             $table->integer('total_price');
             $table->boolean('sms_waybill_status')->default(0);
+            $table->boolean('parcel_reminder')->default(0);
             $table->string('promo_code')->nullable();
 
             $table->string('modified_by')->nullable();

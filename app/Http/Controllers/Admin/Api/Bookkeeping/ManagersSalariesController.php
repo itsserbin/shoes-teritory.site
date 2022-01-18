@@ -21,21 +21,30 @@ class ManagersSalariesController extends BaseController
     /**
      * @return JsonResponse
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $result = $this->managersSalaryRepository->getAllStatistics();
+        if ($request->get('days')) {
+            $result = $this->managersSalaryRepository->getAllStatisticsByTheNumberOfDays($request->get('days'));
+        } elseif ($request->get('date_start') && $request->get('date_end') && $request->get('manager')) {
+            $result = $this->managersSalaryRepository->getAllStatisticsByManagerAndDateRange($request->all());
+        } elseif ($request->get('date_start') && $request->get('date_end')) {
+            $result = $this->managersSalaryRepository->getAllStatisticsByDateRange($request->all());
+        } elseif ($request->get('manager')) {
+            $result = $this->managersSalaryRepository->getAllStatisticsByManager($request->get('manager'));
+        } else {
+            $result = $this->managersSalaryRepository->getAllStatistics();
+        }
 
-        return $this->returnResponse([
-            'success' => true,
-            'result' => $result,
-        ]);
+        return $this->returnResponse(['success' => true,
+            'result' => $result,]);
     }
 
     /**
      * @param Request $request
      * @return JsonResponse
      */
-    public function create(Request $request): JsonResponse
+    public
+    function create(Request $request): JsonResponse
     {
         $result = $this->managersSalaryRepository->addDay($request->all());
 

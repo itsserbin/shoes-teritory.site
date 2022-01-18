@@ -22,53 +22,75 @@
         </div>
         <div class="row my-3">
             <div class="col">
-                <button type="button"
-                        class="btn btn-outline-warning"
-                        @click.prevent="showAllStatistics"
-                >За все время
-                </button>
-            </div>
-            <div class="col">
-                <button type="button"
-                        class="btn btn-outline-warning"
-                        @click.prevent="showStatisticsFor7Days"
-                >За 7 дней
-                </button>
-            </div>
-            <div class="col">
-                <button type="button"
-                        class="btn btn-outline-warning"
-                        @click.prevent="showStatisticsFor14Days"
-                >За 14 дней
-                </button>
-            </div>
-            <div class="col">
-                <button type="button"
-                        class="btn btn-outline-warning"
-                        @click.prevent="showStatisticsFor30Days"
-                >За 30 дней
-                </button>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false" @click="showManagersDropdown">
+                        {{ managersDropdownActive }}
+                    </button>
+                    <ul class="dropdown-menu show" aria-labelledby="dropdownMenuButton1" v-if="managersDropdown">
+                        <li><a class="dropdown-item"
+                               href="javascript:"
+                               @click="showAllStatistics"
+                        >Общая статистика</a></li>
+                        <li><a class="dropdown-item"
+                               href="javascript:"
+                               v-for="manager in managers"
+                               :key="manager.id"
+                               @click="getStatByManager(manager.id,manager.name)"
+                        >{{ manager.name }}</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
+<!--        <div class="row my-3">-->
+<!--            <div class="col">-->
+<!--                <button type="button"-->
+<!--                        class="btn btn-outline-warning"-->
+<!--                        @click.prevent="showAllStatistics"-->
+<!--                >За все время-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div class="col">-->
+<!--                <button type="button"-->
+<!--                        class="btn btn-outline-warning"-->
+<!--                        @click.prevent="showStatisticsByDays(7)"-->
+<!--                >За 7 дней-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div class="col">-->
+<!--                <button type="button"-->
+<!--                        class="btn btn-outline-warning"-->
+<!--                        @click.prevent="showStatisticsByDays(14)"-->
+<!--                >За 14 дней-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div class="col">-->
+<!--                <button type="button"-->
+<!--                        class="btn btn-outline-warning"-->
+<!--                        @click.prevent="showStatisticsByDays(30)"-->
+<!--                >За 30 дней-->
+<!--                </button>-->
+<!--            </div>-->
+<!--        </div>-->
         <div class="row align-items-center">
             <hr>
-            <div class="col-6 col-md-4 text-center my-3">
+            <div class="col-6 col-md-3 text-center my-3">
                 <div class="h5">
                     Всего заявок:
                 </div>
                 <div class="h6">
-                    {{ sumApplications }}
+                    {{ countApplications }}
                 </div>
             </div>
-            <div class="col-6 col-md-4 text-center my-3">
+            <div class="col-6 col-md-3 text-center my-3">
                 <div class="h5">
                     Всего доп.продаж:
                 </div>
                 <div class="h6">
-                    {{ sumAdditionalSales }}
+                    {{ countAdditionalSales }}
                 </div>
             </div>
-            <div class="col-6 col-md-4 text-center my-3">
+            <div class="col-6 col-md-3 text-center my-3">
                 <div class="h5">
                     Отмененных заявок:
                 </div>
@@ -76,7 +98,23 @@
                     {{ sumCanceledApplications }}
                 </div>
             </div>
-            <div class="col-6 col-md-4 text-center my-3">
+            <div class="col-6 col-md-3 text-center my-3">
+                <div class="h5">
+                    Выполненных заявок:
+                </div>
+                <div class="h6">
+                    {{ sumDoneApplications }}
+                </div>
+            </div>
+            <div class="col-6 col-md-3 text-center my-3">
+                <div class="h5">
+                    Общая маржа доп.продаж:
+                </div>
+                <div class="h6">
+                    {{ sumAdditionalSales | formatMoney }}
+                </div>
+            </div>
+            <div class="col-6 col-md-3 text-center my-3">
                 <div class="h5">
                     Сумма за заявки:
                 </div>
@@ -84,15 +122,16 @@
                     {{ sumPriceApplications | formatMoney }}
                 </div>
             </div>
-            <div class="col-6 col-md-4 text-center my-3">
+            <div class="col-6 col-md-3 text-center my-3">
                 <div class="h5">
                     Сумма за доп.продажи:
                 </div>
                 <div class="h6">
-                    {{ sumAdditionalSalesMarginality | formatMoney }}
+                    {{ sumPriceAdditionalSales | formatMoney }}
                 </div>
             </div>
-            <div class="col-6 col-md-4 text-center my-3">
+
+            <div class="col-6 col-md-3 text-center my-3">
                 <div class="h5">
                     Итого:
                 </div>
@@ -109,9 +148,10 @@
                         <tr>
                             <th>Дата</th>
                             <th>Всего заявок</th>
+                            <th>Всего доп.продаж</th>
                             <th>Отмененных заявок</th>
                             <th>Выполненных заявок</th>
-                            <th>Дополнительные продажи</th>
+                            <th>Общая маржа доп.продаж</th>
                             <th>Сумма за заявки</th>
                             <th>Сумма за доп.продажи</th>
                             <th>Общая сумма</th>
@@ -120,10 +160,11 @@
                         <tbody>
                         <tr v-for="item in managersSalaries" :key="item.id">
                             <th>{{ item.date | moment("DD.MM.YYYY") }}</th>
-                            <th>{{ item.applications }}</th>
+                            <th>{{ item.count_applications }}</th>
+                            <th>{{ item.count_additional_sales }}</th>
                             <th>{{ item.canceled_applications }}</th>
                             <th>{{ item.done_applications }}</th>
-                            <th>{{ item.additional_sales }}</th>
+                            <th>{{ item.sum_additional_sales | formatMoney }}</th>
                             <th>{{ item.sum_price_applications | formatMoney }}</th>
                             <th>{{ item.sum_price_additional_sales | formatMoney }}</th>
                             <th>{{ item.total_price |formatMoney }}</th>
@@ -156,19 +197,28 @@ export default {
             perPage: 1,
             total: 1,
             endpoint: '/api/bookkeeping/managers-salaries?page=',
-            sumApplications: null,
+            countApplications: null,
+            countAdditionalSales: null,
+            sumCanceledApplications: null,
+            sumDoneApplications: null,
             sumAdditionalSales: null,
             sumPriceApplications: null,
-            sumCanceledApplications: null,
-            sumAdditionalSalesMarginality: null,
+            sumPriceAdditionalSales: null,
             sumTotalPrice: null,
-
+            managers: [],
+            managerValue: null,
+            managersDropdown: false,
+            managersDropdownActive: false,
             date: new Date(),
             currentDate: new Date(),
         }
     },
     mounted() {
         this.showAllStatistics();
+
+        axios.get('/api/users/list/managers')
+            .then(({data}) => this.managers = data.result)
+            .catch((response) => console.log(response))
     },
     computed: {
         minDate() {
@@ -187,34 +237,54 @@ export default {
         },
     },
     methods: {
+        showManagersDropdown() {
+            this.managersDropdown = !this.managersDropdown;
+        },
+        getStatByManager(value, name) {
+            this.managersDropdownActive = name;
+            this.managerValue = value;
+            this.date = null;
+            if (value !== null) {
+                axios.get("/api/bookkeeping/managers-salaries", {
+                    params: {
+                        manager: value
+                    }
+                })
+                    .then(({data}) => this.getManagerSalariesSuccessResponse(data))
+                    .catch((response) => this.getManagerSalariesErrorResponse(response));
+            } else {
+                axios.get("/api/bookkeeping/managers-salaries")
+                    .then(({data}) => this.getManagerSalariesSuccessResponse(data))
+                    .catch((response) => this.getManagerSalariesErrorResponse(response));
+            }
+            this.showManagersDropdown();
+        },
         showAllStatistics() {
+            this.managersDropdownActive = 'Общая статистика';
+            this.managersDropdown = false;
+            this.managerValue = null;
             axios.get("/api/bookkeeping/managers-salaries")
                 .then(({data}) => this.getManagerSalariesSuccessResponse(data))
                 .catch((response) => this.getManagerSalariesErrorResponse(response));
         },
-        showStatisticsFor7Days() {
-            axios.get("/api/bookkeeping/managers-salaries/?days=7")
-                .then(({data}) => this.getManagerSalariesSuccessResponse(data))
-                .catch((response) => this.getManagerSalariesErrorResponse(response));
-        },
-        showStatisticsFor14Days() {
-            axios.get("/api/bookkeeping/managers-salaries/?days=14")
-                .then(({data}) => this.getManagerSalariesSuccessResponse(data))
-                .catch((response) => this.getManagerSalariesErrorResponse(response));
-        },
-        showStatisticsFor30Days() {
-            axios.get("/api/bookkeeping/managers-salaries/?days=30")
+        showStatisticsByDays(days) {
+            axios.get("/api/bookkeeping/managers-salaries", {
+                params: {
+                    days: days
+                }
+            })
                 .then(({data}) => this.getManagerSalariesSuccessResponse(data))
                 .catch((response) => this.getManagerSalariesErrorResponse(response));
         },
         getManagerSalariesSuccessResponse(data) {
             this.managersSalaries = data.result.all.data;
-            console.log(this.managersSalaries);
-            this.sumApplications = data.result.sumApplications;
+            this.countApplications = data.result.countApplications;
+            this.countAdditionalSales = data.result.countAdditionalSales;
+            this.sumCanceledApplications = data.result.sumCanceledApplications;
+            this.sumDoneApplications = data.result.sumDoneApplications;
             this.sumAdditionalSales = data.result.sumAdditionalSales;
             this.sumPriceApplications = data.result.sumPriceApplications;
-            this.sumCanceledApplications = data.result.sumCanceledApplications;
-            this.sumAdditionalSalesMarginality = data.result.sumAdditionalSalesMarginality;
+            this.sumPriceAdditionalSales = data.result.sumPriceAdditionalSales;
             this.sumTotalPrice = data.result.sumTotalPrice;
 
             this.total = data.result.all.total;
@@ -226,23 +296,29 @@ export default {
         },
         fetch(page = 1) {
             axios.get(this.endpoint + page)
-                .then(({data}) => {
-                    this.dailyStatistics = data.result.data;
-                    this.total = data.result.total;
-                    this.showingFrom = data.result.from;
-                    this.showingTo = data.result.to;
-                    this.pageCount = data.result.last_page;
-                });
+                .then(({data}) => this.getManagerSalariesSuccessResponse(data));
         },
         searchByRange() {
-            axios.get("/api/bookkeeping/daily-statistics/date-range/", {
-                params: {
-                    date_start: this.date.start,
-                    date_end: this.date.end
-                }
-            })
-                .then(({data}) => this.getDailyStatisticsSuccessResponse(data))
-                .catch((response) => this.getDailyStatisticsErrorResponse(response));
+            if (this.managerValue) {
+                axios.get("/api/bookkeeping/managers-salaries", {
+                    params: {
+                        manager: this.managerValue,
+                        date_start: this.date.start,
+                        date_end: this.date.end
+                    }
+                })
+                    .then(({data}) => this.getManagerSalariesSuccessResponse(data))
+                    .catch((response) => this.getManagerSalariesErrorResponse(response));
+            } else {
+                axios.get("/api/bookkeeping/managers-salaries", {
+                    params: {
+                        date_start: this.date.start,
+                        date_end: this.date.end
+                    }
+                })
+                    .then(({data}) => this.getManagerSalariesSuccessResponse(data))
+                    .catch((response) => this.getManagerSalariesErrorResponse(response));
+            }
         },
     }
 }

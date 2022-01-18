@@ -27,6 +27,7 @@
         "@mathieustan/vue-datepicker": "^0.2.11",
         "@tinymce/tinymce-vue": "^3.2.8",
         "bootstrap-vue": "^2.21.2",
+        "dotenv": "^14.2.0",
         "hash.js": "^1.1.7",
         "hooper": "^0.3.4",
         "inputmask": "^5.0.7",
