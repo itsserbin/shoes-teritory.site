@@ -253,7 +253,7 @@ export default {
                     }
                 ]
             });
-            fbq('track', 'AddToCart', {
+            fbq('track', 'InitiateCheckout', {
                 "value": self.cart.totalPrice,
                 "currency": "UAH",
                 "num_items": self.cart.totalCount,
@@ -308,6 +308,13 @@ export default {
                         }
                     }
                 ]
+            });
+            fbq('track', 'Purchase', {
+                "value": this.cart.totalPrice,
+                "currency": "UAH",
+                "content_type": "product",
+                "num_items": this.cart.totalCount,
+                "content_ids": this.contentIds
             });
             this.isLoading = false;
             this.$swal({
