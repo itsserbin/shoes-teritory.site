@@ -6,11 +6,41 @@ use App\Models\Bookkeeping\Costs;
 use App\Models\Bookkeeping\Profit;
 use App\Models\Enum\OrderStatus;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class SumProfitCommand
+class SumProfitCommand extends Command
 {
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'profit:sum';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description';
+
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
     public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @return int
+     */
+    public function handle()
     {
         $date_now = Carbon::now()->format('Y-m-d');
 
@@ -25,9 +55,11 @@ class SumProfitCommand
                 ->whereDate('orders.created_at', $created_at)
                 ->where('status', OrderStatus::STATUS_DONE)
                 ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-                ->select(['orders.id',
+                ->select([
+                    'orders.id',
                     'order_items.order_id',
-                    'order_items.profit',])
+                    'order_items.profit',
+                ])
                 ->sum('order_items.profit');
 
             $item->cost = $ProfitCost = Costs::whereDate('date', $created_at)
