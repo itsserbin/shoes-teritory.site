@@ -66,7 +66,10 @@ class ManagersSalaryRepository extends CoreRepository
 
     public function getAllStatistics()
     {
-        $result['all'] = $this->model::where('manager_id', null)->paginate(15);
+        $result['all'] = $this->model::where('manager_id', null)->orderBy('date', 'desc')->paginate(15);
+
+        $result['sumReturnedApplications'] = $this->sumReturnedApplications();
+        $result['sumTotalApplications'] = $this->sumTotalApplications();
         $result['countApplications'] = $this->countApplications();
         $result['countAdditionalSales'] = $this->countAdditionalSales();
         $result['sumCanceledApplications'] = $this->sumCanceledApplications();
@@ -81,7 +84,10 @@ class ManagersSalaryRepository extends CoreRepository
     public function getAllStatisticsByTheNumberOfDays($days)
     {
         $result['all'] = $this->model::whereDate('date', '>=', Carbon::today()->subDays($days)->format('Y-m-d'))
-            ->where('manager_id', null)->paginate(15);
+            ->where('manager_id', null)->orderBy('date', 'desc')->paginate(15);
+
+        $result['sumReturnedApplications'] = $this->sumReturnedApplicationsByTheNumberOfDays($days);
+        $result['sumTotalApplications'] = $this->sumTotalApplicationsByTheNumberOfDays($days);
         $result['countApplications'] = $this->countApplicationsByTheNumberOfDays($days);
         $result['countAdditionalSales'] = $this->countAdditionalSalesByTheNumberOfDays($days);
         $result['sumCanceledApplications'] = $this->sumCanceledApplicationsByTheNumberOfDays($days);
@@ -96,7 +102,10 @@ class ManagersSalaryRepository extends CoreRepository
     public function getAllStatisticsByDateRange($data)
     {
         $result['all'] = $this->model::whereBetween('date', [$data['date_start'], $data['date_end']])
-            ->where('manager_id', null)->paginate(15);
+            ->where('manager_id', null)->orderBy('date', 'desc')->paginate(15);
+
+        $result['sumReturnedApplications'] = $this->sumReturnedApplicationsByDateRange($data);
+        $result['sumTotalApplications'] = $this->sumTotalApplicationsByDateRange($data);
         $result['countApplications'] = $this->countApplicationsByDateRange($data);
         $result['countAdditionalSales'] = $this->countAdditionalSalesByDateRange($data);
         $result['sumCanceledApplications'] = $this->sumCanceledApplicationsByDateRange($data);
@@ -110,7 +119,10 @@ class ManagersSalaryRepository extends CoreRepository
 
     public function getAllStatisticsByManager($manager_id)
     {
-        $result['all'] = $this->model::where('manager_id', $manager_id)->paginate(15);
+        $result['all'] = $this->model::where('manager_id', $manager_id)->orderBy('date', 'desc')->paginate(15);
+
+        $result['sumReturnedApplications'] = $this->sumReturnedApplications($manager_id);
+        $result['sumTotalApplications'] = $this->sumTotalApplications($manager_id);
         $result['countApplications'] = $this->countApplications($manager_id);
         $result['countAdditionalSales'] = $this->countAdditionalSales($manager_id);
         $result['sumCanceledApplications'] = $this->sumCanceledApplications($manager_id);
@@ -125,7 +137,10 @@ class ManagersSalaryRepository extends CoreRepository
     public function getAllStatisticsByManagerAndDateRange($data)
     {
         $result['all'] = $this->model::whereBetween('date', [$data['date_start'], $data['date_end']])
-            ->where('manager_id', $data['manager'])->paginate(15);
+            ->where('manager_id', $data['manager'])->orderBy('date', 'desc')->paginate(15);
+
+        $result['sumReturnedApplications'] = $this->sumReturnedApplicationsByDateRange($data, $data['manager']);
+        $result['sumTotalApplications'] = $this->sumTotalApplicationsByDateRange($data, $data['manager']);
         $result['countApplications'] = $this->countApplicationsByDateRange($data, $data['manager']);
         $result['countAdditionalSales'] = $this->countAdditionalSalesByDateRange($data, $data['manager']);
         $result['sumCanceledApplications'] = $this->sumCanceledApplicationsByDateRange($data, $data['manager']);
@@ -207,6 +222,41 @@ class ManagersSalaryRepository extends CoreRepository
         }
     }
 
+    public function sumReturnedApplications($manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::where('manager_id', $manager_id)->sum('returned_applications');
+        } else {
+            return $this->model::where('manager_id', null)->sum('returned_applications');
+        }
+    }
+
+    public function sumReturnedApplicationsByTheNumberOfDays($days, $manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::whereDate('date', '>=', Carbon::today()->subDays($days)->format('Y-m-d'))
+                ->where('manager_id', $manager_id)
+                ->sum('returned_applications');
+        } else {
+            return $this->model::whereDate('date', '>=', Carbon::today()->subDays($days)->format('Y-m-d'))
+                ->where('manager_id', null)
+                ->sum('returned_applications');
+        }
+    }
+
+    public function sumReturnedApplicationsByDateRange($data, $manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::whereBetween('date', [$data['date_start'], $data['date_end']])
+                ->where('manager_id', $manager_id)
+                ->sum('returned_applications');
+        } else {
+            return $this->model::whereBetween('date', [$data['date_start'], $data['date_end']])
+                ->where('manager_id', null)
+                ->sum('returned_applications');
+        }
+    }
+
     public function sumDoneApplications($manager_id = null)
     {
         if ($manager_id) {
@@ -239,6 +289,41 @@ class ManagersSalaryRepository extends CoreRepository
             return $this->model::whereBetween('date', [$data['date_start'], $data['date_end']])
                 ->where('manager_id', null)
                 ->sum('done_applications');
+        }
+    }
+
+    public function sumTotalApplications($manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::where('manager_id', $manager_id)->sum('total_applications');
+        } else {
+            return $this->model::where('manager_id', null)->sum('total_applications');
+        }
+    }
+
+    public function sumTotalApplicationsByTheNumberOfDays($days, $manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::whereDate('date', '>=', Carbon::today()->subDays($days)->format('Y-m-d'))
+                ->where('manager_id', $manager_id)
+                ->sum('total_applications');
+        } else {
+            return $this->model::whereDate('date', '>=', Carbon::today()->subDays($days)->format('Y-m-d'))
+                ->where('manager_id', null)
+                ->sum('total_applications');
+        }
+    }
+
+    public function sumTotalApplicationsByDateRange($data, $manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::whereBetween('date', [$data['date_start'], $data['date_end']])
+                ->where('manager_id', $manager_id)
+                ->sum('total_applications');
+        } else {
+            return $this->model::whereBetween('date', [$data['date_start'], $data['date_end']])
+                ->where('manager_id', null)
+                ->sum('total_applications');
         }
     }
 

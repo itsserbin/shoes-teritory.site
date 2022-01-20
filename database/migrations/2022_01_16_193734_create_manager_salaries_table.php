@@ -28,6 +28,8 @@ class CreateManagerSalariesTable extends Migration
 
             $table->integer('canceled_applications')->nullable();
             $table->integer('done_applications')->nullable();
+            $table->integer('returned_applications')->nullable();
+            $table->integer('total_applications')->nullable();
 
             $table->integer('sum_additional_sales')->nullable();
             $table->integer('sum_price_applications')->nullable();

@@ -336,5 +336,61 @@ class OrdersRepository extends CoreRepository
         }
     }
 
+    public function sumReturnedApplications($date, $manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::whereDate('created_at', $date)
+                ->where([
+                    ['status', OrderStatus::STATUS_RETURN],
+                    ['manager_id', $manager_id],
+                ])
+                ->count();
+        } else {
+            return $this->model::whereDate('created_at', $date)
+                ->where('status', OrderStatus::STATUS_RETURN)
+                ->count();
+        }
+    }
+
+    public function countWithParcelReminder($date, $manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::whereDate('created_at', $date)
+                ->where([
+                    ['status', '!=', OrderStatus::STATUS_CANCELED],
+                    ['manager_id', $manager_id],
+                    ['parcel_reminder', 1],
+                ])
+                ->count();
+        } else {
+            return $this->model::whereDate('created_at', $date)
+                ->where([
+                    ['status', '!=', OrderStatus::STATUS_CANCELED],
+                    ['parcel_reminder', 1],
+                ])
+                ->count();
+        }
+    }
+
+    public function countWithoutParcelReminder($date, $manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::whereDate('created_at', $date)
+                ->where([
+                    ['status', '!=', OrderStatus::STATUS_CANCELED],
+                    ['manager_id', $manager_id],
+                    ['parcel_reminder', 0],
+                ])
+                ->count();
+        } else {
+            return $this->model::whereDate('created_at', $date)
+                ->where([
+                    ['status', '!=', OrderStatus::STATUS_CANCELED],
+                    ['parcel_reminder', 0],
+                ])
+                ->count();
+        }
+    }
+
 
 }

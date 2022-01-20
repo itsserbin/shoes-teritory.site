@@ -72,7 +72,7 @@
 <!--                </button>-->
 <!--            </div>-->
 <!--        </div>-->
-        <div class="row align-items-center">
+        <div class="row align-items-center justify-content-center">
             <hr>
             <div class="col-6 col-md-3 text-center my-3">
                 <div class="h5">
@@ -80,14 +80,6 @@
                 </div>
                 <div class="h6">
                     {{ countApplications }}
-                </div>
-            </div>
-            <div class="col-6 col-md-3 text-center my-3">
-                <div class="h5">
-                    Всего доп.продаж:
-                </div>
-                <div class="h6">
-                    {{ countAdditionalSales }}
                 </div>
             </div>
             <div class="col-6 col-md-3 text-center my-3">
@@ -100,10 +92,34 @@
             </div>
             <div class="col-6 col-md-3 text-center my-3">
                 <div class="h5">
+                    Возвратов:
+                </div>
+                <div class="h6">
+                    {{ sumReturnedApplications }}
+                </div>
+            </div>
+            <div class="col-6 col-md-3 text-center my-3">
+                <div class="h5">
                     Выполненных заявок:
                 </div>
                 <div class="h6">
                     {{ sumDoneApplications }}
+                </div>
+            </div>
+            <div class="col-6 col-md-3 text-center my-3">
+                <div class="h5">
+                    Общий апрув:
+                </div>
+                <div class="h6">
+                    {{ sumTotalApplications }}
+                </div>
+            </div>
+            <div class="col-6 col-md-3 text-center my-3">
+                <div class="h5">
+                    Всего доп.продаж:
+                </div>
+                <div class="h6">
+                    {{ countAdditionalSales }}
                 </div>
             </div>
             <div class="col-6 col-md-3 text-center my-3">
@@ -143,14 +159,16 @@
         <div class="row">
             <div class="col">
                 <div class="table-responsive">
-                    <table class="table text-center">
+                    <table class="table text-center" style="white-space: nowrap">
                         <thead>
                         <tr>
                             <th>Дата</th>
-                            <th>Всего заявок</th>
-                            <th>Всего доп.продаж</th>
+                            <th>Поступило заявок</th>
+                            <th>Сделано доп.продаж</th>
                             <th>Отмененных заявок</th>
+                            <th>Возвратов</th>
                             <th>Выполненных заявок</th>
+                            <th>Общий апрув</th>
                             <th>Общая маржа доп.продаж</th>
                             <th>Сумма за заявки</th>
                             <th>Сумма за доп.продажи</th>
@@ -160,14 +178,16 @@
                         <tbody>
                         <tr v-for="item in managersSalaries" :key="item.id">
                             <th>{{ item.date | moment("DD.MM.YYYY") }}</th>
-                            <th>{{ item.count_applications }}</th>
-                            <th>{{ item.count_additional_sales }}</th>
-                            <th>{{ item.canceled_applications }}</th>
-                            <th>{{ item.done_applications }}</th>
-                            <th>{{ item.sum_additional_sales | formatMoney }}</th>
-                            <th>{{ item.sum_price_applications | formatMoney }}</th>
-                            <th>{{ item.sum_price_additional_sales | formatMoney }}</th>
-                            <th>{{ item.total_price |formatMoney }}</th>
+                            <td>{{ item.count_applications }}</td>
+                            <td>{{ item.count_additional_sales }}</td>
+                            <td>{{ item.canceled_applications }}</td>
+                            <td>{{ item.returned_applications }}</td>
+                            <td>{{ item.done_applications }}</td>
+                            <td>{{ item.total_applications }}</td>
+                            <td>{{ item.sum_additional_sales | formatMoney }} грн.</td>
+                            <td>{{ item.sum_price_applications | formatMoney }} грн.</td>
+                            <td>{{ item.sum_price_additional_sales | formatMoney }} грн.</td>
+                            <td>{{ item.total_price |formatMoney }} грн.</td>
                         </tr>
                         </tbody>
                     </table>
@@ -286,6 +306,8 @@ export default {
             this.sumPriceApplications = data.result.sumPriceApplications;
             this.sumPriceAdditionalSales = data.result.sumPriceAdditionalSales;
             this.sumTotalPrice = data.result.sumTotalPrice;
+            this.sumReturnedApplications = data.result.sumReturnedApplications;
+            this.sumTotalApplications = data.result.sumTotalApplications;
 
             this.total = data.result.all.total;
             this.currentPage = data.result.all.current_page;
