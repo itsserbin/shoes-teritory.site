@@ -124,7 +124,7 @@ class ManagersSalaryRepository extends CoreRepository
     {
         $result['all'] = $this->model::where('manager_id', $manager_id)->orderBy('date', 'desc')->paginate(15);
 
-        $result['countInProcessApplications'] = $this->countInProcessApplicationsApplications($manager_id);
+        $result['countInProcessApplications'] = $this->countInProcessApplications($manager_id);
         $result['sumReturnedApplications'] = $this->sumReturnedApplications($manager_id);
         $result['sumTotalApplications'] = $this->sumTotalApplications($manager_id);
         $result['countApplications'] = $this->countApplications($manager_id);
