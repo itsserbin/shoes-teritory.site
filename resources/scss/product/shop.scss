@@ -48,8 +48,12 @@
             content: '';
             display: block;
             height: 0.5px;
-            width: 100%;
+            width: 90%;
             background: #A5A5A5;
+
+            @include adaptive($md) {
+                width: 100%;
+            }
         }
 
         &::after {
@@ -58,8 +62,12 @@
             content: '';
             display: block;
             height: 0.5px;
-            width: 100%;
+            width: 90%;
             background: #A5A5A5;
+
+            @include adaptive($md) {
+                width: 100%;
+            }
         }
     }
 
@@ -306,13 +314,15 @@
         &__title {
             font-size: 38px;
         }
-        &__old-price{
+
+        &__old-price {
             font-size: 20px;
         }
 
-        &__actual-price{
+        &__actual-price {
             font-size: 36px;
         }
+
         &__row {
             display: grid;
             grid-template-columns: 3fr 2fr;
