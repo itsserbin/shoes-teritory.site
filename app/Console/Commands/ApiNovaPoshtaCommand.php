@@ -41,6 +41,7 @@ class ApiNovaPoshtaCommand extends Command
     {
         $orders = Orders::where([
             ['waybill', '!=', null],
+            ['status', '!=', OrderStatus::STATUS_CANCELED],
             ['status', '!=', OrderStatus::STATUS_DONE],
             ['status', '!=', OrderStatus::STATUS_AWAITING_PREPAYMENT],
         ])->select('id', 'status', 'waybill')->get();
