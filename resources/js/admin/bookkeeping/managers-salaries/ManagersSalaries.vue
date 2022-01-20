@@ -100,6 +100,14 @@
             </div>
             <div class="col-6 col-md-3 text-center my-3">
                 <div class="h5">
+                    В процессе:
+                </div>
+                <div class="h6">
+                    {{ countInProcessApplications }}
+                </div>
+            </div>
+            <div class="col-6 col-md-3 text-center my-3">
+                <div class="h5">
                     Выполненных заявок:
                 </div>
                 <div class="h6">
@@ -164,6 +172,7 @@
                         <tr>
                             <th>Дата</th>
                             <th>Поступило заявок</th>
+                            <th>В процессе</th>
                             <th>Сделано доп.продаж</th>
                             <th>Отмененных заявок</th>
                             <th>Возвратов</th>
@@ -179,6 +188,7 @@
                         <tr v-for="item in managersSalaries" :key="item.id">
                             <th>{{ item.date | moment("DD.MM.YYYY") }}</th>
                             <td>{{ item.count_applications }}</td>
+                            <td>{{ item.in_process_applications }}</td>
                             <td>{{ item.count_additional_sales }}</td>
                             <td>{{ item.canceled_applications }}</td>
                             <td>{{ item.returned_applications }}</td>
@@ -308,6 +318,7 @@ export default {
             this.sumTotalPrice = data.result.sumTotalPrice;
             this.sumReturnedApplications = data.result.sumReturnedApplications;
             this.sumTotalApplications = data.result.sumTotalApplications;
+            this.countInProcessApplications = data.result.countInProcessApplications;
 
             this.total = data.result.all.total;
             this.currentPage = data.result.all.current_page;

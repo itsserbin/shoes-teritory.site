@@ -392,5 +392,27 @@ class OrdersRepository extends CoreRepository
         }
     }
 
+    public function sumIndefiniteApplications($date, $manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::whereDate('created_at', $date)
+                ->where('manager_id', $manager_id)
+                ->where('status', OrderStatus::STATUS_TRANSFERRED_TO_SUPPLIER)
+                ->orWhere('status', OrderStatus::STATUS_PROCESSED)
+                ->orWhere('status', OrderStatus::STATUS_ON_THE_ROAD)
+                ->orWhere('status', OrderStatus::STATUS_AWAITING_PREPAYMENT)
+                ->orWhere('status', OrderStatus::STATUS_NEW)
+                ->count();
+        } else {
+            return $this->model::whereDate('created_at', $date)
+                ->where('status', OrderStatus::STATUS_TRANSFERRED_TO_SUPPLIER)
+                ->orWhere('status', OrderStatus::STATUS_PROCESSED)
+                ->orWhere('status', OrderStatus::STATUS_ON_THE_ROAD)
+                ->orWhere('status', OrderStatus::STATUS_AWAITING_PREPAYMENT)
+                ->orWhere('status', OrderStatus::STATUS_NEW)
+                ->count();
+        }
+    }
+
 
 }

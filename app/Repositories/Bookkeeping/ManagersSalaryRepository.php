@@ -68,6 +68,7 @@ class ManagersSalaryRepository extends CoreRepository
     {
         $result['all'] = $this->model::where('manager_id', null)->orderBy('date', 'desc')->paginate(15);
 
+        $result['countInProcessApplications'] = $this->countInProcessApplications();
         $result['sumReturnedApplications'] = $this->sumReturnedApplications();
         $result['sumTotalApplications'] = $this->sumTotalApplications();
         $result['countApplications'] = $this->countApplications();
@@ -86,6 +87,7 @@ class ManagersSalaryRepository extends CoreRepository
         $result['all'] = $this->model::whereDate('date', '>=', Carbon::today()->subDays($days)->format('Y-m-d'))
             ->where('manager_id', null)->orderBy('date', 'desc')->paginate(15);
 
+        $result['countInProcessApplications'] = $this->countInProcessApplicationsByTheNumberOfDays($days);
         $result['sumReturnedApplications'] = $this->sumReturnedApplicationsByTheNumberOfDays($days);
         $result['sumTotalApplications'] = $this->sumTotalApplicationsByTheNumberOfDays($days);
         $result['countApplications'] = $this->countApplicationsByTheNumberOfDays($days);
@@ -104,6 +106,7 @@ class ManagersSalaryRepository extends CoreRepository
         $result['all'] = $this->model::whereBetween('date', [$data['date_start'], $data['date_end']])
             ->where('manager_id', null)->orderBy('date', 'desc')->paginate(15);
 
+        $result['countInProcessApplications'] = $this->countInProcessApplicationsByDateRange($data);
         $result['sumReturnedApplications'] = $this->sumReturnedApplicationsByDateRange($data);
         $result['sumTotalApplications'] = $this->sumTotalApplicationsByDateRange($data);
         $result['countApplications'] = $this->countApplicationsByDateRange($data);
@@ -121,6 +124,7 @@ class ManagersSalaryRepository extends CoreRepository
     {
         $result['all'] = $this->model::where('manager_id', $manager_id)->orderBy('date', 'desc')->paginate(15);
 
+        $result['countInProcessApplications'] = $this->countInProcessApplicationsApplications($manager_id);
         $result['sumReturnedApplications'] = $this->sumReturnedApplications($manager_id);
         $result['sumTotalApplications'] = $this->sumTotalApplications($manager_id);
         $result['countApplications'] = $this->countApplications($manager_id);
@@ -139,6 +143,7 @@ class ManagersSalaryRepository extends CoreRepository
         $result['all'] = $this->model::whereBetween('date', [$data['date_start'], $data['date_end']])
             ->where('manager_id', $data['manager'])->orderBy('date', 'desc')->paginate(15);
 
+        $result['countInProcessApplications'] = $this->countInProcessApplicationsByDateRange($data, $data['manager']);
         $result['sumReturnedApplications'] = $this->sumReturnedApplicationsByDateRange($data, $data['manager']);
         $result['sumTotalApplications'] = $this->sumTotalApplicationsByDateRange($data, $data['manager']);
         $result['countApplications'] = $this->countApplicationsByDateRange($data, $data['manager']);
@@ -502,6 +507,41 @@ class ManagersSalaryRepository extends CoreRepository
             return $this->model::whereBetween('date', [$data['date_start'], $data['date_end']])
                 ->where('manager_id', null)
                 ->sum('total_price');
+        }
+    }
+
+    public function countInProcessApplications($manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::where('manager_id', $manager_id)->sum('in_process_applications');
+        } else {
+            return $this->model::where('manager_id', null)->sum('in_process_applications');
+        }
+    }
+
+    public function countInProcessApplicationsByTheNumberOfDays($days, $manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::whereDate('date', '>=', Carbon::today()->subDays($days)->format('Y-m-d'))
+                ->where('manager_id', $manager_id)
+                ->sum('in_process_applications');
+        } else {
+            return $this->model::whereDate('date', '>=', Carbon::today()->subDays($days)->format('Y-m-d'))
+                ->where('manager_id', null)
+                ->sum('in_process_applications');
+        }
+    }
+
+    public function countInProcessApplicationsByDateRange($data, $manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::whereBetween('date', [$data['date_start'], $data['date_end']])
+                ->where('manager_id', $manager_id)
+                ->sum('in_process_applications');
+        } else {
+            return $this->model::whereBetween('date', [$data['date_start'], $data['date_end']])
+                ->where('manager_id', null)
+                ->sum('in_process_applications');
         }
     }
 

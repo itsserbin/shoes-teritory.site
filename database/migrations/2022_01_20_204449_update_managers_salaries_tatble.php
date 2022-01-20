@@ -14,8 +14,9 @@ class UpdateManagersSalariesTatble extends Migration
     public function up()
     {
         Schema::table('manager_salaries', function (Blueprint $table) {
-            $table->integer('returned_applications')->nullable();
-            $table->integer('total_applications')->nullable();
+            $table->integer('in_process_applications')->nullable();
+//            $table->integer('returned_applications')->nullable();
+//            $table->integer('total_applications')->nullable();
         });
     }
 
