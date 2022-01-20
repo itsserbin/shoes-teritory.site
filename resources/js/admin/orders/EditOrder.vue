@@ -168,8 +168,8 @@
                                         :list="products"
                                         v-model="item.id"
                                         option-value="id"
-                                        option-text="h1"
-                                        placeholder="Виберите товар"
+                                        :custom-text="h1AndCodeAndId"
+                                        placeholder="Выберите товар"
                                     >
                                     </model-list-select>
                                 </div>
@@ -425,6 +425,9 @@ export default {
             .catch((response) => console.log(response));
     },
     methods: {
+        h1AndCodeAndId(item) {
+            return `${item.h1} - ${item.vendor_code}/${item.id}`;
+        },
         addOrderItems() {
             axios.post('/api/order-items/add/' + this.order.id, this.item)
                 .then(() => {

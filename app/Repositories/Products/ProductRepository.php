@@ -371,6 +371,6 @@ class ProductRepository extends CoreRepository
 
     public function list()
     {
-        return $this->model::select('id', 'h1')->get();
+        return $this->model::select('id', 'vendor_code', 'h1')->get();
     }
 }
