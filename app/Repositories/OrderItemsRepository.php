@@ -56,8 +56,6 @@ class OrderItemsRepository extends CoreRepository
             $orderItem->color = $item->color;
             $orderItem->trade_price = $product->trade_price;
             $orderItem->sale_price = $product->discount_price ?: $product->price;
-            $orderItem->profit = $orderItem->sale_price - $product->trade_price;
-            $orderItem->total_price = $orderItem->sale_price * $orderItem->count;
             $orderItem->pay = false;
             $orderItem->provider_id = $product->Providers->id;
 
@@ -70,6 +68,8 @@ class OrderItemsRepository extends CoreRepository
                     $orderItem->sale_price = $orderItem->sale_price * (100 - $discount->percent_discount) / 100;
                 }
             }
+            $orderItem->profit = $orderItem->sale_price - $product->trade_price;
+            $orderItem->total_price = $orderItem->sale_price * $orderItem->count;
 
             $orderItem->save();
         }
@@ -99,7 +99,6 @@ class OrderItemsRepository extends CoreRepository
     public function getByOrderId($id)
     {
         return $this->startConditions()
-            ->with('product.providers')
             ->with('product.providers')
             ->where('order_id', $id)
             ->get();
@@ -326,5 +325,18 @@ class OrderItemsRepository extends CoreRepository
             return $this->model::where('resale', 1)
                 ->sum('profit');
         }
+    }
+
+    public function sumOrderTotalPriceById($id)
+    {
+        $model = $this->model::where('order_id', $id)->get();
+        $sum = $model->sum('sale_price');
+        $additional_sales = 0;
+        foreach ($model as $item) {
+            if ($item->resale) {
+                $additional_sales += $item->discount;
+            }
+        }
+        return $sum - $additional_sales;
     }
 }

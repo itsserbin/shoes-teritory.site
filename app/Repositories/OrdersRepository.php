@@ -161,9 +161,9 @@ class OrdersRepository extends CoreRepository
     /**
      * Обновить данные клиента.
      *
-     * @param $id
-     * @param $request
-     * @return mixed
+     * @param int $id
+     * @param array $data
+     * @return Builder|Builder[]|Collection|\Illuminate\Database\Eloquent\Model
      */
     public function update(int $id, array $data)
     {
@@ -175,6 +175,20 @@ class OrdersRepository extends CoreRepository
         $model->postal_office = $data['postal_office'];
         $model->manager_id = $data['manager_id'];
         $model->parcel_reminder = $data['parcel_reminder'];
+
+        $model->sale_of_air = $data['sale_of_air'];
+
+        $orderItemsRepository = new OrderItemsRepository;
+        $price = $orderItemsRepository->sumOrderTotalPriceById($id);
+
+        if ($data['sale_of_air']) {
+            $model->sale_of_air_price = $data['sale_of_air_price'];
+            $model->total_price = $price - $data['sale_of_air_price'];
+        } else {
+            $model->sale_of_air_price = null;
+            $model->total_price = $price;
+        }
+
         $model->update();
 
         return $model;

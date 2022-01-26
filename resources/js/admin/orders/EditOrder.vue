@@ -133,6 +133,33 @@
                                            @click.prevent="sendWaybill(order.client.phone,order.waybill)"
                     >Отправить повторно</a>)
                     </div>
+
+                    <div class="row align-items-center">
+                        <div class="col-12 col-md-6">
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="sale_of_air"
+                                       v-model="order.sale_of_air"
+                                >
+                                <label class="form-check-label"
+                                       for="sale_of_air"
+                                >
+                                    Доп.продажа воздуха
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div v-if="order.sale_of_air" class="w-100">
+                                <input type="text"
+                                       id="sale_of_air_price"
+                                       v-model="order.sale_of_air_price"
+                                       class="form-control"
+                                       placeholder="Сумма скидки (грн.)"
+                                >
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="col-12 col-md-6">
@@ -146,8 +173,8 @@
                     </div>
                 </div>
             </div>
-            <div class="row text-end">
-                <div class="col-12">
+            <div class="row">
+                <div class="col-12 text-end">
                     <button class="btn btn-danger" type="button" @click="modalAddProductItem">
                         Добавить товар
                     </button>
@@ -201,7 +228,7 @@
                                         <label class="form-check-label"
                                                for="item_resale"
                                         >
-                                            Допродажа
+                                            Доп. продажа
                                         </label>
                                     </div>
 
@@ -373,6 +400,8 @@ export default {
                 updated_at: null,
                 modified_by: null,
                 parcel_reminder: 0,
+                sale_of_air: 0,
+                sale_of_air_price: null,
                 items: [],
             },
             product: {
@@ -562,11 +591,14 @@ export default {
         },
         updateOrder() {
             axios.put('/api/orders/update/' + this.order.id, this.order)
-                .then(() => this.$swal({
-                    title: 'Обновлено!',
-                    text: 'Данные успешно обновлены',
-                    icon: 'success',
-                }))
+                .then(() => {
+                    this.$swal({
+                        title: 'Обновлено!',
+                        text: 'Данные успешно обновлены',
+                        icon: 'success',
+                    });
+                    this.getOrder(this.order.id);
+                })
                 .catch((response) => console.log(response));
         },
     }
