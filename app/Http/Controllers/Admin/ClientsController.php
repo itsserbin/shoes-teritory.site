@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\ClientsExport;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
  * Class ClientsController
@@ -41,5 +44,10 @@ class ClientsController extends BaseController
     public function edit(): View|Factory|Application
     {
         return view('admin.clients.edit');
+    }
+
+    public function export(): BinaryFileResponse
+    {
+        return Excel::download(new ClientsExport(), 'clients-list.xlsx');
     }
 }

@@ -45,8 +45,8 @@ class OrdersController extends BaseController
         return view('admin.orders.edit');
     }
 
-    public function export()
+    public function export(): BinaryFileResponse
     {
-        return Excel::download(new OrdersExport(), 'list.xlsx');
+        return Excel::download(new OrdersExport(), 'orders-list.xlsx');
     }
 }

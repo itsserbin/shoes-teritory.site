@@ -104,6 +104,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
 
         Route::get('/edit/{id}', [ClientsController::class, 'edit'])
             ->name('admin.clients.edit');
+
+        Route::get('export', [ClientsController::class, 'export'])
+            ->name('admin.clients.export');
     });
 
     Route::prefix('orders')->group(function () {
