@@ -131,6 +131,7 @@ Route::get('send-form', [HomeController::class, 'send_form_get'])
 Route::post('send-review', [HomeController::class, 'send_review_post'])
     ->name('send.review.post');
 
-Auth::routes();
+//Auth::routes();
 
+require __DIR__ . '/auth.php';
 require __DIR__ . '/admin.php';
