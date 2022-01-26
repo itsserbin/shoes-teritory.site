@@ -138,7 +138,7 @@ export default {
             this.errors = [];
 
             this.isLoading = true;
-            axios.post('/api/users/create/', this.user)
+            axios.post('/api/users/create', this.user)
                 .then(({data}) => this.getUserCreateSuccessResponse(data))
                 .catch(({response}) => this.getUserCreateErrorResponse(response));
         },
