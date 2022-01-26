@@ -19,7 +19,7 @@
 
                 <add-to-cart
                     h1="{{$product->h1}}"
-                    category="{{$product->categories[0]->title}}"
+                    category="{{count($product->categories) ? $product->categories[0]->title : null}}"
                     discount-price="{{ $product->discount_price }}"
                     price="{{ $product->price }}"
                     size-table="{{$product->size_table}}"
