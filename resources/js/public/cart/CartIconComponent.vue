@@ -1,5 +1,5 @@
 <template>
-    <a href="/cart" class="cart-link">
+    <a :href="cartLink" class="cart-link">
         <div>
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <ellipse cx="10.541" cy="18.7917" rx="1.375" ry="1.375" fill="white"></ellipse>
@@ -20,10 +20,21 @@ export default {
     data() {
         return {
             cart: this.$store.state,
+            cart_link: null,
         }
     },
     mounted() {
         this.$store.commit('loadCart');
+    },
+    computed:{
+        cartLink(){
+            if (this.cart.list.length) {
+                return '/cart';
+            } else {
+                return 'javascript:';
+            }
+        }
+
     }
 }
 </script>
