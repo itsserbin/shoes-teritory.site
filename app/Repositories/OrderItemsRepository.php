@@ -330,7 +330,7 @@ class OrderItemsRepository extends CoreRepository
     public function sumOrderTotalPriceById($id)
     {
         $model = $this->model::where('order_id', $id)->get();
-        $sum = $model->sum('sale_price');
+        $sum = $model->sum('total_price');
         $additional_sales = 0;
         foreach ($model as $item) {
             if ($item->resale) {
