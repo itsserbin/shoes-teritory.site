@@ -160,7 +160,7 @@
                                         </a>
                                     </div>
                                 </th>
-                                <th v-if="activeItem === statusCanceled || activeItem === statusTransferredToSupplier">
+                                <th v-if="activeItem === statusCanceled || activeItem === statusTransferredToSupplier || activeItem === statusReturn || activeItem === statusDone">
                                     <div class="d-flex align-items-center justify-content-center">
                                         <div class="mr-1">Комментарий</div>
                                     </div>
@@ -227,9 +227,9 @@
                                 <td>{{ order.total_count }}</td>
                                 <td>{{ order.total_price | formatMoney }} грн.</td>
                                 <td v-if="activeItem === statusTransferredToSupplier">{{ order.waybill }}</td>
-                                <td v-if="activeItem === statusCanceled || activeItem === statusTransferredToSupplier"
+                                <td v-if="activeItem === statusCanceled || activeItem === statusTransferredToSupplier || activeItem === statusReturn || activeItem === statusDone"
                                     class="w-25"
-                                >{{ order.comment.substr(0, 30) + '...' }}</td>
+                                >{{ order.comment ? order.comment.substr(0, 30) + '...' : '-'}}</td>
                                 <td>
                                     {{ dateFormat(order.created_at) }}
                                     <hr class="m-1">
