@@ -23,9 +23,6 @@
     <main class="py-4">
         <div class="container">
             <div class="row">
-{{--                <div class="col-md-2">--}}
-{{----}}
-{{--                </div>--}}
                 <div class="col-12">
                     @yield('content')
                 </div>

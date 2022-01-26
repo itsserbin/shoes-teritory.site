@@ -1,84 +1,24 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <img src="{{asset('storage/img/content/logo.png')}}" width="75" class="d-inline-block align-top" alt="">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-between" id="navbarNavAltMarkup">
-            <ul class="navbar-nav">
+<admin-header
+    administrator-role="{{json_encode(auth()->check() && auth()->user()->hasRole('administrator'))}}"
+    manager-role="{{json_encode(auth()->check() && auth()->user()->hasRole('manager'))}}"
+    show-clients-permission="{{json_encode(Gate::allows('show-clients'))}}"
+    admin-permission="{{json_encode(Gate::allows('admin'))}}"
+    show-orders-permission="{{json_encode(Gate::allows('show-orders'))}}"
+    show-bookkeeping-permission="{{json_encode(Gate::allows('show-bookkeeping'))}}"
+    edit-options-permission="{{json_encode(Gate::allows('edit-options'))}}"
 
-                @role('administrator','manager')
-                <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : null }}"
-                   href="{{route('admin.dashboard')}}">Dashboard</a>
-                <a class="nav-link {{ request()->routeIs('admin.products.index') ? 'active' : null }}"
-                   href="{{route('admin.products.index')}}">Товары</a>
-                <a class="nav-link {{ request()->routeIs('admin.categories.index') ? 'active' : null }}"
-                   href="{{route('admin.categories.index')}}">Категории</a>
-                <a class="nav-link {{ request()->routeIs('admin.reviews.index') ? 'active' : null }}"
-                   href="{{route('admin.reviews.index')}}">Отзывы</a>
+    home-route="{{route('home')}}"
+    admin-dashboard-route="{{route('admin.dashboard')}}"
+    admin-index-products-route="{{route('admin.products.index')}}"
+    admin-index-categories-route="{{route('admin.categories.index')}}"
+    admin-index-reviews-route="{{route('admin.reviews.index')}}"
+    admin-index-clients-route="{{route('admin.clients.index')}}"
+    admin-index-orders-route="{{route('admin.orders.index')}}"
+    admin-index-bookkeeping-route="{{route('admin.bookkeeping.index')}}"
+    admin-index-options-route="{{route('admin.options.index')}}"
+    admin-index-promo-codes-route="{{route('admin.promo-codes.index')}}"
+    admin-logout-route="{{route('logout')}}"
 
-                @if(Gate::allows('show-clients') OR Gate::allows('admin'))
-                    <a class="nav-link {{ request()->routeIs('admin.clients.index') ? 'active' : null }}"
-                       href="{{route('admin.clients.index')}}">Клиенты</a>
-                @endif
-
-                @if(Gate::allows('show-orders') OR Gate::allows('admin'))
-                    <a class="nav-link {{ request()->routeIs('admin.orders.index') ? 'active' : null }}"
-                       href="{{route('admin.orders.index')}}">Заказы</a>
-                @endif
-                @if(Gate::allows('show-bookkeeping') OR Gate::allows('admin'))
-                    <a class="nav-link {{ request()->routeIs('admin.bookkeeping.index') ? 'active' : null }}"
-                       href="{{route('admin.bookkeeping.index')}}">Бухгалтерия</a>
-                @endif
-                @endrole
-
-                @role('administrator')
-                @if(Gate::allows('edit-options') OR Gate::allows('admin'))
-                    <a class="nav-link {{ request()->routeIs('admin.options.index') ? 'active' : null }}"
-                       href="{{route('admin.options.index')}}">Настройки</a>
-                @endif
-
-                @if(Gate::allows('edit-options') OR Gate::allows('admin'))
-                    <a class="nav-link {{ request()->routeIs('admin.promo-codes.index') ? 'active' : null }}"
-                       href="{{route('admin.promo-codes.index')}}">Промо-коды</a>
-                @endif
-
-
-                @endrole
-
-            </ul>
-        </div>
-        @if(Auth::user())
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                           data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ Auth::user()->name}}
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <li class="dropdown-item">
-                                <button class="btn" disabled>
-                                    <i>@foreach(auth()->user()->roles as $item){{$item->name}}@endforeach</i>
-                                </button>
-                            </li>
-                            <li>
-                                <form action="{{route('logout')}}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item">Выйти</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
-                    <a class="nav-link"
-                       href="{{route('home')}}" target="_blank">
-                        На сайт
-                    </a>
-                </ul>
-            </div>
-        @endif
-    </div>
-</nav>
+    name-user="{{auth()->user()->name}}"
+    roles-user="{{json_encode(auth()->user()->roles)}}"
+></admin-header>

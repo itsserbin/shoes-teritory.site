@@ -36,6 +36,7 @@ Vue.component('arrows-angle-expand-icon', require('../components/icons/ArrowsAng
 Vue.component('telephone-icon', require('../components/icons/TelephoneIcon').default);
 
 Vue.component('admin-dashboard', require('./AdminDashboard').default);
+Vue.component('admin-header', require('./components/Header').default);
 
 Vue.component('reviews-list', require('./reviews/ReviewsList').default);
 Vue.component('edit-review', require('./reviews/EditReview').default);
