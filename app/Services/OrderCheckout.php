@@ -89,6 +89,7 @@ class OrderCheckout
                 $data['postal_office'],
                 $client->id,
                 $cart->promo_code,
+                $data['comment'],
                 $cart->items
             );
 

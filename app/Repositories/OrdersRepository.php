@@ -115,7 +115,7 @@ class OrdersRepository extends CoreRepository
      * @param $items
      * @return mixed
      */
-    public function create($city, $postalOffice, $client_id, $promoCode, $items)
+    public function create($city, $postalOffice, $client_id, $promoCode,$comment, $items)
     {
         $order = new $this->model;
 
@@ -124,6 +124,7 @@ class OrdersRepository extends CoreRepository
         $order->client_id = $client_id;
         $order->status = 'Новый';
         $order->promo_code = $promoCode;
+        $order->comment = $comment;
 
         $totalPrice = 0;
         $totalCount = 0;
