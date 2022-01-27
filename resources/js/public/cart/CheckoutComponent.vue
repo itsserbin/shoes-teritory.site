@@ -21,6 +21,7 @@
                         <div class="input data-list__item">
                             <label> Номер телефона <span class="required">*</span>
                                 <the-mask type="tel"
+                                          class="phone"
                                           placeholder="+38 (0"
                                           v-model="order.phone"
                                           :mask="'+38 (0##) ###-##-##'"
