@@ -236,8 +236,8 @@ class OrderItemsRepository extends CoreRepository
     {
         $model = $this->getById($id);
         $model->count = $data['count'];
-        $model->size = json_encode($data['size']);
-        $model->color = json_encode($data['color']);
+        $model->size = $data['size'];
+        $model->color = $data['color'];
         $model->total_price = $data['count'] * $model->sale_price;
         $model->update();
 
