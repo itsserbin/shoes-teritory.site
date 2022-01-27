@@ -20,12 +20,11 @@
                         </div>
                         <div class="input data-list__item">
                             <label> Номер телефона <span class="required">*</span>
-                                <input id="input-phone"
-                                       class="phone"
-                                       type="text"
-                                       placeholder="+38"
-                                       v-model="order.phone"
-                                >
+                                <the-mask type="tel"
+                                          placeholder="+38 (0"
+                                          v-model="order.phone"
+                                          :mask="'+38 (0##) ###-##-##'"
+                                />
                             </label>
                         </div>
                         <div class="input data-list__item">
@@ -195,11 +194,13 @@
 </template>
 
 <script>
-import Inputmask from 'inputmask';
+import {TheMask} from 'vue-the-mask'
+
 import destroyIcon from '../../components/icons/DestroyIcon';
 
 export default {
     components: {
+        TheMask,
         'destroy-icon': destroyIcon
     },
     data() {
@@ -264,7 +265,7 @@ export default {
         }
     },
     mounted() {
-        new Inputmask("+38 (999) 999-99-99").mask(document.getElementById('input-phone'));
+        // new Inputmask("+38 (999) 999-99-99").mask(document.getElementById('input-phone'));
     },
     methods: {
         removeFromCart(id) {

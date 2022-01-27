@@ -184,7 +184,7 @@ class OrdersRepository extends CoreRepository
 
         if ($data['sale_of_air']) {
             $model->sale_of_air_price = $data['sale_of_air_price'];
-            $model->total_price = $price - $data['sale_of_air_price'];
+            $model->total_price = $price + $data['sale_of_air_price'];
         } else {
             $model->sale_of_air_price = null;
             $model->total_price = $price;
