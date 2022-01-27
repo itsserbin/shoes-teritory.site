@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="permissions.showOrders || permissions.adminPermission">
         <loader v-if="isLoading"></loader>
         <div v-if="!isLoading">
             <div class="row mb-3">
@@ -82,7 +82,8 @@
                         </li>
                     </ul>
                     <hr>
-                    <ul class="nav flex-column">
+                    <ul v-if="permissions.adminPermission || role.administrator"
+                        class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link active"
                                href="/admin/orders/export"
@@ -239,7 +240,8 @@
                                     <a v-bind:href="'/admin/orders/edit/' + order.id">
                                         <edit-icon></edit-icon>
                                     </a>
-                                    <a href="javascript:" @click="onDelete(order.id)">
+                                    <a v-if="permissions.adminPermission || role.administrator || permissions.deleteOrders"
+                                        href="javascript:" @click="onDelete(order.id)">
                                         <destroy-icon></destroy-icon>
                                     </a>
                                 </td>
@@ -253,7 +255,9 @@
                                             v-model="checkedItemsAction"
                                     >
                                         <option :value="null">Выберите действия</option>
-                                        <option :value="destroyMassAction">Удалить</option>
+                                        <option :value="destroyMassAction"
+                                                v-if="permissions.adminPermission || role.administrator || permissions.deleteOrders"
+                                        >Удалить</option>
                                     </select>
                                 </th>
                             </tr>
@@ -294,6 +298,12 @@ export default {
         statusProcessed: String,
         statusReturn: String,
         statusTransferredToSupplier: String,
+
+        administratorRole: String,
+        managerRole: String,
+        adminPermission: String,
+        showOrdersPermission: String,
+        deleteOrdersPermission: String,
     },
     data() {
         return {
@@ -308,7 +318,23 @@ export default {
             total: 1,
             search: null,
             activeItem: null,
+            permissions: {
+                showOrders: false,
+                adminPermission: false,
+                deleteOrders: false,
+            },
+            role: {
+                administrator: false,
+                manager: false,
+            },
         }
+    },
+    created() {
+        this.permissions.showOrders = JSON.parse(this.showOrdersPermission);
+        this.permissions.adminPermission = JSON.parse(this.adminPermission);
+        this.permissions.deleteOrders = JSON.parse(this.deleteOrdersPermission);
+        this.role.administrator = JSON.parse(this.administratorRole);
+        this.role.manager = JSON.parse(this.managerRole);
     },
     mounted() {
         this.getOrders();
@@ -449,6 +475,6 @@ export default {
                 this.checkedAllActive = !this.checkedAllActive;
             }
         },
-    }
+    },
 }
 </script>

@@ -16,5 +16,11 @@
         status-processed="{{\App\Models\Enum\OrderStatus::STATUS_PROCESSED}}"
         status-return="{{\App\Models\Enum\OrderStatus::STATUS_RETURN}}"
         status-transferred-to-supplier="{{\App\Models\Enum\OrderStatus::STATUS_TRANSFERRED_TO_SUPPLIER}}"
+
+        administrator-role="{{json_encode(auth()->check() && auth()->user()->hasRole('administrator'))}}"
+        manager-role="{{json_encode(auth()->check() && auth()->user()->hasRole('manager'))}}"
+        admin-permission="{{json_encode(Gate::allows('admin'))}}"
+        show-orders-permission="{{json_encode(Gate::allows('show-orders'))}}"
+        delete-orders-permission="{{json_encode(Gate::allows('delete-orders'))}}"
     ></orders-list>
 @endsection

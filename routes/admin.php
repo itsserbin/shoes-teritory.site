@@ -106,6 +106,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
             ->name('admin.clients.edit');
 
         Route::get('export', [ClientsController::class, 'export'])
+            ->middleware('role:administrator')
             ->name('admin.clients.export');
     });
 
@@ -117,21 +118,24 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
             ->name('admin.orders.edit');
 
         Route::get('export', [OrdersController::class, 'export'])
+            ->middleware('role:administrator')
             ->name('admin.orders.export');
     });
 
-    Route::group(['prefix' => '/bookkeeping'], function () {
+    Route::group(['prefix' => '/bookkeeping',], function () {
         Route::resource('all', BookkeepingController::class)
             ->names('admin.bookkeeping');
 
         Route::resource('costs', CostsController::class)
+            ->middleware('role:administrator')
             ->names('admin.bookkeeping.costs');
 
         Route::resource('profit', ProfitController::class)
+            ->middleware('role:administrator')
             ->names('admin.bookkeeping.profit');
 
 
-        Route::prefix('daily-statistics')->group(function () {
+        Route::prefix('daily-statistics')->middleware('role:administrator')->group(function () {
             Route::get('/', [DailyStatisticsController::class, 'index'])
                 ->name('admin.bookkeeping.daily-statistics.index');
 
@@ -147,12 +151,15 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
 
 
         Route::resource('product-statistics', ProductStatisticsController::class)
+            ->middleware('role:administrator')
             ->names('admin.bookkeeping.product-statistics');
 
         Route::resource('providers', ProvidersController::class)
+            ->middleware('role:administrator')
             ->names('admin.bookkeeping.providers');
 
         Route::get('supplier-payments', [SupplierPaymentsController::class, 'index'])
+            ->middleware('role:administrator')
             ->name('admin.bookkeeping.supplier-payments.index');
 
         Route::prefix('managers-salaries')->group(function () {
@@ -173,7 +180,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
         Route::resource('roles', RolesColroller::class)->names('admin.roles');
     });
 
-    Route::prefix('users')->group(function () {
+    Route::prefix('users')->middleware('role:administrator')->group(function () {
 
         Route::get('/', [UsersController::class, 'index'])
             ->name('admin.users.index');

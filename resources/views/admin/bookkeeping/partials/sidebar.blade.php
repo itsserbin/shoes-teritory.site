@@ -6,6 +6,7 @@
            href="{{route('admin.bookkeeping.managers-salaries.index')}}">Статистика для менеджеров</a>
     </li>
 
+    @role('administrator')
     <li class="nav-item">
         <a class="nav-link {{ request()->routeIs('admin.bookkeeping.index') ? 'active' : null }}" aria-current="page"
            href="{{route('admin.bookkeeping.index')}}">Сводка</a>
@@ -46,4 +47,5 @@
            aria-current="page"
            href="{{route('admin.bookkeeping.supplier-payments.index')}}">Выплаты поставщика</a>
     </li>
+    @endrole
 </ul>

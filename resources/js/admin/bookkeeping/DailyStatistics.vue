@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="permissions.adminPermission || role.administrator">
         <div class="row">
             <div class="col">
                 <a v-bind:href="'/admin/bookkeeping/daily-statistics/create/'">
@@ -250,7 +250,21 @@ export default {
             SumManagerSalary: 1,
             date: new Date(),
             currentDate: new Date(),
+            permissions: {
+                adminPermission: false,
+            },
+            role: {
+                administrator: false,
+            },
         }
+    },
+    props: {
+        administratorRole: String,
+        adminPermission: String,
+    },
+    created() {
+        this.permissions.adminPermission = JSON.parse(this.adminPermission);
+        this.role.administrator = JSON.parse(this.administratorRole);
     },
     mounted() {
         axios.get("/api/bookkeeping/daily-statistics")

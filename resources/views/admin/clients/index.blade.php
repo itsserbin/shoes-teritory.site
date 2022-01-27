@@ -20,5 +20,11 @@
         return-status-refused="{{\App\Models\Enum\ClientSubStatus::RETURN_STATUS_REFUSED}}"
         return-status-didnt-get-in-touch="{{\App\Models\Enum\ClientSubStatus::RETURN_STATUS_DIDNT_GET_IN_TOUCH}}"
         return-status-new="{{\App\Models\Enum\ClientSubStatus::RETURN_STATUS_NEW}}"
+
+        administrator-role="{{json_encode(auth()->check() && auth()->user()->hasRole('administrator'))}}"
+        manager-role="{{json_encode(auth()->check() && auth()->user()->hasRole('manager'))}}"
+        admin-permission="{{json_encode(Gate::allows('admin'))}}"
+        show-clients-permission="{{json_encode(Gate::allows('show-clients'))}}"
+        delete-clients-permission="{{json_encode(Gate::allows('delete-clients'))}}"
     ></clients-list>
 @endsection

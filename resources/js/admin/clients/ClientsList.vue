@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="permissions.showClients || permissions.adminPermission">
         <loader v-if="isLoading"></loader>
         <div v-if="!isLoading">
             <div class="row mb-3">
@@ -122,7 +122,8 @@
                         </li>
                     </ul>
                     <hr>
-                    <ul class="nav flex-column">
+                    <ul v-if="permissions.adminPermission || role.administrator"
+                        class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link active"
                                href="/admin/clients/export"
@@ -315,7 +316,8 @@
                                     <a v-bind:href="'/admin/clients/edit/' + client.id">
                                         <edit-icon></edit-icon>
                                     </a>
-                                    <a href="javascript:" @click="onDelete(client.id)">
+                                    <a v-if="permissions.adminPermission || role.administrator || permissions.deleteClients"
+                                        href="javascript:" @click="onDelete(client.id)">
                                         <destroy-icon></destroy-icon>
                                     </a>
                                 </td>
@@ -329,7 +331,9 @@
                                             v-model="checkedItemsAction"
                                     >
                                         <option :value="null">Виберите действие</option>
-                                        <option :value="destroyMassAction">Удалить</option>
+                                        <option :value="destroyMassAction"
+                                                v-if="permissions.adminPermission || role.administrator || permissions.deleteClients"
+                                        >Удалить</option>
                                     </select>
                                 </th>
                             </tr>
@@ -377,6 +381,12 @@ export default {
         experiencedStatusNoResponse: String,
         experiencedStatusNotSatisfied: String,
         experiencedStatusInProgress: String,
+
+        administratorRole: String,
+        managerRole: String,
+        adminPermission: String,
+        showClientsPermission: String,
+        deleteClientsPermission: String,
     },
     data() {
         return {
@@ -391,7 +401,23 @@ export default {
             perPage: 1,
             total: 1,
             search: null,
+            permissions: {
+                showClients: false,
+                adminPermission: false,
+                deleteClients: false,
+            },
+            role: {
+                administrator: false,
+                manager: false,
+            },
         }
+    },
+    created() {
+        this.permissions.showClients = JSON.parse(this.showClientsPermission);
+        this.permissions.adminPermission = JSON.parse(this.adminPermission);
+        this.permissions.deleteClients = JSON.parse(this.deleteClientsPermission);
+        this.role.administrator = JSON.parse(this.administratorRole);
+        this.role.manager = JSON.parse(this.managerRole);
     },
     mounted() {
         this.getClients();
