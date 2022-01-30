@@ -74,7 +74,7 @@ class ApiNovaPoshtaCommand extends Command
             } else {
                 $result = json_decode($response, true);
 
-                if ($result['data'][0]['StatusCode'] === 1) {
+                if ($result['data'][0]['StatusCode'] === '1') {
                     $item->status = OrderStatus::STATUS_AWAITING_DISPATCH;
                 } elseif (in_array($result['data'][0]['StatusCode'], ['102', '103', '108'], true)) {
                     $item->status = OrderStatus::STATUS_RETURN;
