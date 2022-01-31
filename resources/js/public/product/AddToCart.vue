@@ -14,7 +14,6 @@
                 <div class="col-6">
                     <button
                         v-if="availability !== 'out of stock'"
-                        disabled
                         class="shop__button order-button button button--color_red button--color-text_white"
                         type="button"
                         @click="addToCart"
