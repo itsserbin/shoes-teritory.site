@@ -26,9 +26,9 @@ class UploadImageService
 
         Image::make($preview)->resize(350, null, function ($constraint) {
             $constraint->aspectRatio();
-        })->save(public_path('storage/preview/' . $filename));
+        })->save(public_path('storage/category/' . $filename));
 
-        return asset('/storage/preview/' . $filename);
+        return asset('/storage/category/' . $filename);
     }
 
     public function uploadProductImages($data)
