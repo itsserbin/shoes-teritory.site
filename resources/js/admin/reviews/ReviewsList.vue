@@ -105,7 +105,11 @@
                         <td>{{ review.id }}</td>
                         <td><a :href="'/admin/reviews/edit/' + review.id">{{review.name}}</a></td>
                         <td>{{ review.comment }}</td>
-                        <td>{{ review.products.id }}</td>
+                        <td>
+                            <a :href="'/product/' + review.products.id" target="_blank">
+                            {{ review.products.id }}
+                            </a>
+                        </td>
                         <td>{{ review.products.h1 }}</td>
                         <td>
                             {{ dateFormat(review.created_at) }}
