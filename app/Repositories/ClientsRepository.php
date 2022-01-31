@@ -157,6 +157,10 @@ class ClientsRepository extends CoreRepository
      *
      * @param $name
      * @param $phone
+     * @param $email
+     * @param $last_name
+     * @param $items
+     * @param $promoCode
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function createClient($name, $phone, $email, $last_name, $items, $promoCode)
@@ -166,7 +170,7 @@ class ClientsRepository extends CoreRepository
         $client->email = $email;
         $client->last_name = $last_name;
         $client->status = ClientStatus::NEW_STATUS;
-        $client->phone = $phone;
+        $client->phone = '+380' . $phone;
         $client->number_of_purchases = 1;
 
         $totalPrice = 0;
