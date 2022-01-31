@@ -67,7 +67,7 @@ class SumManagersSalary extends Command
                         $item->returned_applications = $this->ordersRepository->sumReturnedApplications($item->date, $manager->id);
                         $item->canceled_applications = $this->ordersRepository->sumCancelOrdersCount($item->date, $manager->id);
                         $item->done_applications = $this->ordersRepository->sumDoneOrdersCount($item->date, $manager->id);
-                        $item->total_applications = $item->returned_applications + $item->done_applications;
+                        $item->total_applications = $this->ordersRepository->sumApprovalApplications($item->date, $manager->id);
 
                         $pr = $this->ordersRepository->countWithParcelReminder($item->date, $manager->id);
                         $wpr = $this->ordersRepository->countWithoutParcelReminder($item->date, $manager->id);
@@ -98,7 +98,7 @@ class SumManagersSalary extends Command
                         $item->returned_applications = $this->ordersRepository->sumReturnedApplications($item->date);
                         $item->canceled_applications = $this->ordersRepository->sumCancelOrdersCount($item->date);
                         $item->done_applications = $this->ordersRepository->sumDoneOrdersCount($item->date);
-                        $item->total_applications = $item->returned_applications + $item->done_applications;
+                        $item->total_applications = $this->ordersRepository->sumApprovalApplications($item->date);
 
                         $pr = $this->ordersRepository->countWithParcelReminder($item->date);
                         $wpr = $this->ordersRepository->countWithoutParcelReminder($item->date);
@@ -132,7 +132,7 @@ class SumManagersSalary extends Command
             $item->returned_applications = $this->ordersRepository->sumReturnedApplications($dateNow);
             $item->canceled_applications = $this->ordersRepository->sumCancelOrdersCount($dateNow);
             $item->done_applications = $this->ordersRepository->sumDoneOrdersCount($dateNow);
-            $item->total_applications = $item->returned_applications + $item->done_applications;
+            $item->total_applications = $this->ordersRepository->sumApprovalApplications($dateNow);
 
             $pr = $this->ordersRepository->countWithParcelReminder($dateNow);
             $wpr = $this->ordersRepository->countWithoutParcelReminder($dateNow);
@@ -165,7 +165,7 @@ class SumManagersSalary extends Command
                 $manager_item->returned_applications = $this->ordersRepository->sumReturnedApplications($dateNow, $manager->id);
                 $manager_item->canceled_applications = $this->ordersRepository->sumCancelOrdersCount($dateNow, $manager->id);
                 $manager_item->done_applications = $this->ordersRepository->sumDoneOrdersCount($dateNow, $manager->id);
-                $manager_item->total_applications = $manager_item->returned_applications + $manager_item->done_applications;
+                $manager_item->total_applications = $this->ordersRepository->sumApprovalApplications($dateNow, $manager->id);
 
                 $pr = $this->ordersRepository->countWithParcelReminder($dateNow, $manager->id);
                 $wpr = $this->ordersRepository->countWithoutParcelReminder($dateNow, $manager->id);
@@ -199,7 +199,7 @@ class SumManagersSalary extends Command
                     $managerSalaryAll_item->returned_applications = $this->ordersRepository->sumReturnedApplications($managerSalaryAll_item->date, $manager->id);
                     $managerSalaryAll_item->canceled_applications = $this->ordersRepository->sumCancelOrdersCount($managerSalaryAll_item->date, $manager->id);
                     $managerSalaryAll_item->done_applications = $this->ordersRepository->sumDoneOrdersCount($managerSalaryAll_item->date, $manager->id);
-                    $managerSalaryAll_item->total_applications = $managerSalaryAll_item->returned_applications + $managerSalaryAll_item->done_applications;
+                    $managerSalaryAll_item->total_applications = $this->ordersRepository->sumApprovalApplications($managerSalaryAll_item->date, $manager->id);
 
                     $managerSalaryAll_item->sum_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryAll_item->date, $manager->id);
 
@@ -231,7 +231,7 @@ class SumManagersSalary extends Command
                     $managerSalaryAll_item->returned_applications = $this->ordersRepository->sumReturnedApplications($managerSalaryAll_item->date);
                     $managerSalaryAll_item->canceled_applications = $this->ordersRepository->sumCancelOrdersCount($managerSalaryAll_item->date);
                     $managerSalaryAll_item->done_applications = $this->ordersRepository->sumDoneOrdersCount($managerSalaryAll_item->date);
-                    $managerSalaryAll_item->total_applications = $managerSalaryAll_item->returned_applications + $managerSalaryAll_item->done_applications;
+                    $managerSalaryAll_item->total_applications = $this->ordersRepository->sumApprovalApplications($managerSalaryAll_item->date);
 
                     $managerSalaryAll_item->sum_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryAll_item->date);
 

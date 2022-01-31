@@ -412,13 +412,37 @@ class OrdersRepository extends CoreRepository
         if ($manager_id) {
             return $this->model::whereDate('created_at', $date)
                 ->where('manager_id', $manager_id)
+                ->where('status', OrderStatus::STATUS_PROCESSED)
+                ->orWhere(function ($query) {
+                    $query
+                        ->where('status', OrderStatus::STATUS_AWAITING_PREPAYMENT)
+                        ->where('status', OrderStatus::STATUS_NEW);
+                })
+                ->count();
+        } else {
+            return $this->model::whereDate('created_at', $date)
+                ->where('status', OrderStatus::STATUS_PROCESSED)
+                ->orWhere(function ($query) {
+                    $query
+                        ->where('status', OrderStatus::STATUS_AWAITING_PREPAYMENT)
+                        ->where('status', OrderStatus::STATUS_NEW);
+                })
+                ->count();
+        }
+    }
+
+    public function sumApprovalApplications($date, $manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::whereDate('created_at', $date)
+                ->where('manager_id', $manager_id)
                 ->where('status', OrderStatus::STATUS_TRANSFERRED_TO_SUPPLIER)
                 ->orWhere(function ($query) {
                     $query
-                        ->where('status', OrderStatus::STATUS_PROCESSED)
-                        ->where('status', OrderStatus::STATUS_ON_THE_ROAD)
-                        ->where('status', OrderStatus::STATUS_AWAITING_PREPAYMENT)
-                        ->where('status', OrderStatus::STATUS_NEW);
+                        ->where('status', OrderStatus::STATUS_DONE)
+                        ->where('status', OrderStatus::STATUS_RETURN)
+                        ->where('status', OrderStatus::STATUS_AWAITING_DISPATCH)
+                        ->where('status', OrderStatus::STATUS_ON_THE_ROAD);
                 })
                 ->count();
         } else {
@@ -426,10 +450,10 @@ class OrdersRepository extends CoreRepository
                 ->where('status', OrderStatus::STATUS_TRANSFERRED_TO_SUPPLIER)
                 ->orWhere(function ($query) {
                     $query
-                        ->where('status', OrderStatus::STATUS_PROCESSED)
-                        ->where('status', OrderStatus::STATUS_ON_THE_ROAD)
-                        ->where('status', OrderStatus::STATUS_AWAITING_PREPAYMENT)
-                        ->where('status', OrderStatus::STATUS_NEW);
+                        ->where('status', OrderStatus::STATUS_DONE)
+                        ->where('status', OrderStatus::STATUS_RETURN)
+                        ->where('status', OrderStatus::STATUS_AWAITING_DISPATCH)
+                        ->where('status', OrderStatus::STATUS_ON_THE_ROAD);
                 })
                 ->count();
         }
