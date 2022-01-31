@@ -545,18 +545,25 @@ class ManagersSalaryRepository extends CoreRepository
         }
     }
 
-    public function addDay($data)
+    public function addDay($data): bool
     {
-        foreach ($this->usersRepository->getManagersList() as $item) {
+        if (!$this->model::where('date', $data['date'])->first()) {
+            foreach ($this->usersRepository->getManagersList() as $item) {
+                $model = $this->createNewModel();
+                $model->date = $data['date'];
+                $model->manager_id = $item->id;
+                $model->save();
+            }
             $model = $this->createNewModel();
             $model->date = $data['date'];
-            $model->manager_id = $item->id;
+            $model->manager_id = null;
             $model->save();
+
+            return true;
+        } else {
+            return false;
         }
 
-        $model = $this->createNewModel();
-        $model->date = $data['date'];
-        $model->manager_id = null;
-        $model->save();
+
     }
 }

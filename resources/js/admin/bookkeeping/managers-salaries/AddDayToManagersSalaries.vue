@@ -25,12 +25,20 @@ export default {
     methods: {
         addDayToManagersSalaries() {
             axios.post('/api/bookkeeping/managers-salaries/create', {date: this.date})
-                .then(() => {
-                    this.$swal({
-                        'icon': 'success',
-                        'title': 'Добавлено!'
-                    })
-                    window.location.href = '/admin/bookkeeping/managers-salaries';
+                .then(({data}) => {
+                    if (data.result === true) {
+                        this.$swal({
+                            'icon': 'success',
+                            'title': 'Добавлено!'
+                        })
+                        window.location.href = '/admin/bookkeeping/managers-salaries';
+                    } else {
+                        this.$swal({
+                            'icon': 'error',
+                            'title': 'Ошибка!',
+                            'text': 'День уже добавлен'
+                        })
+                    }
                 })
                 .catch((response) => console.log(response));
         }
