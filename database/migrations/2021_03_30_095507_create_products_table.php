@@ -18,7 +18,7 @@ class CreateProductsTable extends Migration
             $table->boolean('published')->default('0');
             $table->string('status');
 
-            $table->boolean('xs')->nullable();
+            $table->boolean('xs')->default('0');
             $table->boolean('s')->default('0');
             $table->boolean('m')->default('0');
             $table->boolean('l')->default('0');

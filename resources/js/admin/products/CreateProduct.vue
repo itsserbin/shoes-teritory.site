@@ -107,7 +107,7 @@
                             >
                             <label class="btn btn-outline-primary"
                                    for="xxl"
-                            >XXL</label>
+                            >2XL</label>
 
                             <input type="checkbox"
                                    class="btn-check"
@@ -117,7 +117,27 @@
                             >
                             <label class="btn btn-outline-primary"
                                    for="xxxl"
-                            >XXXL</label>
+                            >3XL</label>
+
+                            <input type="checkbox"
+                                   class="btn-check"
+                                   id="xxxxl"
+                                   v-model="product.xxxxl"
+                                   autocomplete="off"
+                            >
+                            <label class="btn btn-outline-primary"
+                                   for="xxxxl"
+                            >4XL</label>
+
+                            <input type="checkbox"
+                                   class="btn-check"
+                                   id="xxxxxl"
+                                   v-model="product.xxxxxl"
+                                   autocomplete="off"
+                            >
+                            <label class="btn btn-outline-primary"
+                                   for="xxxxxl"
+                            >5XL</label>
                         </div>
                     </div>
                     <div class="col-12 mb-3">
@@ -310,6 +330,8 @@ export default {
                 xl: null,
                 xxl: null,
                 xxxl: null,
+                xxxxl: null,
+                xxxxxl: null,
                 title: null,
                 characteristics: null,
                 description: null,

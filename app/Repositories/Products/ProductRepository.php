@@ -264,6 +264,8 @@ class ProductRepository extends CoreRepository
         $model->xl = $data['xl'];
         $model->xxl = $data['xxl'];
         $model->xxxl = $data['xxxl'];
+        $model->xxxxl = $data['xxxxl'];
+        $model->xxxxxl = $data['xxxxxl'];
 
         $model->h1 = $data['h1'];
         $model->title = $data['title'];

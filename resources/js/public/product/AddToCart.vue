@@ -13,6 +13,8 @@
                 </div>
                 <div class="col-6">
                     <button
+                        v-if="availability !== 'out of stock'"
+                        disabled
                         class="shop__button order-button button button--color_red button--color-text_white"
                         type="button"
                         @click="addToCart"
@@ -29,7 +31,7 @@
                 <div class="shop__available-sizes available-sizes">
                     <div class="shop__available-sizes__label w-100 mb-2">Доступные размеры:</div>
 
-                    <div v-if="xs" class="size__element me-1 mb-2">
+                    <div v-if="size.xs" class="size__element me-1 mb-2">
                         <label class="mycheckbox">
                             <input v-model="item.size"
                                    value="xs"
@@ -41,7 +43,7 @@
                         </label>
                     </div>
 
-                    <div v-if="s" class="size__element me-1 mb-2">
+                    <div v-if="size.s" class="size__element me-1 mb-2">
                         <label class="mycheckbox">
                             <input v-model="item.size"
                                    value="s"
@@ -53,7 +55,7 @@
                         </label>
                     </div>
 
-                    <div v-if="m" class="size__element me-1 mb-2">
+                    <div v-if="size.m" class="size__element me-1 mb-2">
                         <label class="mycheckbox">
                             <input v-model="item.size"
                                    value="m"
@@ -65,7 +67,7 @@
                         </label>
                     </div>
 
-                    <div v-if="l" class="size__element me-1 mb-2">
+                    <div v-if="size.l" class="size__element me-1 mb-2">
                         <label class="mycheckbox">
                             <input v-model="item.size"
                                    value="l"
@@ -77,7 +79,7 @@
                         </label>
                     </div>
 
-                    <div v-if="xl" class="size__element me-1 mb-2">
+                    <div v-if="size.xl" class="size__element me-1 mb-2">
                         <label class="mycheckbox">
                             <input value="xl"
                                    class="mycheckbox__default"
@@ -89,27 +91,50 @@
                         </label>
                     </div>
 
-                    <div v-if="xxl" class="size__element me-1 mb-2">
+                    <div v-if="size.xxl" class="size__element me-1 mb-2">
                         <label class="mycheckbox">
-                            <input value="xxl"
+                            <input value="2xl"
                                    class="mycheckbox__default"
                                    type="checkbox"
                                    v-model="item.size"
                             >
-                            <span class="mycheckbox__new">XXL</span>
+                            <span class="mycheckbox__new">2XL</span>
                             <span class="mycheckbox__descr"></span>
                         </label>
 
                     </div>
 
-                    <div v-if="xxxl" class="size__element me-1 mb-2">
+                    <div v-if="size.xxxl" class="size__element me-1 mb-2">
                         <label class="mycheckbox">
-                            <input value="xxxl"
+                            <input value="3xl"
                                    class="mycheckbox__default"
                                    type="checkbox"
                                    v-model="item.size"
                             >
-                            <span class="mycheckbox__new">XXXL</span>
+                            <span class="mycheckbox__new">3XL</span>
+                            <span class="mycheckbox__descr"></span>
+                        </label>
+                    </div>
+                    <div v-if="size.xxxxl" class="size__element me-1 mb-2">
+                        <label class="mycheckbox">
+                            <input value="4xl"
+                                   class="mycheckbox__default"
+                                   type="checkbox"
+                                   v-model="item.size"
+                            >
+                            <span class="mycheckbox__new">4XL</span>
+                            <span class="mycheckbox__descr"></span>
+                        </label>
+                    </div>
+
+                    <div v-if="size.xxxxxl" class="size__element me-1 mb-2">
+                        <label class="mycheckbox">
+                            <input value="5xl"
+                                   class="mycheckbox__default"
+                                   type="checkbox"
+                                   v-model="item.size"
+                            >
+                            <span class="mycheckbox__new">5XL</span>
                             <span class="mycheckbox__descr"></span>
                         </label>
                     </div>
@@ -148,6 +173,17 @@ export default {
                 color: [],
                 item_id: null,
             },
+            size: {
+                xs: 0,
+                s: 0,
+                m: 0,
+                l: 0,
+                xl: 0,
+                xxl: 0,
+                xxxl: 0,
+                xxxxl: 0,
+                xxxxxl: 0,
+            },
             colorsAll: [],
             productColors: [],
             showModal: false,
@@ -169,10 +205,22 @@ export default {
         xl: String,
         xxl: String,
         xxxl: String,
+        xxxxl: String,
+        xxxxxl: String,
+        availability: String,
     },
     created() {
         this.colorsAll = JSON.parse(this.colors);
         this.item.item_id = this.id;
+        this.size.xs = JSON.parse(this.xs);
+        this.size.s = JSON.parse(this.s);
+        this.size.m = JSON.parse(this.m);
+        this.size.l = JSON.parse(this.l);
+        this.size.xl = JSON.parse(this.xl);
+        this.size.xxl = JSON.parse(this.xxl);
+        this.size.xxxl = JSON.parse(this.xxxl);
+        this.size.xxxxl = JSON.parse(this.xxxxl);
+        this.size.xxxxxl = JSON.parse(this.xxxxxl);
     },
     mounted() {
         axios.post('https://graph.facebook.com/' + this.$fb_api_version + '/' + this.$fb_pixel_id + '/events?access_token=' + this.$fb_api, {

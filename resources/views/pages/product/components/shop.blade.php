@@ -10,14 +10,28 @@
                     <div class="shop__product-name">
                         <div class="shop__title">{{$product->h1}}</div>
                         <div class="d-flex justify-content-between align-items-center">
-                            <div class="shop__product-code text-end">Код: {{$product->vendor_code}}/{{$product->id}}</div>
-                            <div class="shop__product-availability">Товар в наличии</div>
+                            <div class="shop__product-code text-end">Код: {{$product->vendor_code}}
+                                /{{$product->id}}</div>
+                            @if($product->status == 'in stock')
+                                <div class="shop__product-availability">
+                                    Товар в наличии
+                                </div>
+                            @elseif($product->status == 'ends')
+                                <div class="shop__product-availability text-warning">
+                                    Заканчивается
+                                </div>
+                            @else
+                                <div class="shop__product-availability text-danger">
+                                    Нет в наличии
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
 
 
                 <add-to-cart
+                    availability="{{$product->status}}"
                     h1="{{$product->h1}}"
                     category="{{count($product->categories) ? $product->categories[0]->title : null}}"
                     discount-price="{{ $product->discount_price }}"
@@ -25,13 +39,15 @@
                     size-table="{{$product->size_table}}"
                     id="{{$product->id}}"
                     colors="{{ json_encode($product->colors) }}"
-                    xs="{{$product->xs}}"
-                    s="{{$product->s}}"
-                    m="{{$product->m}}"
-                    l="{{$product->l}}"
-                    xl="{{$product->xl}}"
-                    xxl="{{$product->xxl}}"
-                    xxxl="{{$product->xxxl}}"
+                    xs="{{json_encode($product->xs)}}"
+                    s="{{json_encode($product->s)}}"
+                    m="{{json_encode($product->m)}}"
+                    l="{{json_encode($product->l)}}"
+                    xl="{{json_encode($product->xl)}}"
+                    xxl="{{json_encode($product->xxl)}}"
+                    xxxl="{{json_encode($product->xxxl)}}"
+                    xxxxl="{{json_encode($product->xxxxl)}}"
+                    xxxxxl="{{json_encode($product->xxxxxl)}}"
                 ></add-to-cart>
 
                 <div class="row mb-3">
@@ -51,9 +67,9 @@
             @if(isset($product->characteristics))
                 <div class="col-12 col-md-6">
                     <div id="specifications" class="shop__specifications-title block-title">Характеристики</div>
-                   <div class="characteristics-table">
-                       {!! $product->characteristics !!}
-                   </div>
+                    <div class="characteristics-table">
+                        {!! $product->characteristics !!}
+                    </div>
                 </div>
             @endif
             <div class="col-12 col-md-6">
