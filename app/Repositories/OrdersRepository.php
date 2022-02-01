@@ -245,7 +245,7 @@ class OrdersRepository extends CoreRepository
         if ($param == 'id') {
             return $this
                 ->model::select($columns)
-                ->where('id', 'LIKE', "%$value%")
+                ->where('id', $value)
                 ->orderBy('created_at', 'desc')
                 ->with('client')
                 ->paginate($perPage);
