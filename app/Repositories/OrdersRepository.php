@@ -94,6 +94,7 @@ class OrdersRepository extends CoreRepository
             'comment',
             'total_price',
             'total_count',
+            'created_at',
             'updated_at',
         ];
 
@@ -471,20 +472,18 @@ class OrdersRepository extends CoreRepository
         if ($manager_id) {
             return $this->model::whereDate('created_at', $date)
                 ->where('manager_id', $manager_id)
-                ->where('status', OrderStatus::STATUS_PROCESSED)
-                ->orWhere(function ($query) {
-                    $query
-                        ->where('status', OrderStatus::STATUS_AWAITING_PREPAYMENT)
-                        ->where('status', OrderStatus::STATUS_NEW);
+                ->where(function ($query) {
+                    $query->where('status', OrderStatus::STATUS_PROCESSED);
+                    $query->orWhere('status', OrderStatus::STATUS_AWAITING_PREPAYMENT);
+                    $query->orWhere('status', OrderStatus::STATUS_NEW);
                 })
                 ->count();
         } else {
             return $this->model::whereDate('created_at', $date)
-                ->where('status', OrderStatus::STATUS_PROCESSED)
-                ->orWhere(function ($query) {
-                    $query
-                        ->where('status', OrderStatus::STATUS_AWAITING_PREPAYMENT)
-                        ->where('status', OrderStatus::STATUS_NEW);
+                ->where(function ($query) {
+                    $query->where('status', OrderStatus::STATUS_PROCESSED);
+                    $query->orWhere('status', OrderStatus::STATUS_AWAITING_PREPAYMENT);
+                    $query->orWhere('status', OrderStatus::STATUS_NEW);
                 })
                 ->count();
         }
@@ -495,28 +494,76 @@ class OrdersRepository extends CoreRepository
         if ($manager_id) {
             return $this->model::whereDate('created_at', $date)
                 ->where('manager_id', $manager_id)
-                ->where('status', OrderStatus::STATUS_TRANSFERRED_TO_SUPPLIER)
-                ->orWhere(function ($query) {
-                    $query
-                        ->where('status', OrderStatus::STATUS_DONE)
-                        ->where('status', OrderStatus::STATUS_RETURN)
-                        ->where('status', OrderStatus::STATUS_AWAITING_DISPATCH)
-                        ->where('status', OrderStatus::STATUS_ON_THE_ROAD);
+                ->where(function ($query) {
+                    $query->where('status', OrderStatus::STATUS_DONE);
+                    $query->orWhere('status', OrderStatus::STATUS_TRANSFERRED_TO_SUPPLIER);
+                    $query->orWhere('status', OrderStatus::STATUS_RETURN);
+                    $query->orWhere('status', OrderStatus::STATUS_AWAITING_DISPATCH);
+                    $query->orWhere('status', OrderStatus::STATUS_ON_THE_ROAD);
+                    $query->orWhere('status', OrderStatus::STATUS_AT_THE_POST_OFFICE);
                 })
                 ->count();
         } else {
             return $this->model::whereDate('created_at', $date)
-                ->where('status', OrderStatus::STATUS_TRANSFERRED_TO_SUPPLIER)
-                ->orWhere(function ($query) {
-                    $query
-                        ->where('status', OrderStatus::STATUS_DONE)
-                        ->where('status', OrderStatus::STATUS_RETURN)
-                        ->where('status', OrderStatus::STATUS_AWAITING_DISPATCH)
-                        ->where('status', OrderStatus::STATUS_ON_THE_ROAD);
+                ->where(function ($query) {
+                    $query->where('status', OrderStatus::STATUS_DONE);
+                    $query->orWhere('status', OrderStatus::STATUS_TRANSFERRED_TO_SUPPLIER);
+                    $query->orWhere('status', OrderStatus::STATUS_RETURN);
+                    $query->orWhere('status', OrderStatus::STATUS_AWAITING_DISPATCH);
+                    $query->orWhere('status', OrderStatus::STATUS_ON_THE_ROAD);
+                    $query->orWhere('status', OrderStatus::STATUS_AT_THE_POST_OFFICE);
                 })
                 ->count();
         }
     }
 
+    public function sumCountSalesOfAirMarginality($date = null, $manager_id = null)
+    {
+        if ($manager_id and $date) {
+            return $this->model::whereDate('created_at', $date)
+                ->where([
+                    ['sale_of_air', 1],
+                    ['manager_id', $manager_id]
+                ])
+                ->count();
+        } elseif ($date) {
+            return $this->model::whereDate('created_at', $date)
+                ->where('sale_of_air', 1)
+                ->count();
+        } elseif ($manager_id) {
+            return $this->model::where([
+                ['sale_of_air', 1],
+                ['manager_id', $manager_id]
+            ])
+                ->count();
+        } else {
+            return $this->model::where('sale_of_air', 1)
+                ->count();
+        }
+    }
 
+    public function sumPriceSalesOfAirMarginality($date = null, $manager_id = null)
+    {
+        if ($manager_id and $date) {
+            return $this->model::whereDate('created_at', $date)
+                ->where([
+                    ['sale_of_air', 1],
+                    ['manager_id', $manager_id]
+                ])
+                ->sum('sale_of_air_price');
+        } elseif ($date) {
+            return $this->model::whereDate('created_at', $date)
+                ->where('sale_of_air', 1)
+                ->sum('sale_of_air_price');
+        } elseif ($manager_id) {
+            return $this->model::where([
+                ['sale_of_air', 1],
+                ['manager_id', $manager_id]
+            ])
+                ->sum('sale_of_air_price');
+        } else {
+            return $this->model::where('sale_of_air', 1)
+                ->sum('sale_of_air_price');
+        }
+    }
 }

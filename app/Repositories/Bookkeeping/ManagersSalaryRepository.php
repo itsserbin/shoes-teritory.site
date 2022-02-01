@@ -49,9 +49,9 @@ class ManagersSalaryRepository extends CoreRepository
             ->find($id);
     }
 
-    public function getRowsByDate($date)
+    public function getRowByDate($date)
     {
-        return $this->model::whereDate('date', $date)->get();
+        return $this->model::whereDate('date', $date)->first();
     }
 
     public function getAll()
@@ -79,6 +79,9 @@ class ManagersSalaryRepository extends CoreRepository
         $result['sumPriceApplications'] = $this->sumPriceApplications();
         $result['sumPriceAdditionalSales'] = $this->sumPriceAdditionalSales();
         $result['sumTotalPrice'] = $this->sumTotalPrice();
+        $result['countSaleOfAir'] = $this->sumCountSalesOfAir();
+        $result['sumPriceSaleOfAir'] = $this->sumPriceSalesOfAir();
+        $result['sumTotalPriceSaleOfAir'] = $this->sumTotalPriceSalesOfAir();
         return $result;
     }
 
@@ -98,6 +101,9 @@ class ManagersSalaryRepository extends CoreRepository
         $result['sumPriceApplications'] = $this->sumPriceApplicationsByTheNumberOfDays($days);
         $result['sumPriceAdditionalSales'] = $this->sumPriceAdditionalSalesByTheNumberOfDays($days);
         $result['sumTotalPrice'] = $this->sumTotalPriceByTheNumberOfDays($days);
+        $result['countSaleOfAir'] = $this->sumCountSalesOfAirByTheNumberOfDays($days);
+        $result['sumPriceSaleOfAir'] = $this->sumPriceSalesOfAirByTheNumberOfDays($days);
+        $result['sumTotalPriceSaleOfAir'] = $this->sumTotalPriceSalesOfAirByTheNumberOfDays($days);
         return $result;
     }
 
@@ -117,6 +123,9 @@ class ManagersSalaryRepository extends CoreRepository
         $result['sumPriceApplications'] = $this->sumPriceApplicationsByDateRange($data);
         $result['sumPriceAdditionalSales'] = $this->sumPriceAdditionalSalesByDateRange($data);
         $result['sumTotalPrice'] = $this->sumTotalPriceByDateRange($data);
+        $result['countSaleOfAir'] = $this->sumCountSalesOfAirByDateRange($data);
+        $result['sumPriceSaleOfAir'] = $this->sumPriceSalesOfAirByDateRange($data);
+        $result['sumTotalPriceSaleOfAir'] = $this->sumTotalPriceSalesOfAirByDateRange($data);
         return $result;
     }
 
@@ -135,6 +144,9 @@ class ManagersSalaryRepository extends CoreRepository
         $result['sumPriceApplications'] = $this->sumPriceApplications($manager_id);
         $result['sumPriceAdditionalSales'] = $this->sumPriceAdditionalSales($manager_id);
         $result['sumTotalPrice'] = $this->sumTotalPrice($manager_id);
+        $result['countSaleOfAir'] = $this->sumCountSalesOfAir($manager_id);
+        $result['sumPriceSaleOfAir'] = $this->sumPriceSalesOfAir($manager_id);
+        $result['sumTotalPriceSaleOfAir'] = $this->sumTotalPriceSalesOfAir($manager_id);
         return $result;
     }
 
@@ -154,6 +166,9 @@ class ManagersSalaryRepository extends CoreRepository
         $result['sumPriceApplications'] = $this->sumPriceApplicationsByDateRange($data, $data['manager']);
         $result['sumPriceAdditionalSales'] = $this->sumPriceAdditionalSalesByDateRange($data, $data['manager']);
         $result['sumTotalPrice'] = $this->sumTotalPriceByDateRange($data, $data['manager']);
+        $result['countSaleOfAir'] = $this->sumCountSalesOfAirByDateRange($data, $data['manager']);
+        $result['sumPriceSaleOfAir'] = $this->sumPriceSalesOfAirByDateRange($data, $data['manager']);
+        $result['sumTotalPriceSaleOfAir'] = $this->sumTotalPriceSalesOfAirByDateRange($data, $data['manager']);
         return $result;
     }
 
@@ -545,6 +560,111 @@ class ManagersSalaryRepository extends CoreRepository
         }
     }
 
+    public function sumCountSalesOfAir($manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::where('manager_id', $manager_id)->sum('count_sale_of_air');
+        } else {
+            return $this->model::where('manager_id', null)->sum('count_sale_of_air');
+        }
+    }
+
+    public function sumCountSalesOfAirByTheNumberOfDays($days, $manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::whereDate('date', '>=', Carbon::today()->subDays($days)->format('Y-m-d'))
+                ->where('manager_id', $manager_id)
+                ->sum('count_sale_of_air');
+        } else {
+            return $this->model::whereDate('date', '>=', Carbon::today()->subDays($days)->format('Y-m-d'))
+                ->where('manager_id', null)
+                ->sum('count_sale_of_air');
+        }
+    }
+
+    public function sumCountSalesOfAirByDateRange($data, $manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::whereBetween('date', [$data['date_start'], $data['date_end']])
+                ->where('manager_id', $manager_id)
+                ->sum('count_sale_of_air');
+        } else {
+            return $this->model::whereBetween('date', [$data['date_start'], $data['date_end']])
+                ->where('manager_id', null)
+                ->sum('count_sale_of_air');
+        }
+    }
+
+    public function sumPriceSalesOfAir($manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::where('manager_id', $manager_id)->sum('price_sale_of_air');
+        } else {
+            return $this->model::where('manager_id', null)->sum('price_sale_of_air');
+        }
+    }
+
+    public function sumPriceSalesOfAirByTheNumberOfDays($days, $manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::whereDate('date', '>=', Carbon::today()->subDays($days)->format('Y-m-d'))
+                ->where('manager_id', $manager_id)
+                ->sum('price_sale_of_air');
+        } else {
+            return $this->model::whereDate('date', '>=', Carbon::today()->subDays($days)->format('Y-m-d'))
+                ->where('manager_id', null)
+                ->sum('price_sale_of_air');
+        }
+    }
+
+    public function sumPriceSalesOfAirByDateRange($data, $manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::whereBetween('date', [$data['date_start'], $data['date_end']])
+                ->where('manager_id', $manager_id)
+                ->sum('price_sale_of_air');
+        } else {
+            return $this->model::whereBetween('date', [$data['date_start'], $data['date_end']])
+                ->where('manager_id', null)
+                ->sum('price_sale_of_air');
+        }
+    }
+
+    public function sumTotalPriceSalesOfAir($manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::where('manager_id', $manager_id)->sum('total_sale_of_air');
+        } else {
+            return $this->model::where('manager_id', null)->sum('total_sale_of_air');
+        }
+    }
+
+    public function sumTotalPriceSalesOfAirByTheNumberOfDays($days, $manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::whereDate('date', '>=', Carbon::today()->subDays($days)->format('Y-m-d'))
+                ->where('manager_id', $manager_id)
+                ->sum('total_sale_of_air');
+        } else {
+            return $this->model::whereDate('date', '>=', Carbon::today()->subDays($days)->format('Y-m-d'))
+                ->where('manager_id', null)
+                ->sum('total_sale_of_air');
+        }
+    }
+
+    public function sumTotalPriceSalesOfAirByDateRange($data, $manager_id = null)
+    {
+        if ($manager_id) {
+            return $this->model::whereBetween('date', [$data['date_start'], $data['date_end']])
+                ->where('manager_id', $manager_id)
+                ->sum('total_sale_of_air');
+        } else {
+            return $this->model::whereBetween('date', [$data['date_start'], $data['date_end']])
+                ->where('manager_id', null)
+                ->sum('total_sale_of_air');
+        }
+    }
+
     public function addDay($data): bool
     {
         if (!$this->model::where('date', $data['date'])->first()) {
@@ -563,7 +683,5 @@ class ManagersSalaryRepository extends CoreRepository
         } else {
             return false;
         }
-
-
     }
 }

@@ -42,36 +42,36 @@
                 </div>
             </div>
         </div>
-<!--        <div class="row my-3">-->
-<!--            <div class="col">-->
-<!--                <button type="button"-->
-<!--                        class="btn btn-outline-warning"-->
-<!--                        @click.prevent="showAllStatistics"-->
-<!--                >За все время-->
-<!--                </button>-->
-<!--            </div>-->
-<!--            <div class="col">-->
-<!--                <button type="button"-->
-<!--                        class="btn btn-outline-warning"-->
-<!--                        @click.prevent="showStatisticsByDays(7)"-->
-<!--                >За 7 дней-->
-<!--                </button>-->
-<!--            </div>-->
-<!--            <div class="col">-->
-<!--                <button type="button"-->
-<!--                        class="btn btn-outline-warning"-->
-<!--                        @click.prevent="showStatisticsByDays(14)"-->
-<!--                >За 14 дней-->
-<!--                </button>-->
-<!--            </div>-->
-<!--            <div class="col">-->
-<!--                <button type="button"-->
-<!--                        class="btn btn-outline-warning"-->
-<!--                        @click.prevent="showStatisticsByDays(30)"-->
-<!--                >За 30 дней-->
-<!--                </button>-->
-<!--            </div>-->
-<!--        </div>-->
+        <!--        <div class="row my-3">-->
+        <!--            <div class="col">-->
+        <!--                <button type="button"-->
+        <!--                        class="btn btn-outline-warning"-->
+        <!--                        @click.prevent="showAllStatistics"-->
+        <!--                >За все время-->
+        <!--                </button>-->
+        <!--            </div>-->
+        <!--            <div class="col">-->
+        <!--                <button type="button"-->
+        <!--                        class="btn btn-outline-warning"-->
+        <!--                        @click.prevent="showStatisticsByDays(7)"-->
+        <!--                >За 7 дней-->
+        <!--                </button>-->
+        <!--            </div>-->
+        <!--            <div class="col">-->
+        <!--                <button type="button"-->
+        <!--                        class="btn btn-outline-warning"-->
+        <!--                        @click.prevent="showStatisticsByDays(14)"-->
+        <!--                >За 14 дней-->
+        <!--                </button>-->
+        <!--            </div>-->
+        <!--            <div class="col">-->
+        <!--                <button type="button"-->
+        <!--                        class="btn btn-outline-warning"-->
+        <!--                        @click.prevent="showStatisticsByDays(30)"-->
+        <!--                >За 30 дней-->
+        <!--                </button>-->
+        <!--            </div>-->
+        <!--        </div>-->
         <div class="row align-items-center justify-content-center">
             <hr>
             <div class="col-6 col-md-3 text-center my-3">
@@ -135,7 +135,7 @@
                     Общая маржа доп.продаж:
                 </div>
                 <div class="h6">
-                    {{ sumAdditionalSales | formatMoney }}
+                    {{ sumAdditionalSales | formatMoney }} грн.
                 </div>
             </div>
             <div class="col-6 col-md-3 text-center my-3">
@@ -143,7 +143,7 @@
                     Сумма за заявки:
                 </div>
                 <div class="h6">
-                    {{ sumPriceApplications | formatMoney }}
+                    {{ sumPriceApplications | formatMoney }} грн.
                 </div>
             </div>
             <div class="col-6 col-md-3 text-center my-3">
@@ -151,7 +151,34 @@
                     Сумма за доп.продажи:
                 </div>
                 <div class="h6">
-                    {{ sumPriceAdditionalSales | formatMoney }}
+                    {{ sumPriceAdditionalSales | formatMoney }} грн.
+                </div>
+            </div>
+
+            <div class="col-6 col-md-3 text-center my-3">
+                <div class="h5">
+                    Кол-во продаж воздуха:
+                </div>
+                <div class="h6">
+                    {{ countSaleOfAir }}
+                </div>
+            </div>
+
+            <div class="col-6 col-md-3 text-center my-3">
+                <div class="h5">
+                    Общая сумма продаж воздуха:
+                </div>
+                <div class="h6">
+                    {{ sumPriceSaleOfAir | formatMoney }} грн.
+                </div>
+            </div>
+
+            <div class="col-6 col-md-3 text-center my-3">
+                <div class="h5">
+                    Сумма за продажу воздуха:
+                </div>
+                <div class="h6">
+                    {{ sumTotalPriceSaleOfAir | formatMoney }} грн.
                 </div>
             </div>
 
@@ -160,7 +187,7 @@
                     Итого:
                 </div>
                 <div class="h6">
-                    {{ sumTotalPrice | formatMoney }}
+                    {{ sumTotalPrice | formatMoney }} грн.
                 </div>
             </div>
         </div>
@@ -178,6 +205,9 @@
                             <th>Возвратов</th>
                             <th>Выполненных заявок</th>
                             <th>Общий апрув</th>
+                            <th>Кол-во доп.продаж воздуха</th>
+                            <th>Сумма доп.продаж воздуха</th>
+                            <th>Прибыль с доп.продаж воздуха</th>
                             <th>Общая маржа доп.продаж</th>
                             <th>Сумма за заявки</th>
                             <th>Сумма за доп.продажи</th>
@@ -194,6 +224,9 @@
                             <td>{{ item.returned_applications }}</td>
                             <td>{{ item.done_applications }}</td>
                             <td>{{ item.total_applications }}</td>
+                            <td>{{ item.count_sale_of_air }}</td>
+                            <td>{{ item.price_sale_of_air }}</td>
+                            <td>{{ item.total_sale_of_air }}</td>
                             <td>{{ item.sum_additional_sales | formatMoney }} грн.</td>
                             <td>{{ item.sum_price_applications | formatMoney }} грн.</td>
                             <td>{{ item.sum_price_additional_sales | formatMoney }} грн.</td>
@@ -235,6 +268,9 @@ export default {
             sumPriceApplications: null,
             sumPriceAdditionalSales: null,
             sumTotalPrice: null,
+            countSaleOfAir: null,
+            sumPriceSaleOfAir: null,
+            sumTotalPriceSaleOfAir: null,
             managers: [],
             managerValue: null,
             managersDropdown: false,
@@ -319,6 +355,9 @@ export default {
             this.sumReturnedApplications = data.result.sumReturnedApplications;
             this.sumTotalApplications = data.result.sumTotalApplications;
             this.countInProcessApplications = data.result.countInProcessApplications;
+            this.countSaleOfAir = data.result.countSaleOfAir;
+            this.sumPriceSaleOfAir = data.result.sumPriceSaleOfAir;
+            this.sumTotalPriceSaleOfAir = data.result.sumTotalPriceSaleOfAir;
 
             this.total = data.result.all.total;
             this.currentPage = data.result.all.current_page;
