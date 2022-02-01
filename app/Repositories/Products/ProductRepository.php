@@ -281,7 +281,12 @@ class ProductRepository extends CoreRepository
         $model->vendor_code = $data['vendor_code'];
         $model->preview = $data['preview'];
         $model->update();
-        $model->categories()->sync($data['categories']);
+
+        $categoryItems = [];
+        foreach ($data['categories'] as $category) {
+            array_push($categoryItems, $category['id']);
+        }
+        $model->categories()->sync($categoryItems);
         $this->productsPhotoRepository->create($model->id, $data['images']);
     }
 
@@ -320,9 +325,11 @@ class ProductRepository extends CoreRepository
                 $model->colors()->attach($color['id']);
             }
         }
-        if (count($data['categories'])) {
-            $model->categories()->sync($data['categories']);
+        $categoryItems = [];
+        foreach ($data['categories'] as $category) {
+            array_push($categoryItems, $category['id']);
         }
+        $model->categories()->sync($categoryItems);
         $this->productsPhotoRepository->create($model->id, $data['images']);
     }
 

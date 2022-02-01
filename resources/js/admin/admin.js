@@ -4,6 +4,9 @@ import Vue from "vue";
 import VueSweetalert2 from 'vue-sweetalert2';
 import Pagination from 'vue-pagination-2';
 import VueDatePicker from '@mathieustan/vue-datepicker';
+import Multiselect from 'vue-multiselect'
+
+Vue.component('multiselect', Multiselect)
 
 Vue.use(VueSweetalert2);
 Vue.use(VueDatePicker);

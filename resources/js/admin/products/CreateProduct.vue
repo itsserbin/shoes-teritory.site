@@ -4,25 +4,25 @@
         <form v-if="!isLoading" @submit.prevent="createProduct">
             <div class="row align-items-center">
                 <div class="col-12 col-md-4 mb-3">
-                    <label class="form-label">Статус публікації</label>
+                    <label class="form-label">Статус публикации</label>
                     <select class="form-select" v-model="product.published">
-                        <option :value="0">Не опубліковано</option>
-                        <option :value="1">Опубліковано</option>
+                        <option :value="0">Не опубликовано</option>
+                        <option :value="1">Опубликовано</option>
                     </select>
                 </div>
                 <div class="col-12 col-md-4 mb-3">
-                    <label class="form-label">Наявність</label>
+                    <label class="form-label">Наличие</label>
                     <select class="form-select" v-model="product.status">
-                        <option :value="inStockAvailability">В наявності</option>
-                        <option :value="outOfStockAvailability">Не в наявності</option>
-                        <option :value="endsAvailability">Закінчуеться</option>
+                        <option :value="inStockAvailability">В наличии</option>
+                        <option :value="outOfStockAvailability">Нет в наличии</option>
+                        <option :value="endsAvailability">Заканчивается</option>
                     </select>
                 </div>
                 <div class="col-12 col-md-4 mb-3">
                     <div v-if="product.preview !== null"
                          class="row justify-content-center text-center"
                     >
-                        <label class="form-label">Головне зображення</label>
+                        <label class="form-label">Главное изображение</label>
                         <img :src="'/storage/products/350/' + product.preview" :alt="product.title" class="w-50">
                         <div>
                             <button class="btn" @click="deletePreview">
@@ -34,7 +34,7 @@
                         </div>
                     </div>
                     <div v-if="product.preview === null">
-                        <label class="form-label">Головне зображення</label>
+                        <label class="form-label">Главное изображение</label>
                         <input class="form-control"
                                type="file"
                                @click="$refs.preview.click()"
@@ -47,7 +47,7 @@
             <div class="row mb-3">
                 <div class="col-12 col-md-6">
                     <div class="col-12 mb-3">
-                        <label class="form-label w-100">Розміри</label>
+                        <label class="form-label w-100">Размеры</label>
                         <div class="btn-group" role="group">
                             <input type="checkbox"
                                    class="btn-check"
@@ -141,20 +141,23 @@
                         </div>
                     </div>
                     <div class="col-12 mb-3">
-                        <label class="form-label">Категорія товару</label>
-                        <select class="form-select" v-model="product.categories" multiple rows="4">
-                            <option v-for="category in categories"
-                                    :key="category.id"
-                                    :value="category.id"
-                            >
-                                {{ category.title }}
-                            </option>
-                        </select>
+                        <label class="form-label">Категория товара</label>
+                        <multiselect v-model="product.categories"
+                                     :options="categories"
+                                     :multiple="true"
+                                     :close-on-select="false"
+                                     :clear-on-select="false"
+                                     :preserve-search="true"
+                                     placeholder="Поиск..."
+                                     label="title"
+                                     track-by="id"
+                        >
+                        </multiselect>
                     </div>
                     <div class="col-12">
-                        <label class="form-label">Постачальник</label>
+                        <label class="form-label">Поставщик</label>
                         <select class="form-select" v-model="product.provider_id">
-                            <option :value="null">Не вибрано</option>
+                            <option :value="null">Не выбрано</option>
                             <option v-for="provider in providers"
                                     :key="provider.id"
                                     :value="provider.id"
@@ -165,23 +168,25 @@
                     </div>
                 </div>
                 <div class="col-12 col-md-6">
-                    <label class="form-label w-100">Обрані кольори</label>
-                    <div class="btn-group d-flex flex-wrap" role="group">
-                        <div v-for="(product_color,index) in product.colors" class="p-1">
-                            <input type="checkbox"
-                                   class="btn-check"
-                                   :id="product_color.id"
-                                   v-model="product.colors"
-                                   autocomplete="off"
-                                   @click="destroyColorFromProduct(index)"
-                            >
-                            <label class="btn btn-outline-primary"
-                                   :for="product_color.id"
-                                   :style="'color:' + product_color.hex + ';' + 'border-color:' + product_color.hex + ';'"
-                            >{{ product_color.name }}</label>
+                    <div v-if="product.colors.length">
+                        <label class="form-label w-100">Выбранные цвета</label>
+                        <div class="btn-group d-flex flex-wrap" role="group">
+                            <div v-for="(product_color,index) in product.colors" class="p-1">
+                                <input type="checkbox"
+                                       class="btn-check"
+                                       :id="product_color.id"
+                                       v-model="product.colors"
+                                       autocomplete="off"
+                                       @click="destroyColorFromProduct(index)"
+                                >
+                                <label class="btn btn-outline-primary"
+                                       :for="product_color.id"
+                                       :style="'color:' + product_color.hex + ';' + 'border-color:' + product_color.hex + ';'"
+                                >{{ product_color.name }}</label>
+                            </div>
                         </div>
                     </div>
-                    <label class="form-label w-100">Всі кольори</label>
+                    <label class="form-label w-100">Все цвета</label>
                     <div class="btn-group d-flex flex-wrap" role="group">
                         <div v-for="(color,index) in colors" class="p-1">
                             <input type="checkbox"
@@ -202,14 +207,14 @@
             <div class="row mb-3">
                 <div class="col-12">
                     <div class="form-group mb-3">
-                        <label class="form-label">Назва товару</label>
+                        <label class="form-label">Название товара</label>
                         <input class="form-control"
                                :class="{'is-invalid': errors.h1}"
                                type="text"
                                v-model="product.h1"
-                               placeholder="Введіть назву товару"
+                               placeholder="Укажите название товара"
                         >
-                        <div v-if="errors.title" class="invalid-feedback">Вкажіть назву товару</div>
+                        <div v-if="errors.title" class="invalid-feedback">Укажите название товара</div>
                     </div>
                 </div>
                 <div class="col-12">
@@ -218,7 +223,7 @@
                         <input class="form-control"
                                type="text"
                                v-model="product.title"
-                               placeholder="Введіть META Title"
+                               placeholder="Введите META Title"
                         >
                     </div>
                     <div class="form-group">
@@ -227,7 +232,7 @@
                                   type="text"
                                   rows="4"
                                   v-model="product.description"
-                                  placeholder="Введіть META Description"
+                                  placeholder="Введите META Description"
                         ></textarea>
                     </div>
                 </div>
@@ -235,7 +240,7 @@
             <div class="row mb-3">
                 <div class="col-12">
                     <div class="form-group">
-                        <label class="form-label">Опис товару</label>
+                        <label class="form-label">Описание товара</label>
                         <editor :api-key="this.$tinyapi" v-model="product.content" :init="$tinySettings"/>
                     </div>
                 </div>
@@ -251,32 +256,32 @@
             <div class="row mb-3">
                 <div class="col-12">
                     <div class="form-group">
-                        <label class="form-label">Таблиця розмірів</label>
+                        <label class="form-label">Таблица размеров</label>
                         <editor :api-key="this.$tinyapi" v-model="product.size_table" :init="$tinySettings"/>
                     </div>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-12 col-md-3">
-                    <label class="form-label">Ціна товару</label>
+                    <label class="form-label">Цена товара</label>
                     <input class="form-control"
                            :class="{'is-invalid': errors.price}"
                            type="number"
                            v-model="product.price"
-                           placeholder="Вкажіть ціну"
+                           placeholder="Укажите цену"
                     >
-                    <div v-if="errors.price" class="invalid-feedback">Вкажіть ціну товара</div>
+                    <div v-if="errors.price" class="invalid-feedback">Укажите цену товара</div>
                 </div>
                 <div class="col-12 col-md-3">
-                    <label class="form-label">Ціна товару зі знижкою</label>
+                    <label class="form-label">Цена товара со скидкой</label>
                     <input class="form-control"
                            type="number"
                            v-model="product.discount_price"
-                           placeholder="Вкажіть ціну зі знижкою"
+                           placeholder="Укажите цену со скидкой"
                     >
                 </div>
                 <div class="col-12 col-md-3">
-                    <label class="form-label">Ціна закупки</label>
+                    <label class="form-label">Цена закупки</label>
                     <input class="form-control"
                            type="number"
                            v-model="product.trade_price"
@@ -287,7 +292,7 @@
                     <input class="form-control"
                            type="text"
                            v-model="product.vendor_code"
-                           placeholder="Вкажіть артикул товару"
+                           placeholder="Укажите артикул"
                     >
                 </div>
             </div>
@@ -295,7 +300,7 @@
                 <div class="mb-3">
                     <label for="images"
                            class="form-label"
-                    >Виберіть файли для завантаження</label>
+                    >Выберите файлы для загрузки</label>
                     <input class="form-control"
                            type="file"
                            id="images"
@@ -303,9 +308,23 @@
                            @change="uploadImages"
                     >
                 </div>
+                <loader v-if="isLoadingImages"></loader>
+                <div class="row" v-if="product.images.length" v-show="!isLoadingImages">
+                    <div class="w-25" v-for="(image,index) in product.images">
+                        <img :src="'/storage/products/350/' + image.image" class="card-img-top">
+                        <div class="card-body d-flex justify-content-around">
+                            <a :href="'/storage/products/' + image.image" class="text-dark" target="_blank">
+                                <arrows-angle-expand-icon></arrows-angle-expand-icon>
+                            </a>
+                            <a href="javascript:" class="text-dark" @click="destroyImage(index)">
+                                <backspace-icon></backspace-icon>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary">
-                Зберегти
+            <button type="submit" class="btn btn-danger">
+                Добавить
             </button>
         </form>
     </div>
@@ -322,7 +341,9 @@ export default {
     data() {
         return {
             isLoading: true,
+            isLoadingImages: false,
             product: {
+                status: this.inStockAvailability,
                 xs: null,
                 s: null,
                 m: null,
@@ -339,6 +360,7 @@ export default {
                 content: null,
                 published: 0,
                 preview: null,
+                size_table: null,
                 price: null,
                 trade_price: null,
                 discount_price: null,
@@ -376,12 +398,15 @@ export default {
         this.isLoading = false;
     },
     methods: {
+        destroyImage(index) {
+            this.product.images.splice(index, 1)
+        },
         uploadImages(event) {
             const self = this;
             Array.from(event.target.files).forEach(function (image) {
+                self.isLoadingImages = true;
                 const formData = new FormData();
                 formData.append('image', image);
-                formData.append('type', 'products');
                 axios.post('/api/products/images/upload', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
@@ -389,16 +414,18 @@ export default {
                 })
                     .then(({data}) => {
                         self.product.images.push({image: data.url});
+                        self.isLoadingImages = false;
                     })
                     .catch((response) => console.log(response));
             });
+
         },
         deletePreview() {
             this.product.preview = null;
         },
         uploadPreview(event) {
             let formData = new FormData();
-            formData.append('images', event.target.files[0]);
+            formData.append('image', event.target.files[0]);
             axios.post('/api/products/images/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -425,18 +452,19 @@ export default {
             axios.post('/api/products/create', this.product)
                 .then(() => {
                     this.$swal({
-                        title: 'Створено!',
+                        title: 'Товар добавлен!',
                         icon: 'success',
                     });
                     this.isLoading = false;
                     this.errors = [];
+                    window.location.href = '/admin/products';
                 })
                 .catch(({response}) => {
                     this.errors = response.data;
                     console.log(response);
                     this.$swal({
-                        title: 'Помилка',
-                        text: 'Перевірте корректність данних або зверніться до адміністратора',
+                        title: 'Ошибка',
+                        text: 'Проверьте корректность данных или обратитесь к администратору',
                         icon: 'error',
                     });
                     this.isLoading = false;
