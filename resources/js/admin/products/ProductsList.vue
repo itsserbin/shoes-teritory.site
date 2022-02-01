@@ -185,7 +185,8 @@
                         <td class="w-25">
                             <img
                                 :src="product.preview ? '/storage/products/55/' + product.preview : '/storage/no_image.png'"
-                                 :alt="product.title"></td>
+                                 :alt="product.title">
+                        </td>
                         <td><a :href="'/product/' + product.id" target="_blank">{{ product.h1 }}</a></td>
                         <td>{{ publishedStatus(product.published) }}</td>
                         <td>{{ product.vendor_code }}</td>
