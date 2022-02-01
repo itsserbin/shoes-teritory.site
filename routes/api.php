@@ -147,7 +147,7 @@ Route::middleware('auth:api')->group(function () {
          *
          * POST /api/orders/search={search}
          */
-        Route::get('/search={search}', [OrdersController::class, 'search'])
+        Route::get('/search', [OrdersController::class, 'search'])
             ->name('api.orders.search');
 
         /**

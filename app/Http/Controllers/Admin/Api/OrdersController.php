@@ -67,9 +67,13 @@ class OrdersController extends BaseController
      * @param $search
      * @return JsonResponse
      */
-    public function search($search): JsonResponse
+    public function search(Request $request): JsonResponse
     {
-        $result = $this->ordersRepository->search($search, 15);
+        $result = $this->ordersRepository->search(
+            $request->get('param'),
+            $request->get('value'),
+            15
+        );
 
         return $this->returnResponse([
             'success' => true,

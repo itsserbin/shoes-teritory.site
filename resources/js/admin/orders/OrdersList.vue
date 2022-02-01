@@ -3,12 +3,25 @@
         <loader v-if="isLoading"></loader>
         <div v-if="!isLoading">
             <div class="row mb-3">
-                <div class="col">
-                    <div class="d-flex">
-                        <button class="btn btn-danger" @click.prevent="getOrders">Очистить</button>
-                        <input type="text" v-model="search" class="form-control mx-1">
-                        <button @click.prevent="getSearchList" type="submit" class="btn btn-danger">Поиск</button>
-                    </div>
+                <div class="col-12 col-md-2">
+                    <button class="btn btn-danger w-100 m-1 m-md-0" @click.prevent="getOrders">Очистить</button>
+                </div>
+                <div class="col-12 col-md-2">
+                    <select class="form-control w-100 m-1 m-md-0" id="status" v-model="searchParam">
+                        <option :value="null">Общий поиск</option>
+                        <option value="id">По ID</option>
+                        <option value="waybill">По ТТН</option>
+                        <option value="comment">По комментарию</option>
+                        <option value="phone">По номеру</option>
+                        <option value="name">По имени</option>
+                        <option value="last_name">По фамилии</option>
+                    </select>
+                </div>
+                <div class="col-12 col-md-6">
+                    <input type="text" v-model="search" class="form-control mx-1 w-100 m-1 m-md-0">
+                </div>
+                <div class="col-12 col-md-2">
+                    <button @click.prevent="getSearchList" type="submit" class="btn btn-danger w-100 m-1 m-md-0">Поиск</button>
                 </div>
             </div>
             <div class="row">
@@ -212,7 +225,7 @@
                                 <td>{{ order.status }}</td>
                                 <td>
                                     <a :href="'/admin/orders/edit/' + order.id">
-                                    {{ order.client ? order.client.name : '-' }}
+                                        {{ order.client ? order.client.name : '-' }}
                                     </a>
                                 </td>
                                 <td>
@@ -230,7 +243,8 @@
                                 <td v-if="activeItem === statusTransferredToSupplier">{{ order.waybill }}</td>
                                 <td v-if="activeItem === statusCanceled || activeItem === statusTransferredToSupplier || activeItem === statusReturn || activeItem === statusDone"
                                     class="w-25"
-                                >{{ order.comment ? order.comment.substr(0, 30) + '...' : '-'}}</td>
+                                >{{ order.comment ? order.comment.substr(0, 30) + '...' : '-' }}
+                                </td>
                                 <td>
                                     {{ dateFormat(order.created_at) }}
                                     <hr class="m-1">
@@ -241,7 +255,7 @@
                                         <edit-icon></edit-icon>
                                     </a>
                                     <a v-if="permissions.adminPermission || role.administrator || permissions.deleteOrders"
-                                        href="javascript:" @click="onDelete(order.id)">
+                                       href="javascript:" @click="onDelete(order.id)">
                                         <destroy-icon></destroy-icon>
                                     </a>
                                 </td>
@@ -257,7 +271,8 @@
                                         <option :value="null">Выберите действия</option>
                                         <option :value="destroyMassAction"
                                                 v-if="permissions.adminPermission || role.administrator || permissions.deleteOrders"
-                                        >Удалить</option>
+                                        >Удалить
+                                        </option>
                                     </select>
                                 </th>
                             </tr>
@@ -318,6 +333,7 @@ export default {
             total: 1,
             search: null,
             activeItem: null,
+            searchParam: null,
             permissions: {
                 showOrders: false,
                 adminPermission: false,
@@ -408,11 +424,16 @@ export default {
             if (this.search == null || this.search.length === 0) {
                 this.getOrders();
             } else {
-                axios.get('/api/orders/search=' + this.search)
+                axios.get('/api/orders/search', {
+                    params: {
+                        param: this.searchParam,
+                        value: this.search,
+                    }
+                })
                     .then(({data}) => {
                         this.getOrdersListSuccessResponse(data);
                         this.isLoading = false;
-                        this.endpoint = '/api/orders/search=' + this.search + '?page=';
+                        this.endpoint = '/api/orders/search?page=';
                     })
                     .catch((response) => this.getOrdersListErrorResponse(response));
             }

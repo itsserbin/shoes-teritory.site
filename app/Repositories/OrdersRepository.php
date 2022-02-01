@@ -223,30 +223,89 @@ class OrdersRepository extends CoreRepository
     /**
      * Искать совпадения по базе по: ID, Имя и телефон.
      *
-     * @param $search
+     * @param $param
+     * @param $value
      * @param null $perPage
      * @return mixed
      */
-    public function search($search, $perPage = null)
+    public function search($param, $value, $perPage = null)
     {
         $columns = [
             'id',
+            'waybill',
+            'comment',
             'status',
-            'product_id',
             'client_id',
             'created_at',
             'updated_at',
         ];
 
-        return $this
-            ->startConditions()
-            ->select($columns)
-            ->where('waybill', 'LIKE', "%$search%")
-            ->orWhere('id', 'LIKE', "%$search%")
-            ->orWhere('comment', 'LIKE', "%$search%")
-            ->orderBy('created_at', 'desc')
-            ->with('client')
-            ->paginate($perPage);
+
+        if ($param == 'id') {
+            return $this
+                ->model::select($columns)
+                ->where('id', 'LIKE', "%$value%")
+                ->orderBy('created_at', 'desc')
+                ->with('client')
+                ->paginate($perPage);
+        } elseif ($param == 'phone') {
+            return $this
+                ->model::select($columns)
+                ->whereHas('client', function ($q) use ($value) {
+                    $q->where('phone', 'LIKE', "%$value%");
+                })
+                ->orderBy('created_at', 'desc')
+                ->with('client')
+                ->paginate($perPage);
+        } elseif ($param == 'name') {
+            return $this
+                ->model::select($columns)
+                ->whereHas('client', function ($q) use ($value) {
+                    $q->where('name', 'LIKE', "%$value%");
+                })
+                ->orderBy('created_at', 'desc')
+                ->with('client')
+                ->paginate($perPage);
+        } elseif ($param == 'last_name') {
+            return $this
+                ->model::select($columns)
+                ->whereHas('client', function ($q) use ($value) {
+                    $q->where('last_name', 'LIKE', "%$value%");
+                })
+                ->orderBy('created_at', 'desc')
+                ->with('client')
+                ->paginate($perPage);
+        } elseif ($param == 'waybill') {
+            return $this
+                ->model::select($columns)
+                ->whereHas('client', function ($q) use ($value) {
+                    $q->where('waybill', 'LIKE', "%$value%");
+                })
+                ->orderBy('created_at', 'desc')
+                ->with('client')
+                ->paginate($perPage);
+        } elseif ($param == 'comment') {
+            return $this
+                ->model::select($columns)
+                ->whereHas('client', function ($q) use ($value) {
+                    $q->where('comment', 'LIKE', "%$value%");
+                })
+                ->orderBy('created_at', 'desc')
+                ->with('client')
+                ->paginate($perPage);
+        } else {
+            return $this
+                ->model::select($columns)
+                ->where('id', 'LIKE', "%$value%")
+                ->orWhere(function ($query) use ($value) {
+                    $query->where('waybill', 'LIKE', "%$value%")
+                        ->where('comment', 'LIKE', "%$value%");
+                })
+                ->with('client')
+                ->orderBy('created_at', 'desc')
+                ->paginate($perPage);
+        }
+
     }
 
     /**

@@ -305,10 +305,10 @@
                                 <td>{{ item.product.vendor_code }}</td>
                                 <td>{{ item.product.providers.name }}</td>
                                 <td>
-                                    <a class="btn" href="javascript:;" @click="onEdit(item.id, index)">
+                                    <a class="btn" href="javascript:" @click="onEdit(item.id, index)">
                                         <edit-icon></edit-icon>
                                     </a>
-                                    <a class="btn" href="javascript:;" @click="onDelete(item.id)">
+                                    <a class="btn" href="javascript:" @click="onDelete(item.id)">
                                         <destroy-icon></destroy-icon>
                                     </a>
                                 </td>
