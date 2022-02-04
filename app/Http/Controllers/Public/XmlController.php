@@ -21,8 +21,9 @@ class XmlController extends Controller
         $this->categoriesRepository = app(CategoriesRepository::class);
     }
 
-    public function xmlFbAll(){
-        $products = Products::where('published',1)
+    public function xmlFbAll()
+    {
+        $products = Products::where('published', 1)
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -61,6 +62,20 @@ class XmlController extends Controller
             $q->where('id', 6);
             $q->orWhere('id', 5);
             $q->orWhere('id', 3);
+        })
+            ->where('published', 1)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->view('xml.fb-product-feed', [
+            'products' => $products
+        ])->header('Content-Type', 'application/xml');
+    }
+
+    public function xmlFbBigSize()
+    {
+        $products = Products::whereHas('categories', function ($q) {
+            $q->where('id', 8);
         })
             ->where('published', 1)
             ->orderBy('created_at', 'desc')
