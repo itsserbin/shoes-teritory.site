@@ -30,7 +30,7 @@
                     <condition>new</condition>
                     <price>{{$item->discount_price ?: $item->price}}</price>
                     <link>{{asset(route('product',$item->id))}}</link>
-                    <image_link>{{asset('/storage/preview/' . $item->preview)}}</image_link>
+                    <image_link>{{asset('/storage/products/' . $item->preview)}}</image_link>
                     <additional_image_link>
                         @foreach($item->images as $item)
                             {{asset('/storage/products/'.$item->image).',' }}
