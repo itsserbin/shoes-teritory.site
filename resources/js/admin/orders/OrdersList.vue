@@ -21,7 +21,8 @@
                     <input type="text" v-model="search" class="form-control mx-1 w-100 m-1 m-md-0">
                 </div>
                 <div class="col-12 col-md-2">
-                    <button @click.prevent="getSearchList" type="submit" class="btn btn-danger w-100 m-1 m-md-0">Поиск</button>
+                    <button @click.prevent="getSearchList" type="submit" class="btn btn-danger w-100 m-1 m-md-0">Поиск
+                    </button>
                 </div>
             </div>
             <div class="row">
@@ -243,7 +244,7 @@
                                 <td v-if="activeItem === statusTransferredToSupplier">{{ order.waybill }}</td>
                                 <td v-if="activeItem === statusCanceled || activeItem === statusTransferredToSupplier || activeItem === statusReturn || activeItem === statusDone"
                                     class="w-25"
-                                >{{ cost.user.name }}
+                                >{{ order.comment ? order.comment.substr(0, 30) + '...' : '-' }}
                                 </td>
                                 <td>
                                     {{ dateFormat(order.created_at) }}
