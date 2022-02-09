@@ -243,7 +243,7 @@
                                 <td v-if="activeItem === statusTransferredToSupplier">{{ order.waybill }}</td>
                                 <td v-if="activeItem === statusCanceled || activeItem === statusTransferredToSupplier || activeItem === statusReturn || activeItem === statusDone"
                                     class="w-25"
-                                >{{ order.comment ? order.comment.substr(0, 30) + '...' : '-' }}
+                                >{{ cost.user.name }}
                                 </td>
                                 <td>
                                     {{ dateFormat(order.created_at) }}

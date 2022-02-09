@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Bookkeeping;
 
-use App\Models\Bookkeeping\Costs;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 
 class CostsController extends BaseController
 {
@@ -13,87 +14,18 @@ class CostsController extends BaseController
         parent::__construct();
     }
 
-    public function index()
+    public function index(): Factory|View|Application
     {
-        $costs = Costs::orderBy('created_at', 'desc')->paginate(15);
-        $InJustAWeek = Costs::orderBy('created_at', 'desc')
-            ->select('total')
-            ->get(7)
-            ->sum('total');
-
-        return view('admin.bookkeeping.costs.index', [
-            'costs' => $costs,
-            'InJustAWeek' => $InJustAWeek
-        ]);
+        return view('admin.bookkeeping.costs.index');
     }
 
-    public function create()
+    public function create(): Factory|View|Application
     {
-        $cost = new Costs();
-
-        return view('admin.bookkeeping.costs.create', [
-            'cost' => $cost
-        ]);
+        return view('admin.bookkeeping.costs.create');
     }
 
-    public function store(Request $request)
+    public function edit(): Factory|View|Application
     {
-        $cost = new Costs();
-        $cost->name = $request->input('name');
-        $cost->comment = $request->input('comment');
-        $cost->quantity = $quantity = $request->input('quantity');
-        $cost->sum = $sum = $request->input('sum');
-        $cost->date = $request->input('date');
-        $cost->user_id = Auth::id();
-        $cost->total = $quantity * $sum;
-        $cost->save();
-
-        if ($cost) {
-            return view('admin.bookkeeping.costs.edit', [
-                'cost' => $cost
-            ])->with('success', 'Трата успешно добавлена');
-        } else {
-            return back()->with('error', 'Произошла ошибка добавления');
-        }
-    }
-
-    public function edit($id)
-    {
-        $cost = Costs::find($id);
-
-        return view('admin.bookkeeping.costs.edit', [
-            'cost' => $cost
-        ]);
-    }
-
-    public function update($id, Request $request)
-    {
-        $cost = Costs::find($id);
-        $cost->name = $request->input('name');
-        $cost->comment = $request->input('comment');
-        $cost->quantity = $quantity = $request->input('quantity');
-        $cost->sum = $sum = $request->input('sum');
-        $cost->total = $quantity * $sum;
-        $cost->date = $request->input('date');
-        $cost->update();
-
-        if ($cost) {
-            return view('admin.bookkeeping.costs.edit',[
-                'cost' => $cost
-            ])->with('success', 'Трата успешно обновлена');
-        } else {
-            return view('admin.bookkeeping.costs.edit')->with('error', 'Произошла ошибка обновления');
-        }
-    }
-
-    public function destroy($id)
-    {
-        $cost = Costs::destroy($id);
-
-        if ($cost) {
-            return back()->with('success', 'Трата успешно удалена');
-        } else {
-            return back()->with('error', 'Произошла ошибка удаления');
-        }
+        return view('admin.bookkeeping.costs.edit');
     }
 }
