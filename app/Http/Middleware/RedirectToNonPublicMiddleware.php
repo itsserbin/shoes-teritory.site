@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class RedirectToNonWwwMiddleware
+class RedirectToNonPublicMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,8 @@ class RedirectToNonWwwMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (str_starts_with(request()->route()->getPrefix(), 'public/')) {
+        if (str_starts_with($request->header('host'), 'www.')) {
+            $request->headers->set('host', env('SESSION_DOMAIN'));
             return redirect()->secure($request->path());
         }
         return $next($request);

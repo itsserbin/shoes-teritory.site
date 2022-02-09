@@ -7,6 +7,8 @@ use App\Http\Middleware\CacheControl;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Middleware\RedirectToNonPublicMiddleware;
+use App\Http\Middleware\RedirectToNonWwwMiddleware;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Middleware\SecuredHttp;
 use App\Http\Middleware\TrimStrings;
@@ -65,7 +67,8 @@ class Kernel extends HttpKernel
             VerifyCsrfToken::class,
             SubstituteBindings::class,
             CreateFreshApiToken::class,
-            \App\Http\Middleware\RedirectToNonWwwMiddleware::class
+            RedirectToNonWwwMiddleware::class,
+            RedirectToNonPublicMiddleware::class
         ],
 
         'api' => [
