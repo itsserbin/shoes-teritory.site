@@ -70,6 +70,7 @@ Vue.component('create-promo-code', require('./promo-codes/CreatePromoCode').defa
 Vue.component('edit-promo-code', require('./promo-codes/EditPromoCode').default);
 
 Vue.component('bookkeeping-profits-list', require('./bookkeeping/profit/ProfitList').default);
+Vue.component('bookkeeping-profits-create', require('./bookkeeping/profit/AddDay').default);
 
 
 Vue.component('bookkeeping-costs-list', require('./bookkeeping/costs/CostsList').default);
