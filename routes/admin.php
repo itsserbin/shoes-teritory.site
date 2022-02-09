@@ -139,10 +139,15 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
                     ->name('admin.bookkeeping.costs.create');
             });
 
-        Route::resource('profit', ProfitController::class)
+        Route::prefix('profits')
             ->middleware('role:administrator')
-            ->names('admin.bookkeeping.profit');
+            ->group(function () {
+                Route::get('/', [ProfitController::class, 'index'])
+                    ->name('admin.bookkeeping.profits.index');
 
+                Route::get('create', [ProfitController::class, 'create'])
+                    ->name('admin.bookkeeping.profits.create');
+            });
 
         Route::prefix('daily-statistics')->middleware('role:administrator')->group(function () {
             Route::get('/', [DailyStatisticsController::class, 'index'])

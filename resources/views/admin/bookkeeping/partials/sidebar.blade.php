@@ -19,9 +19,9 @@
     </li>
 
     <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('admin.bookkeeping.profit.index') ? 'active' : null }}"
+        <a class="nav-link {{ request()->routeIs('admin.bookkeeping.profits.index') ? 'active' : null }}"
            aria-current="page"
-           href="{{route('admin.bookkeeping.profit.index')}}">Прибыль</a>
+           href="{{route('admin.bookkeeping.profits.index')}}">Прибыль</a>
     </li>
 
     <li class="nav-item">

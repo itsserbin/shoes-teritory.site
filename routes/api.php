@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\Api\AdminController;
 use App\Http\Controllers\Admin\Api\Bookkeeping\CostsController;
 use App\Http\Controllers\Admin\Api\Bookkeeping\DailyStatisticsController;
 use App\Http\Controllers\Admin\Api\Bookkeeping\ManagersSalariesController;
+use App\Http\Controllers\Admin\Api\Bookkeeping\ProfitsController;
 use App\Http\Controllers\Admin\Api\Bookkeeping\SupplierPaymentsController;
 use App\Http\Controllers\Admin\Api\CategoriesController;
 use App\Http\Controllers\Admin\Api\ColorsController;
@@ -309,8 +310,16 @@ Route::middleware('auth:api')->group(function () {
             Route::get('edit/{id}', [CostsController::class, 'edit'])
                 ->name('api.bookkeeping.costs.edit');
 
-            Route::put('update/{id}',[CostsController::class,'update'])
+            Route::put('update/{id}', [CostsController::class, 'update'])
                 ->name('api.bookkeeping.costs.update');
+        });
+
+        Route::prefix('profits')->group(function () {
+            Route::get('/', [ProfitsController::class, 'index'])
+                ->name('api.bookkeeping.profits.index');
+
+            Route::post('create', [ProfitsController::class, 'create'])
+                ->name('api.bookkeeping.profits.create');
         });
     });
 

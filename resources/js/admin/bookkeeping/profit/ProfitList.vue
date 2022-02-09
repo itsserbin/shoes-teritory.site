@@ -4,14 +4,14 @@
         <div class="container" v-if="!isLoading">
             <div class="row mb-3">
                 <div class="col-12 col-md-6">
-                    <h2>Расходы</h2>
+                    <h2>Прибыль</h2>
                 </div>
 
                 <div class="col-12 col-md-6 text-end">
                     <button class="btn btn-danger"
-                            @click="createCost"
+                            @click="createProfit"
                     >
-                        Добавить расход
+                        Добавить день
                     </button>
                 </div>
             </div>
@@ -33,56 +33,60 @@
                             </th>
                             <th>
                                 <div class="d-flex align-items-center justify-content-center">
-                                    <div class="mr-1">Категория</div>
-                                    <a href="javascript:" class="text-dark" @click="sort('name','asc')">
+                                    <div class="mr-1">Сумма расходов</div>
+                                    <a href="javascript:" class="text-dark" @click="sort('cost','asc')">
                                         <arrow-up-icon></arrow-up-icon>
                                     </a>
-                                    <a href="javascript:" class="text-dark" @click="sort('name','desc')">
+                                    <a href="javascript:" class="text-dark" @click="sort('cost','desc')">
                                         <arrow-down-icon></arrow-down-icon>
                                     </a>
                                 </div>
                             </th>
-                            <th>Кол-во</th>
-                            <th>Сумма</th>
-                            <th>Итого</th>
-                            <th>Ответственный</th>
-                            <th>Комментарий</th>
-                            <th>Действия</th>
+                            <th>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <div class="mr-1">Сумма прибыли</div>
+                                    <a href="javascript:" class="text-dark" @click="sort('profit','asc')">
+                                        <arrow-up-icon></arrow-up-icon>
+                                    </a>
+                                    <a href="javascript:" class="text-dark" @click="sort('profit','desc')">
+                                        <arrow-down-icon></arrow-down-icon>
+                                    </a>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <div class="mr-1">Маржинальность</div>
+                                    <a href="javascript:" class="text-dark" @click="sort('marginality','asc')">
+                                        <arrow-up-icon></arrow-up-icon>
+                                    </a>
+                                    <a href="javascript:" class="text-dark" @click="sort('marginality','desc')">
+                                        <arrow-down-icon></arrow-down-icon>
+                                    </a>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <div class="mr-1">Оборот</div>
+                                    <a href="javascript:" class="text-dark" @click="sort('turnover','asc')">
+                                        <arrow-up-icon></arrow-up-icon>
+                                    </a>
+                                    <a href="javascript:" class="text-dark" @click="sort('turnover','desc')">
+                                        <arrow-down-icon></arrow-down-icon>
+                                    </a>
+                                </div>
+                            </th>
                         </tr>
                         </thead>
                         <tbody class="text-center">
-                        <tr v-if="costs.length === 0">
-                            <td colspan="10">
-                                <div class="row justify-content-center flex-column align-content-center">
-                                    <div class="h2">Расходы не добавлены</div>
-                                    <button
-                                        @click="createCost"
-                                        class="btn btn-primary w-25 m-auto"
-                                    >
-                                        Добавить расход
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr v-for="cost in costs" :key="cost.id" style="vertical-align: middle;">
-                            <td>{{ dateFormat(cost.date) }}</td>
-                            <td>{{ cost.name }}</td>
-                            <td>{{ cost.quantity }}</td>
-                            <td>{{ cost.sum | formatMoney }} грн.</td>
-                            <td>{{ cost.total | formatMoney }} грн.</td>
-                            <td>{{ cost.user ? cost.user.name : '-' }}</td>
-                            <td>{{ cost.comment ? cost.comment.substr(0, 30) + '...' : '-' }}</td>
-                            <td>
-                                <a :href="'/admin/bookkeeping/costs/edit/' + cost.id">
-                                    <edit-icon></edit-icon>
-                                </a>
-                                <a href="javascript:" @click="onDelete(cost.id)">
-                                    <destroy-icon></destroy-icon>
-                                </a>
-                            </td>
+                        <tr v-for="profit in profits" :key="profit.id" style="vertical-align: middle;">
+                            <td>{{ dateFormat(profit.date) }}</td>
+                            <td>{{ profit.cost | formatMoney}} грн.</td>
+                            <td>{{ profit.profit | formatMoney}} грн.</td>
+                            <td>{{ profit.marginality | formatMoney}} грн.</td>
+                            <td>{{ profit.turnover | formatMoney}} грн.</td>
                         </tr>
                         </tbody>
-                        <tfoot v-if="costs.length !== 0">
+                        <tfoot v-if="profits.length !== 0">
                         <tr>
                             <th colspan="10">
                                 <pagination
@@ -110,31 +114,31 @@ export default {
             checkedAll: false,
             checkedItemsAction: null,
             search: null,
-            costs: [],
+            profits: [],
             currentPage: 1,
             perPage: 1,
             total: 1,
-            endpoint: '/api/bookkeeping/costs?page=',
+            endpoint: '/api/bookkeeping/profits?page=',
             isLoading: true,
         }
     },
     mounted() {
-        this.getCosts();
+        this.getProfits();
     },
     props: {
         destroyMassAction: String,
     },
     methods: {
-        getCosts() {
+        getProfits() {
             this.search = null;
             this.isLoading = true;
-            axios.get('/api/bookkeeping/costs')
-                .then(({data}) => this.getCostsListSuccessResponse(data))
-                .catch((response) => this.getCostsListErrorResponse(response));
+            axios.get('/api/bookkeeping/profits')
+                .then(({data}) => this.getProfitsListSuccessResponse(data))
+                .catch((response) => this.getProfitsListErrorResponse(response));
         },
         sort(value, param) {
             this.isLoading = true;
-            axios.get('/api/bookkeeping/costs', {
+            axios.get('/api/bookkeeping/profits', {
                 params:
                     {
                         sort: value,
@@ -142,30 +146,30 @@ export default {
                     }
             })
                 .then(({data}) => {
-                    this.getCostsListSuccessResponse(data);
+                    this.getProfitsListSuccessResponse(data);
                     this.isLoading = false;
-                    this.endpoint = '/api/bookkeeping/costs?sort=' + value + '&param=' + param + '&page=';
+                    this.endpoint = '/api/bookkeeping/profits?sort=' + value + '&param=' + param + '&page=';
                 })
-                .catch((response) => this.getCostsListErrorResponse(response));
+                .catch((response) => this.getProfitsListErrorResponse(response));
         },
         dateFormat(value) {
             return this.$moment(value).format('DD.MM.YYYY');
         },
-        getCostsListSuccessResponse(data) {
-            this.costs = data.result.data;
+        getProfitsListSuccessResponse(data) {
+            this.profits = data.result.data;
             this.total = data.result.total;
             this.currentPage = data.result.current_page;
             this.perPage = data.result.per_page;
             this.isLoading = false;
         },
-        getCostsListErrorResponse(response) {
+        getProfitsListErrorResponse(response) {
             console.log(response);
             this.isLoading = false;
         },
         fetch(page = 1) {
             this.isLoading = true;
             axios.get(this.endpoint + page)
-                .then(({data}) => this.getCostsListSuccessResponse(data));
+                .then(({data}) => this.getProfitsListSuccessResponse(data));
         },
         onDelete(id) {
             this.$swal({
@@ -174,7 +178,7 @@ export default {
                 showCancelButton: true,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    axios.delete('/api/bookkeeping/costs/destroy/' + id)
+                    axios.delete('/api/bookkeeping/profits/destroy/' + id)
                         .then(() => {
                             this.fetch(1);
                             this.$swal({
@@ -194,8 +198,8 @@ export default {
                 }
             });
         },
-        createCost() {
-            window.location.href = '/admin/bookkeeping/costs/create';
+        createProfit() {
+            window.location.href = '/admin/bookkeeping/profits/create';
         }
     },
 }

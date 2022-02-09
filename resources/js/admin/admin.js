@@ -69,6 +69,9 @@ Vue.component('promo-codes-list', require('./promo-codes/PromoCodesList').defaul
 Vue.component('create-promo-code', require('./promo-codes/CreatePromoCode').default);
 Vue.component('edit-promo-code', require('./promo-codes/EditPromoCode').default);
 
+Vue.component('bookkeeping-profits-list', require('./bookkeeping/profit/ProfitList').default);
+
+
 Vue.component('bookkeeping-costs-list', require('./bookkeeping/costs/CostsList').default);
 Vue.component('bookkeeping-costs-create', require('./bookkeeping/costs/CreateCost').default);
 Vue.component('bookkeeping-costs-edit', require('./bookkeeping/costs/EditCost').default);
