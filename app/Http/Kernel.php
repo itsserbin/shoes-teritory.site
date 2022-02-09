@@ -68,7 +68,6 @@ class Kernel extends HttpKernel
             SubstituteBindings::class,
             CreateFreshApiToken::class,
             RedirectToNonWwwMiddleware::class,
-            RedirectToNonPublicMiddleware::class
         ],
 
         'api' => [
