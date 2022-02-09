@@ -10,13 +10,14 @@ class RedirectToNonWwwMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
-        if (str_starts_with(request()->route()->getPrefix(), 'public/')) {
+        if (str_starts_with($request->header('host'), 'www.')) {
+            $request->headers->set('host', env('SESSION_DOMAIN'));
             return redirect()->secure($request->path());
         }
         return $next($request);

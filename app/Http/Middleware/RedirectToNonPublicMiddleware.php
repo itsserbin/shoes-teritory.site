@@ -16,9 +16,10 @@ class RedirectToNonPublicMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (str_starts_with($request->header('host'), 'www.')) {
-            $request->headers->set('host', env('SESSION_DOMAIN'));
-            return redirect()->secure($request->path());
+        $segments = explode('/', request()->route()->getPrefix());
+        if ($segments[0] == 'public') {
+            unset($segments[0]);
+            return redirect()->secure(implode("/", $segments));
         }
         return $next($request);
     }
