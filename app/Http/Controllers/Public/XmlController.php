@@ -72,6 +72,20 @@ class XmlController extends Controller
         ])->header('Content-Type', 'application/xml');
     }
 
+    public function xmlFbSwimwearAndTunics5Xl()
+    {
+        $products = Products::whereHas('categories', function ($q) {
+            $q->where('id', '!=', 7);
+        })
+            ->where('published', 1)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->view('xml.fb-product-feed', [
+            'products' => $products
+        ])->header('Content-Type', 'application/xml');
+    }
+
     public function xmlFbBigSize()
     {
         $products = Products::whereHas('categories', function ($q) {
