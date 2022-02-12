@@ -29,7 +29,7 @@
                     </li>
                     <li>
                         <a :href="exchangePolicyRoute" class="menu__link text-decoration-none">
-                            Обмен и возврат
+                            Условия возврата и обмена
                         </a>
                     </li>
                     <li>
