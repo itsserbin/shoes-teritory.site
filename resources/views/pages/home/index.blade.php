@@ -5,6 +5,7 @@
 @section('content')
     <section class="product-list card pt-3">
         <div class="container">
+            <main-banners></main-banners>
             <div class="product-list__title">Трендовое женское нижнее белье и пляжная одежда 2022 года</div>
             <categories-grid></categories-grid>
             <div class="product-list__title">Самые продаваемые</div>

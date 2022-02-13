@@ -1,6 +1,6 @@
 <template>
     <section id="reviews" class="reviews">
-        <div class="content">
+        <div class="container">
             <div class="reviews__block-title block-title">Отзывы</div>
             <VueSlickCarousel class="reviews-slider" v-bind="settings" v-if="reviews.length">
                 <div v-for="review in reviews" class="reviews-slider__slide">

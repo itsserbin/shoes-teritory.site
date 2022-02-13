@@ -44,6 +44,7 @@ Vue.component('cart-component', require('./cart/Cart').default);
 /**
  * Vue Product components
  */
+Vue.component('main-banners', require('./home/MainBanners').default);
 Vue.component('best-selling-products', require('./home/BestSelling').default);
 Vue.component('all-products', require('./home/AllProducts').default);
 Vue.component('product-cards', require('./components/ProductCards').default);

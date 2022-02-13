@@ -25,10 +25,28 @@ class UploadController extends Controller
      * @param Request $request
      * @return mixed
      */
-    public function uploadPreview(Request $request)
+    public function uploadPreview(Request $request): mixed
     {
         try {
             $path = $this->uploadImagesService->uploadCategoryPreview($request->all());
+        } catch (\Throwable $exception) {
+            Log::error($exception->getMessage());
+
+            return $this->returnResponse([
+                'success' => false,
+            ], 400);
+        }
+
+        return $this->returnResponse([
+            'success' => true,
+            'url' => $path,
+        ]);
+    }
+
+    public function uploadBannerImage(Request $request): JsonResponse
+    {
+        try {
+            $path = $this->uploadImagesService->uploadBannerImage($request->all());
         } catch (\Throwable $exception) {
             Log::error($exception->getMessage());
 

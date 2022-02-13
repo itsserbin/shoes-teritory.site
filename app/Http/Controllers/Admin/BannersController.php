@@ -6,11 +6,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 
-/**
- * Class CategoriesController
- * @package App\Http\Controllers\Admin
- */
-class CategoriesController extends BaseController
+class BannersController extends BaseController
 {
     public function __construct()
     {
@@ -18,32 +14,26 @@ class CategoriesController extends BaseController
     }
 
     /**
-     * Открыть страницу со всеми категориями.
-     *
      * @return Application|Factory|View
      */
     public function index(): View|Factory|Application
     {
-        return view('admin.categories.index');
+        return view('admin.banners.index');
     }
 
     /**
-     * Открыть страницу создания категории.
-     *
      * @return Application|Factory|View
      */
     public function create(): View|Factory|Application
     {
-        return view('admin.categories.create');
+        return view('admin.banners.create');
     }
 
     /**
-     * Открыть страницу редактирования категории.
-     *
      * @return Application|Factory|View
      */
     public function edit(): View|Factory|Application
     {
-        return view('admin.categories.edit');
+        return view('admin.banners.edit');
     }
 }

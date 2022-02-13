@@ -25,6 +25,8 @@ class CreateProductsTable extends Migration
             $table->boolean('xl')->default('0');
             $table->boolean('xxl')->default('0');
             $table->boolean('xxxl')->default('0');
+            $table->boolean('xxxxl')->default('0');
+            $table->boolean('xxxxxl')->default('0');
 
             $table->string('title')->nullable();
             $table->string('h1')->nullable();

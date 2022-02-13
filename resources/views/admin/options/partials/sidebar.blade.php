@@ -23,4 +23,9 @@
         <a class="nav-link {{ request()->routeIs('admin.roles.index') ? 'active' : null }}" aria-current="page"
            href="{{route('admin.roles.index')}}">Роли</a>
     </li>
+
+    <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('admin.banners.index') ? 'active' : null }}" aria-current="page"
+           href="{{route('admin.banners.index')}}">Баннера</a>
+    </li>
 </ul>

@@ -31,6 +31,16 @@ class UploadImageService
         return asset('/storage/category/' . $filename);
     }
 
+    public function uploadBannerImage($data)
+    {
+        $preview = $data['banner'];
+        $filename = $preview->getClientOriginalName();
+
+        Image::make($preview)->save(public_path('storage/banners/' . $filename));
+
+        return asset('/storage/banners/' . $filename);
+    }
+
     public function uploadProductImages($data)
     {
         $image = $data['image'];

@@ -58,6 +58,11 @@ Vue.component('category-edit', require('./categories/EditCategory').default);
 Vue.component('main-options-list', require('./options/MainOptionsList').default);
 Vue.component('scripts-options-list', require('./options/ScriptsOptionsList').default);
 
+Vue.component('banners-list', require('./banners/BannersList').default);
+Vue.component('create-banner', require('./banners/CreateBanner').default);
+Vue.component('edit-banner', require('./banners/EditBanner').default);
+
+
 Vue.component('users-list', require('./users/UsersList').default);
 Vue.component('edit-user', require('./users/EditUser').default);
 Vue.component('create-user', require('./users/CreateUser').default);

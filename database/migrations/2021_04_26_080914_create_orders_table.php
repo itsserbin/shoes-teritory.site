@@ -40,7 +40,8 @@ class CreateOrdersTable extends Migration
             $table->boolean('sms_waybill_status')->default(0);
             $table->boolean('parcel_reminder')->default(0);
             $table->string('promo_code')->nullable();
-
+            $table->boolean('sale_of_air')->default(0);
+            $table->integer('sale_of_air_price')->nullable();
             $table->string('modified_by')->nullable();
             $table->timestamps();
         });

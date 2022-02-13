@@ -30,10 +30,15 @@ class CreateManagerSalariesTable extends Migration
             $table->integer('done_applications')->nullable();
             $table->integer('returned_applications')->nullable();
             $table->integer('total_applications')->nullable();
+            $table->integer('in_process_applications')->nullable();
 
             $table->integer('sum_additional_sales')->nullable();
             $table->integer('sum_price_applications')->nullable();
             $table->integer('sum_price_additional_sales')->nullable();
+
+            $table->integer('count_sale_of_air')->nullable();
+            $table->integer('price_sale_of_air')->nullable();
+            $table->integer('total_sale_of_air')->nullable();
 
             $table->integer('total_price')->nullable();
         });

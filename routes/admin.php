@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\BannersController;
 use App\Http\Controllers\Admin\Bookkeeping\BookkeepingController;
 use App\Http\Controllers\Admin\Bookkeeping\CostsController;
 use App\Http\Controllers\Admin\Bookkeeping\ManagersSalariesController;
@@ -204,6 +205,18 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
 
         Route::get('create', [UsersController::class, 'create'])
             ->name('admin.users.create');
+    });
+
+    Route::prefix('banners')->group(function () {
+
+        Route::get('/', [BannersController::class, 'index'])
+            ->name('admin.banners.index');
+
+        Route::get('create', [BannersController::class, 'create'])
+            ->name('admin.banners.create');
+
+        Route::get('edit/{id}', [BannersController::class, 'edit'])
+            ->name('admin.banners.edit');
     });
 
     Route::post('notify-waybill', [\App\Http\Controllers\SmsController::class, 'notifyWaybill'])->name('notifyWaybill');

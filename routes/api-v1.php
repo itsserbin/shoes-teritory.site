@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Public\Api\BannersController;
 use App\Http\Controllers\Public\Api\CartController;
 use App\Http\Controllers\Public\Api\CategoriesController;
 use App\Http\Controllers\Public\Api\OrdersController;
@@ -16,7 +17,7 @@ Route::prefix('v1')->middleware('api')->group(function () {
 
         /** Route for get list reviews */
         Route::get('list', [ReviewsController::class, 'list'])
-            ->name('api.public.reviews.list');
+            ->name('api.v1.public.reviews.list');
     });
 
     /** Route group for products */
@@ -28,7 +29,7 @@ Route::prefix('v1')->middleware('api')->group(function () {
          * GET /api/product
          */
         Route::get('/', [ProductsController::class, 'index'])
-            ->name('api.product.index');
+            ->name('api.v1.product.index');
 
         /**
          * Get item by ID.
@@ -36,7 +37,7 @@ Route::prefix('v1')->middleware('api')->group(function () {
          * GET /api/product/show/{id}
          */
         Route::get('show/{id}', [ProductsController::class, 'getProduct'])
-            ->name('api.products.show');
+            ->name('api.v1.products.show');
 
         /**
          * Получить цвета по ID товара.
@@ -44,25 +45,25 @@ Route::prefix('v1')->middleware('api')->group(function () {
          * GET /api/product/colors/{id}
          */
         Route::get('colors/{id}', [ProductsController::class, 'getProductColors'])
-            ->name('api.product.colors.show');
+            ->name('api.v1.product.colors.show');
 
         Route::get('get-images/{id}', [ProductsController::class, 'getImages'])
-            ->name('api.public.products.images.get');
+            ->name('api.v1.public.products.images.get');
 
         Route::get('reviews/{id}', [ProductsController::class, 'getReviews'])
-            ->name('api.public.products.reviews.get');
+            ->name('api.v1.products.reviews.get');
 
         Route::get('relative/{id}', [ProductsController::class, 'getRelativeProducts'])
-            ->name('api.public.products.relative.get');
+            ->name('api.v1.products.relative.get');
 
         Route::get('best-selling', [ProductsController::class, 'getBestSellingProducts'])
-            ->name('api.public.products.best-selling');
+            ->name('api.v1.products.best-selling');
 
         Route::get('category/{slug}', [ProductsController::class, 'getWhereCategorySlug'])
-            ->name('api.public.products.category');
+            ->name('api.v1.products.category');
 
         Route::get('recommend-products', [ProductsController::class, 'getRecommendProducts'])
-            ->name('api.public.products.recommend');
+            ->name('api.v1.products.recommend');
     });
 
     /** Группа маршрутов для корзины */
@@ -74,7 +75,7 @@ Route::prefix('v1')->middleware('api')->group(function () {
          * GET /api/cart/list
          */
         Route::get('list', [CartController::class, 'list'])
-            ->name('api.cart.list');
+            ->name('api.v1.cart.list');
 
         /**
          * Добавить товар в корзину.
@@ -82,7 +83,7 @@ Route::prefix('v1')->middleware('api')->group(function () {
          * POST /api/cart/add
          */
         Route::post('add', [CartController::class, 'add'])
-            ->name('api.cart.add');
+            ->name('api.v1.cart.add');
 
         /**
          * Удалить товар из корзины.
@@ -90,7 +91,7 @@ Route::prefix('v1')->middleware('api')->group(function () {
          * DELETE /api/cart/delete/{item}
          */
         Route::delete('delete/{item}', [CartController::class, 'delete'])
-            ->name('api.cart.delete');
+            ->name('api.v1.cart.delete');
 
         /**
          * Обновить инфу в корзине.
@@ -98,20 +99,20 @@ Route::prefix('v1')->middleware('api')->group(function () {
          * POST /api/cart/update/
          */
         Route::post('update', [CartController::class, 'update'])
-            ->name('api.cart.update');
+            ->name('api.v1.cart.update');
 
         Route::post('update-decrement/{id}', [CartController::class, 'updateDecrement'])
-            ->name('api.cart.update.decrement');
+            ->name('api.v1.cart.update.decrement');
 
         Route::post('update-increment/{id}', [CartController::class, 'updateIncrement'])
-            ->name('api.cart.update.increment');
+            ->name('api.v1.cart.update.increment');
 
         Route::prefix('promo-code')->group(function () {
             Route::post('activate', [CartController::class, 'activatePromoCode'])
-                ->name('api.cart.promo.code.activate');
+                ->name('api.v1.cart.promo.code.activate');
 
             Route::post('deactivate', [CartController::class, 'deactivatePromoCode'])
-                ->name('api.cart.promo.code.deactivate');
+                ->name('api.v1.cart.promo.code.deactivate');
         });
     });
 
@@ -124,7 +125,7 @@ Route::prefix('v1')->middleware('api')->group(function () {
          * POST /api/order/create
          */
         Route::post('create', [OrdersController::class, 'create'])
-            ->name('api.orders.create');
+            ->name('api.v1.orders.create');
     });
 
     /** Группа маршрутов для категорий */
@@ -136,7 +137,7 @@ Route::prefix('v1')->middleware('api')->group(function () {
          * GET /api/category/all-on-prod
          */
         Route::get('all-on-prod', [CategoriesController::class, 'getAll'])
-            ->name('api.category.getAllOnProd');
+            ->name('api.v1.category.getAllOnProd');
 
         /**
          * Получить отдельную категорию.
@@ -144,7 +145,7 @@ Route::prefix('v1')->middleware('api')->group(function () {
          * GET /api/category/{slug}
          */
         Route::get('{slug}', [CategoriesController::class, 'getBySlug'])
-            ->name('api.category.getCategoryOnProduction');
+            ->name('api.v1.category.getCategoryOnProduction');
 
         /**
          * Получить товары из определенной категории..
@@ -158,6 +159,11 @@ Route::prefix('v1')->middleware('api')->group(function () {
     Route::prefix('user')->group(function () {
 
         Route::get('info', [UsersController::class, 'getUserInfo'])
-            ->name('api.user.info');
+            ->name('api.v1.user.info');
+    });
+
+    Route::prefix('banners')->group(function () {
+        Route::get('all', [BannersController::class, 'all'])
+            ->name('api.v1.banners.all');
     });
 });

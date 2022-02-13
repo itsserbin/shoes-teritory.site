@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\Api\AdminController;
+use App\Http\Controllers\Admin\Api\BannersController;
 use App\Http\Controllers\Admin\Api\Bookkeeping\CostsController;
 use App\Http\Controllers\Admin\Api\Bookkeeping\DailyStatisticsController;
 use App\Http\Controllers\Admin\Api\Bookkeeping\ManagersSalariesController;
@@ -417,6 +418,9 @@ Route::middleware('auth:api')->group(function () {
         Route::post('preview-upload', [UploadController::class, 'uploadPreview'])
             ->name('api.images.uploadPreview');
 
+        Route::post('banner-upload', [UploadController::class, 'uploadBannerImage'])
+            ->name('api.images.uploadBannerImage');
+
     });
 
     Route::prefix('options')->group(function () {
@@ -490,6 +494,30 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix('roles')->group(function () {
         Route::get('list', [RolesController::class, 'list'])
             ->name('api.roles.list');
+    });
+
+    Route::prefix('banners')->group(function () {
+
+        Route::get('/', [BannersController::class, 'index'])
+            ->name('api.banners.index');
+
+        Route::post('create', [BannersController::class, 'create'])
+            ->name('api.banners.create');
+
+        Route::get('edit/{id}', [BannersController::class, 'edit'])
+            ->name('api.banners.edit');
+
+        Route::put('update/{id}', [BannersController::class, 'update'])
+            ->name('api.banners.update');
+
+        Route::delete('destroy/{id}', [BannersController::class, 'destroy'])
+            ->name('api.banners.destroy');
+
+        Route::post('update-sort/{id}', [BannersController::class, 'updateSort'])
+            ->name('api.banners.updateSort');
+
+        Route::post('mass', [BannersController::class, 'massActions'])
+            ->name('api.banners.mass');
     });
 });
 

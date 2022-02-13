@@ -5,20 +5,11 @@
             <div class="row mb-3">
                 <div class="col">
                     <button class="btn btn-danger"
-                            v-if="categories.length"
-                            @click="createCategory"
+                            v-if="banners.length"
+                            @click="createBanner"
                     >
-                        Создать категорию
+                        Создать баннер
                     </button>
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col">
-                    <div class="d-flex">
-                        <button class="btn btn-danger" @click.prevent="getCategories">Очистить</button>
-                        <input type="text" v-model="search" class="form-control mx-1">
-                        <button @click.prevent="getSearchList" type="submit" class="btn btn-danger">Поиск</button>
-                    </div>
                 </div>
             </div>
             <div class="row">
@@ -44,16 +35,14 @@
                                     </a>
                                 </div>
                             </th>
-                            <th>
-                                Фото
-                            </th>
+                            <th>Фото</th>
                             <th>
                                 <div class="d-flex align-items-center justify-content-center">
                                     <div class="mr-1">Название</div>
-                                    <a href="javascript:" class="text-dark" @click="sort('h1','asc')">
+                                    <a href="javascript:" class="text-dark" @click="sort('title','asc')">
                                         <arrow-up-icon></arrow-up-icon>
                                     </a>
-                                    <a href="javascript:" class="text-dark" @click="sort('h1','desc')">
+                                    <a href="javascript:" class="text-dark" @click="sort('title','desc')">
                                         <arrow-down-icon></arrow-down-icon>
                                     </a>
                                 </div>
@@ -69,17 +58,7 @@
                                     </a>
                                 </div>
                             </th>
-                            <th>
-                                <div class="d-flex align-items-center justify-content-center">
-                                    <div class="mr-1">Родительская категория</div>
-                                    <a href="javascript:" class="text-dark" @click="sort('published','asc')">
-                                        <arrow-up-icon></arrow-up-icon>
-                                    </a>
-                                    <a href="javascript:" class="text-dark" @click="sort('published','desc')">
-                                        <arrow-down-icon></arrow-down-icon>
-                                    </a>
-                                </div>
-                            </th>
+                            <th>Ссылка</th>
                             <th>
                                 <div class="d-flex align-items-center justify-content-center">
                                     <div class="mr-1">Сортировка</div>
@@ -116,62 +95,62 @@
                         </tr>
                         </thead>
                         <tbody class="text-center">
-                        <tr v-if="categories.length === 0">
+                        <tr v-if="banners.length === 0">
                             <td colspan="10">
                                 <div class="row justify-content-center flex-column align-content-center">
-                                    <div class="h2">Категории не созданы</div>
+                                    <div class="h2">Баннера не созданы</div>
                                     <button
-                                        @click="createCategory"
+                                        @click="createBanner"
                                         class="btn btn-danger w-25 m-auto"
                                     >
-                                        Создать категорию
+                                        Добавить баннер
                                     </button>
                                 </div>
                             </td>
                         </tr>
-                        <tr v-for="category in categories" :key="category.id" style="vertical-align: middle;">
+                        <tr v-for="banner in banners" :key="banner.id" style="vertical-align: middle;">
                             <td>
                                 <div class="form-check">
                                     <input class="form-check-input"
                                            type="checkbox"
-                                           :value="category.id"
+                                           :value="banner.id"
                                            v-model="checkedItems"
                                     >
                                 </div>
                             </td>
-                            <td>{{ category.id }}</td>
+                            <td>{{ banner.id }}</td>
                             <td class="w-25">
                                 <img class="w-25"
-                                     :src="category.preview ? category.preview : '/storage/no_image.png'"
-                                     :alt="category.title"></td>
-                            <td><a :href="'/admin/categories/edit/' + category.id">{{ category.title }}</a></td>
-                            <td>{{ publishedStatus(category.published) }}</td>
-                            <td>{{ category.parent_id }}</td>
+                                     :src="banner.image ? banner.image : '/storage/no_image.png'"
+                                     :alt="banner.title"></td>
+                            <td><a :href="'/admin/banners/edit/' + banner.id">{{ banner.title }}</a></td>
+                            <td>{{ publishedStatus(banner.published) }}</td>
+                            <td>{{ banner.link }}</td>
                             <td>
                                 <form class="d-flex justify-content-center"
-                                      @submit.prevent="updateCategorySort(category.id,category.sort)">
-                                    <input class="w-25 text-center" type="text" v-model="category.sort">
+                                      @submit.prevent="updateBannerSort(banner.id,banner.sort)">
+                                    <input class="w-25 text-center" type="text" v-model="banner.sort">
                                     <button type="submit" class="btn">
                                         <save-icon></save-icon>
                                     </button>
                                 </form>
                             </td>
                             <td>
-                                {{ dateFormat(category.created_at) }}
+                                {{ dateFormat(banner.created_at) }}
                                 <hr class="m-1">
-                                {{ dateFormat(category.updated_at) }}
+                                {{ dateFormat(banner.updated_at) }}
                             </td>
                             <td>
-                                <a v-bind:href="'/admin/categories/edit/' + category.id">
+                                <a v-bind:href="'/admin/banners/edit/' + banner.id">
                                     <edit-icon></edit-icon>
                                 </a>
-                                <a href="javascript:" @click="onDelete(category.id)">
+                                <a href="javascript:" @click="onDelete(banner.id)">
                                     <destroy-icon></destroy-icon>
                                 </a>
                             </td>
                         </tr>
                         </tbody>
-                        <tfoot v-if="categories.length !== 0">
+                        <tfoot v-if="banners.length !== 0">
                         <tr>
                             <th colspan="10">
                                 <select class="form-select"
@@ -212,16 +191,16 @@ export default {
             checkedAll: false,
             checkedItemsAction: null,
             search: null,
-            categories: [],
+            banners: [],
             currentPage: 1,
             perPage: 1,
             total: 1,
-            endpoint: '/api/categories?page=',
+            endpoint: '/api/banners?page=',
             isLoading: true,
         }
     },
     mounted() {
-        this.getCategories();
+        this.getBanners();
     },
     props:{
         destroyMassAction: String,
@@ -229,15 +208,15 @@ export default {
         notPublishedMassAction: String,
     },
     methods: {
-        getCategories(){
+        getBanners(){
             this.search = null;
             this.isLoading = true;
-            axios.get('/api/categories')
-                .then(({data}) => this.getCategoriesListSuccessResponse(data))
-                .catch((response) => this.getCategoriesListErrorResponse(response));
+            axios.get('/api/banners')
+                .then(({data}) => this.getBannersListSuccessResponse(data))
+                .catch((response) => this.getBannersListErrorResponse(response));
         },
-        updateCategorySort(category_id,sort){
-            axios.post('/api/categories/update-sort/' + category_id, {sort: sort})
+        updateBannerSort(id,sort){
+            axios.post('/api/banners/update-sort/' + id, {sort: sort})
                 .then(() => {
                     this.$swal({
                         icon: 'success',
@@ -252,24 +231,9 @@ export default {
                     })
                 })
         },
-        getSearchList() {
-            this.isLoading = true;
-            if (this.search == null || this.search.length === 0) {
-                this.getCategories();
-            } else {
-                axios.get('/api/categories/search=' + this.search)
-                    .then(({data}) => {
-                        this.getCategoriesListSuccessResponse(data);
-                        this.isLoading = false;
-                        this.endpoint = '/api/categories/search/' + this.search + '?page=';
-                    })
-                    .catch((response) => this.getCategoriesListErrorResponse(response));
-            }
-
-        },
         sort(value, param) {
             this.isLoading = true;
-            axios.get('/api/categories', {
+            axios.get('/api/banners', {
                 params:
                     {
                         sort: value,
@@ -277,11 +241,11 @@ export default {
                     }
             })
                 .then(({data}) => {
-                    this.getCategoriesListSuccessResponse(data);
+                    this.getBannersListSuccessResponse(data);
                     this.isLoading = false;
-                    this.endpoint = '/api/categories?sort=' + value + '&param=' + param + '&page=';
+                    this.endpoint = '/api/banners?sort=' + value + '&param=' + param + '&page=';
                 })
-                .catch((response) => this.getCategoriesListErrorResponse(response));
+                .catch((response) => this.getBannersListErrorResponse(response));
         },
         dateFormat(value) {
             return this.$moment(value).format('DD.MM.YYYY');
@@ -291,7 +255,7 @@ export default {
                 this.checkedItems = [];
             } else {
                 const self = this;
-                this.categories.forEach((key) => {
+                this.banners.forEach((key) => {
                     self.checkedItems.push(key.id);
                 })
                 this.checkedAllActive = !this.checkedAllActive;
@@ -299,14 +263,14 @@ export default {
         },
         selectedAction() {
             this.isLoading = true;
-            axios.post('/api/categories/mass', this.checkedItems, {
+            axios.post('/api/banners/mass', this.checkedItems, {
                 params:
                     {
                         action: this.checkedItemsAction,
                     }
             })
                 .then(() => {
-                    this.getCategories();
+                    this.getBanners();
                     this.isLoading = false;
                     this.checkedAll = false;
                     this.checkedItems = [];
@@ -314,21 +278,21 @@ export default {
                 })
                 .catch((response) => this.getCategoriesListErrorResponse(response));
         },
-        getCategoriesListSuccessResponse(data) {
-            this.categories = data.result.data;
+        getBannersListSuccessResponse(data) {
+            this.banners = data.result.data;
             this.total = data.result.total;
             this.currentPage = data.result.current_page;
             this.perPage = data.result.per_page;
             this.isLoading = false;
         },
-        getCategoriesListErrorResponse(response) {
+        getBannersListErrorResponse(response) {
             console.log(response);
             this.isLoading = false;
         },
         fetch(page = 1) {
             this.isLoading = true;
             axios.get(this.endpoint + page)
-                .then(({data}) => this.getCategoriesListSuccessResponse(data));
+                .then(({data}) => this.getBannersListErrorResponse(data));
         },
         onDelete(id) {
             this.$swal({
@@ -337,7 +301,7 @@ export default {
                 showCancelButton: true,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    axios.delete('/api/categories/destroy/' + id)
+                    axios.delete('/api/banners/destroy/' + id)
                         .then(() => {
                             this.fetch(1);
                             this.$swal({
@@ -357,8 +321,8 @@ export default {
                 }
             });
         },
-        createCategory() {
-            window.location.href = '/admin/categories/create';
+        createBanner() {
+            window.location.href = '/admin/banners/create';
         },
         publishedStatus(status) {
             switch (status) {
