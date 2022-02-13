@@ -40,6 +40,7 @@ Vue.component('cart-icon-component', require('./cart/CartIconComponent').default
 Vue.component('add-to-cart', require('./product/AddToCart').default);
 Vue.component('checkout', require('./cart/CheckoutComponent').default);
 Vue.component('cart-component', require('./cart/Cart').default);
+Vue.component('faq-component', require('./components/FaqComponent').default);
 
 /**
  * Vue Product components

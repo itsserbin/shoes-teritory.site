@@ -27,6 +27,7 @@
     </header>
     <main class="main">
         @yield('content')
+        <faq-component></faq-component>
     </main>
     <footer class="footer">
         @include('components.footer')

@@ -1,5 +1,5 @@
 <template>
-    <section class="relative product-list card">
+    <section class="relative product-list">
         <div class="container">
             <div class="row my-5">
                 <div class="relative__title block-title">Смотрите также</div>
