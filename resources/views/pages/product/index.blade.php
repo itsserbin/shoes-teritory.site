@@ -96,5 +96,7 @@
     @include('pages.product.components.shop')
     @include('pages.product.components.advantages')
     <relative-products id="{{$product->id}}"></relative-products>
+    <best-selling-products-product></best-selling-products-product>
+    <new-products></new-products>
 {{--    @include('pages.product.components.shipping-and-payment')--}}
 @endsection

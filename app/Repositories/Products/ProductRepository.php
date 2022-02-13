@@ -338,7 +338,7 @@ class ProductRepository extends CoreRepository
         return $this->model::destroy($id);
     }
 
-    public function getBestSellingProducts($perPage = 8)
+    public function getBestSelling($perPage = 8)
     {
         $columns = [
             'id',
@@ -356,6 +356,48 @@ class ProductRepository extends CoreRepository
             ->select($columns)
             ->orderBy('total_sales', 'desc')
             ->paginate($perPage);
+    }
+
+    public function getBestSellingProducts()
+    {
+        $columns = [
+            'id',
+            'price',
+            'published',
+            'discount_price',
+            'preview',
+            'total_sales',
+            'h1',
+        ];
+
+        return $this
+            ->startConditions()
+            ->where('published', 1)
+            ->select($columns)
+            ->orderBy('total_sales', 'desc')
+            ->limit(10)
+            ->get();
+    }
+
+    public function getNewProducts()
+    {
+        $columns = [
+            'id',
+            'price',
+            'published',
+            'discount_price',
+            'preview',
+            'h1',
+            'created_at',
+        ];
+
+        return $this
+            ->startConditions()
+            ->where('published', 1)
+            ->select($columns)
+            ->orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get();
     }
 
     public function getRecommendProducts()

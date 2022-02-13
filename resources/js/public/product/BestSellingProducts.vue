@@ -2,7 +2,7 @@
     <section class="relative product-list">
         <div class="container">
             <div class="row my-5">
-                <div class="relative__title block-title">Похожие товары</div>
+                <div class="relative__title block-title">Самые продаваемые товары</div>
                 <div class="relative-slider">
                     <VueSlickCarousel v-bind="settings" v-if="products.length">
                         <div v-for="(product,i) in products"
@@ -86,11 +86,8 @@ export default {
             }
         }
     },
-    props: {
-        id: String,
-    },
     mounted() {
-        axios.get('/api/v1/product/relative/' + this.id)
+        axios.get('/api/v1/product/best-selling-products')
             .then(({data}) => this.products = data.result)
             .catch((response) => console.log(response));
     }

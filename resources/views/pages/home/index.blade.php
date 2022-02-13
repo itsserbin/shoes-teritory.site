@@ -9,7 +9,7 @@
             <div class="product-list__title">Трендовое женское нижнее белье и пляжная одежда 2022 года</div>
             <categories-grid></categories-grid>
             <div class="product-list__title">Самые продаваемые</div>
-            <best-selling-products></best-selling-products>
+            <best-selling-products-home></best-selling-products-home>
             <div class="mt-5">
                 <div class="product-list__title">Все товары</div>
                 <all-products></all-products>

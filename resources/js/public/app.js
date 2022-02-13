@@ -45,10 +45,15 @@ Vue.component('faq-component', require('./components/FaqComponent').default);
 /**
  * Vue Product components
  */
-Vue.component('main-banners', require('./home/MainBanners').default);
-Vue.component('best-selling-products', require('./home/BestSelling').default);
-Vue.component('all-products', require('./home/AllProducts').default);
+Vue.component('product-card', require('./components/ProductCard').default);
 Vue.component('product-cards', require('./components/ProductCards').default);
+
+Vue.component('best-selling-products-home', require('./home/BestSelling').default);
+Vue.component('best-selling-products-product', require('./product/BestSellingProducts').default);
+Vue.component('new-products', require('./product/NewProducts').default);
+
+Vue.component('main-banners', require('./home/MainBanners').default);
+Vue.component('all-products', require('./home/AllProducts').default);
 Vue.component('sizes-table', require('./product/SizesTable').default);
 Vue.component('review-form', require('./product/ReviewForm').default);
 Vue.component('images-slider', require('./product/ImagesSlider').default);

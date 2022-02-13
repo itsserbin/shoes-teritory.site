@@ -114,9 +114,9 @@ class ProductsController extends BaseController
     /**
      * @return JsonResponse
      */
-    public function getBestSellingProducts(): JsonResponse
+    public function getBestSelling(): JsonResponse
     {
-        $result = $this->productRepository->getBestSellingProducts();
+        $result = $this->productRepository->getBestSelling();
 
         return $this->returnResponse([
             'success' => true,
@@ -137,6 +137,26 @@ class ProductsController extends BaseController
     public function getRecommendProducts(): JsonResponse
     {
         $result = $this->productRepository->getRecommendProducts();
+
+        return $this->returnResponse([
+            'success' => true,
+            'result' => $result,
+        ]);
+    }
+
+    public function getBestSellingProducts(): JsonResponse
+    {
+        $result = $this->productRepository->getBestSellingProducts();
+
+        return $this->returnResponse([
+            'success' => true,
+            'result' => $result,
+        ]);
+    }
+
+    public function getNewProducts(): JsonResponse
+    {
+        $result = $this->productRepository->getNewProducts();
 
         return $this->returnResponse([
             'success' => true,

@@ -56,7 +56,7 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::get('relative/{id}', [ProductsController::class, 'getRelativeProducts'])
             ->name('api.v1.products.relative.get');
 
-        Route::get('best-selling', [ProductsController::class, 'getBestSellingProducts'])
+        Route::get('best-selling', [ProductsController::class, 'getBestSelling'])
             ->name('api.v1.products.best-selling');
 
         Route::get('category/{slug}', [ProductsController::class, 'getWhereCategorySlug'])
@@ -64,6 +64,12 @@ Route::prefix('v1')->middleware('api')->group(function () {
 
         Route::get('recommend-products', [ProductsController::class, 'getRecommendProducts'])
             ->name('api.v1.products.recommend');
+
+        Route::get('best-selling-products', [ProductsController::class, 'getBestSellingProducts'])
+            ->name('api.v1.products.best-selling-products');
+
+        Route::get('new-products', [ProductsController::class, 'getNewProducts'])
+            ->name('api.v1.products.new-products');
     });
 
     /** Группа маршрутов для корзины */
