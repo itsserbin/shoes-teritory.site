@@ -128,31 +128,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="accordion-item">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button"
-                                    type="button"
-                                    @click="showAccordion7Func"
-                                    :class="{'collapsed' : !showAccordion7,'collaps' : showAccordion7}"
-                            >
-                                Нужна ли предоплата для доставки заказа?
-                            </button>
-                        </h2>
-                        <div class="accordion-collapse collapse"
-                             :class="{'show': showAccordion7 }"
-                        >
-                            <div class="accordion-body">
-                                <p>Мы просим оплатить минимальную предоплату 90 гривен. Мы столкнулись с проблемой, что
-                                    многие
-                                    клиенты заказывают товар и после оформления не приходят на почту и не берут трубку.
-                                    Предоплата
-                                    нужна как гарантия того, что вы заберете товар на почте или хотя бы осмотрите
-                                    посылку. Сумма
-                                    предоплаты вычитается из финальной, таким образом вы не переплачиваете!</p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -169,7 +144,6 @@ export default {
             showAccordion4: false,
             showAccordion5: false,
             showAccordion6: false,
-            showAccordion7: false,
         }
     },
     methods: {
@@ -190,10 +164,7 @@ export default {
         },
         showAccordion6Func() {
             this.showAccordion6 = !this.showAccordion6;
-        },
-        showAccordion7Func() {
-            this.showAccordion7 = !this.showAccordion7;
-        },
+        }
     }
 }
 </script>

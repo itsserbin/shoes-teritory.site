@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Models\Enum\ProductAvailability;
 use App\Models\Products;
 use App\Repositories\CategoriesRepository;
 use App\Repositories\Products\ProductRepository;
@@ -24,6 +25,10 @@ class XmlController extends Controller
     public function xmlFbAll()
     {
         $products = Products::where('published', 1)
+            ->where(function ($query) {
+                $query->where('status', ProductAvailability::IN_STOCK);
+                $query->orWhere('status', ProductAvailability::ENDS);
+            })
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -48,6 +53,10 @@ class XmlController extends Controller
                 ['id', '!=', 133],
                 ['id', '!=', 127],
             ])
+            ->where(function ($query) {
+                $query->where('status', ProductAvailability::IN_STOCK);
+                $query->orWhere('status', ProductAvailability::ENDS);
+            })
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -64,6 +73,10 @@ class XmlController extends Controller
             $q->orWhere('id', 3);
         })
             ->where('published', 1)
+            ->where(function ($query) {
+                $query->where('status', ProductAvailability::IN_STOCK);
+                $query->orWhere('status', ProductAvailability::ENDS);
+            })
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -78,6 +91,10 @@ class XmlController extends Controller
             $q->where('id', '!=', 7);
         })
             ->where('published', 1)
+            ->where(function ($query) {
+                $query->where('status', ProductAvailability::IN_STOCK);
+                $query->orWhere('status', ProductAvailability::ENDS);
+            })
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -92,6 +109,10 @@ class XmlController extends Controller
             $q->where('id', 8);
         })
             ->where('published', 1)
+            ->where(function ($query) {
+                $query->where('status', ProductAvailability::IN_STOCK);
+                $query->orWhere('status', ProductAvailability::ENDS);
+            })
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -102,35 +123,114 @@ class XmlController extends Controller
 
     public function xmlFbTopSwimwearAndTunics()
     {
-        $products = Products::where('id', 119)
-            ->orWhere('id', 118)
-            ->orWhere('id', 116)
-            ->orWhere('id', 109)
-            ->orWhere('id', 103)
-            ->orWhere('id', 101)
-            ->orWhere('id', 104)
-            ->orWhere('id', 105)
-            ->orWhere('id', 98)
-            ->orWhere('id', 97)
-            ->orWhere('id', 96)
-            ->orWhere('id', 95)
-            ->orWhere('id', 80)
-            ->orWhere('id', 78)
-            ->orWhere('id', 74)
-            ->orWhere('id', 73)
-            ->orWhere('id', 70)
-            ->orWhere('id', 72)
-            ->orWhere('id', 71)
-            ->orWhere('id', 48)
-            ->orWhere('id', 39)
-            ->orWhere('id', 37)
-            ->orWhere('id', 29)
-            ->orWhere('id', 28)
-            ->orWhere('id', 25)
-            ->orWhere('id', 20)
-            ->orWhere('id', 12)
+        $products = Products::where('published', 1)
+            ->where(function ($query) {
+                $query->where('status', ProductAvailability::IN_STOCK);
+                $query->orWhere('status', ProductAvailability::ENDS);
+            })->where(function ($q) {
+                $q->where('id', 119);
+                $q->orWhere('id', 118);
+                $q->orWhere('id', 116);
+                $q->orWhere('id', 109);
+                $q->orWhere('id', 103);
+                $q->orWhere('id', 101);
+                $q->orWhere('id', 104);
+                $q->orWhere('id', 105);
+                $q->orWhere('id', 98);
+                $q->orWhere('id', 97);
+                $q->orWhere('id', 96);
+                $q->orWhere('id', 95);
+                $q->orWhere('id', 80);
+                $q->orWhere('id', 78);
+                $q->orWhere('id', 74);
+                $q->orWhere('id', 73);
+                $q->orWhere('id', 70);
+                $q->orWhere('id', 72);
+                $q->orWhere('id', 71);
+                $q->orWhere('id', 48);
+                $q->orWhere('id', 39);
+                $q->orWhere('id', 37);
+                $q->orWhere('id', 29);
+                $q->orWhere('id', 28);
+                $q->orWhere('id', 25);
+                $q->orWhere('id', 20);
+                $q->orWhere('id', 12);
+            })
             ->orderBy('created_at', 'desc')
             ->get();
+
+        return response()->view('xml.fb-product-feed', [
+            'products' => $products
+        ])->header('Content-Type', 'application/xml');
+    }
+
+    public function xmlFbTopSwimwear()
+    {
+        $products = Products::where('published', 1)
+            ->where(function ($query) {
+                $query->where('status', ProductAvailability::IN_STOCK);
+                $query->orWhere('status', ProductAvailability::ENDS);
+            })->where(function ($q) {
+                $q->where('id', 66);
+                $q->orWhere('id', 119);
+                $q->orWhere('id', 118);
+                $q->orWhere('id', 117);
+                $q->orWhere('id', 115);
+                $q->orWhere('id', 112);
+                $q->orWhere('id', 111);
+                $q->orWhere('id', 110);
+                $q->orWhere('id', 109);
+                $q->orWhere('id', 108);
+                $q->orWhere('id', 107);
+                $q->orWhere('id', 106);
+                $q->orWhere('id', 97);
+                $q->orWhere('id', 96);
+                $q->orWhere('id', 95);
+                $q->orWhere('id', 94);
+                $q->orWhere('id', 93);
+                $q->orWhere('id', 92);
+                $q->orWhere('id', 91);
+                $q->orWhere('id', 90);
+                $q->orWhere('id', 83);
+                $q->orWhere('id', 82);
+                $q->orWhere('id', 78);
+                $q->orWhere('id', 74);
+                $q->orWhere('id', 43);
+                $q->orWhere('id', 72);
+                $q->orWhere('id', 71);
+                $q->orWhere('id', 70);
+                $q->orWhere('id', 64);
+                $q->orWhere('id', 57);
+                $q->orWhere('id', 43);
+                $q->orWhere('id', 39);
+                $q->orWhere('id', 37);
+                $q->orWhere('id', 29);
+                $q->orWhere('id', 25);
+            });
+
+        return response()->view('xml.fb-product-feed', [
+            'products' => $products
+        ])->header('Content-Type', 'application/xml');
+    }
+
+    public function xmlFbTopUnderwear()
+    {
+        $products = Products::where('published', 1)
+            ->where(function ($query) {
+                $query->where('status', ProductAvailability::IN_STOCK);
+                $query->orWhere('status', ProductAvailability::ENDS);
+            })->where(function ($q) {
+                $q->where('id', 161);
+                $q->orWhere('id', 159);
+                $q->orWhere('id', 142);
+                $q->orWhere('id', 139);
+                $q->orWhere('id', 134);
+                $q->orWhere('id', 131);
+                $q->orWhere('id', 130);
+                $q->orWhere('id', 125);
+                $q->orWhere('id', 124);
+                $q->orWhere('id', 121);
+            });
 
         return response()->view('xml.fb-product-feed', [
             'products' => $products
