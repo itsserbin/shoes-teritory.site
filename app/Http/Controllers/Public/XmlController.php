@@ -206,7 +206,9 @@ class XmlController extends Controller
                 $q->orWhere('id', 37);
                 $q->orWhere('id', 29);
                 $q->orWhere('id', 25);
-            });
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();;
 
         return response()->view('xml.fb-product-feed', [
             'products' => $products
@@ -230,7 +232,9 @@ class XmlController extends Controller
                 $q->orWhere('id', 125);
                 $q->orWhere('id', 124);
                 $q->orWhere('id', 121);
-            });
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();;
 
         return response()->view('xml.fb-product-feed', [
             'products' => $products
