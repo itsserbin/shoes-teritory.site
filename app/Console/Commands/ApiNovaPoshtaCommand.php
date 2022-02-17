@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Enum\OrderStatus;
 use App\Models\Orders;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class ApiNovaPoshtaCommand extends Command
 {
@@ -75,17 +76,22 @@ class ApiNovaPoshtaCommand extends Command
             } else {
                 $result = json_decode($response, true);
 
-                if ($result['data'][0]['StatusCode'] === '1') {
-                    $item->status = OrderStatus::STATUS_AWAITING_DISPATCH;
-                } elseif (in_array($result['data'][0]['StatusCode'], ['102', '103', '108'], true)) {
-                    $item->status = OrderStatus::STATUS_RETURN;
-                } elseif (in_array($result['data'][0]['StatusCode'], ['7', '8'], true)) {
-                    $item->status = OrderStatus::STATUS_AT_THE_POST_OFFICE;
-                } elseif (in_array($result['data'][0]['StatusCode'], ['5', '6', '101'], true)) {
-                    $item->status = OrderStatus::STATUS_ON_THE_ROAD;
-                } elseif (in_array($result['data'][0]['StatusCode'], ['9', '10', '11'], true)) {
-                    $item->status = OrderStatus::STATUS_DONE;
+                if ($result['data'][0]) {
+                    if ($result['data'][0]['StatusCode'] === '1') {
+                        $item->status = OrderStatus::STATUS_AWAITING_DISPATCH;
+                    } elseif (in_array($result['data'][0]['StatusCode'], ['102', '103', '108'], true)) {
+                        $item->status = OrderStatus::STATUS_RETURN;
+                    } elseif (in_array($result['data'][0]['StatusCode'], ['7', '8'], true)) {
+                        $item->status = OrderStatus::STATUS_AT_THE_POST_OFFICE;
+                    } elseif (in_array($result['data'][0]['StatusCode'], ['5', '6', '101'], true)) {
+                        $item->status = OrderStatus::STATUS_ON_THE_ROAD;
+                    } elseif (in_array($result['data'][0]['StatusCode'], ['9', '10', '11'], true)) {
+                        $item->status = OrderStatus::STATUS_DONE;
+                    }
+                } else {
+                    Log::error('id:' . $item->id . "\n" . 'waybill:' . $item->waybill);
                 }
+
                 $item->update();
             }
         }
