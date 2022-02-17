@@ -75,8 +75,7 @@ class ApiNovaPoshtaCommand extends Command
                 echo "cURL Error #:" . $err;
             } else {
                 $result = json_decode($response, true);
-
-                if ($result['data'][0]) {
+                if (isset($result['data'][0])) {
                     if ($result['data'][0]['StatusCode'] === '1') {
                         $item->status = OrderStatus::STATUS_AWAITING_DISPATCH;
                     } elseif (in_array($result['data'][0]['StatusCode'], ['102', '103', '108'], true)) {
@@ -89,7 +88,7 @@ class ApiNovaPoshtaCommand extends Command
                         $item->status = OrderStatus::STATUS_DONE;
                     }
                 } else {
-                    Log::error('id:' . $item->id . "\n" . 'waybill:' . $item->waybill);
+                    Log::error('id: ' . $item->id . "\n" . 'waybill:' . $item->waybill);
                 }
 
                 $item->update();
