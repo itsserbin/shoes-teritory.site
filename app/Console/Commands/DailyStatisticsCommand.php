@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Bookkeeping\Costs;
+use App\Models\Bookkeeping\Costs\Costs;
 use App\Models\Bookkeeping\OrdersDay;
 use App\Models\Bookkeeping\Profit;
 use App\Models\Enum\OrderStatus;
@@ -60,7 +60,7 @@ class DailyStatisticsCommand extends Command
             ->count();
 
         $SumCostsNow = Costs::whereDate('date', $date_now)
-            ->where('name', 'Таргет')
+            ->where('cost_category_id', 1)
             ->select('total')
             ->sum('total');
 
@@ -85,7 +85,7 @@ class DailyStatisticsCommand extends Command
             $orders_days->date = $date_now;
 
             $orders_days->advertising = Costs::whereDate('date', $date_now)
-                ->where('name', 'Таргет')
+                ->where('cost_category_id', 1)
                 ->select('total')
                 ->sum('total');
 
@@ -179,7 +179,7 @@ class DailyStatisticsCommand extends Command
                     ->count();
 
                 $SumCosts = Costs::whereDate('date', $date)
-                    ->where('name', 'Таргет')
+                    ->where('cost_category_id', 1)
                     ->select('total')
                     ->sum('total');
 
@@ -196,7 +196,7 @@ class DailyStatisticsCommand extends Command
                     ->count();
 
                 $item->advertising = Costs::whereDate('date', $date)
-                    ->where('name', 'Таргет')
+                    ->where('cost_category_id', 1)
                     ->select('total')
                     ->sum('total');
 

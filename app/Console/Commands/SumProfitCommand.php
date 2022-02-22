@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Bookkeeping\Costs;
+use App\Models\Bookkeeping\Costs\Costs;
 use App\Models\Bookkeeping\Profit;
 use App\Models\Enum\OrderStatus;
 use Carbon\Carbon;
