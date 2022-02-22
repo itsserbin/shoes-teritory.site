@@ -5,6 +5,9 @@ namespace App\Console\Commands;
 use App\Models\Bookkeeping\Costs\Costs;
 use App\Models\Bookkeeping\Profit;
 use App\Models\Enum\OrderStatus;
+use App\Repositories\Bookkeeping\CostsRepository;
+use App\Repositories\Bookkeeping\ProfitsRepository;
+use App\Repositories\OrdersRepository;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +28,10 @@ class SumProfitCommand extends Command
      */
     protected $description = 'Command description';
 
+    private $ordersRepository;
+    private $costsRepository;
+    private $profitsRepository;
+
     /**
      * Create a new command instance.
      *
@@ -33,6 +40,9 @@ class SumProfitCommand extends Command
     public function __construct()
     {
         parent::__construct();
+        $this->ordersRepository = app(OrdersRepository::class);
+        $this->costsRepository = app(CostsRepository::class);
+        $this->profitsRepository = app(ProfitsRepository::class);
     }
 
     /**
@@ -44,78 +54,31 @@ class SumProfitCommand extends Command
     {
         $date_now = Carbon::now()->format('Y-m-d');
 
-        $profit_now = Profit::whereDate('date', $date_now)->get();
-
-        $profit_old = Profit::all();
+        $profit_now = $this->profitsRepository->getRowByDate($date_now);
+        $profit_old = $this->profitsRepository->getAll();
 
         foreach ($profit_old as $item) {
             $created_at = $item->date->format('Y-m-d');
-
-            $item->profit = $ProfitProfit = DB::table('orders')
-                ->whereDate('orders.created_at', $created_at)
-                ->where('status', OrderStatus::STATUS_DONE)
-                ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-                ->select([
-                    'orders.id',
-                    'order_items.order_id',
-                    'order_items.profit',
-                ])
-                ->sum('order_items.profit');
-
-            $item->cost = $ProfitCost = Costs::whereDate('date', $created_at)
-                ->select('total')
-                ->sum('total');
-
-            $item->marginality = $ProfitProfit - $ProfitCost;
-
-            $item->turnover = $ProfitProfit + $ProfitCost;
-
+            $item->profit = $this->ordersRepository->sumDoneOrdersTotalPriceByDate($created_at);
+            $item->cost = $this->costsRepository->sumCostsByDate($created_at);
+            $item->marginality = $item->profit - $item->cost;
+            $item->turnover = $item->profit + $item->cost;
             $item->update();
         }
 
-        if (count($profit_now)) {
-            foreach ($profit_now as $item) {
-
-                $item->profit = $ProfitProfit =
-                    DB::table('orders')
-                        ->whereDate('orders.created_at', $date_now)
-                        ->where('status', OrderStatus::STATUS_DONE)
-                        ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-                        ->select([
-                            'orders.id',
-                            'order_items.order_id',
-                            'order_items.profit',
-                        ])
-                        ->sum('order_items.profit');
-
-                $item->cost = $ProfitCost = Costs::whereDate('date', $date_now)
-                    ->select('total')
-                    ->sum('total');
-
-                $item->marginality = $ProfitProfit - $ProfitCost;
-                $item->turnover = $ProfitProfit + $ProfitCost;
-                $item->update();
-            }
+        if ($profit_now) {
+            $profit_now->profit = $this->ordersRepository->sumDoneOrdersTotalPriceByDate($date_now);
+            $profit_now->cost = $this->costsRepository->sumCostsByDate($date_now);
+            $profit_now->marginality = $profit_now->profit - $profit_now->cost;
+            $profit_now->turnover = $profit_now->profit + $profit_now->cost;
+            $profit_now->update();
         } else {
-            $profit = new Profit();
+            $profit = $this->profitsRepository->createNewModel();
             $profit->date = $date_now;
-            $profit->cost = $ProfitCost = Costs::whereDate('date', $date_now)
-                ->select('total')
-                ->sum('total');
-
-            $profit->profit = $ProfitProfit = DB::table('orders')
-                ->whereDate('orders.created_at', $date_now)
-                ->where('status', OrderStatus::STATUS_DONE)
-                ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-                ->select([
-                    'orders.id',
-                    'order_items.order_id',
-                    'order_items.profit',
-                ])
-                ->sum('order_items.profit');
-
-            $profit->marginality = $ProfitProfit - $ProfitCost;
-            $profit->turnover = $ProfitProfit + $ProfitCost;
+            $profit->cost = $this->costsRepository->sumCostsByDate($date_now);
+            $profit->profit = $this->ordersRepository->sumDoneOrdersTotalPriceByDate($date_now);
+            $profit->marginality = $profit->profit - $profit->cost;
+            $profit->turnover = $profit->profit + $profit->cost;
             $profit->save();;
         }
     }

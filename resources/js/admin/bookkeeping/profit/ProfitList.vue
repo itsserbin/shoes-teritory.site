@@ -6,15 +6,69 @@
                 <div class="col-12 col-md-6">
                     <h2>Прибыль</h2>
                 </div>
-
-                <div class="col-12 col-md-6 text-end">
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-6">
                     <button class="btn btn-danger"
                             @click="createProfit"
                     >
                         Добавить день
                     </button>
                 </div>
+                <div class="col-12 col-md-6">
+                    <form @submit.prevent="searchByRange" class="d-flex">
+                        <VueDatePicker
+                            v-model="date"
+                            format="YYYY-MM-DD"
+                            placeholder="Введите дату"
+                            range/>
+
+                        <button type="submit" class="btn btn-danger">Поиск</button>
+                    </form>
+                </div>
             </div>
+            <hr>
+            <div class="row">
+                <div class="col-12 col-md-3 my-2">
+                    <button class="btn btn-outline-danger w-100 h-100"
+                            @click="getProfits"
+                            :class="{'active': activeLastDays === 'all'}"
+                    >За все время
+                    </button>
+                </div>
+                <div class="col-12 col-md-3 my-2">
+                    <button class="btn btn-outline-danger w-100 h-100"
+                            @click="getProfitsByLast('week')"
+                            :class="{'active': activeLastDays === 'week'}"
+                    >Текущая неделя
+                    </button>
+                </div>
+                <div class="col-12 col-md-3 my-2">
+                    <button class="btn btn-outline-danger w-100 h-100"
+                            @click="getProfitsByLast('two-week')"
+                            :class="{'active': activeLastDays === 'two-week'}"
+                    >Текущая и прошлая недели
+                    </button>
+                </div>
+                <div class="col-12 col-md-3 my-2">
+                    <button class="btn btn-outline-danger w-100 h-100"
+                            @click="getProfitsByLast('one-month')"
+                            :class="{'active': activeLastDays === 'one-month'}"
+                    >Текущий месяц
+                    </button>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-12 col-md-3 my-2" v-for="(item,i) in generalStat" :key="i">
+                    <bookkeeping-statistics-card
+                        type="money"
+                        :title="i"
+                        :value="item"
+                    ></bookkeeping-statistics-card>
+                </div>
+            </div>
+            <hr>
             <div class="row">
                 <div class="table-responsive">
                     <table class="table">
@@ -80,10 +134,10 @@
                         <tbody class="text-center">
                         <tr v-for="profit in profits" :key="profit.id" style="vertical-align: middle;">
                             <td>{{ dateFormat(profit.date) }}</td>
-                            <td>{{ profit.cost | formatMoney}} грн.</td>
-                            <td>{{ profit.profit | formatMoney}} грн.</td>
-                            <td>{{ profit.marginality | formatMoney}} грн.</td>
-                            <td>{{ profit.turnover | formatMoney}} грн.</td>
+                            <td>{{ profit.cost | formatMoney }} грн.</td>
+                            <td>{{ profit.profit | formatMoney }} грн.</td>
+                            <td>{{ profit.marginality | formatMoney }} грн.</td>
+                            <td>{{ profit.turnover | formatMoney }} грн.</td>
                         </tr>
                         </tbody>
                         <tfoot v-if="profits.length !== 0">
@@ -110,6 +164,7 @@
 export default {
     data() {
         return {
+            generalStat: {},
             checkedItems: [],
             checkedAll: false,
             checkedItemsAction: null,
@@ -120,6 +175,9 @@ export default {
             total: 1,
             endpoint: '/api/bookkeeping/profits?page=',
             isLoading: true,
+            date: new Date(),
+            currentDate: new Date(),
+            activeLastDays: null,
         }
     },
     mounted() {
@@ -129,11 +187,46 @@ export default {
         destroyMassAction: String,
     },
     methods: {
+        getProfitsByLast(value) {
+            this.isLoading = true;
+            this.date = new Date();
+            axios.get('/api/bookkeeping/profits', {
+                params: {
+                    last: value,
+                }
+            })
+                .then(({data}) => {
+                    this.getProfitsListSuccessResponse(data);
+                    this.activeLastDays = value;
+                    this.endpoint = '/api/bookkeeping/profits?last=' + value + '&page=';
+                })
+                .catch((response) => this.getProfitsListErrorResponse(response));
+        },
+        searchByRange() {
+            this.isLoading = true;
+            axios.get('/api/bookkeeping/profits', {
+                params: {
+                    date_start: this.date.start,
+                    date_end: this.date.end
+                }
+            })
+                .then(({data}) => {
+                    this.getProfitsListSuccessResponse(data);
+                    this.activeLastDays = null;
+                    this.endpoint = '/api/bookkeeping/profits?date_start=' + this.date.start + '&date_end=' + this.date.end + '&page=';
+                })
+                .catch((response) => this.getProfitsListErrorResponse(response));
+        },
         getProfits() {
             this.search = null;
             this.isLoading = true;
+            this.date = new Date();
             axios.get('/api/bookkeeping/profits')
-                .then(({data}) => this.getProfitsListSuccessResponse(data))
+                .then(({data}) => {
+                    this.getProfitsListSuccessResponse(data);
+                    this.activeLastDays = 'all';
+                    this.endpoint = '/api/bookkeeping/profits?page=';
+                })
                 .catch((response) => this.getProfitsListErrorResponse(response));
         },
         sort(value, param) {
@@ -160,6 +253,7 @@ export default {
             this.total = data.result.total;
             this.currentPage = data.result.current_page;
             this.perPage = data.result.per_page;
+            this.generalStat = data.generalStat;
             this.isLoading = false;
         },
         getProfitsListErrorResponse(response) {

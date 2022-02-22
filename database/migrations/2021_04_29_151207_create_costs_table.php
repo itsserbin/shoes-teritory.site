@@ -15,13 +15,17 @@ class CreateCostsTable extends Migration
     {
         Schema::create('costs', function (Blueprint $table) {
             $table->id();
-            $table->text('name');
             $table->text('quantity');
             $table->text('sum');
             $table->text('total');
             $table->text('comment')->nullable();
             $table->foreignId('user_id')->nullable()->references('id')->on('users')->onDelete('set null');
             $table->date('date')->nullable();
+            $table->foreignId('cost_category_id')
+                ->nullable()
+                ->references('id')
+                ->on('cost_categories')
+                ->onDelete('set null');
             $table->timestamps();
         });
     }

@@ -113,6 +113,7 @@ class OrdersRepository extends CoreRepository
      * @param $postalOffice
      * @param $client_id
      * @param $promoCode
+     * @param $comment
      * @param $items
      * @return mixed
      */
@@ -565,5 +566,13 @@ class OrdersRepository extends CoreRepository
             return $this->model::where('sale_of_air', 1)
                 ->sum('sale_of_air_price');
         }
+    }
+
+    public function sumDoneOrdersTotalPriceByDate($date)
+    {
+        return $this->model::whereDate('created_at', $date)
+            ->where('status', OrderStatus::STATUS_DONE)
+            ->select('total_price')
+            ->sum('total_price');
     }
 }

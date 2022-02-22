@@ -26,24 +26,6 @@ class CostsRepository extends CoreRepository
         return $this->model::find($id);
     }
 
-//    public function getAllWithPaginate(string $sort = 'id', string $param = 'desc', int $perPage = 15)
-//    {
-//        return $this
-//            ->model::select(
-//                'id',
-//                'date',
-//                'cost_category_id',
-//                'quantity',
-//                'sum',
-//                'total',
-//                'comment',
-//                'user_id',
-//            )
-//            ->with('user', 'category')
-//            ->orderBy($sort, $param)
-//            ->paginate($perPage);
-//    }
-
     public function getAllWithPaginate($date_start = null, $date_end = null, $last = null, $perPage = 15, string $sort = 'date', string $param = 'desc',)
     {
         if ($date_start && $date_end) {
@@ -146,5 +128,10 @@ class CostsRepository extends CoreRepository
         return $this->model::destroy($id);
     }
 
-
+    public function sumCostsByDate($date)
+    {
+        return $this->model::whereDate('date', $date)
+            ->select('total')
+            ->sum('total');
+    }
 }

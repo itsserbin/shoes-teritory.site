@@ -40,28 +40,28 @@
                 <div class="col-12 col-md-3">
                     <button class="btn btn-outline-danger my-2 w-100"
                             @click="getCosts"
-                            :class="{'active': activeLastDays == 'all'}"
+                            :class="{'active': activeLastDays === 'all'}"
                     >За все время
                     </button>
                 </div>
                 <div class="col-12 col-md-3">
                     <button class="btn btn-outline-danger my-2 w-100"
                             @click="getCostsByLast('week')"
-                            :class="{'active': activeLastDays == 'week'}"
+                            :class="{'active': activeLastDays === 'week'}"
                     >Текущая неделя
                     </button>
                 </div>
                 <div class="col-12 col-md-3">
                     <button class="btn btn-outline-danger my-2 w-100"
                             @click="getCostsByLast('two-week')"
-                            :class="{'active': activeLastDays == 'two-week'}"
+                            :class="{'active': activeLastDays === 'two-week'}"
                     >Текущая и прошлая недели
                     </button>
                 </div>
                 <div class="col-12 col-md-3">
                     <button class="btn btn-outline-danger my-2 w-100"
                             @click="getCostsByLast('one-month')"
-                            :class="{'active': activeLastDays == 'one-month'}"
+                            :class="{'active': activeLastDays === 'one-month'}"
                     >Текущий месяц
                     </button>
                 </div>
@@ -69,12 +69,11 @@
             <hr>
             <div class="row">
                 <div class="col-12 col-md-2" v-for="(item,i) in generalStat" :key="i">
-                    <div class="card h-100">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">{{ i }}</h5>
-                            <p class="card-text">{{ item | formatMoney }} грн.</p>
-                        </div>
-                    </div>
+                    <bookkeeping-statistics-card
+                        type="money"
+                        :title="i"
+                        :value="item"
+                    ></bookkeeping-statistics-card>
                 </div>
             </div>
             <hr>
