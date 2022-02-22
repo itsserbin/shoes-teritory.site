@@ -16,6 +16,7 @@ class Costs extends Model
         'user_id',
         'comment',
         'date',
+        'cost_category_id',
     ];
 
     protected $dates = [

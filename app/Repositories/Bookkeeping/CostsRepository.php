@@ -78,28 +78,35 @@ class CostsRepository extends CoreRepository
 
     }
 
-    public function generalStatistic($date_start = null, $date_end = null)
+    public function generalStatistic($date_start = null, $date_end = null, $last = null)
     {
         $costCategoriesRepository = new CostCategoriesRepository();
         $list = $costCategoriesRepository->list();
         if ($date_start && $date_end) {
-            $model = $this->model::whereBetween('date', [$date_start, $date_end])
-                ->get();
+            $model = $this->model::whereBetween('date', [$date_start, $date_end])->get();
+        } elseif ($last) {
+            if ($last == 'week') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
+            } elseif ($last == 'two-week') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
+            } elseif ($last == 'one-month') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->startOfMonth(), Carbon::now()->endOfWeek()])->get();
+            } else {
+                $model = $this->model;
+            }
         } else {
             $model = $this->model::all();
         }
         $result = [];
+        $result['Всего'] = $model->sum('total');
+
         foreach ($model as $item) {
-            if (!isset($result['Всего'])) {
-                $result['Всего'] = 0;
-            }
-            $result['Всего'] += $item->total;
             foreach ($list as $listItem) {
                 if ($item->cost_category_id == $listItem->id) {
-                    if (!isset($result[$listItem->title])) {
-                        $result[$listItem->title] = 0;
-                    }
-                    $result[$listItem->title] += $item->total;
+                    $result[$listItem->title] = $model->where('cost_category_id', $listItem->id)->sum('total');
                 }
             }
         }
