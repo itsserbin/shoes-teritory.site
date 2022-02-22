@@ -42,8 +42,8 @@ class Cart extends Model
      *
      * @return HasMany
      */
-    public function items()
+    public function items(): HasMany
     {
-        return $this->hasMany('App\Models\CartItems', 'cart_id', 'id')->with('product');
+        return $this->hasMany(CartItems::class, 'cart_id', 'id')->with('product');
     }
 }

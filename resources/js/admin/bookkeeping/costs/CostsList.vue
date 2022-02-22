@@ -1,20 +1,83 @@
 <template>
     <div>
         <loader v-if="isLoading"></loader>
-        <div class="container" v-if="!isLoading">
+        <div v-if="!isLoading">
             <div class="row mb-3">
-                <div class="col-12 col-md-6">
+                <div class="col-12">
                     <h2>Расходы</h2>
                 </div>
+            </div>
+            <div class="row ">
+                <div class="col-12 col-md-2">
+                    <a href="/admin/bookkeeping/costs/create" class="mb-3">
+                        <button class="btn btn-danger my-2 w-100"
+                        >Добавить расход
+                        </button>
+                    </a>
+                </div>
 
-                <div class="col-12 col-md-6 text-end">
-                    <button class="btn btn-danger"
-                            @click="createCost"
-                    >
-                        Добавить расход
+                <div class="col-12 col-md-2">
+                    <a href="/admin/bookkeeping/costs/categories" class="mb-3">
+                        <button class="btn btn-danger my-2 w-100"
+                        >Редактировать категории
+                        </button>
+                    </a>
+                </div>
+                <div class="col-12 col-md-8 my-auto">
+                    <form @submit.prevent="searchByRange" class="d-flex">
+                        <VueDatePicker
+                            v-model="date"
+                            format="YYYY-MM-DD"
+                            placeholder="Введите дату"
+                            range/>
+
+                        <button type="submit" class="btn btn-danger">Поиск</button>
+                    </form>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-12 col-md-3">
+                    <button class="btn btn-outline-danger my-2 w-100"
+                            @click="getCosts"
+                            :class="{'active': activeLastDays == 'all'}"
+                    >За все время
+                    </button>
+                </div>
+                <div class="col-12 col-md-3">
+                    <button class="btn btn-outline-danger my-2 w-100"
+                            @click="getCostsByLast('week')"
+                            :class="{'active': activeLastDays == 'week'}"
+                    >Текущая неделя
+                    </button>
+                </div>
+                <div class="col-12 col-md-3">
+                    <button class="btn btn-outline-danger my-2 w-100"
+                            @click="getCostsByLast('two-week')"
+                            :class="{'active': activeLastDays == 'two-week'}"
+                    >Текущая и прошлая недели
+                    </button>
+                </div>
+                <div class="col-12 col-md-3">
+                    <button class="btn btn-outline-danger my-2 w-100"
+                            @click="getCostsByLast('one-month')"
+                            :class="{'active': activeLastDays == 'one-month'}"
+                    >Текущий месяц
                     </button>
                 </div>
             </div>
+            <hr>
+            <div class="row">
+                <div class="col-12 col-md-2" v-for="(item,i) in generalStat" :key="i">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">{{ i }}</h5>
+                            <p class="card-text">{{ item | formatMoney }} грн.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
             <div class="row">
                 <div class="table-responsive">
                     <table class="table">
@@ -31,17 +94,7 @@
                                     </a>
                                 </div>
                             </th>
-                            <th>
-                                <div class="d-flex align-items-center justify-content-center">
-                                    <div class="mr-1">Категория</div>
-                                    <a href="javascript:" class="text-dark" @click="sort('name','asc')">
-                                        <arrow-up-icon></arrow-up-icon>
-                                    </a>
-                                    <a href="javascript:" class="text-dark" @click="sort('name','desc')">
-                                        <arrow-down-icon></arrow-down-icon>
-                                    </a>
-                                </div>
-                            </th>
+                            <th>Категория</th>
                             <th>Кол-во</th>
                             <th>Сумма</th>
                             <th>Итого</th>
@@ -57,7 +110,7 @@
                                     <div class="h2">Расходы не добавлены</div>
                                     <button
                                         @click="createCost"
-                                        class="btn btn-primary w-25 m-auto"
+                                        class="btn btn-danger w-25 m-auto"
                                     >
                                         Добавить расход
                                     </button>
@@ -66,8 +119,12 @@
                         </tr>
                         <tr v-for="cost in costs" :key="cost.id" style="vertical-align: middle;">
                             <td>{{ dateFormat(cost.date) }}</td>
-                            <td>{{ cost.name }}</td>
-                            <td>{{ cost.quantity }}</td>
+                            <td>
+                                <a :href="'/admin/bookkeeping/costs/edit/' + cost.id">
+                                    {{ cost.category.title }}
+                                </a>
+                            </td>
+                            <td>{{ cost.quantity }} шт.</td>
                             <td>{{ cost.sum | formatMoney }} грн.</td>
                             <td>{{ cost.total | formatMoney }} грн.</td>
                             <td>{{ cost.user ? cost.user.name : '-' }}</td>
@@ -106,6 +163,7 @@
 export default {
     data() {
         return {
+            generalStat: {},
             checkedItems: [],
             checkedAll: false,
             checkedItemsAction: null,
@@ -116,6 +174,10 @@ export default {
             total: 1,
             endpoint: '/api/bookkeeping/costs?page=',
             isLoading: true,
+            date: new Date(),
+            currentDate: new Date(),
+            activeLastDays: 'all',
+
         }
     },
     mounted() {
@@ -125,11 +187,46 @@ export default {
         destroyMassAction: String,
     },
     methods: {
+        getCostsByLast(value) {
+            this.isLoading = true;
+            this.date = new Date();
+            axios.get('/api/bookkeeping/costs', {
+                params: {
+                    last: value,
+                }
+            })
+                .then(({data}) => {
+                    this.getCostsListSuccessResponse(data);
+                    this.activeLastDays = value;
+                    this.endpoint = '/api/bookkeeping/costs?last=' + value + '&page=';
+                })
+                .catch((response) => this.getCostsListErrorResponse(response));
+        },
+        searchByRange() {
+            this.isLoading = true;
+            axios.get('/api/bookkeeping/costs', {
+                params: {
+                    date_start: this.date.start,
+                    date_end: this.date.end
+                }
+            })
+                .then(({data}) => {
+                    this.getCostsListSuccessResponse(data);
+                    this.activeLastDays = null;
+                    this.endpoint = '/api/bookkeeping/costs?date_start=' + this.date.start + '&date_end=' + this.date.end + '&page=';
+                })
+                .catch((response) => this.getCostsListErrorResponse(response));
+        },
         getCosts() {
             this.search = null;
             this.isLoading = true;
+            this.date = new Date();
             axios.get('/api/bookkeeping/costs')
-                .then(({data}) => this.getCostsListSuccessResponse(data))
+                .then(({data}) => {
+                    this.activeLastDays = 'all';
+                    this.getCostsListSuccessResponse(data);
+                    this.endpoint = '/api/bookkeeping/costs?page=';
+                })
                 .catch((response) => this.getCostsListErrorResponse(response));
         },
         sort(value, param) {
@@ -156,6 +253,7 @@ export default {
             this.total = data.result.total;
             this.currentPage = data.result.current_page;
             this.perPage = data.result.per_page;
+            this.generalStat = data.generalStat;
             this.isLoading = false;
         },
         getCostsListErrorResponse(response) {

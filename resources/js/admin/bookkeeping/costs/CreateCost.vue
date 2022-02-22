@@ -5,13 +5,13 @@
             <div class="row">
                 <div class="col-12 col-md-6">
                     <div class="form-group my-3">
-                        <label for="name">Название</label>
-                        <input type="text"
-                               class="form-control"
-                               id="name"
-                               placeholder="Название траты"
-                               v-model="costItem.name"
-                        >
+                        <label>Категория</label>
+                        <model-list-select :list="costCategories"
+                                           v-model="costItem.cost_category_id"
+                                           option-value="id"
+                                           option-text="title"
+                                           placeholder="Выберите категорию"
+                        ></model-list-select>
                     </div>
                 </div>
                 <div class="col-12 col-md-6">
@@ -25,11 +25,12 @@
                     </div>
                 </div>
             </div>
+            <hr>
             <div class="row">
                 <div class="col-12 col-md-4">
                     <div class="form-group my-3">
                         <label for="quantity" class="w-100">Количество</label>
-                        <div class="btn-group" >
+                        <div class="btn-group">
                             <input type="number"
                                    class="form-control"
                                    id="quantity"
@@ -73,7 +74,7 @@
                     </div>
                 </div>
             </div>
-
+            <hr>
             <div class="row">
                 <div class="col-12">
                     <div class="form-group my-3">
@@ -107,6 +108,7 @@ export default {
                 comment: null,
                 total: null,
             },
+            costCategories: [],
             errors: [],
             isLoading: false,
         }
@@ -115,6 +117,11 @@ export default {
         totalSum() {
             return this.costItem.total = this.costItem.sum * this.costItem.quantity;
         }
+    },
+    mounted() {
+        axios.get('/api/bookkeeping/costs/categories/list')
+            .then(({data}) => this.costCategories = data.result)
+            .catch(({response}) => console.log(response));
     },
     methods: {
         createCost() {

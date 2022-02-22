@@ -9,6 +9,7 @@
         "ext-curl": "*",
         "ext-json": "*",
         "daaner/turbosms": "^1.11",
+        "davejamesmiller/laravel-breadcrumbs": "5.x",
         "doctrine/dbal": "^3.1",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",

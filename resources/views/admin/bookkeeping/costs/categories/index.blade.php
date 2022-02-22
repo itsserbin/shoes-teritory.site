@@ -1,18 +1,20 @@
 @extends('layouts.app')
 
-@section('title','Добавить расход')
-@section('header','Добавить расход')
+@section('title','Категории расходов')
+@section('header','Категории расходов')
 
 @section('content')
     <div class="container">
-        {{ Breadcrumbs::render('bookkeeping.costs.create') }}
+
+        {{ Breadcrumbs::render('bookkeeping.costs.categories') }}
         <hr>
-        <div class="row">
+
+        <div class="row ">
             <div class="col-12 col-md-2">
                 @include('admin.bookkeeping.partials.sidebar')
             </div>
             <div class="col-12 col-md-10">
-                <bookkeeping-costs-create></bookkeeping-costs-create>
+                <bookkeeping-costs-categories-list></bookkeeping-costs-categories-list>
             </div>
         </div>
     </div>

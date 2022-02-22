@@ -22,15 +22,30 @@ class CostsController extends BaseController
         $sort = $request->get('sort');
         $param = $request->get('param');
 
+        $date_start = $request->get('date_start');
+        $date_end = $request->get('date_end');
+
+        $last = $request->get('last');
+
         if ($sort && $param) {
-            $result = $this->costsRepository->getAllWithPaginate($sort, $param);
+            $result = $this->costsRepository->getAllWithPaginate(null, null, null, null, $sort, $param);
+            $generalStat = $this->costsRepository->generalStatistic();
+        } elseif ($date_start && $date_end) {
+            $result = $this->costsRepository->getAllWithPaginate($date_start, $date_end);
+            $generalStat = $this->costsRepository->generalStatistic($date_start, $date_end);
+        } elseif ($last) {
+            $result = $this->costsRepository->getAllWithPaginate(null, null, $last);
+            $generalStat = $this->costsRepository->generalStatistic(null, null, $last);
         } else {
             $result = $this->costsRepository->getAllWithPaginate();
+            $generalStat = $this->costsRepository->generalStatistic();
         }
+
 
         return $this->returnResponse([
             'success' => true,
             'result' => $result,
+            'generalStat' => $generalStat,
         ]);
     }
 
@@ -47,6 +62,16 @@ class CostsController extends BaseController
     public function edit($id): JsonResponse
     {
         $result = $this->costsRepository->getById($id);
+
+        return $this->returnResponse([
+            'success' => true,
+            'result' => $result,
+        ]);
+    }
+
+    public function destroy($id): JsonResponse
+    {
+        $result = $this->costsRepository->destroy($id);
 
         return $this->returnResponse([
             'success' => true,

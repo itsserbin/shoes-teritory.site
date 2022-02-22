@@ -5,10 +5,7 @@
 
 @section('content')
     <div class="container">
-
-        @component('admin.components.breadcrumbs')
-            @slot('active')Бухгалтерия@endslot
-        @endcomponent
+        {{ Breadcrumbs::render('bookkeeping') }}
         <hr>
 
         <div class="row">

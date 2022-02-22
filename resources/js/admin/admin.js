@@ -5,8 +5,10 @@ import VueSweetalert2 from 'vue-sweetalert2';
 import Pagination from 'vue-pagination-2';
 import VueDatePicker from '@mathieustan/vue-datepicker';
 import Multiselect from 'vue-multiselect'
+import {ModelListSelect} from 'vue-search-select'
 
 Vue.component('multiselect', Multiselect)
+Vue.component('model-list-select', ModelListSelect)
 
 Vue.use(VueSweetalert2);
 Vue.use(VueDatePicker);
@@ -82,6 +84,9 @@ Vue.component('bookkeeping-costs-list', require('./bookkeeping/costs/CostsList')
 Vue.component('bookkeeping-costs-create', require('./bookkeeping/costs/CreateCost').default);
 Vue.component('bookkeeping-costs-edit', require('./bookkeeping/costs/EditCost').default);
 
+Vue.component('bookkeeping-costs-categories-list', require('./bookkeeping/costs/categories/CostCategoriesList').default);
+Vue.component('bookkeeping-costs-categories-create', require('./bookkeeping/costs/categories/CreateCostCategory').default);
+Vue.component('bookkeeping-costs-categories-edit', require('./bookkeeping/costs/categories/EditCostCategory').default);
 
 Vue.component('bookkeeping-daily-statistics', require('./bookkeeping/DailyStatistics').default);
 Vue.component('supplier-payments', require('./bookkeeping/SupplierPaymentsList').default);

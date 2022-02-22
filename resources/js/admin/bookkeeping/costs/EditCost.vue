@@ -5,13 +5,13 @@
             <div class="row">
                 <div class="col-12 col-md-6">
                     <div class="form-group my-3">
-                        <label for="name">Название</label>
-                        <input type="text"
-                               class="form-control"
-                               id="name"
-                               placeholder="Название траты"
-                               v-model="costItem.name"
-                        >
+                        <label>Категория</label>
+                        <model-list-select :list="costCategories"
+                                           v-model="costItem.cost_category_id"
+                                           option-value="id"
+                                           option-text="title"
+                                           placeholder="Выберите категорию"
+                        ></model-list-select>
                     </div>
                 </div>
                 <div class="col-12 col-md-6">
@@ -25,6 +25,7 @@
                     </div>
                 </div>
             </div>
+            <hr>
             <div class="row">
                 <div class="col-12 col-md-4">
                     <div class="form-group my-3">
@@ -73,7 +74,7 @@
                     </div>
                 </div>
             </div>
-
+            <hr>
             <div class="row">
                 <div class="col-12">
                     <div class="form-group my-3">
@@ -100,7 +101,7 @@ export default {
     data() {
         return {
             costItem: {
-                name: null,
+                cost_category_id: null,
                 date: null,
                 sum: null,
                 quantity: null,
@@ -108,6 +109,7 @@ export default {
                 total: null,
             },
             errors: [],
+            costCategories: [],
             isLoading: false,
         }
     },
@@ -129,7 +131,11 @@ export default {
             .catch(({response}) => {
                 console.log(response);
                 this.isLoading = false;
-            })
+            });
+
+        axios.get('/api/bookkeeping/costs/categories/list')
+            .then(({data}) => this.costCategories = data.result)
+            .catch(({response}) => console.log(response));
     },
     methods: {
         updateCost() {
@@ -151,3 +157,10 @@ export default {
     }
 }
 </script>
+
+<style>
+.vd-wrapper{
+    border-radius: 0.25rem !important;
+    border: 1px solid #dee2e6 !important;
+}
+</style>

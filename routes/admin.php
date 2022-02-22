@@ -124,8 +124,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
     });
 
     Route::group(['prefix' => '/bookkeeping',], function () {
-        Route::resource('all', BookkeepingController::class)
-            ->names('admin.bookkeeping');
+        Route::get('/', [BookkeepingController::class, 'index'])
+            ->name('admin.bookkeeping.index');
 
         Route::prefix('costs')
             ->middleware('role:administrator')
@@ -138,6 +138,17 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
 
                 Route::get('create', [CostsController::class, 'create'])
                     ->name('admin.bookkeeping.costs.create');
+
+                Route::prefix('categories')->group(function () {
+                    Route::get('/', [\App\Http\Controllers\Admin\Bookkeeping\Costs\CategoriesController::class, 'index'])
+                        ->name('admin.bookkeeping.costs.categories.index');
+
+                    Route::get('create', [\App\Http\Controllers\Admin\Bookkeeping\Costs\CategoriesController::class, 'create'])
+                        ->name('admin.bookkeeping.costs.categories.create');
+
+                    Route::get('edit/{id}', [\App\Http\Controllers\Admin\Bookkeeping\Costs\CategoriesController::class, 'edit'])
+                        ->name('admin.bookkeeping.costs.categories.edit');
+                });
             });
 
         Route::prefix('profits')

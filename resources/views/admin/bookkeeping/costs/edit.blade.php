@@ -5,6 +5,8 @@
 
 @section('content')
     <div class="container">
+        {{ Breadcrumbs::render('bookkeeping.costs.edit') }}
+        <hr>
         <div class="row">
             <div class="col-12 col-md-2">
                 @include('admin.bookkeeping.partials.sidebar')

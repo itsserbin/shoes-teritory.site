@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Api\AdminController;
 use App\Http\Controllers\Admin\Api\BannersController;
+use App\Http\Controllers\Admin\Api\Bookkeeping\CostCategoriesController;
 use App\Http\Controllers\Admin\Api\Bookkeeping\CostsController;
 use App\Http\Controllers\Admin\Api\Bookkeeping\DailyStatisticsController;
 use App\Http\Controllers\Admin\Api\Bookkeeping\ManagersSalariesController;
@@ -313,6 +314,29 @@ Route::middleware('auth:api')->group(function () {
 
             Route::put('update/{id}', [CostsController::class, 'update'])
                 ->name('api.bookkeeping.costs.update');
+
+            Route::delete('destroy/{id}', [CostsController::class, 'destroy'])
+                ->name('api.bookkeeping.costs.destroy');
+
+            Route::prefix('categories')->group(function () {
+                Route::get('/', [CostCategoriesController::class, 'index'])
+                    ->name('api.bookkeeping.costs.categories.index');
+
+                Route::post('create', [CostCategoriesController::class, 'create'])
+                    ->name('api.bookkeeping.costs.categories.create');
+
+                Route::get('edit/{id}', [CostCategoriesController::class, 'edit'])
+                    ->name('api.bookkeeping.costs.categories.edit');
+
+                Route::put('update/{id}', [CostCategoriesController::class, 'update'])
+                    ->name('api.bookkeeping.costs.categories.update');
+
+                Route::delete('destroy/{id}', [CostCategoriesController::class, 'destroy'])
+                    ->name('api.bookkeeping.costs.categories.destroy');
+
+                Route::get('list', [CostCategoriesController::class, 'list'])
+                    ->name('api.bookkeeping.costs.categories.list');
+            });
         });
 
         Route::prefix('profits')->group(function () {

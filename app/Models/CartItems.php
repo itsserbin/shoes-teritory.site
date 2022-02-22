@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -59,9 +58,9 @@ class CartItems extends Model
      *
      * @return HasOne
      */
-    public function cart()
+    public function cart(): HasOne
     {
-        return $this->hasOne('App\Models\Cart', 'id', 'cart_id');
+        return $this->hasOne(Cart::class, 'id', 'cart_id');
     }
 
     /**
@@ -69,8 +68,8 @@ class CartItems extends Model
      *
      * @return HasOne
      */
-    public function product()
+    public function product(): HasOne
     {
-        return $this->hasOne('App\Models\Products', 'id', 'product_id');
+        return $this->hasOne(Products::class, 'id', 'product_id');
     }
 }
