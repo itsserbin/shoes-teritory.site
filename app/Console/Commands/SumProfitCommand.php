@@ -2,15 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Bookkeeping\Costs\Costs;
-use App\Models\Bookkeeping\Profit;
-use App\Models\Enum\OrderStatus;
 use App\Repositories\Bookkeeping\CostsRepository;
 use App\Repositories\Bookkeeping\ProfitsRepository;
 use App\Repositories\OrdersRepository;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 
 class SumProfitCommand extends Command
 {
@@ -52,13 +48,13 @@ class SumProfitCommand extends Command
      */
     public function handle()
     {
-        $date_now = Carbon::now()->format('Y-m-d');
+        $date_now = Carbon::now()->toDateString();
 
         $profit_now = $this->profitsRepository->getRowByDate($date_now);
         $profit_old = $this->profitsRepository->getAll();
 
         foreach ($profit_old as $item) {
-            $created_at = $item->date->format('Y-m-d');
+            $created_at = $item->date->toDateString();
             $item->profit = $this->ordersRepository->sumDoneOrdersTotalPriceByDate($created_at);
             $item->cost = $this->costsRepository->sumCostsByDate($created_at);
             $item->marginality = $item->profit - $item->cost;

@@ -571,8 +571,8 @@ class OrdersRepository extends CoreRepository
     public function sumDoneOrdersTotalPriceByDate($date)
     {
         return $this->model::whereDate('created_at', $date)
+            ->select('status','total_price')
             ->where('status', OrderStatus::STATUS_DONE)
-            ->select('total_price')
             ->sum('total_price');
     }
 }
