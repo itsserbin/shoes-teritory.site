@@ -100,6 +100,28 @@ class ProfitsRepository extends CoreRepository
         return $result;
     }
 
+    public function getAll($date_start = null, $date_end = null, $last = null)
+    {
+        if ($date_start && $date_end) {
+            return $this->model::whereBetween('date', [$date_start, $date_end])->get();
+        } elseif ($last) {
+            if ($last == 'week') {
+                return $this->model::whereBetween('date',
+                    [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
+            } elseif ($last == 'two-week') {
+                return $this->model::whereBetween('date',
+                    [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
+            } elseif ($last == 'one-month') {
+                return $this->model::whereBetween('date',
+                    [Carbon::now()->startOfMonth(), Carbon::now()->endOfWeek()])->get();
+            } else {
+                return $this->model::all();
+            }
+        } else {
+            return $this->model::all();
+        }
+    }
+
     public function create($data)
     {
         $model = new $this->model;
@@ -117,8 +139,4 @@ class ProfitsRepository extends CoreRepository
         return new $this->model;
     }
 
-    public function getAll()
-    {
-        return $this->model::all();
-    }
 }

@@ -30,21 +30,26 @@ class ProfitsController extends Controller
         if ($sort && $param) {
             $result = $this->profitsRepository->getAllWithPaginate(null, null, null, null, $sort, $param);
             $generalStat = $this->profitsRepository->generalStatistic();
+            $all = $this->profitsRepository->getAll();
         } elseif ($date_start && $date_end) {
             $result = $this->profitsRepository->getAllWithPaginate($date_start, $date_end);
             $generalStat = $this->profitsRepository->generalStatistic($date_start, $date_end);
+            $all = $this->profitsRepository->getAll($date_start, $date_end);
         } elseif ($last) {
             $result = $this->profitsRepository->getAllWithPaginate(null, null, $last);
             $generalStat = $this->profitsRepository->generalStatistic(null, null, $last);
+            $all = $this->profitsRepository->getAll(null, null, $last);
         } else {
             $result = $this->profitsRepository->getAllWithPaginate();
             $generalStat = $this->profitsRepository->generalStatistic();
+            $all = $this->profitsRepository->getAll();
         }
 
         return $this->returnResponse([
             'success' => true,
             'result' => $result,
             'generalStat' => $generalStat,
+            'all' => $all,
         ]);
     }
 

@@ -30,15 +30,19 @@ class CostsController extends BaseController
         if ($sort && $param) {
             $result = $this->costsRepository->getAllWithPaginate(null, null, null, null, $sort, $param);
             $generalStat = $this->costsRepository->generalStatistic();
+            $all = $this->costsRepository->getAllForChart();
         } elseif ($date_start && $date_end) {
             $result = $this->costsRepository->getAllWithPaginate($date_start, $date_end);
             $generalStat = $this->costsRepository->generalStatistic($date_start, $date_end);
+            $all = $this->costsRepository->getAllForChart($date_start, $date_end);
         } elseif ($last) {
             $result = $this->costsRepository->getAllWithPaginate(null, null, $last);
             $generalStat = $this->costsRepository->generalStatistic(null, null, $last);
+            $all = $this->costsRepository->getAllForChart(null, null, $last);
         } else {
             $result = $this->costsRepository->getAllWithPaginate();
             $generalStat = $this->costsRepository->generalStatistic();
+            $all = $this->costsRepository->getAllForChart();
         }
 
 
@@ -46,6 +50,7 @@ class CostsController extends BaseController
             'success' => true,
             'result' => $result,
             'generalStat' => $generalStat,
+            'all' => $all,
         ]);
     }
 

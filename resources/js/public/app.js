@@ -89,6 +89,7 @@ const app = new Vue({
             cityName: null,
             countryName: null,
             zipCode: null,
+            userAgent: null,
         }
     },
     mounted() {

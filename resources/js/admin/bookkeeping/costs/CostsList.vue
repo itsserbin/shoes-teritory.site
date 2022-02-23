@@ -67,8 +67,12 @@
                 </div>
             </div>
             <hr>
+            <div>
+                <apexchart type="area" height="350" :options="options" :series="series"></apexchart>
+            </div>
+            <hr>
             <div class="row">
-                <div class="col-12 col-md-2" v-for="(item,i) in generalStat" :key="i">
+                <div class="col-12 col-md-2 my-2" v-for="(item,i) in generalStat" :key="i">
                     <bookkeeping-statistics-card
                         type="money"
                         :title="i"
@@ -119,7 +123,7 @@
                         <tr v-for="cost in costs" :key="cost.id" style="vertical-align: middle;">
                             <td>{{ dateFormat(cost.date) }}</td>
                             <td>
-                                <a :href="'/admin/bookkeeping/costs/edit/' + cost.id">
+                                <a :href="'/admin/bookkeeping/costs/edit/' + cost.id" class="text-danger">
                                     {{ cost.category.title }}
                                 </a>
                             </td>
@@ -129,10 +133,10 @@
                             <td>{{ cost.user ? cost.user.name : '-' }}</td>
                             <td>{{ cost.comment ? cost.comment.substr(0, 30) + '...' : '-' }}</td>
                             <td>
-                                <a :href="'/admin/bookkeeping/costs/edit/' + cost.id">
+                                <a :href="'/admin/bookkeeping/costs/edit/' + cost.id" class="text-danger">
                                     <edit-icon></edit-icon>
                                 </a>
-                                <a href="javascript:" @click="onDelete(cost.id)">
+                                <a href="javascript:" @click="onDelete(cost.id)" class="text-danger">
                                     <destroy-icon></destroy-icon>
                                 </a>
                             </td>
@@ -176,10 +180,38 @@ export default {
             date: new Date(),
             currentDate: new Date(),
             activeLastDays: 'all',
-
+            options: {
+                xaxis: {
+                    categories: [],
+                    labels: {
+                        rotate: -15,
+                        rotateAlways: true,
+                    }
+                },
+                chart: {
+                    type: 'area',
+                    stacked: false,
+                    height: 350,
+                    zoom: {
+                        enabled: false,
+                        autoScaleYaxis: true
+                    },
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'smooth'
+                },
+            },
+            series: [],
+            costCategories: []
         }
     },
     mounted() {
+        axios.get('/api/bookkeeping/costs/categories/list')
+            .then(({data}) => this.costCategories = data.result)
+            .catch(({response}) => console.log(response));
         this.getCosts();
     },
     props: {
@@ -253,7 +285,28 @@ export default {
             this.currentPage = data.result.current_page;
             this.perPage = data.result.per_page;
             this.generalStat = data.generalStat;
-            this.isLoading = false;
+
+            this.series = [
+                {
+                    name: 'Расходы',
+                    data: []
+                }
+            ];
+            this.options.xaxis.categories = [];
+
+            let test = this.series.find((item) => item.name === 'Расходы');
+            const self = this;
+            data.all.forEach((item) => {
+                test.data.push({
+                    y: item.total,
+                    x: self.dateFormat(item.date)
+                })
+            });
+            test.data.sort(function (a, b) {
+                var dateA = new Date(a.x), dateB = new Date(b.x)
+                return dateA - dateB
+            })
+            self.isLoading = false;
         },
         getCostsListErrorResponse(response) {
             console.log(response);

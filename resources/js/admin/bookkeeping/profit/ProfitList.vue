@@ -309,12 +309,12 @@ export default {
             let turnover = this.series.find((item) => item.name === 'Оборот');
 
             const self = this;
-            self.profits.forEach((item) => {
-                costs.data.unshift(item.cost);
-                marginality.data.unshift(item.marginality);
-                profits.data.unshift(item.profit);
-                turnover.data.unshift(item.turnover);
-                self.options.xaxis.categories.unshift(this.dateFormat(item.date));
+            data.all.forEach((item) => {
+                costs.data.push(item.cost);
+                marginality.data.push(item.marginality);
+                profits.data.push(item.profit);
+                turnover.data.push(item.turnover);
+                self.options.xaxis.categories.push(this.dateFormat(item.date));
             })
             self.series = [costs, marginality, profits, turnover];
             self.isLoading = false;

@@ -5,6 +5,7 @@ namespace App\Repositories\Bookkeeping;
 use App\Models\Bookkeeping\Costs\Costs as Model;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CostsRepository extends CoreRepository
 {
@@ -65,22 +66,33 @@ class CostsRepository extends CoreRepository
         $costCategoriesRepository = new CostCategoriesRepository();
         $list = $costCategoriesRepository->list();
         if ($date_start && $date_end) {
-            $model = $this->model::whereBetween('date', [$date_start, $date_end])->get();
+            $model = $this->model::whereBetween('date', [$date_start, $date_end])
+                ->orderBy('date', 'desc')
+                ->get();
         } elseif ($last) {
             if ($last == 'week') {
                 $model = $this->model::whereBetween('date',
-                    [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
+                    [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]
+                )
+                    ->orderBy('date', 'DESC')
+                    ->get();
             } elseif ($last == 'two-week') {
                 $model = $this->model::whereBetween('date',
-                    [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
+                    [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->endOfWeek()]
+                )
+                    ->orderBy('date', 'DESC')
+                    ->get();
             } elseif ($last == 'one-month') {
                 $model = $this->model::whereBetween('date',
-                    [Carbon::now()->startOfMonth(), Carbon::now()->endOfWeek()])->get();
+                    [Carbon::now()->startOfMonth(), Carbon::now()->endOfWeek()]
+                )
+                    ->orderBy('date', 'DESC')
+                    ->get();
             } else {
-                $model = $this->model;
+                $model = $this->model::orderBy('date', 'desc')->get();
             }
         } else {
-            $model = $this->model::all();
+            $model = $this->model::orderBy('date', 'desc')->get();
         }
         $result = [];
         $result['Всего'] = $model->sum('total');
@@ -91,6 +103,34 @@ class CostsRepository extends CoreRepository
                     $result[$listItem->title] = $model->where('cost_category_id', $listItem->id)->sum('total');
                 }
             }
+        }
+        return $result;
+    }
+
+    public function getAllForChart($date_start = null, $date_end = null, $last = null)
+    {
+        if ($date_start && $date_end) {
+            return $this->model::whereBetween('date', [$date_start, $date_end])->get();
+        } elseif ($last) {
+            if ($last == 'week') {
+                return $this->model::whereBetween('date',
+                    [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
+            } elseif ($last == 'two-week') {
+                return $this->model::whereBetween('date',
+                    [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
+            } elseif ($last == 'one-month') {
+                return $this->model::whereBetween('date',
+                    [Carbon::now()->startOfMonth(), Carbon::now()->endOfWeek()])->get();
+            } else {
+                return $this->model::all();
+            }
+        } else {
+            $model = $this->model::all();
+        }
+
+        $result = [];
+        foreach ($model as $item) {
+            array_push($result, ['date' => $item->date, 'total' => $this->model::whereDate('date', $item->date)->sum('total')]);
         }
         return $result;
     }
