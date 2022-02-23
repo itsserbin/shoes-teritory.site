@@ -6,6 +6,12 @@ import Pagination from 'vue-pagination-2';
 import VueDatePicker from '@mathieustan/vue-datepicker';
 import Multiselect from 'vue-multiselect'
 import {ModelListSelect} from 'vue-search-select'
+import VueApexCharts from 'vue-apexcharts'
+
+Vue.use(VueApexCharts)
+
+Vue.component('apexchart', VueApexCharts)
+
 
 Vue.component('multiselect', Multiselect)
 Vue.component('model-list-select', ModelListSelect)
@@ -79,6 +85,7 @@ Vue.component('edit-promo-code', require('./promo-codes/EditPromoCode').default)
 Vue.component('bookkeeping-profits-list', require('./bookkeeping/profit/ProfitList').default);
 Vue.component('bookkeeping-profits-create', require('./bookkeeping/profit/AddDay').default);
 
+// Vue.component('bookkeeping-chart', require('./bookkeeping/components/Chart').default);
 Vue.component('bookkeeping-statistics-card', require('./bookkeeping/components/StatisticsCard').default);
 
 Vue.component('bookkeeping-costs-list', require('./bookkeeping/costs/CostsList').default);

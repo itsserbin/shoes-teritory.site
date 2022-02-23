@@ -59,6 +59,10 @@
                 </div>
             </div>
             <hr>
+            <div>
+                <apexchart type="area" height="350" :options="options" :series="series"></apexchart>
+            </div>
+            <hr>
             <div class="row">
                 <div class="col-12 col-md-3 my-2" v-for="(item,i) in generalStat" :key="i">
                     <bookkeeping-statistics-card
@@ -178,6 +182,32 @@ export default {
             date: new Date(),
             currentDate: new Date(),
             activeLastDays: null,
+
+            options: {
+                xaxis: {
+                    categories: [],
+                    labels: {
+                        rotate: -15,
+                        rotateAlways: true,
+                    }
+                },
+                chart: {
+                    type: 'area',
+                    stacked: false,
+                    height: 350,
+                    zoom: {
+                        enabled: false,
+                        autoScaleYaxis: true
+                    },
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'smooth'
+                },
+            },
+            series: []
         }
     },
     mounted() {
@@ -254,7 +284,40 @@ export default {
             this.currentPage = data.result.current_page;
             this.perPage = data.result.per_page;
             this.generalStat = data.generalStat;
-            this.isLoading = false;
+
+            this.series = [
+                {
+                    name: 'Расходы',
+                    data: []
+                },
+                {
+                    name: 'Прибыль',
+                    data: []
+                },
+                {
+                    name: 'Маржинальность',
+                    data: []
+                },
+                {
+                    name: 'Оборот',
+                    data: []
+                }];
+            this.options.xaxis.categories = [];
+            let costs = this.series.find((item) => item.name === 'Расходы');
+            let profits = this.series.find((item) => item.name === 'Прибыль');
+            let marginality = this.series.find((item) => item.name === 'Маржинальность');
+            let turnover = this.series.find((item) => item.name === 'Оборот');
+
+            const self = this;
+            self.profits.forEach((item) => {
+                costs.data.unshift(item.cost);
+                marginality.data.unshift(item.marginality);
+                profits.data.unshift(item.profit);
+                turnover.data.unshift(item.turnover);
+                self.options.xaxis.categories.unshift(this.dateFormat(item.date));
+            })
+            self.series = [costs, marginality, profits, turnover];
+            self.isLoading = false;
         },
         getProfitsListErrorResponse(response) {
             console.log(response);
