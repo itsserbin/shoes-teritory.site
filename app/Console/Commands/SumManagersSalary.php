@@ -80,7 +80,7 @@ class SumManagersSalary extends Command
 
                     if ($managerSalaryNow->count_applications <= 49) {
                         $managerSalaryNow->sum_price_applications = $pr * 16;
-                        $managerSalaryNow->sum_price_applications += $wpr * 13;
+                        $managerSalaryNow->sum_price_applications += $wpr * 15;
                         $managerSalaryNow->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryNow->date, $manager->id) * 0.2;
                     } elseif ($managerSalaryNow->count_applications > 50) {
                         $managerSalaryNow->sum_price_applications = $pr * 15;
@@ -116,7 +116,7 @@ class SumManagersSalary extends Command
 
                 if ($managerSalaryNow->count_applications <= 49) {
                     $managerSalaryNow->sum_price_applications = $pr * 16;
-                    $managerSalaryNow->sum_price_applications += $wpr * 13;
+                    $managerSalaryNow->sum_price_applications += $wpr * 15;
                     $managerSalaryNow->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryNow->date) * 0.2;
                 } elseif ($managerSalaryNow->count_applications > 50) {
                     $managerSalaryNow->sum_price_applications = $pr * 15;
@@ -153,7 +153,7 @@ class SumManagersSalary extends Command
 
             if ($item->count_applications <= 49) {
                 $item->sum_price_applications = $pr * 16;
-                $item->sum_price_applications += $wpr * 13;
+                $item->sum_price_applications += $wpr * 15;
                 $item->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($dateNow) * 0.2;
             } elseif ($item->count_applications > 50) {
                 $item->sum_price_applications = $pr * 15;
@@ -192,7 +192,7 @@ class SumManagersSalary extends Command
 
                 if ($manager_item->count_applications <= 49) {
                     $manager_item->sum_price_applications = $pr * 16;
-                    $manager_item->sum_price_applications += $wpr * 13;
+                    $manager_item->sum_price_applications += $wpr * 15;
                     $manager_item->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($dateNow, $manager->id) * 0.2;
                 } elseif ($manager_item->count_applications > 50) {
                     $manager_item->sum_price_applications = $pr * 15;
@@ -232,7 +232,7 @@ class SumManagersSalary extends Command
 
                     if ($managerSalaryAll_item->count_applications <= 49) {
                         $managerSalaryAll_item->sum_price_applications = $pr * 16;
-                        $managerSalaryAll_item->sum_price_applications += $wpr * 13;
+                        $managerSalaryAll_item->sum_price_applications += $wpr * 15;
                         $managerSalaryAll_item->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryAll_item->date, $manager->id) * 0.2;
                     } elseif ($managerSalaryAll_item->count_applications > 50) {
                         $managerSalaryAll_item->sum_price_applications = $pr * 15;
@@ -269,7 +269,7 @@ class SumManagersSalary extends Command
 
                     if ($managerSalaryAll_item->count_applications <= 49) {
                         $managerSalaryAll_item->sum_price_applications = $pr * 16;
-                        $managerSalaryAll_item->sum_price_applications += $wpr * 13;
+                        $managerSalaryAll_item->sum_price_applications += $wpr * 15;
                         $managerSalaryAll_item->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryAll_item->date) * 0.2;
                     } elseif ($managerSalaryAll_item->count_applications > 50) {
                         $managerSalaryAll_item->sum_price_applications = $pr * 15;
