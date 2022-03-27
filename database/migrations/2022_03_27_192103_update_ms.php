@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateManagerSalariesTable extends Migration
+class UpdateMs extends Migration
 {
     /**
      * Run the migrations.
@@ -13,6 +13,8 @@ class CreateManagerSalariesTable extends Migration
      */
     public function up()
     {
+        Schema::drop('manager_salaries');
+
         Schema::create('manager_salaries', function (Blueprint $table) {
             $table->id();
             $table->date('date');
@@ -51,6 +53,6 @@ class CreateManagerSalariesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('manager_salaries');
+        //
     }
 }

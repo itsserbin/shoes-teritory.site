@@ -59,44 +59,41 @@ class SumManagersSalary extends Command
 
         if (count($managerSalaryNow)) {
             foreach ($managerSalaryNow as $managerSalaryNowItem) {
-                foreach ($managers as $manager) {
-                    if ($managerSalaryNowItem->manager_id == $manager->id) {
-                        $managerSalaryNowItem->count_applications = $this->ordersRepository->sumOrdersCount($managerSalaryNowItem->date, $manager->id);
-                        $managerSalaryNowItem->count_additional_sales = $this->orderItemsRepository->countAdditionalSales($managerSalaryNowItem->date, $manager->id);
+                if ($managerSalaryNowItem->manager_id) {
+                    $managerSalaryNowItem->count_applications = $this->ordersRepository->sumOrdersCount($managerSalaryNowItem->date, $managerSalaryNowItem->id);
+                    $managerSalaryNowItem->count_additional_sales = $this->orderItemsRepository->countAdditionalSales($managerSalaryNowItem->date, $managerSalaryNowItem->id);
 
-                        $managerSalaryNowItem->in_process_applications = $this->ordersRepository->sumIndefiniteApplications($managerSalaryNowItem->date, $manager->id);
-                        $managerSalaryNowItem->returned_applications = $this->ordersRepository->sumReturnedApplications($managerSalaryNowItem->date, $manager->id);
-                        $managerSalaryNowItem->canceled_applications = $this->ordersRepository->sumCancelOrdersCount($managerSalaryNowItem->date, $manager->id);
-                        $managerSalaryNowItem->done_applications = $this->ordersRepository->sumDoneOrdersCount($managerSalaryNowItem->date, $manager->id);
-                        $managerSalaryNowItem->total_applications = $this->ordersRepository->sumApprovalApplications($managerSalaryNowItem->date, $manager->id);
+                    $managerSalaryNowItem->in_process_applications = $this->ordersRepository->sumIndefiniteApplications($managerSalaryNowItem->date, $managerSalaryNowItem->id);
+                    $managerSalaryNowItem->returned_applications = $this->ordersRepository->sumReturnedApplications($managerSalaryNowItem->date, $managerSalaryNowItem->id);
+                    $managerSalaryNowItem->canceled_applications = $this->ordersRepository->sumCancelOrdersCount($managerSalaryNowItem->date, $managerSalaryNowItem->id);
+                    $managerSalaryNowItem->done_applications = $this->ordersRepository->sumDoneOrdersCount($managerSalaryNowItem->date, $managerSalaryNowItem->id);
+                    $managerSalaryNowItem->total_applications = $this->ordersRepository->sumApprovalApplications($managerSalaryNowItem->date, $managerSalaryNowItem->id);
 
-                        $managerSalaryNowItem->count_sale_of_air = $this->ordersRepository->sumCountSalesOfAirMarginality($managerSalaryNowItem->date, $manager->id);
-                        $managerSalaryNowItem->price_sale_of_air = $this->ordersRepository->sumPriceSalesOfAirMarginality($managerSalaryNowItem->date, $manager->id);
-                        $managerSalaryNowItem->total_sale_of_air = $managerSalaryNowItem->price_sale_of_air * 0.15;
+                    $managerSalaryNowItem->count_sale_of_air = $this->ordersRepository->sumCountSalesOfAirMarginality($managerSalaryNowItem->date, $managerSalaryNowItem->id);
+                    $managerSalaryNowItem->price_sale_of_air = $this->ordersRepository->sumPriceSalesOfAirMarginality($managerSalaryNowItem->date, $managerSalaryNowItem->id);
+                    $managerSalaryNowItem->total_sale_of_air = $managerSalaryNowItem->price_sale_of_air * 0.15;
 
-                        $managerSalaryNowItem->sum_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryNowItem->date, $manager->id);
+                    $managerSalaryNowItem->sum_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryNowItem->date, $managerSalaryNowItem->id);
 
-                        $pr = $this->ordersRepository->countWithParcelReminder($managerSalaryNowItem->date, $manager->id);
-                        $wpr = $this->ordersRepository->countWithoutParcelReminder($managerSalaryNowItem->date, $manager->id);
+                    $pr = $this->ordersRepository->countWithParcelReminder($managerSalaryNowItem->date, $managerSalaryNowItem->id);
+                    $wpr = $this->ordersRepository->countWithoutParcelReminder($managerSalaryNowItem->date, $managerSalaryNowItem->id);
 
-                        if ($managerSalaryNowItem->count_applications <= 49) {
-                            $managerSalaryNowItem->sum_price_applications = $pr * 16;
-                            $managerSalaryNowItem->sum_price_applications += $wpr * 15;
-                            $managerSalaryNowItem->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryNowItem->date, $manager->id) * 0.2;
-                        } elseif ($managerSalaryNowItem->count_applications > 50) {
-                            $managerSalaryNowItem->sum_price_applications = $pr * 15;
-                            $managerSalaryNowItem->sum_price_applications += $wpr * 12;
-                            $managerSalaryNowItem->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryNowItem->date, $manager->id) * 0.18;
-                        } else {
-                            $managerSalaryNowItem->sum_price_applications = $pr * 14;
-                            $managerSalaryNowItem->sum_price_applications += $wpr * 11;
-                            $managerSalaryNowItem->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryNowItem->date, $manager->id) * 0.15;
-                        }
-                        $managerSalaryNowItem->total_price = $managerSalaryNowItem->sum_price_applications + $managerSalaryNowItem->sum_price_additional_sales + $managerSalaryNowItem->total_sale_of_air;
-                        $managerSalaryNowItem->update();
+                    if ($managerSalaryNowItem->count_applications <= 49) {
+                        $managerSalaryNowItem->sum_price_applications = $pr * 16;
+                        $managerSalaryNowItem->sum_price_applications += $wpr * 15;
+                        $managerSalaryNowItem->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryNowItem->date, $managerSalaryNowItem->id) * 0.2;
+                    } elseif ($managerSalaryNowItem->count_applications > 50) {
+                        $managerSalaryNowItem->sum_price_applications = $pr * 15;
+                        $managerSalaryNowItem->sum_price_applications += $wpr * 12;
+                        $managerSalaryNowItem->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryNowItem->date, $managerSalaryNowItem->id) * 0.18;
+                    } else {
+                        $managerSalaryNowItem->sum_price_applications = $pr * 14;
+                        $managerSalaryNowItem->sum_price_applications += $wpr * 11;
+                        $managerSalaryNowItem->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryNowItem->date, $managerSalaryNowItem->id) * 0.15;
                     }
-                }
-                if (!$managerSalaryNowItem->manager_id) {
+                    $managerSalaryNowItem->total_price = $managerSalaryNowItem->sum_price_applications + $managerSalaryNowItem->sum_price_additional_sales + $managerSalaryNowItem->total_sale_of_air;
+                    $managerSalaryNowItem->update();
+                } elseif (!$managerSalaryNowItem->manager_id) {
                     $managerSalaryNowItem->count_applications = $this->ordersRepository->sumOrdersCount($managerSalaryNowItem->date);
                     $managerSalaryNowItem->count_additional_sales = $this->orderItemsRepository->countAdditionalSales($managerSalaryNowItem->date);
 
@@ -132,7 +129,7 @@ class SumManagersSalary extends Command
                     $managerSalaryNowItem->update();
                 }
             }
-        } else{
+        } else {
             $item = $this->managersSalaryRepository->createNewModel();
             $item->date = $dateNow;
             $item->count_applications = $this->ordersRepository->sumOrdersCount($dateNow);
@@ -212,80 +209,77 @@ class SumManagersSalary extends Command
         }
 
         foreach ($managerSalaryAll as $managerSalaryAll_item) {
-            foreach ($managers as $manager) {
-                if ($managerSalaryAll_item->manager_id == $manager->id) {
-                    $managerSalaryAll_item->count_applications = $this->ordersRepository->sumOrdersCount($managerSalaryAll_item->date, $manager->id);
-                    $managerSalaryAll_item->count_additional_sales = $this->orderItemsRepository->countAdditionalSales($managerSalaryAll_item->date, $manager->id);
+            if ($managerSalaryAll_item->manager_id) {
+                $managerSalaryAll_item->count_applications = $this->ordersRepository->sumOrdersCount($managerSalaryAll_item->date, $managerSalaryAll_item->id);
+                $managerSalaryAll_item->count_additional_sales = $this->orderItemsRepository->countAdditionalSales($managerSalaryAll_item->date, $managerSalaryAll_item->id);
 
-                    $managerSalaryAll_item->in_process_applications = $this->ordersRepository->sumIndefiniteApplications($managerSalaryAll_item->date, $manager->id);
-                    $managerSalaryAll_item->returned_applications = $this->ordersRepository->sumReturnedApplications($managerSalaryAll_item->date, $manager->id);
-                    $managerSalaryAll_item->canceled_applications = $this->ordersRepository->sumCancelOrdersCount($managerSalaryAll_item->date, $manager->id);
-                    $managerSalaryAll_item->done_applications = $this->ordersRepository->sumDoneOrdersCount($managerSalaryAll_item->date, $manager->id);
-                    $managerSalaryAll_item->total_applications = $this->ordersRepository->sumApprovalApplications($managerSalaryAll_item->date, $manager->id);
+                $managerSalaryAll_item->in_process_applications = $this->ordersRepository->sumIndefiniteApplications($managerSalaryAll_item->date, $managerSalaryAll_item->id);
+                $managerSalaryAll_item->returned_applications = $this->ordersRepository->sumReturnedApplications($managerSalaryAll_item->date, $managerSalaryAll_item->id);
+                $managerSalaryAll_item->canceled_applications = $this->ordersRepository->sumCancelOrdersCount($managerSalaryAll_item->date, $managerSalaryAll_item->id);
+                $managerSalaryAll_item->done_applications = $this->ordersRepository->sumDoneOrdersCount($managerSalaryAll_item->date, $managerSalaryAll_item->id);
+                $managerSalaryAll_item->total_applications = $this->ordersRepository->sumApprovalApplications($managerSalaryAll_item->date, $managerSalaryAll_item->id);
 
-                    $managerSalaryAll_item->count_sale_of_air = $this->ordersRepository->sumCountSalesOfAirMarginality($managerSalaryAll_item->date, $manager->id);
-                    $managerSalaryAll_item->price_sale_of_air = $this->ordersRepository->sumPriceSalesOfAirMarginality($managerSalaryAll_item->date, $manager->id);
-                    $managerSalaryAll_item->total_sale_of_air = $managerSalaryAll_item->price_sale_of_air * 0.15;
+                $managerSalaryAll_item->count_sale_of_air = $this->ordersRepository->sumCountSalesOfAirMarginality($managerSalaryAll_item->date, $managerSalaryAll_item->id);
+                $managerSalaryAll_item->price_sale_of_air = $this->ordersRepository->sumPriceSalesOfAirMarginality($managerSalaryAll_item->date, $managerSalaryAll_item->id);
+                $managerSalaryAll_item->total_sale_of_air = $managerSalaryAll_item->price_sale_of_air * 0.15;
 
-                    $managerSalaryAll_item->sum_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryAll_item->date, $manager->id);
+                $managerSalaryAll_item->sum_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryAll_item->date, $managerSalaryAll_item->id);
 
-                    $pr = $this->ordersRepository->countWithParcelReminder($managerSalaryAll_item->date, $manager->id);
-                    $wpr = $this->ordersRepository->countWithoutParcelReminder($managerSalaryAll_item->date, $manager->id);
+                $pr = $this->ordersRepository->countWithParcelReminder($managerSalaryAll_item->date, $managerSalaryAll_item->id);
+                $wpr = $this->ordersRepository->countWithoutParcelReminder($managerSalaryAll_item->date, $managerSalaryAll_item->id);
 
-                    if ($managerSalaryAll_item->count_applications <= 49) {
-                        $managerSalaryAll_item->sum_price_applications = $pr * 16;
-                        $managerSalaryAll_item->sum_price_applications += $wpr * 15;
-                        $managerSalaryAll_item->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryAll_item->date, $manager->id) * 0.2;
-                    } elseif ($managerSalaryAll_item->count_applications > 50) {
-                        $managerSalaryAll_item->sum_price_applications = $pr * 15;
-                        $managerSalaryAll_item->sum_price_applications += $wpr * 12;
-                        $managerSalaryAll_item->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryAll_item->date, $manager->id) * 0.18;
-                    } else {
-                        $managerSalaryAll_item->sum_price_applications = $pr * 14;
-                        $managerSalaryAll_item->sum_price_applications += $wpr * 11;
-                        $managerSalaryAll_item->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryAll_item->date, $manager->id) * 0.15;
-                    }
-
-                    $managerSalaryAll_item->total_price = $managerSalaryAll_item->sum_price_applications + $managerSalaryAll_item->sum_price_additional_sales + $managerSalaryAll_item->total_sale_of_air;
-                    $managerSalaryAll_item->update();
-
+                if ($managerSalaryAll_item->count_applications <= 49) {
+                    $managerSalaryAll_item->sum_price_applications = $pr * 16;
+                    $managerSalaryAll_item->sum_price_applications += $wpr * 15;
+                    $managerSalaryAll_item->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryAll_item->date, $managerSalaryAll_item->id) * 0.2;
+                } elseif ($managerSalaryAll_item->count_applications > 50) {
+                    $managerSalaryAll_item->sum_price_applications = $pr * 15;
+                    $managerSalaryAll_item->sum_price_applications += $wpr * 12;
+                    $managerSalaryAll_item->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryAll_item->date, $managerSalaryAll_item->id) * 0.18;
+                } else {
+                    $managerSalaryAll_item->sum_price_applications = $pr * 14;
+                    $managerSalaryAll_item->sum_price_applications += $wpr * 11;
+                    $managerSalaryAll_item->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryAll_item->date, $managerSalaryAll_item->id) * 0.15;
                 }
-                if (!$managerSalaryAll_item->manager_id) {
-                    $managerSalaryAll_item->count_applications = $this->ordersRepository->sumOrdersCount($managerSalaryAll_item->date);
-                    $managerSalaryAll_item->count_additional_sales = $this->orderItemsRepository->countAdditionalSales($managerSalaryAll_item->date);
 
-                    $managerSalaryAll_item->in_process_applications = $this->ordersRepository->sumIndefiniteApplications($managerSalaryAll_item->date);
-                    $managerSalaryAll_item->returned_applications = $this->ordersRepository->sumReturnedApplications($managerSalaryAll_item->date);
-                    $managerSalaryAll_item->canceled_applications = $this->ordersRepository->sumCancelOrdersCount($managerSalaryAll_item->date);
-                    $managerSalaryAll_item->done_applications = $this->ordersRepository->sumDoneOrdersCount($managerSalaryAll_item->date);
-                    $managerSalaryAll_item->total_applications = $this->ordersRepository->sumApprovalApplications($managerSalaryAll_item->date);
+                $managerSalaryAll_item->total_price = $managerSalaryAll_item->sum_price_applications + $managerSalaryAll_item->sum_price_additional_sales + $managerSalaryAll_item->total_sale_of_air;
+                $managerSalaryAll_item->update();
 
-                    $managerSalaryAll_item->count_sale_of_air = $this->ordersRepository->sumCountSalesOfAirMarginality($managerSalaryAll_item->date);
-                    $managerSalaryAll_item->price_sale_of_air = $this->ordersRepository->sumPriceSalesOfAirMarginality($managerSalaryAll_item->date);
-                    $managerSalaryAll_item->total_sale_of_air = $managerSalaryAll_item->price_sale_of_air * 0.15;
+            } elseif (!$managerSalaryAll_item->manager_id) {
+                $managerSalaryAll_item->count_applications = $this->ordersRepository->sumOrdersCount($managerSalaryAll_item->date);
+                $managerSalaryAll_item->count_additional_sales = $this->orderItemsRepository->countAdditionalSales($managerSalaryAll_item->date);
 
-                    $managerSalaryAll_item->sum_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryAll_item->date);
+                $managerSalaryAll_item->in_process_applications = $this->ordersRepository->sumIndefiniteApplications($managerSalaryAll_item->date);
+                $managerSalaryAll_item->returned_applications = $this->ordersRepository->sumReturnedApplications($managerSalaryAll_item->date);
+                $managerSalaryAll_item->canceled_applications = $this->ordersRepository->sumCancelOrdersCount($managerSalaryAll_item->date);
+                $managerSalaryAll_item->done_applications = $this->ordersRepository->sumDoneOrdersCount($managerSalaryAll_item->date);
+                $managerSalaryAll_item->total_applications = $this->ordersRepository->sumApprovalApplications($managerSalaryAll_item->date);
 
-                    $pr = $this->ordersRepository->countWithParcelReminder($managerSalaryAll_item->date);
-                    $wpr = $this->ordersRepository->countWithoutParcelReminder($managerSalaryAll_item->date);
+                $managerSalaryAll_item->count_sale_of_air = $this->ordersRepository->sumCountSalesOfAirMarginality($managerSalaryAll_item->date);
+                $managerSalaryAll_item->price_sale_of_air = $this->ordersRepository->sumPriceSalesOfAirMarginality($managerSalaryAll_item->date);
+                $managerSalaryAll_item->total_sale_of_air = $managerSalaryAll_item->price_sale_of_air * 0.15;
 
-                    if ($managerSalaryAll_item->count_applications <= 49) {
-                        $managerSalaryAll_item->sum_price_applications = $pr * 16;
-                        $managerSalaryAll_item->sum_price_applications += $wpr * 15;
-                        $managerSalaryAll_item->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryAll_item->date) * 0.2;
-                    } elseif ($managerSalaryAll_item->count_applications > 50) {
-                        $managerSalaryAll_item->sum_price_applications = $pr * 15;
-                        $managerSalaryAll_item->sum_price_applications += $wpr * 12;
-                        $managerSalaryAll_item->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryAll_item->date) * 0.18;
-                    } else {
-                        $managerSalaryAll_item->sum_price_applications = $pr * 14;
-                        $managerSalaryAll_item->sum_price_applications += $wpr * 11;
-                        $managerSalaryAll_item->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryAll_item->date) * 0.15;
-                    }
+                $managerSalaryAll_item->sum_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryAll_item->date);
 
-                    $managerSalaryAll_item->total_price = $managerSalaryAll_item->sum_price_applications + $managerSalaryAll_item->sum_price_additional_sales + $managerSalaryAll_item->total_sale_of_air;
-                    $managerSalaryAll_item->update();
+                $pr = $this->ordersRepository->countWithParcelReminder($managerSalaryAll_item->date);
+                $wpr = $this->ordersRepository->countWithoutParcelReminder($managerSalaryAll_item->date);
+
+                if ($managerSalaryAll_item->count_applications <= 49) {
+                    $managerSalaryAll_item->sum_price_applications = $pr * 16;
+                    $managerSalaryAll_item->sum_price_applications += $wpr * 15;
+                    $managerSalaryAll_item->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryAll_item->date) * 0.2;
+                } elseif ($managerSalaryAll_item->count_applications > 50) {
+                    $managerSalaryAll_item->sum_price_applications = $pr * 15;
+                    $managerSalaryAll_item->sum_price_applications += $wpr * 12;
+                    $managerSalaryAll_item->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryAll_item->date) * 0.18;
+                } else {
+                    $managerSalaryAll_item->sum_price_applications = $pr * 14;
+                    $managerSalaryAll_item->sum_price_applications += $wpr * 11;
+                    $managerSalaryAll_item->sum_price_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryAll_item->date) * 0.15;
                 }
+
+                $managerSalaryAll_item->total_price = $managerSalaryAll_item->sum_price_applications + $managerSalaryAll_item->sum_price_additional_sales + $managerSalaryAll_item->total_sale_of_air;
+                $managerSalaryAll_item->update();
             }
         }
     }
