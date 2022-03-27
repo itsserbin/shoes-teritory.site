@@ -71,7 +71,7 @@ class SumManagersSalary extends Command
 
                     $managerSalaryNow->count_sale_of_air = $this->ordersRepository->sumCountSalesOfAirMarginality($managerSalaryNow->date, $manager->id);
                     $managerSalaryNow->price_sale_of_air = $this->ordersRepository->sumPriceSalesOfAirMarginality($managerSalaryNow->date, $manager->id);
-                    $managerSalaryNow->total_sale_of_air = $managerSalaryNow->price_sale_of_air * 0.2;
+                    $managerSalaryNow->total_sale_of_air = $managerSalaryNow->price_sale_of_air * 0.15;
 
                     $managerSalaryNow->sum_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryNow->date, $manager->id);
 
@@ -107,7 +107,7 @@ class SumManagersSalary extends Command
 
                 $managerSalaryNow->count_sale_of_air = $this->ordersRepository->sumCountSalesOfAirMarginality($managerSalaryNow->date);
                 $managerSalaryNow->price_sale_of_air = $this->ordersRepository->sumPriceSalesOfAirMarginality($managerSalaryNow->date);
-                $managerSalaryNow->total_sale_of_air = $managerSalaryNow->price_sale_of_air * 0.2;
+                $managerSalaryNow->total_sale_of_air = $managerSalaryNow->price_sale_of_air * 0.15;
 
                 $managerSalaryNow->sum_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryNow->date);
 
@@ -144,7 +144,7 @@ class SumManagersSalary extends Command
 
             $item->count_sale_of_air = $this->ordersRepository->sumCountSalesOfAirMarginality($dateNow);
             $item->price_sale_of_air = $this->ordersRepository->sumPriceSalesOfAirMarginality($dateNow);
-            $item->total_sale_of_air = $item->price_sale_of_air * 0.2;
+            $item->total_sale_of_air = $item->price_sale_of_air * 0.15;
 
             $item->sum_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($dateNow);
 
@@ -183,7 +183,7 @@ class SumManagersSalary extends Command
 
                 $manager_item->count_sale_of_air = $this->ordersRepository->sumCountSalesOfAirMarginality($dateNow, $manager->id);
                 $manager_item->price_sale_of_air = $this->ordersRepository->sumPriceSalesOfAirMarginality($dateNow, $manager->id);
-                $manager_item->total_sale_of_air = $manager_item->price_sale_of_air * 0.2;
+                $manager_item->total_sale_of_air = $manager_item->price_sale_of_air * 0.15;
 
                 $manager_item->sum_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($dateNow, $manager->id);
 
@@ -223,7 +223,7 @@ class SumManagersSalary extends Command
 
                     $managerSalaryAll_item->count_sale_of_air = $this->ordersRepository->sumCountSalesOfAirMarginality($managerSalaryAll_item->date, $manager->id);
                     $managerSalaryAll_item->price_sale_of_air = $this->ordersRepository->sumPriceSalesOfAirMarginality($managerSalaryAll_item->date, $manager->id);
-                    $managerSalaryAll_item->total_sale_of_air = $managerSalaryAll_item->price_sale_of_air * 0.2;
+                    $managerSalaryAll_item->total_sale_of_air = $managerSalaryAll_item->price_sale_of_air * 0.15;
 
                     $managerSalaryAll_item->sum_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryAll_item->date, $manager->id);
 
@@ -260,7 +260,7 @@ class SumManagersSalary extends Command
 
                     $managerSalaryAll_item->count_sale_of_air = $this->ordersRepository->sumCountSalesOfAirMarginality($managerSalaryAll_item->date);
                     $managerSalaryAll_item->price_sale_of_air = $this->ordersRepository->sumPriceSalesOfAirMarginality($managerSalaryAll_item->date);
-                    $managerSalaryAll_item->total_sale_of_air = $managerSalaryAll_item->price_sale_of_air * 0.2;
+                    $managerSalaryAll_item->total_sale_of_air = $managerSalaryAll_item->price_sale_of_air * 0.15;
 
                     $managerSalaryAll_item->sum_additional_sales = $this->orderItemsRepository->sumAdditionalSalesMarginality($managerSalaryAll_item->date);
 

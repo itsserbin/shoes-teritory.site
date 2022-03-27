@@ -497,6 +497,7 @@ class OrdersRepository extends CoreRepository
                 ->where('manager_id', $manager_id)
                 ->where(function ($query) {
                     $query->where('status', OrderStatus::STATUS_DONE);
+                    $query->orWhere('status', OrderStatus::STATUS_AWAITING_PREPAYMENT);
                     $query->orWhere('status', OrderStatus::STATUS_TRANSFERRED_TO_SUPPLIER);
                     $query->orWhere('status', OrderStatus::STATUS_RETURN);
                     $query->orWhere('status', OrderStatus::STATUS_AWAITING_DISPATCH);
@@ -508,6 +509,7 @@ class OrdersRepository extends CoreRepository
             return $this->model::whereDate('created_at', $date)
                 ->where(function ($query) {
                     $query->where('status', OrderStatus::STATUS_DONE);
+                    $query->orWhere('status', OrderStatus::STATUS_AWAITING_PREPAYMENT);
                     $query->orWhere('status', OrderStatus::STATUS_TRANSFERRED_TO_SUPPLIER);
                     $query->orWhere('status', OrderStatus::STATUS_RETURN);
                     $query->orWhere('status', OrderStatus::STATUS_AWAITING_DISPATCH);
@@ -526,16 +528,40 @@ class OrdersRepository extends CoreRepository
                     ['sale_of_air', 1],
                     ['manager_id', $manager_id]
                 ])
+                ->where(function ($query) {
+                    $query->where('status', OrderStatus::STATUS_DONE);
+                    $query->orWhere('status', OrderStatus::STATUS_TRANSFERRED_TO_SUPPLIER);
+                    $query->orWhere('status', OrderStatus::STATUS_RETURN);
+                    $query->orWhere('status', OrderStatus::STATUS_AWAITING_DISPATCH);
+                    $query->orWhere('status', OrderStatus::STATUS_ON_THE_ROAD);
+                    $query->orWhere('status', OrderStatus::STATUS_AT_THE_POST_OFFICE);
+                })
                 ->count();
         } elseif ($date) {
             return $this->model::whereDate('created_at', $date)
                 ->where('sale_of_air', 1)
+                ->where(function ($query) {
+                    $query->where('status', OrderStatus::STATUS_DONE);
+                    $query->orWhere('status', OrderStatus::STATUS_TRANSFERRED_TO_SUPPLIER);
+                    $query->orWhere('status', OrderStatus::STATUS_RETURN);
+                    $query->orWhere('status', OrderStatus::STATUS_AWAITING_DISPATCH);
+                    $query->orWhere('status', OrderStatus::STATUS_ON_THE_ROAD);
+                    $query->orWhere('status', OrderStatus::STATUS_AT_THE_POST_OFFICE);
+                })
                 ->count();
         } elseif ($manager_id) {
             return $this->model::where([
                 ['sale_of_air', 1],
                 ['manager_id', $manager_id]
             ])
+                ->where(function ($query) {
+                    $query->where('status', OrderStatus::STATUS_DONE);
+                    $query->orWhere('status', OrderStatus::STATUS_TRANSFERRED_TO_SUPPLIER);
+                    $query->orWhere('status', OrderStatus::STATUS_RETURN);
+                    $query->orWhere('status', OrderStatus::STATUS_AWAITING_DISPATCH);
+                    $query->orWhere('status', OrderStatus::STATUS_ON_THE_ROAD);
+                    $query->orWhere('status', OrderStatus::STATUS_AT_THE_POST_OFFICE);
+                })
                 ->count();
         } else {
             return $this->model::where('sale_of_air', 1)
