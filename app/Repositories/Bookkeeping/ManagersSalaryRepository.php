@@ -49,9 +49,9 @@ class ManagersSalaryRepository extends CoreRepository
             ->find($id);
     }
 
-    public function getRowByDate($date)
+    public function getRowsByDate($date)
     {
-        return $this->model::whereDate('date', $date)->first();
+        return $this->model::whereDate('date', $date)->get();
     }
 
     public function getAll()
