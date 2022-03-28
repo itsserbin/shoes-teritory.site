@@ -29,6 +29,9 @@ class XmlController extends Controller
                 $query->where('status', ProductAvailability::IN_STOCK);
                 $query->orWhere('status', ProductAvailability::ENDS);
             })
+            ->whereHas('categories', function ($q) {
+                $q->where('id', '!=', 9);
+            })
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -235,6 +238,24 @@ class XmlController extends Controller
             })
             ->orderBy('created_at', 'desc')
             ->get();;
+
+        return response()->view('xml.fb-product-feed', [
+            'products' => $products
+        ])->header('Content-Type', 'application/xml');
+    }
+
+    public function xmlFbFitness()
+    {
+        $products = Products::whereHas('categories', function ($q) {
+            $q->where('id', 9);
+        })
+            ->where('published', 1)
+            ->where(function ($query) {
+                $query->where('status', ProductAvailability::IN_STOCK);
+                $query->orWhere('status', ProductAvailability::ENDS);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return response()->view('xml.fb-product-feed', [
             'products' => $products

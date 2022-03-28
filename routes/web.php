@@ -126,6 +126,9 @@ Route::prefix('xml')->group(function () {
 
         Route::get('swimwear-and-tunics-5xl', [XmlController::class, 'xmlFbSwimwearAndTunics5Xl'])
             ->name('xml.fb.swimwear-and-tunics-5xl');
+
+        Route::get('fitness', [XmlController::class, 'xmlFbFitness'])
+            ->name('xml.fb.fitness');
     });
 
 
