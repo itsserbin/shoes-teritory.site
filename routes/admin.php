@@ -180,10 +180,16 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
             ->middleware('role:administrator')
             ->names('admin.bookkeeping.product-statistics');
 
-        Route::resource('providers', ProvidersController::class)
-            ->middleware('role:administrator')
-            ->names('admin.bookkeeping.providers');
+        Route::prefix('providers')->group(function () {
+            Route::get('/', [ProvidersController::class, 'index'])
+                ->name('admin.bookkeeping.providers.index');
 
+            Route::get('create', [ProvidersController::class, 'create'])
+                ->name('admin.bookkeeping.providers.create');
+
+            Route::get('edit/{id}', [ProvidersController::class, 'edit'])
+                ->name('admin.bookkeeping.providers.edit');
+        });
         Route::get('supplier-payments', [SupplierPaymentsController::class, 'index'])
             ->middleware('role:administrator')
             ->name('admin.bookkeeping.supplier-payments.index');

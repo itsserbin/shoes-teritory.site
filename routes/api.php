@@ -1,27 +1,27 @@
 <?php
 
-use App\Http\Controllers\Admin\Api\AdminController;
-use App\Http\Controllers\Admin\Api\BannersController;
-use App\Http\Controllers\Admin\Api\Bookkeeping\CostCategoriesController;
-use App\Http\Controllers\Admin\Api\Bookkeeping\CostsController;
-use App\Http\Controllers\Admin\Api\Bookkeeping\DailyStatisticsController;
-use App\Http\Controllers\Admin\Api\Bookkeeping\ManagersSalariesController;
-use App\Http\Controllers\Admin\Api\Bookkeeping\ProfitsController;
-use App\Http\Controllers\Admin\Api\Bookkeeping\SupplierPaymentsController;
-use App\Http\Controllers\Admin\Api\CategoriesController;
-use App\Http\Controllers\Admin\Api\ColorsController;
-use App\Http\Controllers\Admin\Api\OptionsController;
-use App\Http\Controllers\Admin\Api\OrderItemsController;
-use App\Http\Controllers\Admin\Api\OrdersController;
-use App\Http\Controllers\Admin\Api\ProductsController;
-use App\Http\Controllers\Admin\Api\PromoCodesController;
-use App\Http\Controllers\Admin\Api\ProvidersController;
-use App\Http\Controllers\Admin\Api\ReviewsController;
-use App\Http\Controllers\Admin\Api\RolesController;
-use App\Http\Controllers\Admin\Api\UploadController;
-use App\Http\Controllers\Admin\Api\UsersController;
+use App\Http\Controllers\Api\Admin\AdminController;
+use App\Http\Controllers\Api\Admin\BannersController;
+use App\Http\Controllers\Api\Admin\Bookkeeping\CostCategoriesController;
+use App\Http\Controllers\Api\Admin\Bookkeeping\CostsController;
+use App\Http\Controllers\Api\Admin\Bookkeeping\DailyStatisticsController;
+use App\Http\Controllers\Api\Admin\Bookkeeping\ManagersSalariesController;
+use App\Http\Controllers\Api\Admin\Bookkeeping\ProfitsController;
+use App\Http\Controllers\Api\Admin\Bookkeeping\SupplierPaymentsController;
+use App\Http\Controllers\Api\Admin\CategoriesController;
+use App\Http\Controllers\Api\Admin\ColorsController;
+use App\Http\Controllers\Api\Admin\OptionsController;
+use App\Http\Controllers\Api\Admin\OrderItemsController;
+use App\Http\Controllers\Api\Admin\OrdersController;
+use App\Http\Controllers\Api\Admin\ProductsController;
+use App\Http\Controllers\Api\Admin\PromoCodesController;
+use App\Http\Controllers\Api\Admin\ProvidersController;
+use App\Http\Controllers\Api\Admin\ReviewsController;
+use App\Http\Controllers\Api\Admin\RolesController;
+use App\Http\Controllers\Api\Admin\UploadController;
+use App\Http\Controllers\Api\Admin\UsersController;
+use App\Http\Controllers\Api\Admin\ClientsController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\Api\ClientsController;
 
 
 /*
@@ -233,6 +233,21 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix('providers')->group(function () {
         Route::get('list', [ProvidersController::class, 'list'])
             ->name('api.providers.list');
+
+        Route::get('/', [ProvidersController::class, 'index'])
+            ->name('api.providers.index');
+
+        Route::post('create', [ProvidersController::class, 'create'])
+            ->name('api.providers.create');
+
+        Route::get('edit/{id}', [ProvidersController::class, 'edit'])
+            ->name('api.providers.edit');
+
+        Route::put('update/{id}', [ProvidersController::class, 'update'])
+            ->name('api.providers.update');
+
+        Route::delete('destroy/{id}', [ProvidersController::class, 'destroy'])
+            ->name('api.providers.destroy');
     });
 
     /** Группа маршрутов для бухгалтерии */

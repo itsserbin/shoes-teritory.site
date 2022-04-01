@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Repositories\Bookkeeping\CostsRepository;
 use App\Repositories\Bookkeeping\ProfitsRepository;
+use App\Repositories\OrderItemsRepository;
 use App\Repositories\OrdersRepository;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -25,6 +26,7 @@ class SumProfitCommand extends Command
     protected $description = 'Command description';
 
     private $ordersRepository;
+    private $orderItemsRepository;
     private $costsRepository;
     private $profitsRepository;
 
@@ -37,6 +39,7 @@ class SumProfitCommand extends Command
     {
         parent::__construct();
         $this->ordersRepository = app(OrdersRepository::class);
+        $this->orderItemsRepository = app(OrderItemsRepository::class);
         $this->costsRepository = app(CostsRepository::class);
         $this->profitsRepository = app(ProfitsRepository::class);
     }
@@ -55,26 +58,29 @@ class SumProfitCommand extends Command
 
         foreach ($profit_old as $item) {
             $created_at = $item->date->toDateString();
-            $item->profit = $this->ordersRepository->sumDoneOrdersTotalPriceByDate($created_at);
+            $item->turnover = $this->ordersRepository->sumDoneOrdersTotalPriceByDate($created_at);
+            $item->profit = $this->orderItemsRepository->sumProfitByDate($created_at);
             $item->cost = $this->costsRepository->sumCostsByDate($created_at);
-            $item->marginality = $item->profit - $item->cost;
-            $item->turnover = $item->profit + $item->cost;
+            $item->refunds_sum = $this->orderItemsRepository->sumRefundsByDate($created_at);
+            $item->clear_profit = $item->profit - $item->cost - $item->refunds_sum;
             $item->update();
         }
 
         if ($profit_now) {
-            $profit_now->profit = $this->ordersRepository->sumDoneOrdersTotalPriceByDate($date_now);
+            $profit_now->turnover = $this->ordersRepository->sumDoneOrdersTotalPriceByDate($date_now);
+            $profit_now->profit = $this->orderItemsRepository->sumProfitByDate($date_now);
             $profit_now->cost = $this->costsRepository->sumCostsByDate($date_now);
-            $profit_now->marginality = $profit_now->profit - $profit_now->cost;
-            $profit_now->turnover = $profit_now->profit + $profit_now->cost;
+            $profit_now->refunds_sum = $this->orderItemsRepository->sumRefundsByDate($profit_now);
+            $profit_now->clear_profit = $profit_now->profit - $profit_now->cost - $profit_now->refunds_sum;
             $profit_now->update();
         } else {
             $profit = $this->profitsRepository->createNewModel();
             $profit->date = $date_now;
+            $profit->turnover = $this->ordersRepository->sumDoneOrdersTotalPriceByDate($date_now);
+            $profit->profit = $this->orderItemsRepository->sumProfitByDate($date_now);
             $profit->cost = $this->costsRepository->sumCostsByDate($date_now);
-            $profit->profit = $this->ordersRepository->sumDoneOrdersTotalPriceByDate($date_now);
-            $profit->marginality = $profit->profit - $profit->cost;
-            $profit->turnover = $profit->profit + $profit->cost;
+            $profit->refunds_sum = $this->orderItemsRepository->sumRefundsByDate($date_now);
+            $profit->clear_profit = $profit->profit - $profit->cost - $profit->refunds_sum;
             $profit->save();;
         }
     }

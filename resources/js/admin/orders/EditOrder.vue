@@ -10,7 +10,7 @@
                         <input type="text"
                                class="form-control"
                                id="name"
-                               v-model="order.client.name"
+                               :value="order.client.name"
                                disabled
                         >
                     </div>
@@ -303,7 +303,7 @@
                                     <span v-else>{{ item.discount }}</span>
                                 </td>
                                 <td>{{ item.product.vendor_code }}</td>
-                                <td>{{ item.product.providers.name }}</td>
+                                <td>{{ item.product.providers ? item.product.providers.name : 'Не указан' }}</td>
                                 <td>
                                     <a class="btn" href="javascript:" @click="onEdit(item.id, index)">
                                         <edit-icon></edit-icon>

@@ -25,21 +25,6 @@ class ProfitsRepository extends CoreRepository
         return $this->model::find($id);
     }
 
-//    public function getAllWithPaginate(string $sort = 'id', string $param = 'desc', int $perPage = 15)
-//    {
-//        return $this
-//            ->model::select(
-//                'id',
-//                'date',
-//                'cost',
-//                'profit',
-//                'marginality',
-//                'turnover',
-//            )
-//            ->orderBy($sort, $param)
-//            ->paginate($perPage);
-//    }
-
     public function getAllWithPaginate($date_start = null, $date_end = null, $last = null, $perPage = 15, string $sort = 'date', string $param = 'desc',)
     {
         if ($date_start && $date_end) {
@@ -63,7 +48,8 @@ class ProfitsRepository extends CoreRepository
             'date',
             'cost',
             'profit',
-            'marginality',
+            'clear_profit',
+            'refunds_sum',
             'turnover',
         )
             ->orderBy($sort, $param)
@@ -93,34 +79,35 @@ class ProfitsRepository extends CoreRepository
         }
 
         $result['Расходы'] = $model->sum('cost');
-        $result['Прибыль'] = $model->sum('profit');
-        $result['Маржинальность'] = $model->sum('marginality');
+        $result['Прибыль без расходов'] = $model->sum('profit');
+        $result['Чистая прибыль'] = $model->sum('clear_profit');
+        $result['Сумма за возвраты'] = $model->sum('refunds_sum');
         $result['Оборот'] = $model->sum('turnover');
 
         return $result;
     }
 
-    public function getAll($date_start = null, $date_end = null, $last = null)
-    {
-        if ($date_start && $date_end) {
-            return $this->model::whereBetween('date', [$date_start, $date_end])->get();
-        } elseif ($last) {
-            if ($last == 'week') {
-                return $this->model::whereBetween('date',
-                    [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
-            } elseif ($last == 'two-week') {
-                return $this->model::whereBetween('date',
-                    [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
-            } elseif ($last == 'one-month') {
-                return $this->model::whereBetween('date',
-                    [Carbon::now()->startOfMonth(), Carbon::now()->endOfWeek()])->get();
-            } else {
-                return $this->model::all();
-            }
-        } else {
-            return $this->model::all();
-        }
-    }
+//    public function getAll($date_start = null, $date_end = null, $last = null)
+//    {
+//        if ($date_start && $date_end) {
+//            return $this->model::whereBetween('date', [$date_start, $date_end])->get();
+//        } elseif ($last) {
+//            if ($last == 'week') {
+//                return $this->model::whereBetween('date',
+//                    [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
+//            } elseif ($last == 'two-week') {
+//                return $this->model::whereBetween('date',
+//                    [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
+//            } elseif ($last == 'one-month') {
+//                return $this->model::whereBetween('date',
+//                    [Carbon::now()->startOfMonth(), Carbon::now()->endOfWeek()])->get();
+//            } else {
+//                return $this->model::all();
+//            }
+//        } else {
+//            return $this->model::all();
+//        }
+//    }
 
     public function create($data)
     {

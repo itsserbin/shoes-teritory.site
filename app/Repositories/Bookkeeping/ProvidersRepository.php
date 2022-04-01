@@ -55,35 +55,54 @@ class ProvidersRepository extends CoreRepository
      * @param null $perPage
      * @return mixed
      */
-    public function getAllWithPaginate($perPage = null)
+    public function getAllWithPaginate($perPage = 15)
     {
         return $this
-            ->startConditions()
-            ->orderBy('created_at', 'desc')
+            ->model::orderBy('created_at', 'desc')
             ->paginate($perPage);
     }
 
     /**
-     * Создать нового поставщика.
-     *
      * @param array $request
      * @return mixed
      */
-    public function create(array $request)
+    public function create(array $data)
     {
-        return $this->model->create($request);
+        $model = new $this->model;
+        $model->name = $data['name'];
+        $model->catalog = $data['catalog'];
+        $model->time_of_dispatch = $data['time_of_dispatch'];
+        $model->availability = $data['availability'];
+        $model->prepayment = $data['prepayment'];
+        $model->prepayment_sum = $data['prepayment_sum'];
+        $model->refunds = $data['refunds'];
+        $model->refunds_sum = $data['refunds_sum'];
+        $model->contacts = $data['contacts'];
+        $model->comment = $data['comment'];
+
+        return $model->save();
     }
 
     /**
-     * Обновить данные поставщика.
-     *
      * @param int $id
      * @param array $request
      * @return mixed
      */
-    public function update(int $id, array $request)
+    public function update(int $id, array $data)
     {
-        return $this->model::where('id', $id)->update($request);
+        $model = $this->getById($id);
+        $model->name = $data['name'];
+        $model->catalog = $data['catalog'];
+        $model->time_of_dispatch = $data['time_of_dispatch'];
+        $model->availability = $data['availability'];
+        $model->prepayment = $data['prepayment'];
+        $model->prepayment_sum = $data['prepayment_sum'];
+        $model->refunds = $data['refunds'];
+        $model->refunds_sum = $data['refunds_sum'];
+        $model->contacts = $data['contacts'];
+        $model->comment = $data['comment'];
+
+        return $model->update();
     }
 
     /**

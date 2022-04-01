@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\Public\Api\BannersController;
-use App\Http\Controllers\Public\Api\CartController;
-use App\Http\Controllers\Public\Api\CategoriesController;
-use App\Http\Controllers\Public\Api\OrdersController;
-use App\Http\Controllers\Public\Api\ProductsController;
-use App\Http\Controllers\Public\Api\ReviewsController;
-use App\Http\Controllers\Public\Api\UsersController;
+use App\Http\Controllers\Api\Public\BannersController;
+use App\Http\Controllers\Api\Public\CartController;
+use App\Http\Controllers\Api\Public\CategoriesController;
+use App\Http\Controllers\Api\Public\OrdersController;
+use App\Http\Controllers\Api\Public\ProductsController;
+use App\Http\Controllers\Api\Public\ReviewsController;
+use App\Http\Controllers\Api\Public\UsersController;
 use Illuminate\Support\Facades\Route;
 
 /** Public API */

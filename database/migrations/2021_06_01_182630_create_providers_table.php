@@ -17,9 +17,11 @@ class CreateProvidersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('catalog')->nullable();
-            $table->string('availability');
-            $table->string('refunds');
-            $table->string('prepayment');
+            $table->string('availability')->nullable();
+            $table->boolean('refunds')->default(0);
+            $table->integer('refunds_sum')->nullable();
+            $table->boolean('prepayment')->default(0);
+            $table->integer('prepayment_sum')->nullable();
             $table->string('time_of_dispatch')->nullable();
             $table->string('comment')->nullable();
             $table->string('contacts')->nullable();

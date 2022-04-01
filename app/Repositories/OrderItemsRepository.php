@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\CartItems;
+use App\Models\Enum\OrderStatus;
 use App\Models\OrderItems as Model;
 use App\Repositories\Products\ProductRepository;
 use Illuminate\Database\Eloquent\Builder;
@@ -338,5 +339,39 @@ class OrderItemsRepository extends CoreRepository
             }
         }
         return $sum - $additional_sales;
+    }
+
+    public function sumProfitByDate($date)
+    {
+        return $this->model::whereDate('created_at', $date)
+            ->select('total_price', 'order_id')
+            ->with('order')
+            ->whereHas('order', function ($q) {
+                $q->where('status', OrderStatus::STATUS_DONE);
+            })
+            ->sum('total_price');
+    }
+
+    public function sumRefundsByDate($date)
+    {
+        $model = $this->model::whereDate('created_at', $date)
+            ->select('provider_id', 'order_id')
+            ->with('provider', 'order')
+            ->whereHas('order', function ($q) {
+                $q->where('status', OrderStatus::STATUS_RETURN);
+            })->get();
+
+        $refundsSum = 0;
+
+        foreach ($model as $item) {
+            if ($item->provider){
+                if ($item->provider->refunds) {
+                    $refundsSum += $item->provider->refunds_sum;
+                }
+            }
+
+        }
+
+        return $refundsSum;
     }
 }

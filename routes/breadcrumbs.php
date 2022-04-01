@@ -11,6 +11,21 @@ Breadcrumbs::for('bookkeeping', function ($trail) {
     $trail->push('Бухгалтерия', route('admin.bookkeeping.index'));
 });
 
+Breadcrumbs::for('bookkeeping.providers', function ($trail) {
+    $trail->parent('bookkeeping');
+    $trail->push('Поставщики', route('admin.bookkeeping.providers.index'));
+});
+
+Breadcrumbs::for('bookkeeping.providers.create', function ($trail) {
+    $trail->parent('bookkeeping.providers');
+    $trail->push('Добавление поставщика', route('admin.bookkeeping.providers.create'));
+});
+
+Breadcrumbs::for('bookkeeping.providers.edit', function ($trail) {
+    $trail->parent('bookkeeping.providers');
+    $trail->push('Редактирование поставщика');
+});
+
 Breadcrumbs::for('bookkeeping.costs', function ($trail) {
     $trail->parent('bookkeeping');
     $trail->push('Расходы', route('admin.bookkeeping.costs.index'));

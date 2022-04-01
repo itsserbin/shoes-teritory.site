@@ -33,7 +33,7 @@
                     <button class="btn btn-outline-danger w-100 h-100"
                             @click="getProfits"
                             :class="{'active': activeLastDays === 'all'}"
-                    >За все время
+                    >Вся статистика
                     </button>
                 </div>
                 <div class="col-12 col-md-3 my-2">
@@ -63,8 +63,8 @@
                 <apexchart type="area" height="350" :options="options" :series="series"></apexchart>
             </div>
             <hr>
-            <div class="row">
-                <div class="col-12 col-md-3 my-2" v-for="(item,i) in generalStat" :key="i">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-2 my-2" v-for="(item,i) in generalStat" :key="i">
                     <bookkeeping-statistics-card
                         type="money"
                         :title="i"
@@ -102,7 +102,18 @@
                             </th>
                             <th>
                                 <div class="d-flex align-items-center justify-content-center">
-                                    <div class="mr-1">Сумма прибыли</div>
+                                    <div class="mr-1">Сумма за возвраты</div>
+                                    <a href="javascript:" class="text-dark" @click="sort('refunds_sum','asc')">
+                                        <arrow-up-icon></arrow-up-icon>
+                                    </a>
+                                    <a href="javascript:" class="text-dark" @click="sort('refunds_sum','desc')">
+                                        <arrow-down-icon></arrow-down-icon>
+                                    </a>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <div class="mr-1">Прибыль без затрат</div>
                                     <a href="javascript:" class="text-dark" @click="sort('profit','asc')">
                                         <arrow-up-icon></arrow-up-icon>
                                     </a>
@@ -113,11 +124,11 @@
                             </th>
                             <th>
                                 <div class="d-flex align-items-center justify-content-center">
-                                    <div class="mr-1">Маржинальность</div>
-                                    <a href="javascript:" class="text-dark" @click="sort('marginality','asc')">
+                                    <div class="mr-1">Чистая прибыль</div>
+                                    <a href="javascript:" class="text-dark" @click="sort('clear_profit','asc')">
                                         <arrow-up-icon></arrow-up-icon>
                                     </a>
-                                    <a href="javascript:" class="text-dark" @click="sort('marginality','desc')">
+                                    <a href="javascript:" class="text-dark" @click="sort('clear_profit','desc')">
                                         <arrow-down-icon></arrow-down-icon>
                                     </a>
                                 </div>
@@ -139,8 +150,9 @@
                         <tr v-for="profit in profits" :key="profit.id" style="vertical-align: middle;">
                             <td>{{ dateFormat(profit.date) }}</td>
                             <td>{{ profit.cost | formatMoney }} грн.</td>
+                            <td>{{ profit.refunds_sum | formatMoney }} грн.</td>
                             <td>{{ profit.profit | formatMoney }} грн.</td>
-                            <td>{{ profit.marginality | formatMoney }} грн.</td>
+                            <td>{{ profit.clear_profit | formatMoney }} грн.</td>
                             <td>{{ profit.turnover | formatMoney }} грн.</td>
                         </tr>
                         </tbody>
@@ -182,7 +194,7 @@ export default {
             date: new Date(),
             currentDate: new Date(),
             activeLastDays: null,
-
+            series: [],
             options: {
                 xaxis: {
                     categories: [],
@@ -207,7 +219,6 @@ export default {
                     curve: 'smooth'
                 },
             },
-            series: []
         }
     },
     mounted() {
@@ -291,32 +302,38 @@ export default {
                     data: []
                 },
                 {
-                    name: 'Прибыль',
+                    name: 'Прибыль без расходов',
                     data: []
                 },
                 {
-                    name: 'Маржинальность',
+                    name: 'Чистая прибыль',
                     data: []
                 },
                 {
                     name: 'Оборот',
                     data: []
+                },
+                {
+                    name: 'Сумма за возвраты',
+                    data: []
                 }];
             this.options.xaxis.categories = [];
             let costs = this.series.find((item) => item.name === 'Расходы');
-            let profits = this.series.find((item) => item.name === 'Прибыль');
-            let marginality = this.series.find((item) => item.name === 'Маржинальность');
+            let profits = this.series.find((item) => item.name === 'Прибыль без расходов');
+            let clear_profit = this.series.find((item) => item.name === 'Чистая прибыль');
             let turnover = this.series.find((item) => item.name === 'Оборот');
+            let refunds_sum = this.series.find((item) => item.name === 'Сумма за возвраты');
 
             const self = this;
-            data.all.forEach((item) => {
+            data.result.data.forEach((item) => {
                 costs.data.push(item.cost);
-                marginality.data.push(item.marginality);
+                clear_profit.data.push(item.clear_profit);
                 profits.data.push(item.profit);
                 turnover.data.push(item.turnover);
+                refunds_sum.data.push(item.refunds_sum);
                 self.options.xaxis.categories.push(this.dateFormat(item.date));
             })
-            self.series = [costs, marginality, profits, turnover];
+            self.series = [costs, clear_profit, profits, turnover, refunds_sum];
             self.isLoading = false;
         },
         getProfitsListErrorResponse(response) {

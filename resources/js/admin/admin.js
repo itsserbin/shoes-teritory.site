@@ -78,6 +78,10 @@ Vue.component('create-user', require('./users/CreateUser').default);
 Vue.component('orders-list', require('./orders/OrdersList').default);
 Vue.component('order-edit', require('./orders/EditOrder').default);
 
+Vue.component('providers-list', require('./providers/ProvidersList').default);
+Vue.component('create-provider', require('./providers/CreateProvider').default);
+Vue.component('edit-provider', require('./providers/EditProvider').default);
+
 Vue.component('promo-codes-list', require('./promo-codes/PromoCodesList').default);
 Vue.component('create-promo-code', require('./promo-codes/CreatePromoCode').default);
 Vue.component('edit-promo-code', require('./promo-codes/EditPromoCode').default);
