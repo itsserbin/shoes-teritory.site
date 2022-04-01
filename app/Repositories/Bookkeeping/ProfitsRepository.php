@@ -87,8 +87,8 @@ class ProfitsRepository extends CoreRepository
         return $result;
     }
 
-//    public function getAll($date_start = null, $date_end = null, $last = null)
-//    {
+    public function getAll($date_start = null, $date_end = null, $last = null)
+    {
 //        if ($date_start && $date_end) {
 //            return $this->model::whereBetween('date', [$date_start, $date_end])->get();
 //        } elseif ($last) {
@@ -107,7 +107,8 @@ class ProfitsRepository extends CoreRepository
 //        } else {
 //            return $this->model::all();
 //        }
-//    }
+            return $this->model::all();
+    }
 
     public function create($data)
     {
