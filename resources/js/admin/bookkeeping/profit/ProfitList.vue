@@ -64,7 +64,7 @@
             </div>
             <hr>
             <div class="row justify-content-center">
-                <div class="col-12 col-md-2 my-2" v-for="(item,i) in generalStat" :key="i">
+                <div class="col-12 col-md-3 my-2" v-for="(item,i) in generalStat" :key="i">
                     <bookkeeping-statistics-card
                         type="money"
                         :title="i"
@@ -124,11 +124,22 @@
                             </th>
                             <th>
                                 <div class="d-flex align-items-center justify-content-center">
-                                    <div class="mr-1">Чистая прибыль</div>
-                                    <a href="javascript:" class="text-dark" @click="sort('clear_profit','asc')">
+                                    <div class="mr-1">Продажи воздуха</div>
+                                    <a href="javascript:" class="text-dark" @click="sort('sale_of_air_sum','asc')">
                                         <arrow-up-icon></arrow-up-icon>
                                     </a>
-                                    <a href="javascript:" class="text-dark" @click="sort('clear_profit','desc')">
+                                    <a href="javascript:" class="text-dark" @click="sort('sale_of_air_sum','desc')">
+                                        <arrow-down-icon></arrow-down-icon>
+                                    </a>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <div class="mr-1">Прибыль без продаж воздуха</div>
+                                    <a href="javascript:" class="text-dark" @click="sort('sale_of_air_sum','asc')">
+                                        <arrow-up-icon></arrow-up-icon>
+                                    </a>
+                                    <a href="javascript:" class="text-dark" @click="sort('sale_of_air_sum','desc')">
                                         <arrow-down-icon></arrow-down-icon>
                                     </a>
                                 </div>
@@ -144,6 +155,17 @@
                                     </a>
                                 </div>
                             </th>
+                            <th>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <div class="mr-1">Чистая прибыль</div>
+                                    <a href="javascript:" class="text-dark" @click="sort('clear_profit','asc')">
+                                        <arrow-up-icon></arrow-up-icon>
+                                    </a>
+                                    <a href="javascript:" class="text-dark" @click="sort('clear_profit','desc')">
+                                        <arrow-down-icon></arrow-down-icon>
+                                    </a>
+                                </div>
+                            </th>
                         </tr>
                         </thead>
                         <tbody class="text-center">
@@ -152,8 +174,10 @@
                             <td>{{ profit.cost | formatMoney }} грн.</td>
                             <td>{{ profit.refunds_sum | formatMoney }} грн.</td>
                             <td>{{ profit.profit | formatMoney }} грн.</td>
-                            <td>{{ profit.clear_profit | formatMoney }} грн.</td>
+                            <td>{{ profit.sale_of_air_sum | formatMoney }} грн.</td>
+                            <td>{{ profit.profit_without_sale_of_air | formatMoney }} грн.</td>
                             <td>{{ profit.turnover | formatMoney }} грн.</td>
+                            <td>{{ profit.clear_profit | formatMoney }} грн.</td>
                         </tr>
                         </tbody>
                         <tfoot v-if="profits.length !== 0">
@@ -316,6 +340,14 @@ export default {
                 {
                     name: 'Сумма за возвраты',
                     data: []
+                },
+                {
+                    name: 'Продажи воздуха',
+                    data: []
+                },
+                {
+                    name: 'Прибыль без продаж воздуха',
+                    data: []
                 }];
             this.options.xaxis.categories = [];
             let costs = this.series.find((item) => item.name === 'Расходы');
@@ -323,6 +355,8 @@ export default {
             let clear_profit = this.series.find((item) => item.name === 'Чистая прибыль');
             let turnover = this.series.find((item) => item.name === 'Оборот');
             let refunds_sum = this.series.find((item) => item.name === 'Сумма за возвраты');
+            let sale_of_air_sum = this.series.find((item) => item.name === 'Продажи воздуха');
+            let profit_without_sale_of_air = this.series.find((item) => item.name === 'Прибыль без продаж воздуха');
 
             const self = this;
             data.result.data.forEach((item) => {
@@ -331,9 +365,11 @@ export default {
                 profits.data.unshift(item.profit);
                 turnover.data.unshift(item.turnover);
                 refunds_sum.data.unshift(item.refunds_sum);
+                sale_of_air_sum.data.unshift(item.sale_of_air_sum);
+                profit_without_sale_of_air.data.unshift(item.profit_without_sale_of_air);
                 self.options.xaxis.categories.unshift(this.dateFormat(item.date));
             })
-            self.series = [costs, clear_profit, profits, turnover, refunds_sum];
+            self.series = [costs, clear_profit, profits, turnover, refunds_sum,sale_of_air_sum,profit_without_sale_of_air];
             self.isLoading = false;
         },
         getProfitsListErrorResponse(response) {

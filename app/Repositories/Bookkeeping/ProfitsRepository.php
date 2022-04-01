@@ -50,6 +50,8 @@ class ProfitsRepository extends CoreRepository
             'profit',
             'clear_profit',
             'refunds_sum',
+            'sale_of_air_sum',
+            'profit_without_sale_of_air',
             'turnover',
         )
             ->orderBy($sort, $param)
@@ -83,6 +85,8 @@ class ProfitsRepository extends CoreRepository
         $result['Чистая прибыль'] = $model->sum('clear_profit');
         $result['Сумма за возвраты'] = $model->sum('refunds_sum');
         $result['Оборот'] = $model->sum('turnover');
+        $result['Продажи воздуха'] = $model->sum('sale_of_air_sum');
+        $result['Прибыль без продаж воздуха'] = $model->sum('profit_without_sale_of_air');
 
         return $result;
     }

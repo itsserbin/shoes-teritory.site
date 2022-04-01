@@ -573,6 +573,7 @@ class OrdersRepository extends CoreRepository
     {
         if ($manager_id and $date) {
             return $this->model::whereDate('created_at', $date)
+                ->where('status', OrderStatus::STATUS_DONE)
                 ->where([
                     ['sale_of_air', 1],
                     ['manager_id', $manager_id]
@@ -580,16 +581,19 @@ class OrdersRepository extends CoreRepository
                 ->sum('sale_of_air_price');
         } elseif ($date) {
             return $this->model::whereDate('created_at', $date)
+                ->where('status', OrderStatus::STATUS_DONE)
                 ->where('sale_of_air', 1)
                 ->sum('sale_of_air_price');
         } elseif ($manager_id) {
-            return $this->model::where([
-                ['sale_of_air', 1],
-                ['manager_id', $manager_id]
-            ])
+            return $this->model::where('status', OrderStatus::STATUS_DONE)
+                ->where([
+                    ['sale_of_air', 1],
+                    ['manager_id', $manager_id]
+                ])
                 ->sum('sale_of_air_price');
         } else {
             return $this->model::where('sale_of_air', 1)
+                ->where('status', OrderStatus::STATUS_DONE)
                 ->sum('sale_of_air_price');
         }
     }
@@ -597,7 +601,7 @@ class OrdersRepository extends CoreRepository
     public function sumDoneOrdersTotalPriceByDate($date)
     {
         return $this->model::whereDate('created_at', $date)
-            ->select('status','total_price')
+            ->select('status', 'total_price')
             ->where('status', OrderStatus::STATUS_DONE)
             ->sum('total_price');
     }

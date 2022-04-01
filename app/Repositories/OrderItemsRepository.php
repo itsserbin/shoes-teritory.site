@@ -364,7 +364,7 @@ class OrderItemsRepository extends CoreRepository
         $refundsSum = 0;
 
         foreach ($model as $item) {
-            if ($item->provider){
+            if ($item->provider) {
                 if ($item->provider->refunds) {
                     $refundsSum += $item->provider->refunds_sum;
                 }
