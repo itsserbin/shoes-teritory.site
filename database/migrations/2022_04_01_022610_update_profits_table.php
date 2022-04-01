@@ -19,8 +19,13 @@ class UpdateProfitsTable extends Migration
             $table->integer('refunds_sum')->nullable();
             $table->integer('cost')->nullable()->change();
             $table->integer('profit')->nullable()->change();
-            $table->integer('clear_profit')->nullable()->change();
+//            $table->integer('clear_profit')->nullable()->change();
             $table->integer('turnover')->nullable()->change();
+
+        });
+
+        Schema::table('profits', function ($table) {
+            $table->integer('clear_profit')->nullable()->change();
 
         });
     }
