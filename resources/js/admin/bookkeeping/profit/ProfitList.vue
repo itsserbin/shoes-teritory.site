@@ -326,12 +326,12 @@ export default {
 
             const self = this;
             data.result.data.forEach((item) => {
-                costs.data.push(item.cost);
-                clear_profit.data.push(item.clear_profit);
-                profits.data.push(item.profit);
-                turnover.data.push(item.turnover);
-                refunds_sum.data.push(item.refunds_sum);
-                self.options.xaxis.categories.push(this.dateFormat(item.date));
+                costs.data.unshift(item.cost);
+                clear_profit.data.unshift(item.clear_profit);
+                profits.data.unshift(item.profit);
+                turnover.data.unshift(item.turnover);
+                refunds_sum.data.unshift(item.refunds_sum);
+                self.options.xaxis.categories.unshift(this.dateFormat(item.date));
             })
             self.series = [costs, clear_profit, profits, turnover, refunds_sum];
             self.isLoading = false;
