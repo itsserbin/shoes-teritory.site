@@ -6,7 +6,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 
-class SupplierPaymentsController extends BaseController
+class OrdersStatisticController extends BaseController
 {
     public function __construct()
     {
@@ -15,6 +15,6 @@ class SupplierPaymentsController extends BaseController
 
     public function index(): Factory|View|Application
     {
-        return view('admin.bookkeeping.supplier-payments.index');
+        return view('admin.bookkeeping.orders-statistics.index');
     }
 }

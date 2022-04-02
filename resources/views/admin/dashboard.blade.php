@@ -7,14 +7,11 @@
         <div class="row">
             <div class="col">
                 <admin-dashboard></admin-dashboard>
-
+                <hr>
             </div>
         </div>
         <div class="row">
-            <bookkeeping-daily-statistics
-                administrator-role="{{json_encode(auth()->check() && auth()->user()->hasRole('administrator'))}}"
-                admin-permission="{{json_encode(Gate::allows('admin'))}}"
-            ></bookkeeping-daily-statistics>
+            <bookkeeping-orders-statistics></bookkeeping-orders-statistics>
         </div>
     </div>
 @endsection

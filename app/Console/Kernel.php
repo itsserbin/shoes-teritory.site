@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\ApiNovaPoshtaCommand;
 use App\Console\Commands\DailyStatisticsCommand;
+use App\Console\Commands\OrdersStatisticCommand;
 use App\Console\Commands\SumManagersSalary;
 use App\Console\Commands\SumProfitCommand;
 use Illuminate\Console\Scheduling\Schedule;
@@ -21,6 +22,7 @@ class Kernel extends ConsoleKernel
         ApiNovaPoshtaCommand::class,
         DailyStatisticsCommand::class,
         SumProfitCommand::class,
+        OrdersStatisticCommand::class,
     ];
 
     /**
@@ -31,6 +33,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command('orderStatistics:count')->everyMinute();
         $schedule->command('managers_salary:sum')->everyMinute();
         $schedule->command('api_nova_poshta:order_integration')->everyMinute();
         $schedule->command('daily_statistics:run')->everyMinute();

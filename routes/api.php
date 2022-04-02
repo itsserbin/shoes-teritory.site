@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Admin\Bookkeeping\CostCategoriesController;
 use App\Http\Controllers\Api\Admin\Bookkeeping\CostsController;
 use App\Http\Controllers\Api\Admin\Bookkeeping\DailyStatisticsController;
 use App\Http\Controllers\Api\Admin\Bookkeeping\ManagersSalariesController;
+use App\Http\Controllers\Api\Admin\Bookkeeping\OrdersStatisticController;
 use App\Http\Controllers\Api\Admin\Bookkeeping\ProfitsController;
 use App\Http\Controllers\Api\Admin\Bookkeeping\SupplierPaymentsController;
 use App\Http\Controllers\Api\Admin\CategoriesController;
@@ -41,7 +42,7 @@ Route::middleware('auth:api')->group(function () {
     /**
      * Маршрут дашборда админ.панели.
      *
-     * GET /api/dashboard
+     * GET /api/dashbard
      */
     Route::get('dashboard', [AdminController::class, 'dashboard'])
         ->name('api.dashboard');
@@ -360,6 +361,11 @@ Route::middleware('auth:api')->group(function () {
 
             Route::post('create', [ProfitsController::class, 'create'])
                 ->name('api.bookkeeping.profits.create');
+        });
+
+        Route::prefix('orders-statistics')->group(function () {
+            Route::get('/', [OrdersStatisticController::class, 'index'])
+                ->name('api.bookkeeping.orders-statistics.index');
         });
     });
 

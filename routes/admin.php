@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\BannersController;
 use App\Http\Controllers\Admin\Bookkeeping\BookkeepingController;
 use App\Http\Controllers\Admin\Bookkeeping\CostsController;
 use App\Http\Controllers\Admin\Bookkeeping\ManagersSalariesController;
+use App\Http\Controllers\Admin\Bookkeeping\OrdersStatisticController;
 use App\Http\Controllers\Admin\Bookkeeping\ProfitController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\ClientsController;
@@ -175,6 +176,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
                 ->name('admin.bookkeeping.daily-statistics.destroy');
         });
 
+        Route::prefix('orders-statistic')->group(function () {
+            Route::get('/', [OrdersStatisticController::class, 'index'])
+                ->name('admin.bookkeeping.orders-statistic.index');
+        });
 
         Route::resource('product-statistics', ProductStatisticsController::class)
             ->middleware('role:administrator')

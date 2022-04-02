@@ -60,13 +60,13 @@ class SumManagersSalary extends Command
         if (count($managerSalaryNow)) {
             foreach ($managerSalaryNow as $managerSalaryNowItem) {
                 if ($managerSalaryNowItem->manager_id) {
-                    $managerSalaryNowItem->count_applications = $this->ordersRepository->sumOrdersCount($managerSalaryNowItem->date, $managerSalaryNowItem->manager_id);
+                    $managerSalaryNowItem->count_applications = $this->ordersRepository->countAllOrders($managerSalaryNowItem->date, $managerSalaryNowItem->manager_id);
                     $managerSalaryNowItem->count_additional_sales = $this->orderItemsRepository->countAdditionalSales($managerSalaryNowItem->date, $managerSalaryNowItem->manager_id);
 
                     $managerSalaryNowItem->in_process_applications = $this->ordersRepository->sumIndefiniteApplications($managerSalaryNowItem->date, $managerSalaryNowItem->manager_id);
                     $managerSalaryNowItem->returned_applications = $this->ordersRepository->sumReturnedApplications($managerSalaryNowItem->date, $managerSalaryNowItem->manager_id);
                     $managerSalaryNowItem->canceled_applications = $this->ordersRepository->sumCancelOrdersCount($managerSalaryNowItem->date, $managerSalaryNowItem->manager_id);
-                    $managerSalaryNowItem->done_applications = $this->ordersRepository->sumDoneOrdersCount($managerSalaryNowItem->date, $managerSalaryNowItem->manager_id);
+                    $managerSalaryNowItem->done_applications = $this->ordersRepository->countDoneOrders($managerSalaryNowItem->date, $managerSalaryNowItem->manager_id);
                     $managerSalaryNowItem->total_applications = $this->ordersRepository->sumApprovalApplications($managerSalaryNowItem->date, $managerSalaryNowItem->manager_id);
 
                     $managerSalaryNowItem->count_sale_of_air = $this->ordersRepository->sumCountSalesOfAirMarginality($managerSalaryNowItem->date, $managerSalaryNowItem->manager_id);
@@ -94,13 +94,13 @@ class SumManagersSalary extends Command
                     $managerSalaryNowItem->total_price = $managerSalaryNowItem->sum_price_applications + $managerSalaryNowItem->sum_price_additional_sales + $managerSalaryNowItem->total_sale_of_air;
                     $managerSalaryNowItem->update();
                 } elseif (!$managerSalaryNowItem->manager_id) {
-                    $managerSalaryNowItem->count_applications = $this->ordersRepository->sumOrdersCount($managerSalaryNowItem->date);
+                    $managerSalaryNowItem->count_applications = $this->ordersRepository->countAllOrders($managerSalaryNowItem->date);
                     $managerSalaryNowItem->count_additional_sales = $this->orderItemsRepository->countAdditionalSales($managerSalaryNowItem->date);
 
                     $managerSalaryNowItem->in_process_applications = $this->ordersRepository->sumIndefiniteApplications($managerSalaryNowItem->date);
                     $managerSalaryNowItem->returned_applications = $this->ordersRepository->sumReturnedApplications($managerSalaryNowItem->date);
                     $managerSalaryNowItem->canceled_applications = $this->ordersRepository->sumCancelOrdersCount($managerSalaryNowItem->date);
-                    $managerSalaryNowItem->done_applications = $this->ordersRepository->sumDoneOrdersCount($managerSalaryNowItem->date);
+                    $managerSalaryNowItem->done_applications = $this->ordersRepository->countDoneOrders($managerSalaryNowItem->date);
                     $managerSalaryNowItem->total_applications = $this->ordersRepository->sumApprovalApplications($managerSalaryNowItem->date);
 
                     $managerSalaryNowItem->count_sale_of_air = $this->ordersRepository->sumCountSalesOfAirMarginality($managerSalaryNowItem->date);
@@ -132,13 +132,13 @@ class SumManagersSalary extends Command
         } else {
             $item = $this->managersSalaryRepository->createNewModel();
             $item->date = $dateNow;
-            $item->count_applications = $this->ordersRepository->sumOrdersCount($dateNow);
+            $item->count_applications = $this->ordersRepository->countAllOrders($dateNow);
             $item->count_additional_sales = $this->orderItemsRepository->countAdditionalSales($dateNow);
 
             $item->in_process_applications = $this->ordersRepository->sumIndefiniteApplications($dateNow);
             $item->returned_applications = $this->ordersRepository->sumReturnedApplications($dateNow);
             $item->canceled_applications = $this->ordersRepository->sumCancelOrdersCount($dateNow);
-            $item->done_applications = $this->ordersRepository->sumDoneOrdersCount($dateNow);
+            $item->done_applications = $this->ordersRepository->countDoneOrders($dateNow);
             $item->total_applications = $this->ordersRepository->sumApprovalApplications($dateNow);
 
             $item->count_sale_of_air = $this->ordersRepository->sumCountSalesOfAirMarginality($dateNow);
@@ -171,13 +171,13 @@ class SumManagersSalary extends Command
                 $manager_item = $this->managersSalaryRepository->createNewModel();
                 $manager_item->date = $dateNow;
                 $manager_item->manager_id = $manager->id;
-                $manager_item->count_applications = $this->ordersRepository->sumOrdersCount($dateNow, $manager->id);
+                $manager_item->count_applications = $this->ordersRepository->countAllOrders($dateNow, $manager->id);
                 $manager_item->count_additional_sales = $this->orderItemsRepository->countAdditionalSales($dateNow, $manager->id);
 
                 $manager_item->in_process_applications = $this->ordersRepository->sumIndefiniteApplications($dateNow, $manager->id);
                 $manager_item->returned_applications = $this->ordersRepository->sumReturnedApplications($dateNow, $manager->id);
                 $manager_item->canceled_applications = $this->ordersRepository->sumCancelOrdersCount($dateNow, $manager->id);
-                $manager_item->done_applications = $this->ordersRepository->sumDoneOrdersCount($dateNow, $manager->id);
+                $manager_item->done_applications = $this->ordersRepository->countDoneOrders($dateNow, $manager->id);
                 $manager_item->total_applications = $this->ordersRepository->sumApprovalApplications($dateNow, $manager->id);
 
                 $manager_item->count_sale_of_air = $this->ordersRepository->sumCountSalesOfAirMarginality($dateNow, $manager->id);
@@ -210,13 +210,13 @@ class SumManagersSalary extends Command
 
         foreach ($managerSalaryAll as $managerSalaryAll_item) {
             if ($managerSalaryAll_item->manager_id) {
-                $managerSalaryAll_item->count_applications = $this->ordersRepository->sumOrdersCount($managerSalaryAll_item->date, $managerSalaryAll_item->manager_id);
+                $managerSalaryAll_item->count_applications = $this->ordersRepository->countAllOrders($managerSalaryAll_item->date, $managerSalaryAll_item->manager_id);
                 $managerSalaryAll_item->count_additional_sales = $this->orderItemsRepository->countAdditionalSales($managerSalaryAll_item->date, $managerSalaryAll_item->manager_id);
 
                 $managerSalaryAll_item->in_process_applications = $this->ordersRepository->sumIndefiniteApplications($managerSalaryAll_item->date, $managerSalaryAll_item->manager_id);
                 $managerSalaryAll_item->returned_applications = $this->ordersRepository->sumReturnedApplications($managerSalaryAll_item->date, $managerSalaryAll_item->manager_id);
                 $managerSalaryAll_item->canceled_applications = $this->ordersRepository->sumCancelOrdersCount($managerSalaryAll_item->date, $managerSalaryAll_item->manager_id);
-                $managerSalaryAll_item->done_applications = $this->ordersRepository->sumDoneOrdersCount($managerSalaryAll_item->date, $managerSalaryAll_item->manager_id);
+                $managerSalaryAll_item->done_applications = $this->ordersRepository->countDoneOrders($managerSalaryAll_item->date, $managerSalaryAll_item->manager_id);
                 $managerSalaryAll_item->total_applications = $this->ordersRepository->sumApprovalApplications($managerSalaryAll_item->date, $managerSalaryAll_item->manager_id);
 
                 $managerSalaryAll_item->count_sale_of_air = $this->ordersRepository->sumCountSalesOfAirMarginality($managerSalaryAll_item->date, $managerSalaryAll_item->manager_id);
@@ -246,13 +246,13 @@ class SumManagersSalary extends Command
                 $managerSalaryAll_item->update();
 
             } elseif (!$managerSalaryAll_item->manager_id) {
-                $managerSalaryAll_item->count_applications = $this->ordersRepository->sumOrdersCount($managerSalaryAll_item->date);
+                $managerSalaryAll_item->count_applications = $this->ordersRepository->countAllOrders($managerSalaryAll_item->date);
                 $managerSalaryAll_item->count_additional_sales = $this->orderItemsRepository->countAdditionalSales($managerSalaryAll_item->date);
 
                 $managerSalaryAll_item->in_process_applications = $this->ordersRepository->sumIndefiniteApplications($managerSalaryAll_item->date);
                 $managerSalaryAll_item->returned_applications = $this->ordersRepository->sumReturnedApplications($managerSalaryAll_item->date);
                 $managerSalaryAll_item->canceled_applications = $this->ordersRepository->sumCancelOrdersCount($managerSalaryAll_item->date);
-                $managerSalaryAll_item->done_applications = $this->ordersRepository->sumDoneOrdersCount($managerSalaryAll_item->date);
+                $managerSalaryAll_item->done_applications = $this->ordersRepository->countDoneOrders($managerSalaryAll_item->date);
                 $managerSalaryAll_item->total_applications = $this->ordersRepository->sumApprovalApplications($managerSalaryAll_item->date);
 
                 $managerSalaryAll_item->count_sale_of_air = $this->ordersRepository->sumCountSalesOfAirMarginality($managerSalaryAll_item->date);

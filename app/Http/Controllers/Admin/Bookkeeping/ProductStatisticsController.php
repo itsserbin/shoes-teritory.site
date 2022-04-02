@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin\Bookkeeping;
 
 use App\Repositories\Bookkeeping\BookkeepingRepository;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 
 class ProductStatisticsController extends BaseController
 {
@@ -19,7 +22,7 @@ class ProductStatisticsController extends BaseController
         $this->BookkeepingRepository = app(BookkeepingRepository::class);
     }
 
-    public function index()
+    public function index(): Factory|View|Application
     {
         $done_orders = $this->BookkeepingRepository->getDoneOrdersWithPaginate(15);
 

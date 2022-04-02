@@ -367,9 +367,9 @@ export default {
                 refunds_sum.data.unshift(item.refunds_sum);
                 sale_of_air_sum.data.unshift(item.sale_of_air_sum);
                 profit_without_sale_of_air.data.unshift(item.profit_without_sale_of_air);
-                self.options.xaxis.categories.unshift(this.dateFormat(item.date));
+                self.options.xaxis.categories.unshift(self.dateFormat(item.date));
             })
-            self.series = [costs, clear_profit, profits, turnover, refunds_sum,sale_of_air_sum,profit_without_sale_of_air];
+            self.series = [costs, clear_profit, profits, turnover, refunds_sum, sale_of_air_sum, profit_without_sale_of_air];
             self.isLoading = false;
         },
         getProfitsListErrorResponse(response) {

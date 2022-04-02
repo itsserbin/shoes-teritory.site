@@ -371,7 +371,7 @@ class OrdersRepository extends CoreRepository
         return $model;
     }
 
-    public function sumOrdersCount($date, $manager_id = null)
+    public function countAllOrders($date, $manager_id = null)
     {
         if ($manager_id) {
             return $this->model::whereDate('created_at', $date)->where('manager_id', $manager_id)->count();
@@ -380,7 +380,7 @@ class OrdersRepository extends CoreRepository
         }
     }
 
-    public function sumDoneOrdersCount($date, $manager_id = null)
+    public function countDoneOrders($date, $manager_id = null)
     {
         if ($manager_id) {
             return $this->model::whereDate('created_at', $date)
@@ -393,6 +393,34 @@ class OrdersRepository extends CoreRepository
             return $this->model::whereDate('created_at', $date)
                 ->where('status', OrderStatus::STATUS_DONE)
                 ->count();
+        }
+    }
+
+    public function countOrdersByStatus($status = null, $date = null, $manager_id = null)
+    {
+        if ($manager_id && $date && $status) {
+            return $this->model::whereDate('created_at', $date)
+                ->where([
+                    ['status', $status],
+                    ['manager_id', $manager_id],
+                ])->count();
+        } elseif ($manager_id && $date) {
+            return $this->model::whereDate('created_at', $date)
+                ->where('manager_id', $manager_id)->count();
+        } elseif ($date && $status) {
+            return $this->model::whereDate('created_at', $date)
+                ->where('status', $status)->count();
+        } elseif ($status && $manager_id) {
+            return $this->model::where([
+                ['status', $status],
+                ['manager_id', $manager_id],
+            ])->count();
+        } elseif ($status) {
+            return $this->model::where('status', $status)->count();
+        } elseif ($date) {
+            return $this->model::whereDate('created_at', $date)->count();
+        } elseif ($manager_id) {
+            return $this->model::whereDate('manager_id', $manager_id)->count();
         }
     }
 
