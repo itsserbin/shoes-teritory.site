@@ -58,6 +58,36 @@
                     </button>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-12 col-md-3 my-2">
+                    <button class="btn btn-outline-danger w-100 h-100"
+                            @click="getProfitsByLast('7-days')"
+                            :class="{'active': activeLastDays === '7-days'}"
+                    >7 дней
+                    </button>
+                </div>
+                <div class="col-12 col-md-3 my-2">
+                    <button class="btn btn-outline-danger w-100 h-100"
+                            @click="getProfitsByLast('14-days')"
+                            :class="{'active': activeLastDays === '14-days'}"
+                    >14 дней
+                    </button>
+                </div>
+                <div class="col-12 col-md-3 my-2">
+                    <button class="btn btn-outline-danger w-100 h-100"
+                            @click="getProfitsByLast('30-days')"
+                            :class="{'active': activeLastDays === '30-days'}"
+                    >30 дней
+                    </button>
+                </div>
+                <div class="col-12 col-md-3 my-2">
+                    <button class="btn btn-outline-danger w-100 h-100"
+                            @click="getProfitsByLast('90-days')"
+                            :class="{'active': activeLastDays === '90-days'}"
+                    >90 дней
+                    </button>
+                </div>
+            </div>
             <hr>
             <div>
                 <apexchart type="area" height="350" :options="options" :series="series"></apexchart>
@@ -124,6 +154,17 @@
                             </th>
                             <th>
                                 <div class="d-flex align-items-center justify-content-center">
+                                    <div class="mr-1">Прибыль без продаж воздуха</div>
+                                    <a href="javascript:" class="text-dark" @click="sort('profit_without_sale_of_air','asc')">
+                                        <arrow-up-icon></arrow-up-icon>
+                                    </a>
+                                    <a href="javascript:" class="text-dark" @click="sort('profit_without_sale_of_air','desc')">
+                                        <arrow-down-icon></arrow-down-icon>
+                                    </a>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="d-flex align-items-center justify-content-center">
                                     <div class="mr-1">Продажи воздуха</div>
                                     <a href="javascript:" class="text-dark" @click="sort('sale_of_air_sum','asc')">
                                         <arrow-up-icon></arrow-up-icon>
@@ -135,11 +176,11 @@
                             </th>
                             <th>
                                 <div class="d-flex align-items-center justify-content-center">
-                                    <div class="mr-1">Прибыль без продаж воздуха</div>
-                                    <a href="javascript:" class="text-dark" @click="sort('sale_of_air_sum','asc')">
+                                    <div class="mr-1">Маржа</div>
+                                    <a href="javascript:" class="text-dark" @click="sort('marginality','asc')">
                                         <arrow-up-icon></arrow-up-icon>
                                     </a>
-                                    <a href="javascript:" class="text-dark" @click="sort('sale_of_air_sum','desc')">
+                                    <a href="javascript:" class="text-dark" @click="sort('marginality','desc')">
                                         <arrow-down-icon></arrow-down-icon>
                                     </a>
                                 </div>
@@ -174,8 +215,9 @@
                             <td>{{ profit.cost | formatMoney }} грн.</td>
                             <td>{{ profit.refunds_sum | formatMoney }} грн.</td>
                             <td>{{ profit.profit | formatMoney }} грн.</td>
-                            <td>{{ profit.sale_of_air_sum | formatMoney }} грн.</td>
                             <td>{{ profit.profit_without_sale_of_air | formatMoney }} грн.</td>
+                            <td>{{ profit.sale_of_air_sum | formatMoney }} грн.</td>
+                            <td>{{ profit.marginality | formatMoney }} грн.</td>
                             <td>{{ profit.turnover | formatMoney }} грн.</td>
                             <td>{{ profit.clear_profit | formatMoney }} грн.</td>
                         </tr>
@@ -221,7 +263,6 @@ export default {
             series: [],
             options: {
                 xaxis: {
-                    categories: [],
                     labels: {
                         rotate: -15,
                         rotateAlways: true,
@@ -229,24 +270,28 @@ export default {
                 },
                 chart: {
                     type: 'area',
-                    stacked: false,
-                    height: 350,
+                    stacked: true,
+                    // height: 450,
                     zoom: {
-                        enabled: false,
+                        enabled: true,
+                        type: 'x',
                         autoScaleYaxis: true
                     },
+                },
+                markers: {
+                    size: 0,
                 },
                 dataLabels: {
                     enabled: false
                 },
                 stroke: {
-                    curve: 'smooth'
+                    curve: 'straight'
                 },
             },
         }
     },
     mounted() {
-        this.getProfits();
+        this.getProfitsByLast('7-days');
     },
     props: {
         destroyMassAction: String,
@@ -348,6 +393,10 @@ export default {
                 {
                     name: 'Прибыль без продаж воздуха',
                     data: []
+                },
+                {
+                    name: 'Маржа',
+                    data: []
                 }];
             let costs = this.series.find((item) => item.name === 'Расходы');
             let profits = this.series.find((item) => item.name === 'Прибыль без расходов');
@@ -356,21 +405,33 @@ export default {
             let refunds_sum = this.series.find((item) => item.name === 'Сумма за возвраты');
             let sale_of_air_sum = this.series.find((item) => item.name === 'Продажи воздуха');
             let profit_without_sale_of_air = this.series.find((item) => item.name === 'Прибыль без продаж воздуха');
+            let marginality = this.series.find((item) => item.name === 'Маржа');
 
             const self = this;
-            data.result.data.forEach((item) => {
-                costs.data.unshift({y: item.cost, x: self.dateFormat(item.date)});
-                clear_profit.data.unshift({y: item.clear_profit, x: self.dateFormat(item.date)});
-                profits.data.unshift({y: item.profit, x: self.dateFormat(item.date)});
-                turnover.data.unshift({y: item.turnover, x: self.dateFormat(item.date)});
-                refunds_sum.data.unshift({y: item.refunds_sum, x: self.dateFormat(item.date)});
-                sale_of_air_sum.data.unshift({y: item.sale_of_air_sum, x: self.dateFormat(item.date)});
-                profit_without_sale_of_air.data.unshift({
-                    y: item.profit_without_sale_of_air,
-                    x: self.dateFormat(item.date)
-                });
+            self.options.xaxis.categories = [];
+            data.chart.forEach((item) => {
+                // costs.data.unshift({y: item.cost, x: self.dateFormat(item.date)});
+                // clear_profit.data.unshift({y: item.clear_profit, x: self.dateFormat(item.date)});
+                // profits.data.unshift({y: item.profit, x: self.dateFormat(item.date)});
+                // turnover.data.unshift({y: item.turnover, x: self.dateFormat(item.date)});
+                // refunds_sum.data.unshift({y: item.refunds_sum, x: self.dateFormat(item.date)});
+                // sale_of_air_sum.data.unshift({y: item.sale_of_air_sum, x: self.dateFormat(item.date)});
+                // marginality.data.unshift({y: item.marginality, x: self.dateFormat(item.date)});
+                // profit_without_sale_of_air.data.unshift({
+                //     y: item.profit_without_sale_of_air,
+                //     x: self.dateFormat(item.date)
+                // });
+                costs.data.unshift(item.cost);
+                clear_profit.data.unshift(item.clear_profit);
+                profits.data.unshift(item.profit);
+                turnover.data.unshift(item.turnover);
+                marginality.data.unshift(item.marginality);
+                refunds_sum.data.unshift(item.refunds_sum);
+                sale_of_air_sum.data.unshift(item.sale_of_air_sum);
+                profit_without_sale_of_air.data.unshift(item.profit_without_sale_of_air);
+                self.options.xaxis.categories.unshift(self.dateFormat(item.date));
             })
-            self.series = [costs, clear_profit, profits, turnover, refunds_sum, sale_of_air_sum, profit_without_sale_of_air];
+            self.series = [costs, clear_profit, profits, turnover, refunds_sum, sale_of_air_sum, profit_without_sale_of_air, marginality];
             self.isLoading = false;
         },
         getProfitsListErrorResponse(response) {

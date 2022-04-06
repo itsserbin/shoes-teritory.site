@@ -29,21 +29,26 @@ class ProfitsController extends BaseController
         if ($sort && $param) {
             $result = $this->profitsRepository->getAllWithPaginate(null, null, null, null, $sort, $param);
             $generalStat = $this->profitsRepository->generalStatistic();
+            $chart = $this->profitsRepository->getDataForChart();
         } elseif ($date_start && $date_end) {
             $result = $this->profitsRepository->getAllWithPaginate($date_start, $date_end);
             $generalStat = $this->profitsRepository->generalStatistic($date_start, $date_end);
+            $chart = $this->profitsRepository->getDataForChart($date_start, $date_end);
         } elseif ($last) {
             $result = $this->profitsRepository->getAllWithPaginate(null, null, $last);
             $generalStat = $this->profitsRepository->generalStatistic(null, null, $last);
+            $chart = $this->profitsRepository->getDataForChart(null, null, $last);
         } else {
             $result = $this->profitsRepository->getAllWithPaginate();
             $generalStat = $this->profitsRepository->generalStatistic();
+            $chart = $this->profitsRepository->getDataForChart();
         }
 
         return $this->returnResponse([
             'success' => true,
             'result' => $result,
             'generalStat' => $generalStat,
+            'chart' => $chart,
         ]);
     }
 

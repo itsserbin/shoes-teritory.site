@@ -36,6 +36,18 @@ class ProfitsRepository extends CoreRepository
                 $model = $this->model::whereBetween('date', [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->endOfWeek()]);
             } elseif ($last == 'one-month') {
                 $model = $this->model::whereBetween('date', [Carbon::now()->startOfMonth(), Carbon::now()->endOfWeek()]);
+            } elseif ($last == '7-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(7), Carbon::now()]);
+            } elseif ($last == '14-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(14), Carbon::now()]);
+            } elseif ($last == '30-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(30), Carbon::now()]);
+            } elseif ($last == '90-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(90), Carbon::now()]);
             } else {
                 $model = $this->model;
             }
@@ -48,6 +60,7 @@ class ProfitsRepository extends CoreRepository
             'date',
             'cost',
             'profit',
+            'marginality',
             'clear_profit',
             'refunds_sum',
             'sale_of_air_sum',
@@ -56,6 +69,53 @@ class ProfitsRepository extends CoreRepository
         )
             ->orderBy($sort, $param)
             ->paginate($perPage);
+
+    }
+
+    public function getDataForChart($date_start = null, $date_end = null, $last = null)
+    {
+        if ($date_start && $date_end) {
+            $model = $this->model::whereBetween('date', [$date_start, $date_end]);
+        } elseif ($last) {
+            if ($last == 'week') {
+                $model = $this->model::whereBetween('date', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+            } elseif ($last == 'two-week') {
+                $model = $this->model::whereBetween('date', [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->endOfWeek()]);
+            } elseif ($last == 'one-month') {
+                $model = $this->model::whereBetween('date', [Carbon::now()->startOfMonth(), Carbon::now()->endOfWeek()]);
+            } elseif ($last == '7-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(7), Carbon::now()]);
+            } elseif ($last == '14-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(14), Carbon::now()]);
+            } elseif ($last == '30-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(30), Carbon::now()]);
+            } elseif ($last == '90-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(90), Carbon::now()]);
+            } else {
+                $model = $this->model;
+            }
+        } else {
+            $model = $this->model;
+        }
+
+        return $model->select(
+            'id',
+            'date',
+            'cost',
+            'profit',
+            'marginality',
+            'clear_profit',
+            'refunds_sum',
+            'sale_of_air_sum',
+            'profit_without_sale_of_air',
+            'turnover',
+        )
+            ->orderBy('date','desc')
+            ->get();
 
     }
 
@@ -73,6 +133,18 @@ class ProfitsRepository extends CoreRepository
             } elseif ($last == 'one-month') {
                 $model = $this->model::whereBetween('date',
                     [Carbon::now()->startOfMonth(), Carbon::now()->endOfWeek()])->get();
+            } elseif ($last == '7-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(7), Carbon::now()])->get();
+            } elseif ($last == '14-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(14), Carbon::now()])->get();
+            } elseif ($last == '30-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(30), Carbon::now()])->get();
+            } elseif ($last == '90-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(90), Carbon::now()])->get();
             } else {
                 $model = $this->model;
             }
@@ -87,6 +159,7 @@ class ProfitsRepository extends CoreRepository
         $result['Оборот'] = $model->sum('turnover');
         $result['Продажи воздуха'] = $model->sum('sale_of_air_sum');
         $result['Прибыль без продаж воздуха'] = $model->sum('profit_without_sale_of_air');
+        $result['Маржа'] = $model->sum('marginality');
 
         return $result;
     }
@@ -111,7 +184,7 @@ class ProfitsRepository extends CoreRepository
 //        } else {
 //            return $this->model::all();
 //        }
-            return $this->model::all();
+        return $this->model::all();
     }
 
     public function create($data)

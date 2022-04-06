@@ -352,6 +352,17 @@ class OrderItemsRepository extends CoreRepository
             ->sum('total_price');
     }
 
+    public function sumMarginalityByDate($date)
+    {
+        return $this->model::whereDate('created_at', $date)
+            ->select('clear_total_price', 'order_id')
+            ->with('order')
+            ->whereHas('order', function ($q) {
+                $q->where('status', OrderStatus::STATUS_DONE);
+            })
+            ->sum('clear_total_price');
+    }
+
     public function sumRefundsByDate($date)
     {
         $model = $this->model::whereDate('created_at', $date)
