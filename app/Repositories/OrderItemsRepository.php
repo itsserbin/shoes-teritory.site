@@ -275,6 +275,7 @@ class OrderItemsRepository extends CoreRepository
             $this->ordersRepository->updateOnAddOrderTotalPriceAndCount($id, $data['count'], $orderItem->total_price);
         }
         $orderItem->profit = $orderItem->sale_price - $product->trade_price;
+        $orderItem->clear_total_price = $orderItem->profit * $orderItem->count;
 
         $orderItem->save();
 
