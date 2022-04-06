@@ -349,7 +349,6 @@ export default {
                     name: 'Прибыль без продаж воздуха',
                     data: []
                 }];
-            this.options.xaxis.categories = [];
             let costs = this.series.find((item) => item.name === 'Расходы');
             let profits = this.series.find((item) => item.name === 'Прибыль без расходов');
             let clear_profit = this.series.find((item) => item.name === 'Чистая прибыль');
@@ -360,14 +359,16 @@ export default {
 
             const self = this;
             data.result.data.forEach((item) => {
-                costs.data.unshift(item.cost);
-                clear_profit.data.unshift(item.clear_profit);
-                profits.data.unshift(item.profit);
-                turnover.data.unshift(item.turnover);
-                refunds_sum.data.unshift(item.refunds_sum);
-                sale_of_air_sum.data.unshift(item.sale_of_air_sum);
-                profit_without_sale_of_air.data.unshift(item.profit_without_sale_of_air);
-                self.options.xaxis.categories.unshift(self.dateFormat(item.date));
+                costs.data.unshift({y: item.cost, x: self.dateFormat(item.date)});
+                clear_profit.data.unshift({y: item.clear_profit, x: self.dateFormat(item.date)});
+                profits.data.unshift({y: item.profit, x: self.dateFormat(item.date)});
+                turnover.data.unshift({y: item.turnover, x: self.dateFormat(item.date)});
+                refunds_sum.data.unshift({y: item.refunds_sum, x: self.dateFormat(item.date)});
+                sale_of_air_sum.data.unshift({y: item.sale_of_air_sum, x: self.dateFormat(item.date)});
+                profit_without_sale_of_air.data.unshift({
+                    y: item.profit_without_sale_of_air,
+                    x: self.dateFormat(item.date)
+                });
             })
             self.series = [costs, clear_profit, profits, turnover, refunds_sum, sale_of_air_sum, profit_without_sale_of_air];
             self.isLoading = false;

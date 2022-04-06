@@ -47,10 +47,12 @@
             </div>
             <hr>
             <div>
-                <apexchart type="area" height="350" :options="optionsOrdersStatistic" :series="seriesOrdersStatistic"></apexchart>
+                <apexchart type="area" height="350" :options="optionsOrdersStatistic"
+                           :series="seriesOrdersStatistic"></apexchart>
             </div>
             <hr>
             <div class="row align-items-center justify-content-center">
+
                 <hr>
                 <div class="col-6 col-md-3 text-center my-1" v-for="(item,i) in generalOrderStatistics">
                     <bookkeeping-statistics-card
@@ -133,13 +135,13 @@ export default {
             seriesOrdersStatistic: [],
             optionsOrdersStatistic: {
                 xaxis: {
-                    categories: [],
                     labels: {
                         rotate: -15,
                         rotateAlways: true,
-                    }
+                    },
                 },
                 chart: {
+                    id: 'options-orders-statistic-chart',
                     type: 'area',
                     stacked: false,
                     height: 350,
@@ -219,7 +221,6 @@ export default {
                     name: 'Отмененные',
                     data: []
                 }];
-            this.optionsOrdersStatistic.xaxis.categories = [];
             let applications = this.seriesOrdersStatistic.find((item) => item.name === 'Всего заявок');
             let completed = this.seriesOrdersStatistic.find((item) => item.name === 'Выполненные');
             let refunds = this.seriesOrdersStatistic.find((item) => item.name === 'Возвраты');
@@ -227,11 +228,10 @@ export default {
 
             const self = this;
             self.ordersStatistics.forEach((item) => {
-                applications.data.unshift(item.applications);
-                completed.data.unshift(item.completed);
-                refunds.data.unshift(item.refunds);
-                cancel.data.unshift(item.cancel);
-                self.optionsOrdersStatistic.xaxis.categories.unshift(self.dateFormat(item.date));
+                applications.data.unshift({y: item.applications, x: self.dateFormat(item.date)});
+                completed.data.unshift({y: item.completed, x: self.dateFormat(item.date)});
+                refunds.data.unshift({y: item.refunds, x: self.dateFormat(item.date)});
+                cancel.data.unshift({y: item.cancel, x: self.dateFormat(item.date)});
             })
             self.seriesOrdersStatistic = [applications, completed, refunds, cancel];
             self.isLoading = false;

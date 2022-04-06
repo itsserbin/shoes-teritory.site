@@ -292,20 +292,18 @@ export default {
                     data: []
                 }
             ];
-            this.options.xaxis.categories = [];
-
             let test = this.series.find((item) => item.name === 'Расходы');
             const self = this;
-            data.all.forEach((item) => {
-                test.data.push({
+            self.costs.forEach((item) => {
+                test.data.unshift({
                     y: item.total,
                     x: self.dateFormat(item.date)
                 })
             });
-            test.data.sort(function (a, b) {
-                var dateA = new Date(a.x), dateB = new Date(b.x)
-                return dateA - dateB
-            })
+            // test.data.sort(function (a, b) {
+            //     var dateA = new Date(a.x), dateB = new Date(b.x)
+            //     return dateA - dateB
+            // })
             self.isLoading = false;
         },
         getCostsListErrorResponse(response) {

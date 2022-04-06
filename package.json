@@ -28,7 +28,7 @@
         "@tinymce/tinymce-vue": "^3.2.8",
         "apexcharts": "^3.33.1",
         "bootstrap-vue": "^2.21.2",
-        "chart.js": "^2.9.0",
+        "chart.js": "^2.9.4",
         "dotenv": "^14.2.0",
         "hash.js": "^1.1.7",
         "hooper": "^0.3.4",
