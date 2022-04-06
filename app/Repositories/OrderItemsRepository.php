@@ -71,6 +71,7 @@ class OrderItemsRepository extends CoreRepository
             }
             $orderItem->profit = $orderItem->sale_price - $product->trade_price;
             $orderItem->total_price = $orderItem->sale_price * $orderItem->count;
+            $orderItem->clear_total_price = $orderItem->profit * $orderItem->count;
 
             $orderItem->save();
         }
