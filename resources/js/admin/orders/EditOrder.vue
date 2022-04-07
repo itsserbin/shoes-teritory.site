@@ -133,33 +133,6 @@
                                            @click.prevent="sendWaybill(order.client.phone,order.waybill)"
                     >Отправить повторно</a>)
                     </div>
-
-                    <div class="row align-items-center">
-                        <div class="col-12 col-md-6">
-                            <div class="form-check">
-                                <input class="form-check-input"
-                                       type="checkbox"
-                                       id="sale_of_air"
-                                       v-model="order.sale_of_air"
-                                >
-                                <label class="form-check-label"
-                                       for="sale_of_air"
-                                >
-                                    Доп.продажа воздуха
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <div v-if="order.sale_of_air" class="w-100">
-                                <input type="text"
-                                       id="sale_of_air_price"
-                                       v-model="order.sale_of_air_price"
-                                       class="form-control"
-                                       placeholder="Сумма скидки (грн.)"
-                                >
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="col-12 col-md-6">
@@ -170,6 +143,64 @@
                                   id="comment"
                                   v-model="order.comment">
                         </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row align-items-center">
+                <div class="col-12 col-md-6">
+                    <div class="form-group my-3">
+                        <label class="form-label">Доп.продажа воздуха</label>
+                        <select class="form-control" v-model="order.sale_of_air">
+                            <option :value="0">Нет</option>
+                            <option :value="1">Да</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="w-100">
+                        <label class="form-label">Сумма скидки (грн.)</label>
+                        <input type="number"
+                               v-model="order.sale_of_air_price"
+                               class="form-control"
+                               placeholder="Укажите сумму скидки"
+                               v-if="order.sale_of_air === 1"
+                        >
+                        <input type="number"
+                               v-else
+                               v-model="order.sale_of_air_price"
+                               class="form-control"
+                               placeholder="Укажите сумму скидки"
+                               disabled
+                        >
+                    </div>
+                </div>
+            </div>
+            <div class="row align-items-center">
+                <div class="col-12 col-md-6">
+                    <div class="form-group my-3">
+                        <label class="form-label">Предоплата</label>
+                        <select class="form-control" v-model="order.prepayment">
+                            <option :value="0">Нет</option>
+                            <option :value="1">Да</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="w-100">
+                        <label class="form-label">Сумма предоплаты (грн.)</label>
+                        <input type="number"
+                               v-model="order.prepayment_sum"
+                               class="form-control"
+                               placeholder="Укажите сумму предоплаты"
+                               v-if="order.prepayment === 1"
+                        >
+                        <input type="number"
+                               v-else
+                               v-model="order.prepayment_sum"
+                               class="form-control"
+                               placeholder="Укажите сумму предоплаты"
+                               disabled
+                        >
                     </div>
                 </div>
             </div>

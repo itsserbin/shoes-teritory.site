@@ -70,32 +70,32 @@
                             <tr>
                                 <th>Дата</th>
                                 <th>Всего</th>
-                                <th>Новые</th>
-                                <th>В процессе</th>
                                 <th>Переданы поставщику</th>
-                                <th>На почте</th>
-                                <th>Отмененные</th>
-                                <th>Возвраты</th>
-                                <th>Выполненные</th>
                                 <th>Ожидают отправки</th>
                                 <th>Ожидают предоплаты</th>
                                 <th>В дороге</th>
+                                <th>В процессе</th>
+                                <th>На почте</th>
+                                <th>Выполненные</th>
+                                <th>Возвраты</th>
+                                <th>Отмененные</th>
+                                <th>Новые</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr v-for="item in ordersStatistics" :key="item.id">
                                 <th>{{ item.date | moment("DD.MM.YYYY") }}</th>
                                 <td>{{ item.applications }}</td>
-                                <td>{{ item.unprocessed }}</td>
-                                <td>{{ item.in_process }}</td>
                                 <td>{{ item.transferred_to_supplier }}</td>
-                                <td>{{ item.at_the_post_office }}</td>
-                                <td>{{ item.cancel }}</td>
-                                <td>{{ item.refunds }}</td>
-                                <td>{{ item.completed }}</td>
                                 <td>{{ item.awaiting_dispatch }}</td>
                                 <td>{{ item.awaiting_prepayment }}</td>
                                 <td>{{ item.on_the_road }}</td>
+                                <td>{{ item.in_process }}</td>
+                                <td>{{ item.at_the_post_office }}</td>
+                                <td>{{ item.completed }}</td>
+                                <td>{{ item.refunds }}</td>
+                                <td>{{ item.cancel }}</td>
+                                <td>{{ item.unprocessed }}</td>
                             </tr>
                             </tbody>
                         </table>

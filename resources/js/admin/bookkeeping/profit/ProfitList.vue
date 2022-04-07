@@ -154,17 +154,6 @@
                             </th>
                             <th>
                                 <div class="d-flex align-items-center justify-content-center">
-                                    <div class="mr-1">Прибыль без продаж воздуха</div>
-                                    <a href="javascript:" class="text-dark" @click="sort('profit_without_sale_of_air','asc')">
-                                        <arrow-up-icon></arrow-up-icon>
-                                    </a>
-                                    <a href="javascript:" class="text-dark" @click="sort('profit_without_sale_of_air','desc')">
-                                        <arrow-down-icon></arrow-down-icon>
-                                    </a>
-                                </div>
-                            </th>
-                            <th>
-                                <div class="d-flex align-items-center justify-content-center">
                                     <div class="mr-1">Продажи воздуха</div>
                                     <a href="javascript:" class="text-dark" @click="sort('sale_of_air_sum','asc')">
                                         <arrow-up-icon></arrow-up-icon>
@@ -176,11 +165,45 @@
                             </th>
                             <th>
                                 <div class="d-flex align-items-center justify-content-center">
-                                    <div class="mr-1">Маржа</div>
-                                    <a href="javascript:" class="text-dark" @click="sort('marginality','asc')">
+                                    <div class="mr-1">Средняя маржа</div>
+                                    <a href="javascript:" class="text-dark" @click="sort('average_marginality','asc')">
                                         <arrow-up-icon></arrow-up-icon>
                                     </a>
-                                    <a href="javascript:" class="text-dark" @click="sort('marginality','desc')">
+                                    <a href="javascript:" class="text-dark" @click="sort('average_marginality','desc')">
+                                        <arrow-down-icon></arrow-down-icon>
+                                    </a>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <div class="mr-1">Сумма доп.продаж</div>
+                                    <a href="javascript:" class="text-dark" @click="sort('additional_sales_sum','asc')">
+                                        <arrow-up-icon></arrow-up-icon>
+                                    </a>
+                                    <a href="javascript:" class="text-dark"
+                                       @click="sort('additional_sales_sum','desc')">
+                                        <arrow-down-icon></arrow-down-icon>
+                                    </a>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <div class="mr-1">Сумма предоплат</div>
+                                    <a href="javascript:" class="text-dark" @click="sort('prepayment_sum','asc')">
+                                        <arrow-up-icon></arrow-up-icon>
+                                    </a>
+                                    <a href="javascript:" class="text-dark" @click="sort('prepayment_sum','desc')">
+                                        <arrow-down-icon></arrow-down-icon>
+                                    </a>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <div class="mr-1">Сумма доп.продаж</div>
+                                    <a href="javascript:" class="text-dark" @click="sort('additional_sales_sum','asc')">
+                                        <arrow-up-icon></arrow-up-icon>
+                                    </a>
+                                    <a href="javascript:" class="text-dark" @click="sort('additional_sales_sum','desc')">
                                         <arrow-down-icon></arrow-down-icon>
                                     </a>
                                 </div>
@@ -215,9 +238,11 @@
                             <td>{{ profit.cost | formatMoney }} грн.</td>
                             <td>{{ profit.refunds_sum | formatMoney }} грн.</td>
                             <td>{{ profit.profit | formatMoney }} грн.</td>
-                            <td>{{ profit.profit_without_sale_of_air | formatMoney }} грн.</td>
                             <td>{{ profit.sale_of_air_sum | formatMoney }} грн.</td>
-                            <td>{{ profit.marginality | formatMoney }} грн.</td>
+                            <td>{{ profit.average_marginality | formatMoney }} грн.</td>
+                            <td>{{ profit.additional_sales_sum | formatMoney }} грн.</td>
+                            <td>{{ profit.prepayment_sum | formatMoney }} грн.</td>
+                            <td>{{ profit.additional_sales_sum | formatMoney }} грн.</td>
                             <td>{{ profit.turnover | formatMoney }} грн.</td>
                             <td>{{ profit.clear_profit | formatMoney }} грн.</td>
                         </tr>
@@ -391,11 +416,15 @@ export default {
                     data: []
                 },
                 {
-                    name: 'Прибыль без продаж воздуха',
+                    name: 'Средняя маржа',
                     data: []
                 },
                 {
-                    name: 'Маржа',
+                    name: 'Сумма предоплат',
+                    data: []
+                },
+                {
+                    name: 'Сумма доп.продаж',
                     data: []
                 }];
             let costs = this.series.find((item) => item.name === 'Расходы');
@@ -404,34 +433,25 @@ export default {
             let turnover = this.series.find((item) => item.name === 'Оборот');
             let refunds_sum = this.series.find((item) => item.name === 'Сумма за возвраты');
             let sale_of_air_sum = this.series.find((item) => item.name === 'Продажи воздуха');
-            let profit_without_sale_of_air = this.series.find((item) => item.name === 'Прибыль без продаж воздуха');
-            let marginality = this.series.find((item) => item.name === 'Маржа');
+            let average_marginality = this.series.find((item) => item.name === 'Средняя маржа');
+            let prepayment_sum = this.series.find((item) => item.name === 'Сумма предоплат');
+            let additional_sales_sum = this.series.find((item) => item.name === 'Сумма доп.продаж');
 
             const self = this;
             self.options.xaxis.categories = [];
             data.chart.forEach((item) => {
-                // costs.data.unshift({y: item.cost, x: self.dateFormat(item.date)});
-                // clear_profit.data.unshift({y: item.clear_profit, x: self.dateFormat(item.date)});
-                // profits.data.unshift({y: item.profit, x: self.dateFormat(item.date)});
-                // turnover.data.unshift({y: item.turnover, x: self.dateFormat(item.date)});
-                // refunds_sum.data.unshift({y: item.refunds_sum, x: self.dateFormat(item.date)});
-                // sale_of_air_sum.data.unshift({y: item.sale_of_air_sum, x: self.dateFormat(item.date)});
-                // marginality.data.unshift({y: item.marginality, x: self.dateFormat(item.date)});
-                // profit_without_sale_of_air.data.unshift({
-                //     y: item.profit_without_sale_of_air,
-                //     x: self.dateFormat(item.date)
-                // });
                 costs.data.unshift(item.cost);
                 clear_profit.data.unshift(item.clear_profit);
                 profits.data.unshift(item.profit);
                 turnover.data.unshift(item.turnover);
-                marginality.data.unshift(item.marginality);
+                average_marginality.data.unshift(item.average_marginality);
                 refunds_sum.data.unshift(item.refunds_sum);
                 sale_of_air_sum.data.unshift(item.sale_of_air_sum);
-                profit_without_sale_of_air.data.unshift(item.profit_without_sale_of_air);
+                prepayment_sum.data.unshift(item.prepayment_sum);
+                additional_sales_sum.data.unshift(item.additional_sales_sum);
                 self.options.xaxis.categories.unshift(self.dateFormat(item.date));
             })
-            self.series = [costs, clear_profit, profits, turnover, refunds_sum, sale_of_air_sum, profit_without_sale_of_air, marginality];
+            self.series = [costs, clear_profit, profits, turnover, refunds_sum, sale_of_air_sum, average_marginality, prepayment_sum,additional_sales_sum];
             self.isLoading = false;
         },
         getProfitsListErrorResponse(response) {

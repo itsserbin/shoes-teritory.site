@@ -133,6 +133,7 @@
                                 </a>
                             </div>
                         </th>
+                        <th>Поставщик</th>
                         <th>
                             <div class="d-flex align-items-center justify-content-center">
                                 <div class="mr-1">Создано</div>
@@ -181,13 +182,23 @@
                                 >
                             </div>
                         </td>
-                        <td>{{ product.id }}</td>
-                        <td class="w-25">
-                            <img
-                                :src="product.preview ? '/storage/products/55/' + product.preview : '/storage/no_image.png'"
-                                 :alt="product.title">
+                        <td>
+                            <a v-bind:href="'/admin/products/edit/' + product.id">
+                                {{ product.id }}
+                            </a>
                         </td>
-                        <td><a :href="'/product/' + product.id" target="_blank">{{ product.h1 }}</a></td>
+                        <td class="w-25">
+                            <a v-bind:href="'/admin/products/edit/' + product.id">
+                                <img
+                                    :src="product.preview ? '/storage/products/55/' + product.preview : '/storage/no_image.png'"
+                                    :alt="product.title">
+                            </a>
+                        </td>
+                        <td>
+                            <a :href="'/product/' + product.id" target="_blank">
+                                {{ product.h1 }}
+                            </a>
+                        </td>
                         <td>{{ publishedStatus(product.published) }}</td>
                         <td>{{ product.vendor_code }}</td>
                         <td>{{ product.price }}</td>
@@ -207,14 +218,14 @@
                             {{ product.total_sales }}
                         </td>
                         <td>
+                            {{ product.providers ? product.providers.name : 'Не выбран' }}
+                        </td>
+                        <td>
                             {{ dateFormat(product.created_at) }}
                             <hr class="m-1">
                             {{ dateFormat(product.updated_at) }}
                         </td>
                         <td>
-                            <a v-bind:href="'/admin/products/edit/' + product.id">
-                                <edit-icon></edit-icon>
-                            </a>
                             <a href="javascript:" @click="onDelete(product.id)">
                                 <destroy-icon></destroy-icon>
                             </a>

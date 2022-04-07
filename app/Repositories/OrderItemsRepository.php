@@ -71,7 +71,7 @@ class OrderItemsRepository extends CoreRepository
             }
             $orderItem->profit = $orderItem->sale_price - $product->trade_price;
             $orderItem->total_price = $orderItem->sale_price * $orderItem->count;
-            $orderItem->clear_total_price = $orderItem->profit * $orderItem->count;
+            $orderItem->clear_total_price = $orderItem->total_price - $orderItem->sale_price;
 
             $orderItem->save();
         }
@@ -258,7 +258,7 @@ class OrderItemsRepository extends CoreRepository
         $orderItem->size = $data['size'] ?? null;
         $orderItem->color = $data['color'] ?? null;
         $orderItem->pay = false;
-        $orderItem->provider_id = $product->Providers->id;
+        $orderItem->provider_id = $product->Providers?->id;
 
         $orderItem->trade_price = $product->trade_price;
         $orderItem->sale_price = ($product->discount_price ?: $product->price);
@@ -266,16 +266,13 @@ class OrderItemsRepository extends CoreRepository
         if (isset($data['resale'])) {
             $orderItem->resale = $data['resale'];
             $orderItem->discount = $data['discount'];
-            $orderItem->total_price = ($product->discount_price ?: $product->price) * (int)$data['count'] - $data['discount'];
-
-
-            $this->ordersRepository->updateOnAddOrderTotalPriceAndCount($id, $data['count'], $orderItem->total_price);
+            $orderItem->total_price = $orderItem->sale_price * (int)$data['count'] - $data['discount'];
         } else {
-            $orderItem->total_price = ($product->discount_price ?: $product->price) * (int)$data['count'];
-            $this->ordersRepository->updateOnAddOrderTotalPriceAndCount($id, $data['count'], $orderItem->total_price);
+            $orderItem->total_price = $orderItem->sale_price * (int)$data['count'];
         }
+        $this->ordersRepository->updateOnAddOrderTotalPriceAndCount($id, $data['count'], $orderItem->total_price);
         $orderItem->profit = $orderItem->sale_price - $product->trade_price;
-        $orderItem->clear_total_price = $orderItem->profit * $orderItem->count;
+        $orderItem->clear_total_price = $orderItem->total_price - $orderItem->trade_price;
 
         $orderItem->save();
 
@@ -332,15 +329,17 @@ class OrderItemsRepository extends CoreRepository
 
     public function sumOrderTotalPriceById($id)
     {
-        $model = $this->model::where('order_id', $id)->get();
-        $sum = $model->sum('total_price');
-        $additional_sales = 0;
-        foreach ($model as $item) {
-            if ($item->resale) {
-                $additional_sales += $item->discount;
-            }
-        }
-        return $sum - $additional_sales;
+//        $model = $this->model::where('order_id', $id)->get();
+//        $sum = $model->sum('total_price');
+//        $additional_sales = 0;
+//        foreach ($model as $item) {
+//            if ($item->resale) {
+//                $additional_sales += $item->discount;
+//            }
+//        }
+//        return $sum - $additional_sales;
+
+        return $this->model::where('order_id', $id)->sum('total_price');
     }
 
     public function sumProfitByDate($date)
@@ -365,6 +364,17 @@ class OrderItemsRepository extends CoreRepository
             ->sum('clear_total_price');
     }
 
+    public function averageMarginalityByDate($date)
+    {
+        return $this->model::whereDate('created_at', $date)
+            ->select('clear_total_price', 'order_id')
+            ->with('order')
+            ->whereHas('order', function ($q) {
+                $q->where('status', OrderStatus::STATUS_DONE);
+            })
+            ->avg('clear_total_price');
+    }
+
     public function sumRefundsByDate($date)
     {
         $model = $this->model::whereDate('created_at', $date)
@@ -386,5 +396,13 @@ class OrderItemsRepository extends CoreRepository
         }
 
         return $refundsSum;
+    }
+
+    public function sumMarginalityAdditionalSalesByDate($date)
+    {
+        return $this->model::whereDate('created_at', $date)
+            ->select('resale', 'discount','clear_total_price')
+            ->where('resale', 1)
+            ->sum('clear_total_price');
     }
 }

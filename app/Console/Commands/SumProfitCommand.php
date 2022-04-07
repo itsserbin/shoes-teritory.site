@@ -56,41 +56,27 @@ class SumProfitCommand extends Command
         $profit_now = $this->profitsRepository->getRowByDate($date_now);
         $profit_old = $this->profitsRepository->getAll();
 
+        if (!$profit_now) {
+            $profit = $this->profitsRepository->createNewModel();
+            $profit->date = $date_now;
+            $profit->save();
+        }
+
         foreach ($profit_old as $item) {
             $created_at = $item->date->toDateString();
             $item->turnover = $this->ordersRepository->sumDoneOrdersTotalPriceByDate($created_at);
             $item->sale_of_air_sum = $this->ordersRepository->sumPriceSalesOfAirMarginality($created_at);
-            $item->profit = $this->orderItemsRepository->sumProfitByDate($created_at) + $item->sale_of_air_sum;
-            $item->marginality = $this->orderItemsRepository->sumMarginalityByDate($created_at) + $item->sale_of_air_sum;
-            $item->profit_without_sale_of_air = $this->orderItemsRepository->sumProfitByDate($created_at);
+            $item->profit = $this->orderItemsRepository->sumMarginalityByDate($created_at) + $item->sale_of_air_sum;
+            $item->average_marginality = $this->orderItemsRepository->averageMarginalityByDate($created_at);
             $item->cost = $this->costsRepository->sumCostsByDate($created_at);
             $item->refunds_sum = $this->orderItemsRepository->sumRefundsByDate($created_at);
-            $item->clear_profit = ($item->marginality + $item->sale_of_air_sum) - $item->cost - $item->refunds_sum;
+            $item->clear_profit = $item->profit - $item->cost - $item->refunds_sum;
+            $item->prepayment_sum = $this->ordersRepository->sumPrepaymentByDate($created_at);
+            if ($created_at == '2022-04-07'){
+                dd($this->orderItemsRepository->sumMarginalityAdditionalSalesByDate($created_at));
+            }
+            $item->additional_sales_sum = $this->orderItemsRepository->sumMarginalityAdditionalSalesByDate($created_at);
             $item->update();
-        }
-
-        if ($profit_now) {
-            $profit_now->turnover = $this->ordersRepository->sumDoneOrdersTotalPriceByDate($date_now);
-            $profit_now->sale_of_air_sum = $this->ordersRepository->sumPriceSalesOfAirMarginality($profit_now);
-            $profit_now->profit = $this->orderItemsRepository->sumProfitByDate($date_now) + $profit_now->sale_of_air_sum;
-            $profit_now->profit_without_sale_of_air = $this->orderItemsRepository->sumProfitByDate($date_now);
-            $profit_now->marginality = $this->orderItemsRepository->sumMarginalityByDate($date_now) + $profit_now->sale_of_air_sum;
-            $profit_now->cost = $this->costsRepository->sumCostsByDate($date_now);
-            $profit_now->refunds_sum = $this->orderItemsRepository->sumRefundsByDate($profit_now);
-            $profit_now->clear_profit = ($profit_now->marginality + $profit_now->sale_of_air_sum) - $profit_now->cost - $profit_now->refunds_sum;
-            $profit_now->update();
-        } else {
-            $profit = $this->profitsRepository->createNewModel();
-            $profit->date = $date_now;
-            $profit->turnover = $this->ordersRepository->sumDoneOrdersTotalPriceByDate($date_now);
-            $profit->sale_of_air_sum = $this->ordersRepository->sumPriceSalesOfAirMarginality($date_now);
-            $profit->profit = $this->orderItemsRepository->sumProfitByDate($date_now) + $profit->sale_of_air_sum;
-            $profit->profit_without_sale_of_air = $this->orderItemsRepository->sumProfitByDate($date_now);
-            $profit->marginality = $this->orderItemsRepository->sumMarginalityByDate($date_now) + $profit->sale_of_air_sum;
-            $profit->cost = $this->costsRepository->sumCostsByDate($date_now);
-            $profit->refunds_sum = $this->orderItemsRepository->sumRefundsByDate($date_now);
-            $profit->clear_profit = ($profit->marginality + $profit->sale_of_air_sum) - $profit->cost - $profit->refunds_sum;
-            $profit->save();;
         }
     }
 }

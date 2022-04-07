@@ -29,11 +29,11 @@ class CreateOrdersDaysTable extends Migration
             $table->string('transferred_to_supplier')->nullable();
             $table->string('canceled_orders_rate')->nullable();
             $table->string('received_parcel_ratio')->nullable();
+            $table->string('returned_orders_ratio')->nullable();
             $table->string('client_cost')->nullable();
             $table->string('profit')->nullable();
             $table->string('marginality')->nullable();
             $table->string('investor_profit')->nullable();
-            $table->string('returned_orders_ratio')->nullable();
             $table->string('manager_salary')->nullable();
             $table->string('costs')->nullable();
             $table->string('net_profit')->nullable();

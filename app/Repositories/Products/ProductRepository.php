@@ -79,6 +79,7 @@ class ProductRepository extends CoreRepository
             'vendor_code',
             'viewed',
             'total_sales',
+            'provider_id',
             'created_at',
             'updated_at',
         ];
@@ -86,6 +87,7 @@ class ProductRepository extends CoreRepository
         return $this
             ->model
             ->select($columns)
+            ->with('providers')
             ->orderBy($sort, $param)
             ->paginate($perPage);
     }

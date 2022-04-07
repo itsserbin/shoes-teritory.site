@@ -192,6 +192,11 @@ class OrdersRepository extends CoreRepository
             $model->total_price = $price;
         }
 
+        $model->prepayment = $data['prepayment'];
+        if ($data['prepayment']) {
+            $model->prepayment_sum = $data['prepayment_sum'];
+        }
+
         $model->update();
 
         return $model;
@@ -648,5 +653,13 @@ class OrdersRepository extends CoreRepository
             ->select('status', 'total_count')
             ->where('status', OrderStatus::STATUS_DONE)
             ->average('total_count');
+    }
+
+    public function sumPrepaymentByDate($date)
+    {
+        return $this->model::whereDate('created_at', $date)
+            ->select('prepayment', 'prepayment_sum')
+            ->where('prepayment', 1)
+            ->sum('prepayment_sum');
     }
 }

@@ -60,11 +60,12 @@ class ProfitsRepository extends CoreRepository
             'date',
             'cost',
             'profit',
-            'marginality',
+            'average_marginality',
             'clear_profit',
             'refunds_sum',
             'sale_of_air_sum',
-            'profit_without_sale_of_air',
+            'prepayment_sum',
+            'additional_sales_sum',
             'turnover',
         )
             ->orderBy($sort, $param)
@@ -107,12 +108,13 @@ class ProfitsRepository extends CoreRepository
             'date',
             'cost',
             'profit',
-            'marginality',
+            'average_marginality',
             'clear_profit',
             'refunds_sum',
             'sale_of_air_sum',
-            'profit_without_sale_of_air',
             'turnover',
+            'additional_sales_sum',
+            'prepayment_sum',
         )
             ->orderBy('date', 'desc')
             ->get();
@@ -158,8 +160,8 @@ class ProfitsRepository extends CoreRepository
         $result['Сумма за возвраты'] = $model->sum('refunds_sum');
         $result['Оборот'] = $model->sum('turnover');
         $result['Продажи воздуха'] = $model->sum('sale_of_air_sum');
-        $result['Прибыль без продаж воздуха'] = $model->sum('profit_without_sale_of_air');
-        $result['Маржа'] = $model->sum('marginality');
+        $result['Средняя маржа'] = $model->sum('average_marginality');
+        $result['Сумма предоплат'] = $model->sum('prepayment_sum');
 
         return $result;
     }
@@ -207,7 +209,7 @@ class ProfitsRepository extends CoreRepository
     public function averageMarginalityByDate($date)
     {
         return $this->model::whereDate('date', $date)
-            ->select('marginality')
-            ->average('marginality');
+            ->select('average_marginality')
+            ->average('average_marginality');
     }
 }
