@@ -633,4 +633,19 @@ class OrdersRepository extends CoreRepository
             ->where('status', OrderStatus::STATUS_DONE)
             ->sum('total_price');
     }
+
+    public function averageCheckOfCompletedOrdersByDate($date)
+    {
+        return $this->model::whereDate('created_at', $date)
+            ->select('status', 'total_price')
+            ->where('status', OrderStatus::STATUS_DONE)
+            ->average('total_price');
+    }
+
+    public function averageCountItemsCompletedOrdersByDate($date)
+    {
+        return $this->model::whereDate('created_at', $date)
+            ->select('status', 'total_count')
+            ->average('total_count');
+    }
 }

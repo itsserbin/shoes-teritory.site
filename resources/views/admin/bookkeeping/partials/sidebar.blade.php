@@ -31,6 +31,12 @@
     </li>
 
     <li class="nav-item w-100">
+        <a class="nav-link {{ request()->is('admin/bookkeeping/marketing-statistic*') ? 'active' : null }}"
+           aria-current="page"
+           href="{{route('admin.bookkeeping.marketing-statistic.index')}}">Маркетинговая статистика</a>
+    </li>
+
+    <li class="nav-item w-100">
         <a class="nav-link {{ request()->is('admin/bookkeeping/product-statistics*') ? 'active' : null }}"
            aria-current="page"
            href="{{route('admin.bookkeeping.product-statistics.index')}}">Статистика продаж товаров</a>

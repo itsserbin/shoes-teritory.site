@@ -2,10 +2,10 @@
 
 namespace App\Repositories\Bookkeeping;
 
-use App\Models\Bookkeeping\Profit as Model;
+use App\Models\Bookkeeping\MarketingStatistic as Model;
 use Carbon\Carbon;
 
-class ProfitsRepository extends CoreRepository
+class MarketingStatisticRepository extends CoreRepository
 {
     public function __construct()
     {
@@ -36,18 +36,6 @@ class ProfitsRepository extends CoreRepository
                 $model = $this->model::whereBetween('date', [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->endOfWeek()]);
             } elseif ($last == 'one-month') {
                 $model = $this->model::whereBetween('date', [Carbon::now()->startOfMonth(), Carbon::now()->endOfWeek()]);
-            } elseif ($last == '7-days') {
-                $model = $this->model::whereBetween('date',
-                    [Carbon::now()->subDays(7), Carbon::now()]);
-            } elseif ($last == '14-days') {
-                $model = $this->model::whereBetween('date',
-                    [Carbon::now()->subDays(14), Carbon::now()]);
-            } elseif ($last == '30-days') {
-                $model = $this->model::whereBetween('date',
-                    [Carbon::now()->subDays(30), Carbon::now()]);
-            } elseif ($last == '90-days') {
-                $model = $this->model::whereBetween('date',
-                    [Carbon::now()->subDays(90), Carbon::now()]);
             } else {
                 $model = $this->model;
             }
@@ -58,14 +46,12 @@ class ProfitsRepository extends CoreRepository
         return $model->select(
             'id',
             'date',
-            'cost',
-            'profit',
-            'marginality',
-            'clear_profit',
-            'refunds_sum',
-            'sale_of_air_sum',
-            'profit_without_sale_of_air',
-            'turnover',
+            'average_application_price',
+            'average_approve_application_price',
+            'average_done_application_price',
+            'average_check',
+            'average_marginality',
+            'average_items',
         )
             ->orderBy($sort, $param)
             ->paginate($perPage);
@@ -105,16 +91,14 @@ class ProfitsRepository extends CoreRepository
         return $model->select(
             'id',
             'date',
-            'cost',
-            'profit',
-            'marginality',
-            'clear_profit',
-            'refunds_sum',
-            'sale_of_air_sum',
-            'profit_without_sale_of_air',
-            'turnover',
+            'average_application_price',
+            'average_approve_application_price',
+            'average_done_application_price',
+            'average_check',
+            'average_marginality',
+            'average_items',
         )
-            ->orderBy('date', 'desc')
+            ->orderBy('date','desc')
             ->get();
 
     }
@@ -133,18 +117,6 @@ class ProfitsRepository extends CoreRepository
             } elseif ($last == 'one-month') {
                 $model = $this->model::whereBetween('date',
                     [Carbon::now()->startOfMonth(), Carbon::now()->endOfWeek()])->get();
-            } elseif ($last == '7-days') {
-                $model = $this->model::whereBetween('date',
-                    [Carbon::now()->subDays(7), Carbon::now()])->get();
-            } elseif ($last == '14-days') {
-                $model = $this->model::whereBetween('date',
-                    [Carbon::now()->subDays(14), Carbon::now()])->get();
-            } elseif ($last == '30-days') {
-                $model = $this->model::whereBetween('date',
-                    [Carbon::now()->subDays(30), Carbon::now()])->get();
-            } elseif ($last == '90-days') {
-                $model = $this->model::whereBetween('date',
-                    [Carbon::now()->subDays(90), Carbon::now()])->get();
             } else {
                 $model = $this->model;
             }
@@ -152,38 +124,18 @@ class ProfitsRepository extends CoreRepository
             $model = $this->model::all();
         }
 
-        $result['Расходы'] = $model->sum('cost');
-        $result['Прибыль без расходов'] = $model->sum('profit');
-        $result['Чистая прибыль'] = $model->sum('clear_profit');
-        $result['Сумма за возвраты'] = $model->sum('refunds_sum');
-        $result['Оборот'] = $model->sum('turnover');
-        $result['Продажи воздуха'] = $model->sum('sale_of_air_sum');
-        $result['Прибыль без продаж воздуха'] = $model->sum('profit_without_sale_of_air');
-        $result['Маржа'] = $model->sum('marginality');
+        $result['Ср.цена заявки'] = $model->average('average_application_price');
+        $result['Ср.цена апрува'] = $model->average('average_approve_application_price');
+        $result['Ср.цена выполненной заявки'] = $model->average('average_done_application_price');
+        $result['Ср.чек'] = $model->average('average_check');
+        $result['Ср.маржа'] = $model->average('average_marginality');
+        $result['Ср.кол-во товара'] = $model->average('average_items');
 
         return $result;
     }
 
-    public function getAll($date_start = null, $date_end = null, $last = null)
+    public function getAll()
     {
-//        if ($date_start && $date_end) {
-//            return $this->model::whereBetween('date', [$date_start, $date_end])->get();
-//        } elseif ($last) {
-//            if ($last == 'week') {
-//                return $this->model::whereBetween('date',
-//                    [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
-//            } elseif ($last == 'two-week') {
-//                return $this->model::whereBetween('date',
-//                    [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
-//            } elseif ($last == 'one-month') {
-//                return $this->model::whereBetween('date',
-//                    [Carbon::now()->startOfMonth(), Carbon::now()->endOfWeek()])->get();
-//            } else {
-//                return $this->model::all();
-//            }
-//        } else {
-//            return $this->model::all();
-//        }
         return $this->model::all();
     }
 
@@ -204,10 +156,4 @@ class ProfitsRepository extends CoreRepository
         return new $this->model;
     }
 
-    public function averageMarginalityByDate($date)
-    {
-        return $this->model::whereDate('date', $date)
-            ->select('marginality')
-            ->average('marginality');
-    }
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\BannersController;
 use App\Http\Controllers\Admin\Bookkeeping\BookkeepingController;
 use App\Http\Controllers\Admin\Bookkeeping\CostsController;
 use App\Http\Controllers\Admin\Bookkeeping\ManagersSalariesController;
+use App\Http\Controllers\Admin\Bookkeeping\MarketingStatisticController;
 use App\Http\Controllers\Admin\Bookkeeping\OrdersStatisticController;
 use App\Http\Controllers\Admin\Bookkeeping\ProfitController;
 use App\Http\Controllers\Admin\CategoriesController;
@@ -179,6 +180,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
         Route::prefix('orders-statistic')->group(function () {
             Route::get('/', [OrdersStatisticController::class, 'index'])
                 ->name('admin.bookkeeping.orders-statistic.index');
+        });
+
+        Route::prefix('marketing-statistic')->group(function () {
+            Route::get('/', [MarketingStatisticController::class, 'index'])
+                ->name('admin.bookkeeping.marketing-statistic.index');
         });
 
         Route::resource('product-statistics', ProductStatisticsController::class)

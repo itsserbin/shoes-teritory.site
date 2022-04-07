@@ -36,6 +36,7 @@ class CreateOrderItemsTable extends Migration
             $table->boolean('resale')->default(0);
             $table->integer('discount')->nullable();
             $table->integer('total_price');
+            $table->integer('clear_total_price')->nullable();
 
             $table->timestamps();
         });

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Admin\Bookkeeping\CostCategoriesController;
 use App\Http\Controllers\Api\Admin\Bookkeeping\CostsController;
 use App\Http\Controllers\Api\Admin\Bookkeeping\DailyStatisticsController;
 use App\Http\Controllers\Api\Admin\Bookkeeping\ManagersSalariesController;
+use App\Http\Controllers\Api\Admin\Bookkeeping\MarketingStatisticController;
 use App\Http\Controllers\Api\Admin\Bookkeeping\OrdersStatisticController;
 use App\Http\Controllers\Api\Admin\Bookkeeping\ProfitsController;
 use App\Http\Controllers\Api\Admin\Bookkeeping\SupplierPaymentsController;
@@ -366,6 +367,11 @@ Route::middleware('auth:api')->group(function () {
         Route::prefix('orders-statistics')->group(function () {
             Route::get('/', [OrdersStatisticController::class, 'index'])
                 ->name('api.bookkeeping.orders-statistics.index');
+        });
+
+        Route::prefix('marketing-statistic')->group(function () {
+            Route::get('/', [MarketingStatisticController::class, 'index'])
+                ->name('api.bookkeeping.marketing-statistic.index');
         });
     });
 

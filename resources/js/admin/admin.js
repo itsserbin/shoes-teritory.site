@@ -89,6 +89,8 @@ Vue.component('edit-promo-code', require('./promo-codes/EditPromoCode').default)
 Vue.component('bookkeeping-profits-list', require('./bookkeeping/profit/ProfitList').default);
 Vue.component('bookkeeping-profits-create', require('./bookkeeping/profit/AddDay').default);
 
+Vue.component('bookkeeping-marketing-statistic', require('./bookkeeping/marketing-statistic/MarketingStatisticList').default);
+
 Vue.component('bookkeeping-orders-statistics', require('./bookkeeping/orders-statistic/OrdersStaticticList').default);
 
 Vue.component('bookkeeping-statistics-card', require('./bookkeeping/components/StatisticsCard').default);

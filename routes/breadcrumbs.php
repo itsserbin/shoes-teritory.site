@@ -11,6 +11,11 @@ Breadcrumbs::for('bookkeeping', function ($trail) {
     $trail->push('Бухгалтерия', route('admin.bookkeeping.index'));
 });
 
+Breadcrumbs::for('bookkeeping.marketing-statistic', function ($trail) {
+    $trail->parent('bookkeeping');
+    $trail->push('Статистика по заявкам', route('admin.bookkeeping.marketing-statistic.index'));
+});
+
 Breadcrumbs::for('bookkeeping.orders-statistic', function ($trail) {
     $trail->parent('bookkeeping');
     $trail->push('Статистика по заявкам', route('admin.bookkeeping.orders-statistic.index'));

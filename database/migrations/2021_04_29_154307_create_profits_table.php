@@ -21,6 +21,9 @@ class CreateProfitsTable extends Migration
             $table->integer('profit')->nullable();
             $table->integer('clear_profit')->nullable();
             $table->integer('turnover')->nullable();
+            $table->integer('marginality')->nullable();
+            $table->integer('sale_of_air_sum')->nullable();
+            $table->integer('profit_without_sale_of_air')->nullable();
             $table->timestamps();
         });
     }
