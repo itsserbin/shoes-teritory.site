@@ -36,6 +36,18 @@ class MarketingStatisticRepository extends CoreRepository
                 $model = $this->model::whereBetween('date', [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->endOfWeek()]);
             } elseif ($last == 'one-month') {
                 $model = $this->model::whereBetween('date', [Carbon::now()->startOfMonth(), Carbon::now()->endOfWeek()]);
+            } elseif ($last == '7-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(7), Carbon::now()]);
+            } elseif ($last == '14-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(14), Carbon::now()]);
+            } elseif ($last == '30-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(30), Carbon::now()]);
+            } elseif ($last == '90-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(90), Carbon::now()]);
             } else {
                 $model = $this->model;
             }
@@ -98,7 +110,7 @@ class MarketingStatisticRepository extends CoreRepository
             'average_marginality',
             'average_items',
         )
-            ->orderBy('date','desc')
+            ->orderBy('date', 'desc')
             ->get();
 
     }
@@ -129,7 +141,7 @@ class MarketingStatisticRepository extends CoreRepository
             } elseif ($last == '90-days') {
                 $model = $this->model::whereBetween('date',
                     [Carbon::now()->subDays(90), Carbon::now()]);
-            }else {
+            } else {
                 $model = $this->model;
             }
         } else {
