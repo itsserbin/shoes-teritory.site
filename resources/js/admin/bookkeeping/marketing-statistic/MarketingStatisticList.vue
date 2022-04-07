@@ -19,7 +19,7 @@
                 <div class="col-12 col-md-3">
                     <button class="btn btn-outline-danger my-2 w-100"
                             @click="getAllMarketingStatistics"
-                            :class="{'active': activeLastDays === 'all'}"
+                            :class="{'active': activeLastDays === null}"
                     >За все время
                     </button>
                 </div>
@@ -82,10 +82,16 @@
             </div>
             <hr>
             <div class="row align-items-center justify-content-center">
-
                 <hr>
                 <div class="col-6 col-md-3 text-center my-1" v-for="(item,i) in generalMarketingStatistics">
                     <bookkeeping-statistics-card
+                        v-if="i !== 'Ср.кол-во товара'"
+                        type="money"
+                        :title="i"
+                        :value="item"
+                    ></bookkeeping-statistics-card>
+                    <bookkeeping-statistics-card
+                        v-else
                         type="quantity"
                         :title="i"
                         :value="item"
@@ -184,7 +190,7 @@ export default {
         }
     },
     mounted() {
-        this.getAllMarketingStatistics();
+        this.getStatisticsByLastDays('7-days');
     },
     computed: {
         minDate() {
@@ -225,7 +231,7 @@ export default {
         },
         getMarketingStatisticSuccessResponse(data) {
             this.marketingStatistics = data.result.data;
-            this.generalMarketingStatistics = data.generalStatistics;
+            this.generalMarketingStatistics = data.generalStat;
             this.total = data.result.total;
             this.currentPage = data.result.current_page;
             this.perPage = data.result.per_page;

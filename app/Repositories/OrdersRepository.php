@@ -646,6 +646,7 @@ class OrdersRepository extends CoreRepository
     {
         return $this->model::whereDate('created_at', $date)
             ->select('status', 'total_count')
+            ->where('status', OrderStatus::STATUS_DONE)
             ->average('total_count');
     }
 }
