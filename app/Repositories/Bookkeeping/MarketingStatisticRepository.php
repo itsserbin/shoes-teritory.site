@@ -117,7 +117,19 @@ class MarketingStatisticRepository extends CoreRepository
             } elseif ($last == 'one-month') {
                 $model = $this->model::whereBetween('date',
                     [Carbon::now()->startOfMonth(), Carbon::now()->endOfWeek()])->get();
-            } else {
+            } elseif ($last == '7-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(7), Carbon::now()]);
+            } elseif ($last == '14-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(14), Carbon::now()]);
+            } elseif ($last == '30-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(30), Carbon::now()]);
+            } elseif ($last == '90-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(90), Carbon::now()]);
+            }else {
                 $model = $this->model;
             }
         } else {
