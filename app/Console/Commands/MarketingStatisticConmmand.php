@@ -17,7 +17,7 @@ class MarketingStatisticConmmand extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'marketing_statistic:sum';
 
     /**
      * The console command description.
@@ -64,7 +64,7 @@ class MarketingStatisticConmmand extends Command
             $profit->date = Carbon::now()->toDateString();
             $profit->save();
         }
-        
+
         foreach ($statisticOld as $item) {
             $ordersStatisticModel = $this->ordersStatisticsRepository->getRowByDate($item->date);
             $costsSum = $this->costsRepository->sumCostsByDate($item->date);

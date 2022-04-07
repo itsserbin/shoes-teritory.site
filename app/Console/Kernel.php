@@ -33,11 +33,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('orderStatistics:count')->everyMinute();
-        $schedule->command('managers_salary:sum')->everyMinute();
-        $schedule->command('api_nova_poshta:order_integration')->everyMinute();
-        $schedule->command('daily_statistics:run')->everyMinute();
-        $schedule->command('profit:sum')->everyMinute();
+        $schedule->command('orderStatistics:count')->everyFiveMinutes();
+        $schedule->command('managers_salary:sum')->everyFiveMinutes();
+        $schedule->command('api_nova_poshta:order_integration')->everyFiveMinutes();
+        $schedule->command('daily_statistics:run')->everyFiveMinutes();
+        $schedule->command('profit:sum')->everyFiveMinutes();
+        $schedule->command('marketing_statistic:sum')->everyFiveMinutes();
     }
 
     /**
