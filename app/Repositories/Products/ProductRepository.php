@@ -165,29 +165,39 @@ class ProductRepository extends CoreRepository
         return $this->model::where('id', $id)->select('id', 'preview')->with('images')->first();
     }
 
-    public function getReviews($id)
-    {
-        return $this->model::where('id', $id)->select('id')->with('Reviews')->first();
-    }
-
     public function getRelativeProducts($id, $limit = 10)
     {
         $product = $this->model::where('id', $id)->with('categories')->first();
 
-        return $this->model::where('id', '!=', $id)
-            ->where('published', 1)
-            ->select(
-                'id',
-                'h1',
-                'price',
-                'discount_price',
-                'preview'
-            )
-            ->whereHas('categories', function ($q) use ($product) {
-                $q->where('id', $product->categories[0]->id);
-            })
-            ->limit($limit)
-            ->get();
+        if (count($product->categories)) {
+            return $this->model::where('id', '!=', $id)
+                ->where('published', 1)
+                ->select(
+                    'id',
+                    'h1',
+                    'price',
+                    'discount_price',
+                    'preview'
+                )
+                ->whereHas('categories', function ($q) use ($product) {
+                    $q->where('id', $product->categories[0]->id);
+                })
+                ->limit($limit)
+                ->get();
+        } else {
+            return $this->model::where('id', '!=', $id)
+                ->where('published', 1)
+                ->select(
+                    'id',
+                    'h1',
+                    'price',
+                    'discount_price',
+                    'preview'
+                )
+                ->whereDoesntHave('categories')
+                ->limit($limit)
+                ->get();
+        }
     }
 
 

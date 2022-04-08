@@ -38,8 +38,8 @@ export default {
         id: String,
     },
     mounted() {
-        axios.get('/api/v1/product/reviews/' + this.id)
-            .then(({data}) => this.reviews = data.result.reviews)
+        axios.get('/api/v1/reviews/product/' + this.id)
+            .then(({data}) => this.reviews = data.result)
             .catch((response) => console.log(response))
     }
 }

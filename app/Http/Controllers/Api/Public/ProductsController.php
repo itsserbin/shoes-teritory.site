@@ -86,20 +86,6 @@ class ProductsController extends BaseController
      * @param $id
      * @return JsonResponse
      */
-    public function getReviews($id): JsonResponse
-    {
-        $result = $this->productRepository->getReviews($id);
-
-        return $this->returnResponse([
-            'success' => true,
-            'result' => $result,
-        ]);
-    }
-
-    /**
-     * @param $id
-     * @return JsonResponse
-     */
     public function getRelativeProducts($id): JsonResponse
     {
         $result = $this->productRepository->getRelativeProducts($id);

@@ -232,29 +232,6 @@ export default {
                 self.contentIds.push(item.id);
             });
 
-            axios.post('https://graph.facebook.com/' + self.$fb_api_version + '/' + self.$fb_pixel_id + '/events?access_token=' + self.$fb_api, {
-                "data": [
-                    {
-                        "event_name": "InitiateCheckout",
-                        "event_time": Math.floor(Date.now() / 1000),
-                        "action_source": "website",
-                        "event_source_url": window.location.href,
-                        "user_data": {
-                            "ct": [hash.sha256().update(self.cityName).digest('hex')],
-                            "country": [hash.sha256().update(self.countryName).digest('hex')],
-                            "client_ip_address": self.ip,
-                            "client_user_agent": self.userAgent,
-                        },
-                        "custom_data": {
-                            "value": self.cart.totalPrice,
-                            "currency": "UAH",
-                            "num_items": self.cart.totalCount,
-                            "content_ids": self.contentIds,
-                            "content_type": "product"
-                        }
-                    }
-                ]
-            });
             fbq('track', 'InitiateCheckout', {
                 "value": self.cart.totalPrice,
                 "currency": "UAH",
@@ -262,11 +239,9 @@ export default {
                 "content_ids": self.contentIds,
                 "content_type": "product"
             });
+
             self.fbInitiateCheckout = false;
         }
-    },
-    mounted() {
-        // new Inputmask("+38 (999) 999-99-99").mask(document.getElementById('input-phone'));
     },
     methods: {
         removeFromCart(id) {
@@ -287,30 +262,6 @@ export default {
                 .catch(({response}) => this.sendFormErrorResponse(response));
         },
         sendFormSuccessResponse() {
-            axios.post('https://graph.facebook.com/' + this.$fb_api_version + '/' + this.$fb_pixel_id + '/events?access_token=' + this.$fb_api, {
-                "data": [
-                    {
-                        "event_name": "Purchase",
-                        "event_time": Math.floor(Date.now() / 1000),
-                        "action_source": "website",
-                        "event_source_url": window.location.href,
-                        "user_data": {
-                            "ph": [hash.sha256().update(this.order.phone).digest('hex')],
-                            "ct": [hash.sha256().update(this.cityName).digest('hex')],
-                            "country": [hash.sha256().update(this.countryName).digest('hex')],
-                            "client_ip_address": this.ip,
-                            "client_user_agent": this.userAgent,
-                        },
-                        "custom_data": {
-                            "value": this.cart.totalPrice,
-                            "currency": "UAH",
-                            "content_type": "product",
-                            "num_items": this.cart.totalCount,
-                            "content_ids": this.contentIds
-                        }
-                    }
-                ]
-            });
             fbq('track', 'Purchase', {
                 "value": this.cart.totalPrice,
                 "currency": "UAH",

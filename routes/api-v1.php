@@ -18,6 +18,9 @@ Route::prefix('v1')->middleware('api')->group(function () {
         /** Route for get list reviews */
         Route::get('list', [ReviewsController::class, 'list'])
             ->name('api.v1.public.reviews.list');
+
+        Route::get('product/{id}', [ReviewsController::class, 'getProductReviews'])
+            ->name('api.v1.public.reviews.product');
     });
 
     /** Route group for products */
@@ -49,9 +52,6 @@ Route::prefix('v1')->middleware('api')->group(function () {
 
         Route::get('get-images/{id}', [ProductsController::class, 'getImages'])
             ->name('api.v1.public.products.images.get');
-
-        Route::get('reviews/{id}', [ProductsController::class, 'getReviews'])
-            ->name('api.v1.products.reviews.get');
 
         Route::get('relative/{id}', [ProductsController::class, 'getRelativeProducts'])
             ->name('api.v1.products.relative.get');

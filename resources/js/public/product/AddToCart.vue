@@ -222,30 +222,6 @@ export default {
         this.size.xxxxxl = JSON.parse(this.xxxxxl);
     },
     mounted() {
-        axios.post('https://graph.facebook.com/' + this.$fb_api_version + '/' + this.$fb_pixel_id + '/events?access_token=' + this.$fb_api, {
-            "data": [
-                {
-                    "event_name": "ViewContent",
-                    "event_time": Math.floor(Date.now() / 1000),
-                    "action_source": "website",
-                    "event_source_url": window.location.href,
-                    "user_data": {
-                        "ct": [hash.sha256().update(this.cityName).digest('hex')],
-                        "country": [hash.sha256().update(this.countryName).digest('hex')],
-                        "client_ip_address": this.ip,
-                        "client_user_agent": this.userAgent,
-                    },
-                    "custom_data": {
-                        "value": this.discountPrice ? this.discountPrice : this.price,
-                        "currency": "UAH",
-                        "content_type": "product",
-                        "content_ids": [this.item.item_id],
-                        "content_category": this.category,
-                        "content_name": this.h1
-                    }
-                }
-            ]
-        });
         fbq('track', 'ViewContent', {
             "value": this.discountPrice ? this.discountPrice : this.price,
             "currency": "UAH",
@@ -271,29 +247,6 @@ export default {
             axios.post('/api/v1/cart/add', this.item)
                 .then(({data}) => {
                     this.$store.commit('loadCart');
-                    axios.post('https://graph.facebook.com/' + this.$fb_api_version + '/' + this.$fb_pixel_id + '/events?access_token=' + this.$fb_api, {
-                        "data": [
-                            {
-                                "event_name": "AddToCart",
-                                "event_time": Math.floor(Date.now() / 1000),
-                                "action_source": "website",
-                                "event_source_url": window.location.href,
-                                "user_data": {
-                                    "ct": [hash.sha256().update(this.cityName).digest('hex')],
-                                    "country": [hash.sha256().update(this.countryName).digest('hex')],
-                                    "client_ip_address": this.ip,
-                                    "client_user_agent": this.userAgent,
-                                },
-                                "custom_data": {
-                                    "value": this.discountPrice ? this.discountPrice : this.price,
-                                    "currency": "UAH",
-                                    "content_type": "product",
-                                    "content_ids": [this.item.item_id],
-                                    "content_name": this.h1
-                                }
-                            }
-                        ]
-                    });
                     fbq('track', 'AddToCart', {
                         "value": this.discountPrice ? this.discountPrice : this.price,
                         "currency": "UAH",

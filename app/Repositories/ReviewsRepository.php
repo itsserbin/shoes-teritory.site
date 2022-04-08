@@ -104,4 +104,11 @@ class ReviewsRepository extends CoreRepository
     {
         return $this->model::where('id', $id)->update(['status' => 1]);
     }
+
+    public function getProductReviews($id)
+    {
+        return $this->model::whereHas('products', function ($q) use ($id) {
+            $q->where('id', $id);
+        })->where('status', 1)->select('id', 'name', 'comment')->get();
+    }
 }

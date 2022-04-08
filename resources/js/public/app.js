@@ -69,11 +69,6 @@ Vue.component('category', require('./category/ShowCategory').default);
 window.hash = require('hash.js');
 
 
-Vue.prototype.$fb_api = 'EAAErmzE35MMBADkZBJgPpKpm836MOGaojDZA8ZBCUuCStZCfj3I2rLY6Dkvwmvj91mRGKKtdsdigMsKIHXsLYt6Fh7yqgL7tVcmY2VJ9MIl5dAtJhQIVE1scJGCa6ykDXDEIO6H6YGnAIDtupLoWx3ESuneoTXkZC6tZAfttiLi8cGWzIMaxYKF8Q8Nd8dHtwZD';
-Vue.prototype.$fb_pixel_id = '2420788534721287';
-Vue.prototype.$fb_api_version = 'v11.0';
-
-
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -83,42 +78,4 @@ Vue.prototype.$fb_api_version = 'v11.0';
 const app = new Vue({
     el: '#app',
     store: new Vuex.Store(store),
-    data() {
-        return {
-            ip: null,
-            cityName: null,
-            countryName: null,
-            zipCode: null,
-            userAgent: null,
-        }
-    },
-    mounted() {
-        axios.get('/api/v1/user/info')
-            .then(({data}) => {
-                if (data.location.ip !== '66.102.0.0') {
-                    this.ip = data.location.ip;
-                    this.cityName = data.location.cityName;
-                    this.countryName = data.location.countryName;
-                    this.zipCode = data.location.zipCode;
-                    this.userAgent = data.userAgent;
-                }
-            });
-
-        axios.post('https://graph.facebook.com/' + this.$fb_api_version + '/' + this.$fb_pixel_id + '/events?access_token=' + this.$fb_api, {
-            "data": [
-                {
-                    "event_name": "PageView",
-                    "event_time": Math.floor(Date.now() / 1000),
-                    "action_source": "website",
-                    "event_source_url": window.location.href,
-                    "user_data": {
-                        "ct": [hash.sha256().update(this.cityName).digest('hex')],
-                        "country": [hash.sha256().update(this.countryName).digest('hex')],
-                        "client_ip_address": this.ip,
-                        "client_user_agent": this.userAgent
-                    }
-                }
-            ]
-        });
-    }
 });

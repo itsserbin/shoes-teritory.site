@@ -24,4 +24,14 @@ class ReviewsController extends BaseController
             'result' => $result
         ]);
     }
+
+    public function getProductReviews($id): JsonResponse
+    {
+        $result = $this->reviewsRepository->getProductReviews($id);
+
+        return $this->returnResponse([
+            'success' => true,
+            'result' => $result
+        ]);
+    }
 }
