@@ -60,8 +60,8 @@ class MarketingStatisticConmmand extends Command
         $statisticOld = $this->marketingStatisticRepository->getAll();
 
         if (!$statisticNow) {
-            $profit = $this->profitsRepository->createNewModel();
-            $profit->date = Carbon::now()->toDateString();
+            $profit = $this->marketingStatisticRepository->createNewModel();
+            $profit->date = $date_now;
             $profit->save();
         }
 
