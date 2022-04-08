@@ -155,7 +155,6 @@
                                     <div class="additions-item__desc">
                                         <div class="left">
                                             <div class="name">{{ recommendProduct.h1 }}</div>
-                                            <div class="weight">1 л</div>
                                         </div>
                                         <div class="right">
                                             <div class="price">{{
