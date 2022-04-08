@@ -21,18 +21,22 @@ class OrdersStatisticController extends BaseController
         if ($request->get('last')) {
             $result = $this->ordersStatisticsRepository->getAllWithPaginate(null, null, $request->get('last'));
             $generalStatistics = $this->ordersStatisticsRepository->generalStatistic(null, null, $request->get('last'));
+            $generalIndicatorsStatistic = $this->ordersStatisticsRepository->generalIndicatorsStatistic(null, null, $request->get('last'));
         } elseif ($request->get('date_start') && $request->get('date_end')) {
             $result = $this->ordersStatisticsRepository->getAllWithPaginate($request->get('date_start'), $request->get('date_end'));
             $generalStatistics = $this->ordersStatisticsRepository->generalStatistic($request->get('date_start'), $request->get('date_end'));
+            $generalIndicatorsStatistic = $this->ordersStatisticsRepository->generalIndicatorsStatistic($request->get('date_start'), $request->get('date_end'));
         } else {
             $result = $this->ordersStatisticsRepository->getAllWithPaginate();
             $generalStatistics = $this->ordersStatisticsRepository->generalStatistic();
+            $generalIndicatorsStatistic = $this->ordersStatisticsRepository->generalIndicatorsStatistic();
         }
 
         return $this->returnResponse([
             'success' => true,
             'result' => $result,
-            'generalStatistics' => $generalStatistics
+            'generalStatistics' => $generalStatistics,
+            'generalIndicatorsStatistic' => $generalIndicatorsStatistic
         ]);
     }
 

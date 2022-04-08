@@ -44,8 +44,6 @@ class OrderItemsRepository extends CoreRepository
      */
     public function create($cartItems, $orderId, $promoCode)
     {
-//        $productRepository = new ProductRepository();
-
         foreach ($cartItems as $item) {
             $product = $this->productRepository->getById($item->product_id);
 
@@ -58,7 +56,7 @@ class OrderItemsRepository extends CoreRepository
             $orderItem->trade_price = $product->trade_price;
             $orderItem->sale_price = $product->discount_price ?: $product->price;
             $orderItem->pay = false;
-            $orderItem->provider_id = $product->Providers->id;
+            $orderItem->provider_id = $product->Providers?->id;
 
             if ($promoCode) {
                 $discount = $this->promoCodesRepository->getDiscount($promoCode);

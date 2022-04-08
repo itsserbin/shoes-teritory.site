@@ -36,6 +36,18 @@ class OrdersStatisticsRepository extends CoreRepository
                 $model = $this->model::whereBetween('date', [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->endOfWeek()]);
             } elseif ($last == 'one-month') {
                 $model = $this->model::whereBetween('date', [Carbon::now()->startOfMonth(), Carbon::now()->endOfWeek()]);
+            } elseif ($last == '7-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(7), Carbon::now()]);
+            } elseif ($last == '14-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(14), Carbon::now()]);
+            } elseif ($last == '30-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(30), Carbon::now()]);
+            } elseif ($last == '90-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(90), Carbon::now()]);
             } else {
                 $model = $this->model;
             }
@@ -57,6 +69,9 @@ class OrdersStatisticsRepository extends CoreRepository
             'awaiting_dispatch',
             'awaiting_prepayment',
             'on_the_road',
+            'received_parcel_ratio',
+            'returned_orders_ratio',
+            'canceled_orders_rate',
         )
             ->orderBy($sort, $param)
             ->paginate($perPage);
@@ -77,6 +92,18 @@ class OrdersStatisticsRepository extends CoreRepository
             } elseif ($last == 'one-month') {
                 $model = $this->model::whereBetween('date',
                     [Carbon::now()->startOfMonth(), Carbon::now()->endOfWeek()])->get();
+            } elseif ($last == '7-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(7), Carbon::now()]);
+            } elseif ($last == '14-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(14), Carbon::now()]);
+            } elseif ($last == '30-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(30), Carbon::now()]);
+            } elseif ($last == '90-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(90), Carbon::now()]);
             } else {
                 $model = $this->model;
             }
@@ -95,6 +122,46 @@ class OrdersStatisticsRepository extends CoreRepository
         $result['Ожидание предоплаты'] = $model->sum('awaiting_prepayment');
         $result['Ожидание отправки'] = $model->sum('awaiting_dispatch');
         $result['В дороге'] = $model->sum('on_the_road');
+
+        return $result;
+    }
+
+    public function generalIndicatorsStatistic($date_start = null, $date_end = null, $last = null)
+    {
+        if ($date_start && $date_end) {
+            $model = $this->model::whereBetween('date', [$date_start, $date_end])->get();
+        } elseif ($last) {
+            if ($last == 'week') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
+            } elseif ($last == 'two-week') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
+            } elseif ($last == 'one-month') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->startOfMonth(), Carbon::now()->endOfWeek()])->get();
+            } elseif ($last == '7-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(7), Carbon::now()]);
+            } elseif ($last == '14-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(14), Carbon::now()]);
+            } elseif ($last == '30-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(30), Carbon::now()]);
+            } elseif ($last == '90-days') {
+                $model = $this->model::whereBetween('date',
+                    [Carbon::now()->subDays(90), Carbon::now()]);
+            } else {
+                $model = $this->model;
+            }
+        } else {
+            $model = $this->model::all();
+        }
+
+        $result['COR (Отмененные)'] = round($model->average('canceled_orders_rate'));
+        $result['ROR (Возвраты)'] = round($model->average('returned_orders_ratio'));
+        $result['RPT (Выполненные)'] = round($model->average('received_parcel_ratio'));
 
         return $result;
     }

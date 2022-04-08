@@ -45,6 +45,36 @@
                     </button>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-12 col-md-3 my-2">
+                    <button class="btn btn-outline-danger w-100 h-100"
+                            @click="getStatisticsByLastDays('7-days')"
+                            :class="{'active': activeLastDays === '7-days'}"
+                    >7 дней
+                    </button>
+                </div>
+                <div class="col-12 col-md-3 my-2">
+                    <button class="btn btn-outline-danger w-100 h-100"
+                            @click="getStatisticsByLastDays('14-days')"
+                            :class="{'active': activeLastDays === '14-days'}"
+                    >14 дней
+                    </button>
+                </div>
+                <div class="col-12 col-md-3 my-2">
+                    <button class="btn btn-outline-danger w-100 h-100"
+                            @click="getStatisticsByLastDays('30-days')"
+                            :class="{'active': activeLastDays === '30-days'}"
+                    >30 дней
+                    </button>
+                </div>
+                <div class="col-12 col-md-3 my-2">
+                    <button class="btn btn-outline-danger w-100 h-100"
+                            @click="getStatisticsByLastDays('90-days')"
+                            :class="{'active': activeLastDays === '90-days'}"
+                    >90 дней
+                    </button>
+                </div>
+            </div>
             <hr>
             <div>
                 <apexchart type="area" height="350" :options="optionsOrdersStatistic"
@@ -52,8 +82,6 @@
             </div>
             <hr>
             <div class="row align-items-center justify-content-center">
-
-                <hr>
                 <div class="col-6 col-md-3 text-center my-1" v-for="(item,i) in generalOrderStatistics">
                     <bookkeeping-statistics-card
                         type="quantity"
@@ -113,6 +141,55 @@
                     </div>
                 </div>
             </div>
+            <hr>
+            <div class="row align-items-center justify-content-center">
+
+                <hr>
+                <div class="col-6 col-md-3 text-center my-1" v-for="(item,i) in generalIndicatorsStatistic">
+                    <bookkeeping-statistics-card
+                        type="percent"
+                        :title="i"
+                        :value="item"
+                    ></bookkeeping-statistics-card>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="table-responsive">
+                        <table class="table text-center">
+                            <thead>
+                            <tr>
+                                <th>Дата</th>
+                                <th>Всего</th>
+                                <th>Выполненные</th>
+                                <th>Возвраты</th>
+                                <th>Отмененные</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="item in ordersStatistics" :key="item.id">
+                                <th>{{ item.date | moment("DD.MM.YYYY") }}</th>
+                                <td>{{ item.applications }}</td>
+                                <td>{{ item.completed }} ({{ item.received_parcel_ratio }}%)</td>
+                                <td>{{ item.refunds }} ({{ item.returned_orders_ratio }}%)</td>
+                                <td>{{ item.cancel }} ({{ item.canceled_orders_rate }}%)</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="row mt-2">
+                            <div class="col">
+                                <pagination
+                                    v-model="currentPage"
+                                    :records="total"
+                                    :per-page="perPage"
+                                    @paginate="fetch"
+                                    :options="this.$paginateOptions"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -125,6 +202,7 @@ export default {
             isLoading: false,
             ordersStatistics: [],
             generalOrderStatistics: [],
+            generalIndicatorsStatistic: [],
             currentPage: 1,
             perPage: 1,
             total: 1,
@@ -200,6 +278,7 @@ export default {
         getOrdersStatisticSuccessResponse(data) {
             this.ordersStatistics = data.result.data;
             this.generalOrderStatistics = data.generalStatistics;
+            this.generalIndicatorsStatistic = data.generalIndicatorsStatistic;
             this.total = data.result.total;
             this.currentPage = data.result.current_page;
             this.perPage = data.result.per_page;

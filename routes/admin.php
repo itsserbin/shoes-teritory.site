@@ -163,20 +163,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
                     ->name('admin.bookkeeping.profits.create');
             });
 
-        Route::prefix('daily-statistics')->middleware('role:administrator')->group(function () {
-            Route::get('/', [DailyStatisticsController::class, 'index'])
-                ->name('admin.bookkeeping.daily-statistics.index');
-
-            Route::get('create', [DailyStatisticsController::class, 'create'])
-                ->name('admin.bookkeeping.daily-statistics.create');
-
-            Route::post('store', [DailyStatisticsController::class, 'store'])
-                ->name('admin.bookkeeping.daily-statistics.store');
-
-            Route::delete('destroy/{id}', [DailyStatisticsController::class, 'destroy'])
-                ->name('admin.bookkeeping.daily-statistics.destroy');
-        });
-
         Route::prefix('orders-statistic')->group(function () {
             Route::get('/', [OrdersStatisticController::class, 'index'])
                 ->name('admin.bookkeeping.orders-statistic.index');

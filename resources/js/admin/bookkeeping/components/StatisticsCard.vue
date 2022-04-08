@@ -4,8 +4,8 @@
             <h5 class="card-title">{{ title }}</h5>
             <p class="card-text" v-if="type === null">{{ value }}</p>
             <p class="card-text" v-if="type === 'money'">{{ value | formatMoney }} грн.</p>
-            <p class="card-text" v-if="type === 'quantity'">{{ value.toFixed() }} шт.</p>
-            <p class="card-text" v-if="type === 'percent'">{{ value | formatPercent }}</p>
+            <p class="card-text" v-if="type === 'quantity'">{{ value }} шт.</p>
+            <p class="card-text" v-if="type === 'percent'">{{ value }} %</p>
         </div>
     </div>
 </template>

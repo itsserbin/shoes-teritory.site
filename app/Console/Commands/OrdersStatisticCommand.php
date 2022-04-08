@@ -64,6 +64,11 @@ class OrdersStatisticCommand extends Command
             $model->awaiting_dispatch = $this->ordersRepository->countOrdersByStatus(OrderStatus::STATUS_AWAITING_DISPATCH, $dateNow);
             $model->awaiting_prepayment = $this->ordersRepository->countOrdersByStatus(OrderStatus::STATUS_AWAITING_PREPAYMENT, $dateNow);
             $model->on_the_road = $this->ordersRepository->countOrdersByStatus(OrderStatus::STATUS_ON_THE_ROAD, $dateNow);
+            if ($model->applications) {
+                $model->canceled_orders_rate = $model->cancel / $model->applications;
+                $model->returned_orders_ratio = $model->refunds / $model->applications;
+                $model->received_parcel_ratio = $model->completed / $model->applications;
+            }
             $model->save();
         }
 
@@ -81,6 +86,11 @@ class OrdersStatisticCommand extends Command
             $item->awaiting_dispatch = $this->ordersRepository->countOrdersByStatus(OrderStatus::STATUS_AWAITING_DISPATCH, $item->date);
             $item->awaiting_prepayment = $this->ordersRepository->countOrdersByStatus(OrderStatus::STATUS_AWAITING_PREPAYMENT, $item->date);
             $item->on_the_road = $this->ordersRepository->countOrdersByStatus(OrderStatus::STATUS_ON_THE_ROAD, $item->date);
+            if ($item->applications) {
+                $item->canceled_orders_rate = ($item->cancel / $item->applications) * 100;
+                $item->returned_orders_ratio = ($item->refunds / $item->applications) * 100;
+                $item->received_parcel_ratio = ($item->completed / $item->applications) * 100;
+            }
             $item->update();
         }
     }

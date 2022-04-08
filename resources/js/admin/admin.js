@@ -103,7 +103,6 @@ Vue.component('bookkeeping-costs-categories-list', require('./bookkeeping/costs/
 Vue.component('bookkeeping-costs-categories-create', require('./bookkeeping/costs/categories/CreateCostCategory').default);
 Vue.component('bookkeeping-costs-categories-edit', require('./bookkeeping/costs/categories/EditCostCategory').default);
 
-Vue.component('bookkeeping-daily-statistics', require('./bookkeeping/DailyStatistics').default);
 Vue.component('supplier-payments', require('./bookkeeping/SupplierPaymentsList').default);
 
 Vue.component('bookkeeping-managers-salaries', require('./bookkeeping/managers-salaries/ManagersSalaries').default);
