@@ -72,9 +72,6 @@ class SumProfitCommand extends Command
             $item->refunds_sum = $this->orderItemsRepository->sumRefundsByDate($created_at);
             $item->clear_profit = $item->profit - $item->cost - $item->refunds_sum;
             $item->prepayment_sum = $this->ordersRepository->sumPrepaymentByDate($created_at);
-            if ($created_at == '2022-04-07'){
-                dd($this->orderItemsRepository->sumMarginalityAdditionalSalesByDate($created_at));
-            }
             $item->additional_sales_sum = $this->orderItemsRepository->sumMarginalityAdditionalSalesByDate($created_at);
             $item->update();
         }
