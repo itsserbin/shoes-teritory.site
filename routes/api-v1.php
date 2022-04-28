@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Public\BannersController;
 use App\Http\Controllers\Api\Public\CartController;
 use App\Http\Controllers\Api\Public\CategoriesController;
+use App\Http\Controllers\Api\Public\FaqController;
 use App\Http\Controllers\Api\Public\OrdersController;
 use App\Http\Controllers\Api\Public\ProductsController;
 use App\Http\Controllers\Api\Public\ReviewsController;
@@ -172,4 +173,7 @@ Route::prefix('v1')->middleware('api')->group(function () {
         Route::get('all', [BannersController::class, 'all'])
             ->name('api.v1.banners.all');
     });
+
+    Route::get('faq/list', [FaqController::class, 'list'])
+        ->name('api.v1.faq.list');
 });

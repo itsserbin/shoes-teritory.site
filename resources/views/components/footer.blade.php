@@ -55,7 +55,10 @@
         @endif
     </div>
     <div class="row text-center">
-        <a href="{{route('exchange-policy')}}" class="text-decoration-none text-white mb-3">Условия возврата и обмена</a>
-        <a href="{{route('privacy-policy')}}" class="text-decoration-none text-white">Политика Конфиденциальности</a>
+        @foreach($pages as $page)
+            <a href="{{route('pages',$page->slug)}}"
+               class="text-decoration-none text-white mb-3"
+            >{{app()->getLocale() == 'ua' ? $page->heading['ua'] : $page->heading['ru']}}</a>
+        @endforeach
     </div>
 </div>

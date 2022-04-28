@@ -5,9 +5,9 @@ namespace App\Http;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CacheControl;
 use App\Http\Middleware\EncryptCookies;
+use App\Http\Middleware\LocaleMiddleware;
 use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Http\Middleware\RedirectIfAuthenticated;
-use App\Http\Middleware\RedirectToNonPublicMiddleware;
 use App\Http\Middleware\RedirectToNonWwwMiddleware;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Middleware\SecuredHttp;
@@ -50,6 +50,7 @@ class Kernel extends HttpKernel
         ConvertEmptyStringsToNull::class,
         CacheControl::class,
         SecuredHttp::class,
+        LocaleMiddleware::class,
     ];
 
     /**

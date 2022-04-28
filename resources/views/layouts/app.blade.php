@@ -21,13 +21,7 @@
     </header>
 
     <main class="py-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    @yield('content')
-                </div>
-            </div>
-        </div>
+        @yield('content')
     </main>
 
 </div>

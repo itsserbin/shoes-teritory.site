@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Requests\ReviewCreateRequest;
 use App\Models\Reviews;
+use App\Repositories\AdvantagesRepository;
 use App\Repositories\CategoriesRepository;
 use App\Repositories\OptionsRepository;
+use App\Repositories\PagesRepository;
 use App\Repositories\Products\ProductRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -22,6 +24,10 @@ class HomeController extends BaseController
 
     private $optionsRepository;
 
+    private $advantagesRepository;
+
+    private $pagesRepository;
+
     /**
      * Display a listing of the resource.
      *
@@ -33,6 +39,8 @@ class HomeController extends BaseController
         $this->productRepository = app(productRepository::class);
         $this->categoriesRepository = app(categoriesRepository::class);
         $this->optionsRepository = app(OptionsRepository::class);
+        $this->advantagesRepository = app(AdvantagesRepository::class);
+        $this->pagesRepository = app(PagesRepository::class);
     }
 
     /**
@@ -43,6 +51,9 @@ class HomeController extends BaseController
         return view('pages.home.index', [
             'options' => $this->getOptions(),
             'products' => $this->productRepository->getItemsWithPaginateOnProduction(15),
+            'advantages' => $this->getAdvantages(),
+            'pages' => $this->getPagesList(),
+            'categories' => $this->getCategories(),
         ]);
     }
 
@@ -57,6 +68,9 @@ class HomeController extends BaseController
         return view('pages.product.index', [
             'options' => $this->getOptions(),
             'product' => $this->productRepository->getProduct($id),
+            'pages' => $this->getPagesList(),
+            'advantages' => $this->getAdvantages(),
+            'categories' => $this->getCategories(),
         ]);
     }
 
@@ -67,6 +81,18 @@ class HomeController extends BaseController
     {
         return view('pages.order.index', [
             'options' => $this->getOptions(),
+            'pages' => $this->getPagesList(),
+            'categories' => $this->getCategories(),
+        ]);
+    }
+
+    public function page($slug): Factory|View|Application
+    {
+        return view('pages.page', [
+            'page' => $this->pagesRepository->getBySlug($slug),
+            'options' => $this->getOptions(),
+            'pages' => $this->getPagesList(),
+            'categories' => $this->getCategories(),
         ]);
     }
 
@@ -84,6 +110,8 @@ class HomeController extends BaseController
     {
         return view('pages.checkout.index', [
             'options' => $this->getOptions(),
+            'pages' => $this->getPagesList(),
+            'categories' => $this->getCategories(),
         ]);
     }
 
@@ -94,6 +122,8 @@ class HomeController extends BaseController
     {
         return view('pages.cart.index', [
             'options' => $this->getOptions(),
+            'pages' => $this->getPagesList(),
+            'categories' => $this->getCategories(),
         ]);
     }
 
@@ -107,7 +137,9 @@ class HomeController extends BaseController
 
         return view('pages.category.index', [
             'options' => $this->getOptions(),
-            'category' => $category
+            'pages' => $this->getPagesList(),
+            'category' => $category,
+            'categories' => $this->getCategories(),
         ]);
     }
 
@@ -142,28 +174,6 @@ class HomeController extends BaseController
     }
 
     /**
-     * Открыть политику конфеденциальности
-     */
-    public function privacyPolicy(): Factory|View|Application
-    {
-        return view('pages.privacy-policy', [
-            'options' => $this->getOptions(),
-        ]);
-    }
-
-    /**
-     * Открыть политику обмена и возврата.
-     *
-     * @return Application|Factory|View
-     */
-    public function exchangePolicy(): View|Factory|Application
-    {
-        return view('pages.exchange-policy', [
-            'options' => $this->getOptions(),
-        ]);
-    }
-
-    /**
      * Открыть robots.txt
      *
      * @return Response
@@ -179,5 +189,20 @@ class HomeController extends BaseController
     public function getOptions()
     {
         return $this->optionsRepository->getToProd();
+    }
+
+    public function getPagesList()
+    {
+        return $this->pagesRepository->getPagesListToPublic();
+    }
+
+    public function getAdvantages()
+    {
+        return $this->advantagesRepository->getAllToPublic();
+    }
+
+    public function getCategories()
+    {
+        return $this->categoriesRepository->getAllOnProd();
     }
 }

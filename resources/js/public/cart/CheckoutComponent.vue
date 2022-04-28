@@ -5,49 +5,62 @@
             <div class="col-12 col-md-6 mb-3">
                 <div class="ordering-item">
                     <div class="ordering-item__title">
-                        <h3>Персональные данные</h3>
+                        <h3>{{ textPersonalData }}</h3>
                     </div>
                     <div class="data-list">
                         <div class="input data-list__item">
-                            <label> Имя<span class="required">*</span>
-                                <input type="text" v-model="order.name" placeholder="Введите имя">
+                            <label> {{ textName }}<span class="required">*</span>
+                                <input type="text" v-model="order.name" :placeholder="textEnterName">
+                                <input-invalid-feedback v-if="errors.name"
+                                                        :errors="errors.name"
+                                ></input-invalid-feedback>
                             </label>
                         </div>
                         <div class="input data-list__item">
-                            <label> Фамилия
-                                <input type="text" v-model="order.last_name" placeholder="Введите фамилию">
+                            <label>{{ textSurname }}
+                                <input type="text" v-model="order.last_name" :placeholder="textEnterSurname">
                             </label>
                         </div>
                         <div class="input data-list__item">
-                            <label> Номер телефона <span class="required">*</span>
+                            <label>{{ textPhone }} <span class="required">*</span>
                                 <the-mask type="tel"
                                           class="phone"
                                           placeholder="+38 (0"
                                           v-model="order.phone"
                                           :mask="'+38 (0##) ###-##-##'"
                                 />
+                                <input-invalid-feedback v-if="errors.phone"
+                                                        :errors="errors.phone"
+                                ></input-invalid-feedback>
                             </label>
                         </div>
                         <div class="input data-list__item">
-                            <label> Email
-                                <input type="email" v-model="order.email" placeholder="Введіть вашу пошту">
+                            <label>{{ textEmail }}
+                                <input type="email" v-model="order.email" :placeholder="textEnterEmail">
                             </label>
                         </div>
                     </div>
                 </div>
                 <div class="ordering-item payment-delivery">
                     <div class="ordering-item__title">
-                        <h3>Доставка</h3>
+                        <h3>{{ textDelivery }}</h3>
                     </div>
                     <div class="data-list">
                         <div class="input data-list__item">
-                            <label> Город<span class="required">*</span>
-                                <input type="text" v-model="order.city" placeholder="Введите город">
+                            <label>{{ textCity }}<span class="required">*</span>
+                                <input type="text" v-model="order.city" :placeholder="textEnterCity">
+                                <input-invalid-feedback v-if="errors.city"
+                                                        :errors="errors.city"
+                                ></input-invalid-feedback>
                             </label>
                         </div>
                         <div class="input data-list__item">
-                            <label> Отделение НоваяПочта<span class="required">*</span>
-                                <input type="text" v-model="order.postal_office" placeholder="Введите отделение НП">
+                            <label>{{ textPostalOfficeNovaPoshta }}<span class="required">*</span>
+                                <input type="text" v-model="order.postal_office"
+                                       :placeholder="textEnterPostalOfficeNovaPoshta">
+                                <input-invalid-feedback v-if="errors.postal_office"
+                                                        :errors="errors.postal_office"
+                                ></input-invalid-feedback>
                             </label>
                         </div>
                     </div>
@@ -87,8 +100,8 @@
 
 
                 <div class="textarea">
-                    <label> Комментарий
-                        <textarea v-model="order.comment" placeholder="Ваш комментарий..."></textarea>
+                    <label>{{ textComment }}
+                        <textarea v-model="order.comment" :placeholder="textEnterComment"></textarea>
                     </label>
                 </div>
             </div>
@@ -96,7 +109,7 @@
                 <div class="ordering-right__inner">
                     <div class="ordering-cart">
                         <div class="ordering-item__title">
-                            <h3>Заказ</h3>
+                            <h3>{{ textOrder }}</h3>
                         </div>
                         <div class="ordering-cart__list">
                             <div class="ordering-cart__item" v-for="item in cart.list" :key="item.id">
@@ -104,11 +117,16 @@
                                     <div class="img-inner">
                                         <img
                                             :src="item.image ? '/storage/products/350/' + item.image : '/images/no-image.png'"
-                                            :alt="item.name">
+                                            :alt="item.name.ua" v-if="lang === 'ua'">
+
+                                        <img
+                                            :src="item.image ? '/storage/products/350/' + item.image : '/images/no-image.png'"
+                                            :alt="item.name.ru" v-if="lang === 'ru'">
                                     </div>
                                 </div>
                                 <div class="line"></div>
-                                <div class="title">{{ item.name }}</div>
+                                <div class="title" v-if="lang === 'ua'">{{ item.name.ua }}</div>
+                                <div class="title" v-if="lang === 'ru'">{{ item.name.ru }}</div>
                                 <div class="color-size">
                                     <div v-if="item.color.length || item.size.length">
                                         <div class="color"
@@ -121,9 +139,6 @@
                                              v-for="size in item.size"
                                         >{{ size }}
                                         </div>
-                                    </div>
-                                    <div v-else>
-                                        <div class="size">Размер и цвет не выбран</div>
                                     </div>
                                 </div>
                                 <div class="ordering-cart__count"> x<span class="count">{{ item.count }}</span></div>
@@ -162,7 +177,7 @@
                         <div class="payment-top">
                             <div class="sum">
                                 <div class="item discount" v-if="cart.price_without_discount !== 0">
-                                    <div class="label">Цена без скидки</div>
+                                    <div class="label">{{ textCartPriceWithoutDiscount }}</div>
                                     <div class="value">
                                         <div class="product-card__price">
                                             <div class="price">
@@ -174,7 +189,7 @@
                                     </div>
                                 </div>
                                 <div class="item">
-                                    <div class="label">К оплате</div>
+                                    <div class="label">{{ textCartTotalPrice }}</div>
                                     <div class="value">
                                         <div class="product-card__price">
                                             <div class="price total">{{ cart.totalPrice }} грн.</div>
@@ -183,7 +198,8 @@
                                 </div>
                             </div>
                             <div class="buttons">
-                                <a href="javascript:" class="button-checkout" @click.prevent="sendOrder">Заказать</a>
+                                <a href="javascript:" class="button-checkout"
+                                   @click.prevent="sendOrder">{{ textSendOrder }}</a>
                             </div>
                         </div>
                     </div>
@@ -243,48 +259,66 @@ export default {
             self.fbInitiateCheckout = false;
         }
     },
+    props: {
+        lang: String,
+        textPersonalData: String,
+        textEnterName: String,
+        textName: String,
+        textEnterSurname: String,
+        textSurname: String,
+        textPhone: String,
+        textEnterPhone: String,
+        textEnterEmail: String,
+        textEmail: String,
+        textDelivery: String,
+        textEnterCity: String,
+        textCity: String,
+        textPostalOfficeNovaPoshta: String,
+        textEnterPostalOfficeNovaPoshta: String,
+        textEnterComment: String,
+        textComment: String,
+        textOrder: String,
+        textCartPriceWithoutDiscount: String,
+        textCartTotalPrice: String,
+        textSendOrder: String,
+        textSuccessSendOrder: String,
+        textErrorDescription: String,
+        textError: String,
+    },
     methods: {
         removeFromCart(id) {
             axios.delete('/api/v1/cart/delete/' + id)
-                .then(() => this.deleteCartListSuccessResponse())
-                .catch((response) => this.deleteCartListErrorResponse(response));
-        },
-        deleteCartListSuccessResponse() {
-            this.$store.commit('loadCart');
-        },
-        deleteCartListErrorResponse(response) {
-            console.log(response);
+                .then(() => this.$store.commit('loadCart'))
+                .catch((response) => console.log(response));
         },
         sendOrder() {
             this.isLoading = true;
+            this.errors = [];
             axios.post('/api/v1/order/create', this.order)
-                .then(() => this.sendFormSuccessResponse())
-                .catch(({response}) => this.sendFormErrorResponse(response));
-        },
-        sendFormSuccessResponse() {
-            fbq('track', 'Purchase', {
-                "value": this.cart.totalPrice,
-                "currency": "UAH",
-                "content_type": "product",
-                "num_items": this.cart.totalCount,
-                "content_ids": this.contentIds
-            });
-            this.isLoading = false;
-            this.$swal({
-                title: 'Отправлено!',
-                text: 'Ваша заявка отправлена :)',
-                icon: 'success',
-            });
-            window.location.href = '/send-form';
-        },
-        sendFormErrorResponse(response) {
-            this.errors = response.data;
-            this.isLoading = false;
-            this.$swal({
-                title: 'Произошла ошибка :(',
-                text: 'Проверьте корректность введенных данных, или же обратитесь по контактным данным',
-                icon: 'error',
-            });
+                .then(() => {
+                    fbq('track', 'Purchase', {
+                        "value": this.cart.totalPrice,
+                        "currency": "UAH",
+                        "content_type": "product",
+                        "num_items": this.cart.totalCount,
+                        "content_ids": this.contentIds
+                    });
+                    this.isLoading = false;
+                    this.$swal({
+                        title: this.textSuccessSendOrder,
+                        icon: 'success',
+                    });
+                    setTimeout(window.location.href = '/', 3000);
+                })
+                .catch(({response}) => {
+                    this.errors = response.data;
+                    this.isLoading = false;
+                    this.$swal({
+                        title: this.textError,
+                        text: this.textErrorDescription,
+                        icon: 'error',
+                    });
+                });
         }
     }
 }

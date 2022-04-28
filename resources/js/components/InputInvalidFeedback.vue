@@ -1,6 +1,6 @@
 <template>
-    <div v-if="errors.length" class="invalid-feedback">
-        <span v-for="error in errors">{{ error }}</span>
+    <div class="has-error text-danger">
+        <div v-for="error in errors">{{ error }}</div>
     </div>
 </template>
 

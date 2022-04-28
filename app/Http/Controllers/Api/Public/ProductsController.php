@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Api\Public;
 
 use App\Repositories\Products\ProductRepository;
-use App\Services\ShoppingCart;
 use Illuminate\Http\JsonResponse;
 
 class ProductsController extends BaseController
 {
     private $productRepository;
-    private $shoppingCartService;
 
     /**
      * ClientsController constructor.
@@ -18,7 +16,6 @@ class ProductsController extends BaseController
     {
         parent::__construct();
         $this->productRepository = app(ProductRepository::class);
-        $this->shoppingCartService = app(ShoppingCart::class);
     }
 
     /**

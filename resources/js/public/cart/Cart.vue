@@ -4,8 +4,8 @@
             <div class="col-12 col-md-6 mb-3">
                 <div class="cart-item" v-for="item in cart.list" :key="item.id">
                     <div class="cart-item__inner">
-                        <div class="cart-item__color">
-                            <div v-if="item.color.length || item.size.length">
+                        <div class="cart-item__color" v-if="item.color.length || item.size.length">
+                            <div>
                                 <div class="color"
                                      v-for="color in item.color"
                                      v-if="item.color.length"
@@ -16,9 +16,6 @@
                                      v-for="size in item.size"
                                 >{{ size }}
                                 </div>
-                            </div>
-                            <div v-else>
-                                <div class="size">Размер и цвет не выбран</div>
                             </div>
                         </div>
                         <div class="delete-cart" @click="removeFromCart(item.id)">
@@ -31,12 +28,17 @@
                         </div>
                         <div class="cart-item__img">
                             <div class="img">
-                                <img
-                                    :src="item.image ? '/storage/products/350/' + item.image : '/images/no-image.png'"
-                                    :alt="item.name">
+                                <a :href="productRoute + '/' + item.id">
+                                    <img
+                                        :src="item.image ? '/storage/products/350/' + item.image : '/images/no-image.png'"
+                                        :alt="lang === 'ua' ? item.name.ua : (lang === 'ru' ? item.name.ru : null)">
+                                </a>
+
                             </div>
                         </div>
-                        <div class="cart-item__title">{{ item.name }}</div>
+                        <a :href="'/product/' + item.id" class="cart-item__title text-danger">
+                            <div>{{ lang === 'ua' ? item.name.ua : (lang === 'ru' ? item.name.ru : null) }}</div>
+                        </a>
                         <div class="cart-item__bottom">
                             <div class="product-card__price">
                                 <div class="price" v-if="item.discount_price !== 0">
@@ -80,7 +82,7 @@
             <div class="col-12 col-md-6 mb-3">
                 <div class="cart-item__right row mb-3">
                     <form class="promocode mb-3" v-if="cart.promo_code">
-                        <label class="promocode__label"> Ваш промо код
+                        <label class="promocode__label">{{ textYourPromoCode }}
                             <input class="promocode__input mx-3"
                                    type="text"
                                    placeholder="XXX-XXX-XXX"
@@ -88,23 +90,29 @@
                                    disabled
                             >
                         </label>
-                        <a href="javascript:" class="promocode__button" @click="deactivatePromoCode">Удалить</a>
+                        <a href="javascript:"
+                           class="promocode__button"
+                           @click="deactivatePromoCode"
+                        >{{ textCartDeactivatePromocode }}</a>
                     </form>
                     <form class="promocode mb-3" v-else>
-                        <label class="promocode__label"> Промо код
+                        <label class="promocode__label">{{ textPromoCode }}
                             <input class="promocode__input mx-3"
                                    type="text"
                                    placeholder="XXX-XXX-XXX"
                                    v-model="promo_code"
                             >
                         </label>
-                        <a href="javascript:" class="promocode__button" @click="activatePromoCode">Активувати</a>
+                        <a href="javascript:"
+                           class="promocode__button"
+                           @click="activatePromoCode"
+                        >{{ textCartActivatePromocode }}</a>
                     </form>
 
                     <div class="payment">
                         <div class="sum">
                             <div class="item">
-                                <div class="label">Товаров</div>
+                                <div class="label">{{ textCartTotalCount }}</div>
                                 <div class="value">
                                     <div class="total">
                                         <div class="price total">{{ cart.totalCount }}</div>
@@ -113,7 +121,7 @@
                             </div>
                             <hr>
                             <div class="item discount" v-if="cart.price_without_discount !== 0">
-                                <div class="label">Цена без скидки</div>
+                                <div class="label">{{ textCartPriceWithoutDiscount }}</div>
                                 <div class="value">
                                     <div class="product-card__price">
                                         <div class="price">
@@ -127,7 +135,7 @@
                                 </div>
                             </div>
                             <div class="item">
-                                <div class="label">К оплате</div>
+                                <div class="label">{{ textCartTotalPrice }}</div>
                                 <div class="value">
                                     <div class="total">
                                         <div class="price total">{{ cart.totalPrice }} грн.</div>
@@ -136,25 +144,32 @@
                             </div>
                         </div>
                         <div class="buttons">
-                            <a href="/checkout" class="payment-btn">Оформить заказ</a>
+                            <a :href="checkoutRoute" class="payment-btn">{{ textGoToCheckout }}</a>
                         </div>
                     </div>
 
 
                     <div class="additions">
-                        <h3 class="additions-title">Вам понравится</h3>
+                        <h3 class="additions-title">{{ textCartAdditionalProducts }}</h3>
                         <div class="additions-list">
                             <div class="additions-item" v-for="recommendProduct in recommendProducts"
                                  :key="recommendProduct.id">
                                 <div class="additions-item__inner">
                                     <div class="additions-item__left">
                                         <div class="img">
-                                            <img :src="'/storage/products/350/' + recommendProduct.preview"
-                                                 :alt="recommendProduct.h1"></div>
+                                            <a :href="productRoute + '/' + recommendProduct.id">
+                                                <img :src="'/storage/products/350/' + recommendProduct.preview"
+                                                     :alt="lang === 'ua' ? recommendProduct.h1.ua : (lang === 'ru' ? recommendProduct.h1.ru : null)">
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="additions-item__desc">
                                         <div class="left">
-                                            <div class="name">{{ recommendProduct.h1 }}</div>
+                                            <a :href="productRoute + '/' + recommendProduct.id">
+                                                <div class="name">
+                                                    {{lang === 'ua' ? recommendProduct.h1.ua : (lang === 'ru' ? recommendProduct.h1.ru : null) }}
+                                                </div>
+                                            </a>
                                         </div>
                                         <div class="right">
                                             <div class="price">{{
@@ -205,6 +220,20 @@ export default {
         axios.get('/api/v1/product/recommend-products')
             .then(({data}) => this.recommendProducts = data.result.data)
             .catch((response) => console.log(response));
+    },
+    props: {
+        lang: String,
+        textPromoCode: String,
+        textYourPromoCode: String,
+        textCartTotalCount: String,
+        textCartPriceWithoutDiscount: String,
+        textCartTotalPrice: String,
+        textGoToCheckout: String,
+        textCartAdditionalProducts: String,
+        textCartDeactivatePromocode: String,
+        textCartActivatePromocode: String,
+        productRoute: String,
+        checkoutRoute: String
     },
     methods: {
         addToCart(id) {

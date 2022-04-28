@@ -7,7 +7,7 @@
                     <button
                         @click="createProduct"
                         class="btn btn-danger w-25">
-                        Додати товар
+                        Добавить
                     </button>
                 </div>
             </div>
@@ -15,12 +15,28 @@
             <div class="row mb-3">
                 <div class="col">
                     <div class="d-flex">
-                        <button class="btn btn-danger" @click.prevent="getProducts">Очистити</button>
+                        <button class="btn btn-danger" @click.prevent="getProducts">Очистить</button>
                         <input type="text" v-model="search" class="form-control mx-1">
-                        <button @click.prevent="getSearchList" type="submit" class="btn btn-danger">Пошук</button>
+                        <button @click.prevent="getSearchList" type="submit" class="btn btn-danger">Поиск</button>
                     </div>
                 </div>
             </div>
+            <ul class="nav nav-tabs justify-content-center my-2" v-if="products.length">
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="javascript:"
+                       @click="activeLang = 'ua'"
+                       :class="{'active':activeLang === 'ua'}"
+                    >UA</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="javascript:"
+                       @click="activeLang = 'ru'"
+                       :class="{'active':activeLang === 'ru'}"
+                    >RU</a>
+                </li>
+            </ul>
             <div class="table-responsive">
                 <table class="table">
                     <thead class="text-center">
@@ -191,12 +207,19 @@
                             <a v-bind:href="'/admin/products/edit/' + product.id">
                                 <img
                                     :src="product.preview ? '/storage/products/55/' + product.preview : '/storage/no_image.png'"
-                                    :alt="product.title">
+                                    :alt="product.h1.ru" v-if="activeLang === 'ru'">
+                                <img
+                                    :src="product.preview ? '/storage/products/55/' + product.preview : '/storage/no_image.png'"
+                                    :alt="product.h1.ua" v-if="activeLang === 'ua'">
                             </a>
                         </td>
                         <td>
-                            <a :href="'/product/' + product.id" target="_blank">
-                                {{ product.h1 }}
+                            <a :href="'/product/' + product.id" target="_blank" v-if="activeLang === 'ru'">
+                                {{ product.h1.ru }}
+                            </a>
+
+                            <a :href="'/product/' + product.id" target="_blank" v-if="activeLang === 'ua'">
+                                {{ product.h1.ua }}
                             </a>
                         </td>
                         <td>{{ publishedStatus(product.published) }}</td>
@@ -239,10 +262,10 @@
                                     @change="selectedAction"
                                     v-model="checkedItemsAction"
                             >
-                                <option :value="null">Виберіть дію</option>
-                                <option :value="publishedMassAction">Опублікувати</option>
-                                <option :value="notPublishedMassAction">Зняти з публікації</option>
-                                <option :value="destroyMassAction">Видалити</option>
+                                <option :value="null">Выберите действие</option>
+                                <option :value="publishedMassAction">Опубликовать</option>
+                                <option :value="notPublishedMassAction">Снять с публикации</option>
+                                <option :value="destroyMassAction">Удалить</option>
                             </select>
                         </th>
                     </tr>
@@ -276,6 +299,7 @@ export default {
     },
     data() {
         return {
+            activeLang: 'ua',
             checkedItems: [],
             checkedAll: false,
             checkedItemsAction: null,

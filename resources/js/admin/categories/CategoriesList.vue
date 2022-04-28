@@ -1,7 +1,7 @@
 <template>
     <div>
         <loader v-if="isLoading"></loader>
-        <div class="container" v-if="!isLoading">
+        <div v-if="!isLoading">
             <div class="row mb-3">
                 <div class="col">
                     <button class="btn btn-danger"
@@ -21,6 +21,22 @@
                     </div>
                 </div>
             </div>
+            <ul class="nav nav-tabs justify-content-center my-2" v-if="categories.length">
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="javascript:"
+                       @click="activeLang = 'ua'"
+                       :class="{'active':activeLang === 'ua'}"
+                    >UA</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="javascript:"
+                       @click="activeLang = 'ru'"
+                       :class="{'active':activeLang === 'ru'}"
+                    >RU</a>
+                </li>
+            </ul>
             <div class="row">
                 <div class="table-responsive">
                     <table class="table">
@@ -139,12 +155,27 @@
                                     >
                                 </div>
                             </td>
-                            <td>{{ category.id }}</td>
+                            <td>
+                                <a :href="'/admin/categories/edit/' + category.id">
+                                    {{ category.id }}
+                                </a>
+                            </td>
                             <td class="w-25">
                                 <img class="w-25"
                                      :src="category.preview ? category.preview : '/storage/no_image.png'"
-                                     :alt="category.title"></td>
-                            <td><a :href="'/admin/categories/edit/' + category.id">{{ category.title }}</a></td>
+                                     :alt="category.title.ru" v-if="activeLang === 'ru'">
+                                <img class="w-25"
+                                     :src="category.preview ? category.preview : '/storage/no_image.png'"
+                                     :alt="category.title.ua" v-if="activeLang === 'ua'">
+                            </td>
+                            <td>
+                                <a :href="'/admin/categories/edit/' + category.id" v-if="activeLang === 'ru'">
+                                    {{ category.title.ru }}
+                                </a>
+                                <a :href="'/admin/categories/edit/' + category.id" v-if="activeLang === 'ua'">
+                                    {{ category.title.ua }}
+                                </a>
+                            </td>
                             <td>{{ publishedStatus(category.published) }}</td>
                             <td>{{ category.parent_id }}</td>
                             <td>
@@ -208,6 +239,7 @@
 export default {
     data() {
         return {
+            activeLang: 'ua',
             checkedItems: [],
             checkedAll: false,
             checkedItemsAction: null,
@@ -223,20 +255,20 @@ export default {
     mounted() {
         this.getCategories();
     },
-    props:{
+    props: {
         destroyMassAction: String,
         publishedMassAction: String,
         notPublishedMassAction: String,
     },
     methods: {
-        getCategories(){
+        getCategories() {
             this.search = null;
             this.isLoading = true;
             axios.get('/api/categories')
                 .then(({data}) => this.getCategoriesListSuccessResponse(data))
                 .catch((response) => this.getCategoriesListErrorResponse(response));
         },
-        updateCategorySort(category_id,sort){
+        updateCategorySort(category_id, sort) {
             axios.post('/api/categories/update-sort/' + category_id, {sort: sort})
                 .then(() => {
                     this.$swal({

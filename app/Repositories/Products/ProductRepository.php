@@ -280,6 +280,10 @@ class ProductRepository extends CoreRepository
         $model->xxxxxl = $data['xxxxxl'];
 
         $model->h1 = $data['h1'];
+//        $model->title = ['ru' => $data['title']['ru'], 'ua' => $data['title']['ua']];
+//        $model->description = ['ru' => $data['description']['ru'], 'ua' => $data['description']['ua']];
+//        $model->content = ['ru' => $data['content']['ru'], 'ua' => $data['content']['ua']];
+//        $model->characteristics = ['ru' => $data['characteristics']['ru'], 'ua' => $data['characteristics']['ua']];
         $model->title = $data['title'];
         $model->description = $data['description'];
         $model->content = $data['content'];
@@ -318,6 +322,11 @@ class ProductRepository extends CoreRepository
         $model->xxxl = $data['xxxl'];
 
         $model->h1 = $data['h1'];
+//        $model->title = ['ru' => $data['title']['ru'], 'ua' => $data['title']['ua']];
+//        $model->description = ['ru' => $data['description']['ru'], 'ua' => $data['description']['ua']];
+//        $model->content = ['ru' => $data['content']['ru'], 'ua' => $data['content']['ua']];
+//        $model->characteristics = ['ru' => $data['characteristics']['ru'], 'ua' => $data['characteristics']['ua']];
+
         $model->title = $data['title'];
         $model->description = $data['description'];
         $model->content = $data['content'];
@@ -408,7 +417,7 @@ class ProductRepository extends CoreRepository
             ->where('published', 1)
             ->select($columns)
             ->orderBy('created_at', 'desc')
-            ->limit(10)
+            ->limit(8)
             ->get();
     }
 

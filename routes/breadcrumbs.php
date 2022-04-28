@@ -2,13 +2,134 @@
 
 use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 
+/** Admin panel */
 Breadcrumbs::for('dashboard', function ($trail) {
     $trail->push('Dashboard', route('admin.dashboard'));
+});
+
+Breadcrumbs::for('categories', function ($trail) {
+    $trail->parent('dashboard');
+    $trail->push('Категории', route('admin.categories.index'));
+});
+
+Breadcrumbs::for('categories.create', function ($trail) {
+    $trail->parent('categories');
+    $trail->push('Добавление категории', route('admin.categories.create'));
+});
+
+Breadcrumbs::for('categories.edit', function ($trail) {
+    $trail->parent('categories');
+    $trail->push('Редактирование категории');
 });
 
 Breadcrumbs::for('bookkeeping', function ($trail) {
     $trail->parent('dashboard');
     $trail->push('Бухгалтерия', route('admin.bookkeeping.index'));
+});
+
+Breadcrumbs::for('pages', function ($trail) {
+    $trail->parent('dashboard');
+    $trail->push('Страницы', route('admin.pages.index'));
+});
+
+Breadcrumbs::for('pages.create', function ($trail) {
+    $trail->parent('pages');
+    $trail->push('Добавление страницы', route('admin.pages.create'));
+});
+
+Breadcrumbs::for('pages.edit', function ($trail) {
+    $trail->parent('pages');
+    $trail->push('Редактирование страницы');
+});
+
+Breadcrumbs::for('products', function ($trail) {
+    $trail->parent('dashboard');
+    $trail->push('Товары', route('admin.products.index'));
+});
+
+Breadcrumbs::for('products.edit', function ($trail) {
+    $trail->parent('products');
+    $trail->push('Редактирование товара');
+});
+
+Breadcrumbs::for('products.create', function ($trail) {
+    $trail->parent('products');
+    $trail->push('Создание товара');
+});
+
+Breadcrumbs::for('options', function ($trail) {
+    $trail->parent('dashboard');
+    $trail->push('Настройки', route('admin.options.index'));
+});
+
+Breadcrumbs::for('options.promo-codes', function ($trail) {
+    $trail->parent('options');
+    $trail->push('Промо-коды', route('admin.promo-codes.index'));
+});
+
+Breadcrumbs::for('options.promo-codes.create', function ($trail) {
+    $trail->parent('options.promo-codes');
+    $trail->push('Добавление промо-кода', route('admin.promo-codes.create'));
+});
+
+Breadcrumbs::for('options.promo-codes.edit', function ($trail) {
+    $trail->parent('options.promo-codes');
+    $trail->push('Редактирование промо-кода');
+});
+
+Breadcrumbs::for('options.faq', function ($trail) {
+    $trail->parent('options');
+    $trail->push('Настройка FAQ', route('admin.options.faq.index'));
+});
+
+Breadcrumbs::for('options.faq.create', function ($trail) {
+    $trail->parent('options.faq');
+    $trail->push('Добавление FAQ', route('admin.options.faq.create'));
+});
+
+Breadcrumbs::for('options.faq.edit', function ($trail) {
+    $trail->parent('options.faq');
+    $trail->push('Редактирование FAQ');
+});
+
+Breadcrumbs::for('options.advantages', function ($trail) {
+    $trail->parent('options');
+    $trail->push('Настройка преимуществ', route('admin.options.advantages.index'));
+});
+
+Breadcrumbs::for('options.advantages.create', function ($trail) {
+    $trail->parent('options.advantages');
+    $trail->push('Добавление преимущества', route('admin.options.advantages.create'));
+});
+
+Breadcrumbs::for('options.advantages.edit', function ($trail) {
+    $trail->parent('options.advantages');
+    $trail->push('Редактирование преимущества');
+});
+
+Breadcrumbs::for('options.translations', function ($trail) {
+    $trail->parent('options');
+    $trail->push('Переводы', route('admin.options.translations.index'));
+});
+
+Breadcrumbs::for('options.translations.create', function ($trail) {
+    $trail->parent('dashboard');
+    $trail->push('Добавить перевод', route('admin.options.translations.create'));
+});
+
+Breadcrumbs::for('options.banners', function ($trail) {
+    $trail->parent('options');
+    $trail->push('Баннера', route('admin.banners.index'));
+});
+
+Breadcrumbs::for('options.banners.edit', function ($trail) {
+    $trail->parent('options.banners');
+    $trail->push('Редактирование баннера');
+});
+
+Breadcrumbs::for('options.banners.create', function ($trail) {
+    $trail->parent('options.banners');
+    $trail->push('Создание баннера');
 });
 
 Breadcrumbs::for('bookkeeping.marketing-statistic', function ($trail) {

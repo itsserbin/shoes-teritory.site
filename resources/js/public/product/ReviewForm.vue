@@ -8,7 +8,7 @@
                     @click="showReviewModalFunction"
                 >
                     <span class="icon-file-text2"></span>
-                    <span>Оставить отзыв</span>
+                    <span>{{ textGiveReview }}</span>
                 </button>
             </div>
 
@@ -22,7 +22,7 @@
                     <div class="modal-content">
                         <form id="review-form" class="form review-form" v-if="!isLoading">
                             <div class="modal-header">
-                                <h5 class="modal-title">Оставить отзыв</h5>
+                                <h5 class="modal-title">{{ textGiveReview }}</h5>
                                 <button type="button"
                                         class="btn-close"
                                         @click="showReviewModal = false"
@@ -35,33 +35,28 @@
                                         <div class="input-group mb-1">
                                             <input type="text"
                                                    class="form-control"
-                                                   placeholder="Ваше имя"
+                                                   :placeholder="textEnterName"
                                                    v-model="review.name"
                                             >
                                         </div>
-                                        <span
-                                            v-if="errors.name"
-                                            class="has-error text-danger"
-                                        >
-                                        Введите Ваше имя.
-                                    </span>
+                                        <input-invalid-feedback :errors="errors.name"
+                                                                v-if="errors.name"
+                                        ></input-invalid-feedback>
                                     </div>
 
                                     <div class="mb-3">
                                         <div class="input-group mb-1">
                                     <textarea type="text"
                                               class="form-control"
-                                              placeholder="Ваш отзыв"
+                                              :placeholder="textEnterReview"
                                               v-model="review.comment"
                                               rows="6"
                                     ></textarea>
                                         </div>
-                                        <span
-                                            v-if="errors.comment"
-                                            class="has-error text-danger"
-                                        >
-                                        Отзыв должен содержать не менее 10-ти символов.
-                                    </span>
+                                        <input-invalid-feedback v-if="errors.comment"
+                                                                :errors="errors.comment"
+                                        ></input-invalid-feedback>
+
                                     </div>
                                 </div>
                                 <div class="row justify-content-center mt-2">
@@ -71,7 +66,7 @@
                                         @click.prevent="sendReview"
                                     >
                                         <span class="icon-arrow-right2"></span>
-                                        <span>Оставить отзыв</span>
+                                        <span>{{ textGiveReview }}</span>
                                     </button>
                                 </div>
                             </div>
@@ -97,6 +92,11 @@ export default {
                 comment: null,
             }
         }
+    },
+    props: {
+        textGiveReview: String,
+        textEnterName: String,
+        textEnterReview: String,
     },
     mounted() {
         let str = window.location.pathname;

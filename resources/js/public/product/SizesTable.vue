@@ -8,7 +8,7 @@
                 @click="showModalSizesFunction"
             >
                 <span class="icon-table"></span>
-                <span>Таблица размеров</span>
+                <span>{{ textSizesTable }}</span>
             </button>
         </div>
 
@@ -17,7 +17,7 @@
                 <div class="modal-content">
                     <form>
                         <div class="modal-header">
-                            <h5 class="modal-title">Таблица размеров</h5>
+                            <h5 class="modal-title">{{ textSizesTable }}</h5>
                             <button type="button"
                                     class="btn-close"
                                     @click="showModalSizes = false">
@@ -56,7 +56,7 @@
                                     <td>101-105</td>
                                 </tr>
                             </table>
-                            <div v-if="this.sizeTable.length" class="sizes-table">
+                            <div v-if="sizeTable.length" class="sizes-table">
                                 <div v-html="sizeTable"></div>
                             </div>
                         </div>
@@ -76,6 +76,7 @@ export default {
     },
     props: {
         sizeTable: String,
+        textSizesTable: String,
     },
     methods: {
         showModalSizesFunction() {

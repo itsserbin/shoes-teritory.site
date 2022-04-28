@@ -2,58 +2,57 @@
 
 @section('head')
     <link rel="stylesheet" href="{{asset('css/product/app.css')}}">
-
     <script type="application/ld+json">
     {
       "@context": "https://schema.org/",
       "@type": "Product",
-      "name": "{{$product->h1}}",
+      "name": "{{app()->getLocale() == 'ua' ? $product->h1['ua'] : $product->h1['ru']}}",
       "image": "{{asset($product->preview)}}",
-      "description": "{{$product->description}}",
+      "description": "{{app()->getLocale() == 'ua' ? $product->description['ua'] : $product->description['ru']}}",
       "sku": "{{$product->vendor_code}}",
       "mpn": "{{$product->id}}",
       "brand": {
         "@type": "Brand",
-        "name": "Dabango"
-      },
+        "name": {{$options['brand']['value']}}
+        },
 
-      "review": [
-       @foreach($product->Reviews as $review_item)
-      @if($loop->last)
-      {
-      "@type": "Review",
-      "reviewRating": {
-        "@type": "Rating",
-        "ratingValue": "5"
-      },
+        "review": [
+        @foreach($product->Reviews as $review_item)
+            @if($loop->last)
+                {
+                "@type": "Review",
+                "reviewRating": {
+                  "@type": "Rating",
+                  "ratingValue": "5"
+                },
 
-      "author": {
-        "@type": "Person",
-        "name": "{{$review_item->name}}"
-      },
-        "reviewBody": "{!! $review_item->comment !!}"
-      }
-      @else
-      {
-      "@type": "Review",
-      "reviewRating": {
-        "@type": "Rating",
-        "ratingValue": "5"
-      },
+                "author": {
+                  "@type": "Person",
+                  "name": "{{$review_item->name}}"
+                    },
+                     "reviewBody": "{!! $review_item->comment !!}"
+                    }
+            @else
+                {
+                "@type": "Review",
+                "reviewRating": {
+                  "@type": "Rating",
+                  "ratingValue": "5"
+                },
 
-      "author": {
-        "@type": "Person",
-        "name": "{{$review_item->name}}"
+                "author": {
+                  "@type": "Person",
+                  "name": "{{$review_item->name}}"
       },
         "reviewBody": "{!! $review_item->comment !!}"
       },
       @endif
-      @endforeach
-      ],
+        @endforeach
+        ],
 
-      "offers": {
-        "@type": "Offer",
-        "url": "{{route('product',$product->id)}}",
+        "offers": {
+          "@type": "Offer",
+          "url": "{{route('product',$product->id)}}",
         "priceCurrency": "UAH",
         "price": "{{$product->discount_price ? : $product->price}}",
         "priceValidUntil": "{{Carbon::now()->addYear()->format('c')}}",
@@ -67,36 +66,52 @@
         "ratingCount": "{{$product->Reviews->count()}}"
       }
     }
+
     </script>
 
 @endsection
 
-@section('title'){{$product->title}}@endsection
-@section('description'){{$product->description}}@endsection
+@section('title'){{app()->getLocale() == 'ua' ? $product->title['ua'] : $product->title['ru']}}@endsection
+@section('description'){{app()->getLocale() == 'ua' ? $product->description['ua'] : $product->description['ru']}}@endsection
 
 @section('content')
     @component('components.breadcrumbs')
         @slot('active')
             @if(isset($product->categories[0]['title']))
-                {{$product->categories[0]['title']}}
+                {{app()->getLocale() == 'ua' ? $product->categories[0]['title']['ua'] : $product->categories[0]['title']['ru']}}
             @else
                 Без категории
             @endif
         @endslot
         @slot('active_link')
             @if(isset($product->categories[0]['slug']))
-                {{route('category',$product->categories[0]['slug']) ?? '#'}}
+                {{route('category',$product->categories[0]['slug'])}}
             @else
                 #
             @endif
         @endslot
-        @slot('subsidiary'){{$product->h1}}@endslot
+        @slot('subsidiary'){{app()->getLocale() == 'ua' ? $product->h1['ua'] : $product->h1['ru']}}@endslot
     @endcomponent
 
     @include('pages.product.components.shop')
-    @include('pages.product.components.advantages')
-    <relative-products id="{{$product->id}}"></relative-products>
-    <best-selling-products-product></best-selling-products-product>
-    <new-products></new-products>
-{{--    @include('pages.product.components.shipping-and-payment')--}}
+    @include('components.advantages')
+    <relative-products
+        id="{{$product->id}}"
+        lang="{{app()->getLocale()}}"
+        text-go-to-product-card="@lang('home.text_go_to_product_card')"
+        text-relative-products="@lang('home.text_relative_products')"
+        product-route="{{route('product')}}"
+    ></relative-products>
+    <best-selling-products-product
+        lang="{{app()->getLocale()}}"
+        text-go-to-product-card="@lang('home.text_go_to_product_card')"
+        text-best-selling="@lang('home.text_best_selling')"
+        product-route="{{route('product')}}"
+    ></best-selling-products-product>
+    <new-products
+        lang="{{app()->getLocale()}}"
+        text-go-to-product-card="@lang('home.text_go_to_product_card')"
+        text-latest-products="@lang('home.text_latest_products')"
+        product-route="{{route('product')}}"
+    ></new-products>
 @endsection

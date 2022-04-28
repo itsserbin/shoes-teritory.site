@@ -51,7 +51,7 @@
 
                     <a v-if="permissions.adminPermission"
                        class="nav-link"
-                       :href="adminIndexPromoCodesRoute">Промо-коды</a>
+                       :href="adminIndexPagesRoute">Страницы</a>
 
 
                 </ul>
@@ -127,7 +127,7 @@ export default {
         adminIndexOrdersRoute: String,
         adminIndexBookkeepingRoute: String,
         adminIndexOptionsRoute: String,
-        adminIndexPromoCodesRoute: String,
+        adminIndexPagesRoute: String,
         adminLogoutRoute: String,
 
         nameUser: String,

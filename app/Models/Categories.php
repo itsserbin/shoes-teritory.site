@@ -24,15 +24,12 @@ class Categories extends Model
         'modified_by'
     ];
 
-//    /**
-//     * Mutators
-//     *
-//     * @param $value
-//     */
-//    public function setSlugAttribute($value)
-//    {
-//        $this->attributes['slug'] = Str::slug(mb_substr($this->title, 0, 40) . "-" . Carbon::now()->format('dmyHi'), '-');
-//    }
+    protected $casts = [
+        'title' => 'array',
+        'meta_title' => 'array',
+        'meta_description' => 'array',
+        'meta_keyword' => 'array',
+    ];
 
     /**
      * Get children category

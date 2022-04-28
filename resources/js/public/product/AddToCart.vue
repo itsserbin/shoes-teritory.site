@@ -19,7 +19,7 @@
                         @click="addToCart"
                     >
                         <span class="icon-cart"></span>
-                        <span>Купить</span>
+                        <span>{{ textBuyProduct }}</span>
                     </button>
                 </div>
             </div>
@@ -28,7 +28,7 @@
         <div class="row mt-2">
             <div class="col-12 col-md-6 mb-3">
                 <div class="shop__available-sizes available-sizes">
-                    <div class="shop__available-sizes__label w-100 mb-2">Доступные размеры:</div>
+                    <div class="shop__available-sizes__label w-100 mb-2">{{ textAvailableSizes }}</div>
 
                     <div v-if="size.xs" class="size__element me-1 mb-2">
                         <label class="mycheckbox">
@@ -142,7 +142,7 @@
 
             <div class="col-12 col-md-6 mb-3" v-if="colorsAll.length">
                 <div class="available-colors">
-                    <div class="available-colors__label w-100 mb-2">Доступные цвета:</div>
+                    <div class="available-colors__label w-100 mb-2">{{ textAvailableColors }}</div>
                     <div v-for="colors_item in colorsAll" :key="colors_item.id">
                         <label class="mycheckbox" :style="'background-color:' + colors_item.hex ">
                             <input :value="colors_item.name"
@@ -156,9 +156,7 @@
                 </div>
             </div>
         </div>
-        <div class="row mb-3">
-            <sizes-table :size-table="sizeTable"></sizes-table>
-        </div>
+
     </div>
 </template>
 
@@ -207,6 +205,14 @@ export default {
         xxxxl: String,
         xxxxxl: String,
         availability: String,
+        textBuyProduct: String,
+        textAvailableSizes: String,
+        textAvailableColors: String,
+        textAddedProductToCart: String,
+        textGoToCheckout: String,
+        textContinueShopping: String,
+        textError: String,
+        textErrorDescription: String,
     },
     created() {
         this.colorsAll = JSON.parse(this.colors);
@@ -255,13 +261,12 @@ export default {
                         "content_name": this.h1
                     });
                     this.$swal({
-                        title: 'Добавлено!',
-                        text: 'Товар в корзине :)',
+                        title: this.textAddedProductToCart,
                         icon: 'success',
                         showCancelButton: false,
                         showDenyButton: true,
-                        confirmButtonText: 'Оформить заказ',
-                        denyButtonText: `Продолжить покупки`,
+                        confirmButtonText: this.textGoToCheckout,
+                        denyButtonText: this.textContinueShopping,
                     }).then((result) => {
                         if (result.isConfirmed) {
                             window.location.href = '/cart';
@@ -270,8 +275,8 @@ export default {
                 })
                 .catch(() => {
                     this.$swal({
-                        title: 'Ошибка!',
-                        text: 'Что то сломалось :(',
+                        title: this.textError,
+                        text: this.textErrorDescription,
                         icon: 'error',
                     });
                 });

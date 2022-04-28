@@ -2,10 +2,16 @@
     <section id="banners" class="banners mb-3" v-if="banners.length">
         <swiper ref="mySwiper" :options="swiperOptions">
             <swiper-slide v-for="(banner,i) in banners" :key="i">
-                <a :href="banner.link" v-if="banner.link">
-                    <img :src="banner.image" :alt="banner.title">
+                <a :href="banner.link.ru" v-if="banner.link && lang === 'ru' && banner.image.ru">
+                    <img :src="banner.image.ru" :alt="banner.title.ru">
                 </a>
-                <img v-else :src="banner.image" :alt="banner.title">
+
+                <a :href="banner.link.ua" v-if="banner.link && lang === 'ua' && banner.image.ua">
+                    <img :src="banner.image.ua" :alt="banner.title.ua">
+                </a>
+
+                <img :src="banner.image.ru" :alt="banner.title.ru" v-if="!banner.link && lang === 'ru' && banner.image.ru">
+                <img :src="banner.image.ua" :alt="banner.title.ua" v-if="!banner.link && lang === 'ua' && banner.image.ua">
             </swiper-slide>
             <div class="swiper-pagination" slot="pagination"></div>
         </swiper>
@@ -20,6 +26,9 @@ export default {
         Swiper,
         SwiperSlide
     },
+    props: {
+        lang: String,
+    },
     directives: {
         swiper: directive
     },
@@ -27,7 +36,6 @@ export default {
         return {
             banners: [],
             swiperOptions: {
-
                 loop: true,
                 mousewheel: true,
                 pagination: {
@@ -54,7 +62,7 @@ export default {
     width: 100%;
 }
 
-.swiper-wrapper{
+.swiper-wrapper {
     margin-bottom: 2rem;
 }
 </style>

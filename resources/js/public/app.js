@@ -51,6 +51,7 @@ Vue.component('product-cards', require('./components/ProductCards').default);
 Vue.component('best-selling-products-home', require('./home/BestSelling').default);
 Vue.component('best-selling-products-product', require('./product/BestSellingProducts').default);
 Vue.component('new-products', require('./product/NewProducts').default);
+Vue.component('index-new-products', require('./home/NewProducts').default);
 
 Vue.component('main-banners', require('./home/MainBanners').default);
 Vue.component('all-products', require('./home/AllProducts').default);
@@ -60,6 +61,7 @@ Vue.component('images-slider', require('./product/ImagesSlider').default);
 Vue.component('product-reviews', require('./product/ProductReviews').default);
 Vue.component('relative-products', require('./product/RelativeProducts').default);
 
+Vue.component('input-invalid-feedback', require('../components/InputInvalidFeedback').default);
 /**
  * Vue categories components
  */

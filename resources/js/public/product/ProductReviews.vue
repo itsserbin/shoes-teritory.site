@@ -1,14 +1,19 @@
 <template>
     <div id="reviews" class="reviews">
-        <div class="reviews__title block-title">Отзывы</div>
+        <div class="reviews__title block-title">{{ textProductReviews }}</div>
         <VueSlickCarousel class="reviews-slider" v-bind="settings" v-if="reviews.length !== 0">
             <div v-for="review in reviews" class="reviews-slider__slide">
                 <div class="reviews-slider__name">{{ review.name }}</div>
                 <div class="reviews-slider__text">{{ review.comment }}</div>
             </div>
         </VueSlickCarousel>
-        <div v-else-if="reviews.length === 0">Отзывы отсутствуют</div>
-        <review-form :id="id"></review-form>
+        <div v-else-if="reviews.length === 0">{{ textNoReviews }}</div>
+        <review-form
+            :id="id"
+            :text-give-review="textGiveReview"
+            :text-enter-name="textEnterName"
+            :text-enter-review="textEnterReview"
+        ></review-form>
     </div>
 </template>
 
@@ -36,6 +41,11 @@ export default {
     },
     props: {
         id: String,
+        textProductReviews: String,
+        textNoReviews: String,
+        textGiveReview: String,
+        textEnterName: String,
+        textEnterReview: String,
     },
     mounted() {
         axios.get('/api/v1/reviews/product/' + this.id)

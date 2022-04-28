@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Admin\AdminController;
+use App\Http\Controllers\Api\Admin\AdvantagesController;
 use App\Http\Controllers\Api\Admin\BannersController;
 use App\Http\Controllers\Api\Admin\Bookkeeping\CostCategoriesController;
 use App\Http\Controllers\Api\Admin\Bookkeeping\CostsController;
@@ -12,14 +13,17 @@ use App\Http\Controllers\Api\Admin\Bookkeeping\ProfitsController;
 use App\Http\Controllers\Api\Admin\Bookkeeping\SupplierPaymentsController;
 use App\Http\Controllers\Api\Admin\CategoriesController;
 use App\Http\Controllers\Api\Admin\ColorsController;
+use App\Http\Controllers\Api\Admin\FaqController;
 use App\Http\Controllers\Api\Admin\OptionsController;
 use App\Http\Controllers\Api\Admin\OrderItemsController;
 use App\Http\Controllers\Api\Admin\OrdersController;
+use App\Http\Controllers\Api\Admin\PagesController;
 use App\Http\Controllers\Api\Admin\ProductsController;
 use App\Http\Controllers\Api\Admin\PromoCodesController;
 use App\Http\Controllers\Api\Admin\ProvidersController;
 use App\Http\Controllers\Api\Admin\ReviewsController;
 use App\Http\Controllers\Api\Admin\RolesController;
+use App\Http\Controllers\Api\Admin\TranslationsController;
 use App\Http\Controllers\Api\Admin\UploadController;
 use App\Http\Controllers\Api\Admin\UsersController;
 use App\Http\Controllers\Api\Admin\ClientsController;
@@ -569,6 +573,77 @@ Route::middleware('auth:api')->group(function () {
 
         Route::post('mass', [BannersController::class, 'massActions'])
             ->name('api.banners.mass');
+    });
+
+    Route::prefix('translations')->group(function () {
+        Route::get('/', [TranslationsController::class, 'index'])
+            ->name('api.translations.index');
+
+        Route::post('create', [TranslationsController::class, 'create'])
+            ->name('api.translations.create');
+
+        Route::put('update/{id}', [TranslationsController::class, 'update'])
+            ->name('api.translations.update');
+
+        Route::delete('destroy/{id}', [TranslationsController::class, 'destroy'])
+            ->name('api.translations.destroy');
+
+        Route::get('search={search}', [TranslationsController::class, 'search'])
+            ->name('api.translations.search');
+    });
+
+    Route::prefix('advantages')->group(function () {
+        Route::get('/', [AdvantagesController::class, 'index'])
+            ->name('api.advantages.index');
+
+        Route::get('edit/{id}', [AdvantagesController::class, 'edit'])
+            ->name('api.advantages.edit');
+
+        Route::post('create', [AdvantagesController::class, 'create'])
+            ->name('api.advantages.create');
+
+        Route::put('update/{id}', [AdvantagesController::class, 'update'])
+            ->name('api.advantages.update');
+
+        Route::delete('destroy/{id}', [AdvantagesController::class, 'destroy'])
+            ->name('api.advantages.destroy');
+    });
+
+    Route::prefix('faq')->group(function () {
+        Route::get('/', [FaqController::class, 'index'])
+            ->name('api.faq.index');
+
+        Route::get('edit/{id}', [FaqController::class, 'edit'])
+            ->name('api.faq.edit');
+
+        Route::post('create', [FaqController::class, 'create'])
+            ->name('api.faq.create');
+
+        Route::put('update/{id}', [FaqController::class, 'update'])
+            ->name('api.faq.update');
+
+        Route::delete('destroy/{id}', [FaqController::class, 'destroy'])
+            ->name('api.faq.destroy');
+    });
+
+    Route::prefix('pages')->group(function () {
+        Route::get('/', [PagesController::class, 'index'])
+            ->name('api.pages.index');
+
+        Route::get('edit/{id}', [PagesController::class, 'edit'])
+            ->name('api.pages.edit');
+
+        Route::post('create', [PagesController::class, 'create'])
+            ->name('api.pages.create');
+
+        Route::put('update/{id}', [PagesController::class, 'update'])
+            ->name('api.pages.update');
+
+        Route::delete('destroy/{id}', [PagesController::class, 'destroy'])
+            ->name('api.pages.destroy');
+
+        Route::post('mass', [PagesController::class, 'massActions'])
+            ->name('api.pages.mass');
     });
 });
 

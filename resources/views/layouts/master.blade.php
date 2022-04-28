@@ -23,11 +23,22 @@
             app-schedule="{!! $options['schedule']->value !!}"
             app-telegram="{{$options['telegram']->value}}"
             app-viber="{{$options['viber']->value}}"
+            pages="{{json_encode($pages)}}"
+            lang="{{app()->getLocale()}}"
+            categories="{{$categories}}"
+
+            setlocate-ru="{{route('setlocale',['lang' => 'ru'])}}"
+            setlocate-ua="{{route('setlocale',['lang' => 'ua'])}}"
+            cart-route="{{route('cart')}}"
+            category-route="{{route('category')}}"
         ></header-component>
     </header>
     <main class="main">
         @yield('content')
-        <faq-component></faq-component>
+        <faq-component
+            lang="{{app()->getLocale()}}"
+            text-faq-heading="@lang('home.text_faq_heading')"
+        ></faq-component>
     </main>
     <footer class="footer">
         @include('components.footer')

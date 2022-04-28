@@ -16,7 +16,7 @@
     admin-index-orders-route="{{route('admin.orders.index')}}"
     admin-index-bookkeeping-route="{{route('admin.bookkeeping.index')}}"
     admin-index-options-route="{{route('admin.options.index')}}"
-    admin-index-promo-codes-route="{{route('admin.promo-codes.index')}}"
+    admin-index-pages-route="{{route('admin.pages.index')}}"
     admin-logout-route="{{route('logout')}}"
 
     name-user="{{auth()->user()->name}}"

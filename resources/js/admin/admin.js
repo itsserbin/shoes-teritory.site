@@ -66,14 +66,28 @@ Vue.component('category-edit', require('./categories/EditCategory').default);
 Vue.component('main-options-list', require('./options/MainOptionsList').default);
 Vue.component('scripts-options-list', require('./options/ScriptsOptionsList').default);
 
+Vue.component('pages-list', require('./pages/PagesList').default);
+Vue.component('create-page', require('./pages/CreatePage').default);
+Vue.component('edit-page', require('./pages/EditPage').default);
+
+Vue.component('faq-list', require('./faq/FaqList').default);
+Vue.component('create-faq', require('./faq/CreateFaq').default);
+Vue.component('edit-faq', require('./faq/EditFaq').default);
+
 Vue.component('banners-list', require('./banners/BannersList').default);
 Vue.component('create-banner', require('./banners/CreateBanner').default);
 Vue.component('edit-banner', require('./banners/EditBanner').default);
 
-
 Vue.component('users-list', require('./users/UsersList').default);
 Vue.component('edit-user', require('./users/EditUser').default);
 Vue.component('create-user', require('./users/CreateUser').default);
+
+Vue.component('translations-list', require('./translations/TranslationsList').default);
+Vue.component('create-translation', require('./translations/CreateTranslation').default);
+
+Vue.component('advantages-list', require('./advantages/AdvantagesList').default);
+Vue.component('create-advantage', require('./advantages/CreateAdvantage').default);
+Vue.component('edit-advantage', require('./advantages/EditAdvantage').default);
 
 Vue.component('orders-list', require('./orders/OrdersList').default);
 Vue.component('order-edit', require('./orders/EditOrder').default);
@@ -116,7 +130,12 @@ Vue.component('bookkeeping-add-day-to-managers-salaries', require('./bookkeeping
 
 
 Vue.prototype.$tinyapi = 'ufqphs7puyg4ij1mc3c61o7isu5mxekk5x9yygffpdo89ava';
-Vue.prototype.$tinySettings = {plugins: 'table', height: 300};
+Vue.prototype.$tinySettings = {
+    plugins: ['table', 'code', 'lists'],
+    height: 300,
+    branding: false,
+    toolbar: 'undo redo styleselect bold italic alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat'
+};
 Vue.prototype.$paginateOptions = {
     theme: 'bootstrap4',
     texts: {

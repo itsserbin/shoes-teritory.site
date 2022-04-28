@@ -26,10 +26,13 @@ export default {
     mounted() {
         this.$store.commit('loadCart');
     },
+    props:{
+        cartRoute: String,
+    },
     computed:{
         cartLink(){
             if (this.cart.list.length) {
-                return '/cart';
+                return this.cartRoute;
             } else {
                 return 'javascript:';
             }

@@ -2,11 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Models\Options;
+use App\Models\Enum\OptionsName;
 use App\Models\Options as Model;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
-use PhpParser\Node\Expr\AssignOp\Concat;
 
 /**
  * Class ArticleRepository
@@ -36,15 +33,24 @@ class OptionsRepository extends CoreRepository
      */
     public function getMainOptions(): array
     {
-        $options['schedule'] = $this->getSchedule();
-        $options['email'] = $this->getEmail();
-        $options['phone'] = $this->getPhone();
-        $options['facebook'] = $this->getFacebook();
-        $options['instagram'] = $this->getInstagram();
-        $options['telegram'] = $this->getTelegram();
-        $options['viber'] = $this->getViber();
-        $options['whatsapp'] = $this->getWhatsapp();
-        $options['fb_messenger'] = $this->getFbMessenger();
+        $options[OptionsName::OPTION_SCHEDULE] = $this->getOptionValue(OptionsName::OPTION_SCHEDULE);
+        $options[OptionsName::OPTION_EMAIL] = $this->getOptionValue(OptionsName::OPTION_EMAIL);
+        $options[OptionsName::OPTION_PHONE] = $this->getOptionValue(OptionsName::OPTION_PHONE);
+        $options[OptionsName::OPTION_FACEBOOK] = $this->getOptionValue(OptionsName::OPTION_FACEBOOK);
+        $options[OptionsName::OPTION_INSTAGRAM] = $this->getOptionValue(OptionsName::OPTION_INSTAGRAM);
+        $options[OptionsName::OPTION_TELEGRAM] = $this->getOptionValue(OptionsName::OPTION_TELEGRAM);
+        $options[OptionsName::OPTION_VIBER] = $this->getOptionValue(OptionsName::OPTION_VIBER);
+        $options[OptionsName::OPTION_WHATSAPP] = $this->getOptionValue(OptionsName::OPTION_WHATSAPP);
+        $options[OptionsName::OPTION_FB_MESSENGER] = $this->getOptionValue(OptionsName::OPTION_FB_MESSENGER);
+        $options[OptionsName::OPTION_BRAND] = $this->getOptionValue(OptionsName::OPTION_BRAND);
+        $options[OptionsName::OPTION_META_TITLE_UA] = $this->getOptionValue(OptionsName::OPTION_META_TITLE_UA);
+        $options[OptionsName::OPTION_META_DESCRIPTION_UA] = $this->getOptionValue(OptionsName::OPTION_META_DESCRIPTION_UA);
+        $options[OptionsName::OPTION_META_TITLE_RU] = $this->getOptionValue(OptionsName::OPTION_META_TITLE_RU);
+        $options[OptionsName::OPTION_META_DESCRIPTION_RU] = $this->getOptionValue(OptionsName::OPTION_META_DESCRIPTION_RU);
+        $options[OptionsName::OPTION_TEXT_DELIVERY_AND_PAYMENT_UA] = $this->getOptionValue(OptionsName::OPTION_TEXT_DELIVERY_AND_PAYMENT_UA);
+        $options[OptionsName::OPTION_TEXT_RETURN_AND_EXCHANGE_UA] = $this->getOptionValue(OptionsName::OPTION_TEXT_RETURN_AND_EXCHANGE_UA);
+        $options[OptionsName::OPTION_TEXT_DELIVERY_AND_PAYMENT_RU] = $this->getOptionValue(OptionsName::OPTION_TEXT_DELIVERY_AND_PAYMENT_RU);
+        $options[OptionsName::OPTION_TEXT_RETURN_AND_EXCHANGE_RU] = $this->getOptionValue(OptionsName::OPTION_TEXT_RETURN_AND_EXCHANGE_RU);
 
         return $options;
     }
@@ -55,58 +61,112 @@ class OptionsRepository extends CoreRepository
      */
     public function updateMainOptions($data): bool
     {
-        if ($this->getSchedule()) {
-            $this->model::where('name', 'schedule')->update(['value' => $data['schedule']]);
+        if ($this->getOptionValue(OptionsName::OPTION_SCHEDULE)) {
+            $this->update(OptionsName::OPTION_SCHEDULE, $data[OptionsName::OPTION_SCHEDULE]);
         } else {
-            $this->model::create(['name', 'schedule', 'value' => $data['schedule']]);
+            $this->create(OptionsName::OPTION_SCHEDULE, $data[OptionsName::OPTION_SCHEDULE]);
         }
 
-        if ($this->getEmail()) {
-            $this->model::where('name', 'email')->update(['value' => $data['email']]);
+        if ($this->getOptionValue(OptionsName::OPTION_EMAIL)) {
+            $this->update(OptionsName::OPTION_EMAIL, $data[OptionsName::OPTION_EMAIL]);
         } else {
-            $this->model::create(['name', 'email', 'value' => $data['email']]);
+            $this->create(OptionsName::OPTION_EMAIL, $data[OptionsName::OPTION_EMAIL]);
         }
 
-        if ($this->getPhone()) {
-            $this->model::where('name', 'phone')->update(['value' => $data['phone']]);
+        if ($this->getOptionValue(OptionsName::OPTION_PHONE)) {
+            $this->update(OptionsName::OPTION_PHONE, $data[OptionsName::OPTION_PHONE]);
         } else {
-            $this->model::create(['name', 'phone', 'value' => $data['phone']]);
+            $this->create(OptionsName::OPTION_PHONE, $data[OptionsName::OPTION_PHONE]);
         }
 
-        if ($this->getFacebook()) {
-            $this->model::where('name', 'facebook')->update(['value' => $data['facebook']]);
+        if ($this->getOptionValue(OptionsName::OPTION_FACEBOOK)) {
+            $this->update(OptionsName::OPTION_FACEBOOK, $data[OptionsName::OPTION_FACEBOOK]);
         } else {
-            $this->model::create(['name', 'facebook', 'value' => $data['facebook']]);
+            $this->create(OptionsName::OPTION_FACEBOOK, $data[OptionsName::OPTION_FACEBOOK]);
         }
 
-        if ($this->getInstagram()) {
-            $this->model::where('name', 'instagram')->update(['value' => $data['instagram']]);
+        if ($this->getOptionValue(OptionsName::OPTION_INSTAGRAM)) {
+            $this->update(OptionsName::OPTION_INSTAGRAM, $data[OptionsName::OPTION_INSTAGRAM]);
         } else {
-            $this->model::create(['name', 'instagram', 'value' => $data['instagram']]);
+            $this->create(OptionsName::OPTION_INSTAGRAM, $data[OptionsName::OPTION_INSTAGRAM]);
         }
 
-        if ($this->getTelegram()) {
-            $this->model::where('name', 'telegram')->update(['value' => $data['telegram']]);
+        if ($this->getOptionValue(OptionsName::OPTION_TELEGRAM)) {
+            $this->update(OptionsName::OPTION_TELEGRAM, $data[OptionsName::OPTION_TELEGRAM]);
         } else {
-            $this->model::create(['name', 'telegram', 'value' => $data['telegram']]);
+            $this->create(OptionsName::OPTION_TELEGRAM, $data[OptionsName::OPTION_TELEGRAM]);
         }
 
-        if ($this->getViber()) {
-            $this->model::where('name', 'viber')->update(['value' => $data['viber']]);
+        if ($this->getOptionValue(OptionsName::OPTION_VIBER)) {
+            $this->update(OptionsName::OPTION_VIBER, $data[OptionsName::OPTION_VIBER]);
         } else {
-            $this->model::create(['name', 'viber', 'value' => $data['viber']]);
+            $this->create(OptionsName::OPTION_VIBER, $data[OptionsName::OPTION_VIBER]);
         }
 
-        if ($this->getWhatsapp()) {
-            $this->model::where('name', 'whatsapp')->update(['value' => $data['whatsapp']]);
+        if ($this->getOptionValue(OptionsName::OPTION_WHATSAPP)) {
+            $this->update(OptionsName::OPTION_WHATSAPP, $data[OptionsName::OPTION_WHATSAPP]);
         } else {
-            $this->model::create(['name', 'whatsapp', 'value' => $data['whatsapp']]);
+            $this->create(OptionsName::OPTION_WHATSAPP, $data[OptionsName::OPTION_WHATSAPP]);
         }
 
-        if ($this->getFbMessenger()) {
-            $this->model::where('name', 'fb_messenger')->update(['value' => $data['fb_messenger']]);
+        if ($this->getOptionValue(OptionsName::OPTION_FB_MESSENGER)) {
+            $this->update(OptionsName::OPTION_FB_MESSENGER, $data[OptionsName::OPTION_FB_MESSENGER]);
         } else {
-            $this->model::create(['name', 'fb_messenger', 'value' => $data['fb_messenger']]);
+            $this->create(OptionsName::OPTION_FB_MESSENGER, $data[OptionsName::OPTION_FB_MESSENGER]);
+        }
+
+        if ($this->getOptionValue(OptionsName::OPTION_BRAND)) {
+            $this->update(OptionsName::OPTION_BRAND, $data[OptionsName::OPTION_BRAND]);
+        } else {
+            $this->create(OptionsName::OPTION_BRAND, $data[OptionsName::OPTION_BRAND]);
+        }
+
+        if ($this->getOptionValue(OptionsName::OPTION_META_TITLE_UA)) {
+            $this->update(OptionsName::OPTION_META_TITLE_UA, $data[OptionsName::OPTION_META_TITLE_UA]);
+        } else {
+            $this->create(OptionsName::OPTION_META_TITLE_UA, $data[OptionsName::OPTION_META_TITLE_UA]);
+        }
+
+        if ($this->getOptionValue(OptionsName::OPTION_META_DESCRIPTION_UA)) {
+            $this->update(OptionsName::OPTION_META_DESCRIPTION_UA, $data[OptionsName::OPTION_META_DESCRIPTION_UA]);
+        } else {
+            $this->create(OptionsName::OPTION_META_DESCRIPTION_UA, $data[OptionsName::OPTION_META_DESCRIPTION_UA]);
+        }
+
+        if ($this->getOptionValue(OptionsName::OPTION_META_TITLE_RU)) {
+            $this->update(OptionsName::OPTION_META_TITLE_RU, $data[OptionsName::OPTION_META_TITLE_RU]);
+        } else {
+            $this->create(OptionsName::OPTION_META_TITLE_RU, $data[OptionsName::OPTION_META_TITLE_RU]);
+        }
+
+        if ($this->getOptionValue(OptionsName::OPTION_META_DESCRIPTION_RU)) {
+            $this->update(OptionsName::OPTION_META_DESCRIPTION_RU, $data[OptionsName::OPTION_META_DESCRIPTION_RU]);
+        } else {
+            $this->create(OptionsName::OPTION_META_DESCRIPTION_RU, $data[OptionsName::OPTION_META_DESCRIPTION_RU]);
+        }
+
+        if ($this->getOptionValue(OptionsName::OPTION_TEXT_RETURN_AND_EXCHANGE_UA)) {
+            $this->update(OptionsName::OPTION_TEXT_RETURN_AND_EXCHANGE_UA, $data[OptionsName::OPTION_TEXT_RETURN_AND_EXCHANGE_UA]);
+        } else {
+            $this->create(OptionsName::OPTION_TEXT_RETURN_AND_EXCHANGE_UA, $data[OptionsName::OPTION_TEXT_RETURN_AND_EXCHANGE_UA]);
+        }
+
+        if ($this->getOptionValue(OptionsName::OPTION_TEXT_DELIVERY_AND_PAYMENT_UA)) {
+            $this->update(OptionsName::OPTION_TEXT_DELIVERY_AND_PAYMENT_UA, $data[OptionsName::OPTION_TEXT_DELIVERY_AND_PAYMENT_UA]);
+        } else {
+            $this->create(OptionsName::OPTION_TEXT_DELIVERY_AND_PAYMENT_UA, $data[OptionsName::OPTION_TEXT_DELIVERY_AND_PAYMENT_UA]);
+        }
+
+        if ($this->getOptionValue(OptionsName::OPTION_TEXT_RETURN_AND_EXCHANGE_RU)) {
+            $this->update(OptionsName::OPTION_TEXT_RETURN_AND_EXCHANGE_RU, $data[OptionsName::OPTION_TEXT_RETURN_AND_EXCHANGE_RU]);
+        } else {
+            $this->create(OptionsName::OPTION_TEXT_RETURN_AND_EXCHANGE_RU, $data[OptionsName::OPTION_TEXT_RETURN_AND_EXCHANGE_RU]);
+        }
+
+        if ($this->getOptionValue(OptionsName::OPTION_TEXT_DELIVERY_AND_PAYMENT_RU)) {
+            $this->update(OptionsName::OPTION_TEXT_DELIVERY_AND_PAYMENT_RU, $data[OptionsName::OPTION_TEXT_DELIVERY_AND_PAYMENT_RU]);
+        } else {
+            $this->create(OptionsName::OPTION_TEXT_DELIVERY_AND_PAYMENT_RU, $data[OptionsName::OPTION_TEXT_DELIVERY_AND_PAYMENT_RU]);
         }
 
         return true;
@@ -117,9 +177,9 @@ class OptionsRepository extends CoreRepository
      */
     public function getScriptsOptions(): array
     {
-        $options['head_scripts'] = $this->getHeadScripts();
-        $options['after_body_scripts'] = $this->getAfterBodyScripts();
-        $options['footer_scripts'] = $this->getFooterScripts();
+        $options['head_scripts'] = $this->getOptionValue(OptionsName::OPTION_HEAD_SCRIPTS);
+        $options['after_body_scripts'] = $this->getOptionValue(OptionsName::OPTION_AFTER_BODY_SCRIPTS);
+        $options['footer_scripts'] = $this->getOptionValue(OptionsName::OPTION_FOOTER_SCRIPTS);
 
         return $options;
     }
@@ -130,84 +190,39 @@ class OptionsRepository extends CoreRepository
      */
     public function updateScriptsOptions($data): bool
     {
-        if ($this->getHeadScripts()) {
-            $this->model::where('name', 'head_scripts')->update(['value' => $data['head_scripts']]);
+        if ($this->getOptionValue(OptionsName::OPTION_HEAD_SCRIPTS)) {
+            $this->update(OptionsName::OPTION_HEAD_SCRIPTS, $data['head_scripts']);
         } else {
-            $this->model::create(['name' => 'head_scripts', 'value' => $data['head_scripts']]);
+            $this->create(OptionsName::OPTION_HEAD_SCRIPTS, $data['head_scripts']);
         }
 
-        if ($this->getAfterBodyScripts()) {
-            $this->model::where('name', 'after_body_scripts')->update(['value' => $data['after_body_scripts']]);
+        if ($this->getOptionValue(OptionsName::OPTION_AFTER_BODY_SCRIPTS)) {
+            $this->update(OptionsName::OPTION_AFTER_BODY_SCRIPTS, $data['after_body_scripts']);
         } else {
-            $this->model::create(['name' => 'after_body_scripts', 'value' => $data['after_body_scripts']]);
+            $this->create(OptionsName::OPTION_AFTER_BODY_SCRIPTS, $data['after_body_scripts']);
         }
 
-        if ($this->getFooterScripts()) {
-            $this->model::where('name', 'footer_scripts')->update(['value' => $data['footer_scripts']]);
+        if ($this->getOptionValue(OptionsName::OPTION_FOOTER_SCRIPTS)) {
+            $this->update(OptionsName::OPTION_FOOTER_SCRIPTS, $data['footer_scripts']);
         } else {
-            $this->model::create(['name' => 'footer_scripts', 'value' => $data['footer_scripts']]);
+            $this->create(OptionsName::OPTION_FOOTER_SCRIPTS, $data['footer_scripts']);
         }
 
         return true;
     }
 
-    public function getSchedule()
+    public function getOptionValue($name)
     {
-        return $this->model::where('name', 'schedule')->select('value')->first();
+        return $this->model::where('name', $name)->select('value')->first();
     }
 
-    public function getEmail()
+    public function create($name, $value)
     {
-        return $this->model::where('name', 'email')->select('value')->first();
+        return $this->model::create(['name' => $name, 'value' => $value]);
     }
 
-    public function getPhone()
+    public function update($name, $value)
     {
-        return $this->model::where('name', 'phone')->select('value')->first();
-    }
-
-    public function getFacebook()
-    {
-        return $this->model::where('name', 'facebook')->select('value')->first();
-    }
-
-    public function getInstagram()
-    {
-        return $this->model::where('name', 'instagram')->select('value')->first();
-    }
-
-    public function getTelegram()
-    {
-        return $this->model::where('name', 'telegram')->select('value')->first();
-    }
-
-    public function getViber()
-    {
-        return $this->model::where('name', 'viber')->select('value')->first();
-    }
-
-    public function getWhatsapp()
-    {
-        return $this->model::where('name', 'whatsapp')->select('value')->first();
-    }
-
-    public function getFbMessenger()
-    {
-        return $this->model::where('name', 'fb_messenger')->select('value')->first();
-    }
-
-    public function getHeadScripts()
-    {
-        return $this->model::where('name', 'head_scripts')->select('value')->first();
-    }
-
-    public function getAfterBodyScripts()
-    {
-        return $this->model::where('name', 'after_body_scripts')->select('value')->first();
-    }
-
-    public function getFooterScripts()
-    {
-        return $this->model::where('name', 'footer_scripts')->select('value')->first();
+        return $this->model::where('name', $name)->update(['value' => $value]);
     }
 }

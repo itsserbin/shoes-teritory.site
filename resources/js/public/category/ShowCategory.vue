@@ -3,11 +3,15 @@
         <loader v-if="isLoading"></loader>
         <section v-if="!isLoading" class="product-list card">
             <div class="product-list__title">{{ categoryTitle }}</div>
-            <product-cards :products="products"></product-cards>
+            <product-cards :products="products"
+                           :lang="lang"
+                           :text-go-to-product-card="textGoToProductCard"
+                           :product-route="productRoute"
+            ></product-cards>
             <div class="row d-flex justify-content-center" v-if="showLoadMore">
                 <loader v-if="isLoadingMore"></loader>
                 <button class="load-more__button" type="button" v-if="!isLoadingMore" @click="fetch">
-                    <span>Загрузить еще</span>
+                    <span>{{ textLoadMore }}</span>
                 </button>
             </div>
         </section>
@@ -40,6 +44,10 @@ export default {
         categoryId: String,
         categoryTitle: String,
         categorySlug: String,
+        lang: String,
+        textLoadMore: String,
+        textGoToProductCard: String,
+        productRoute: String,
     },
     methods: {
         getCategoryProductSuccessResponse(data) {

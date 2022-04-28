@@ -149,7 +149,7 @@
                                      :clear-on-select="false"
                                      :preserve-search="true"
                                      placeholder="Поиск..."
-                                     label="title"
+                                     :custom-label="customCategoriesLabel"
                                      track-by="id"
                         >
                         </multiselect>
@@ -203,7 +203,22 @@
                     </div>
                 </div>
             </div>
-            <hr>
+            <ul class="nav nav-tabs justify-content-center my-2">
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="javascript:"
+                       @click="activeLang = 'ua'"
+                       :class="{'active':activeLang === 'ua'}"
+                    >UA</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="javascript:"
+                       @click="activeLang = 'ru'"
+                       :class="{'active':activeLang === 'ru'}"
+                    >RU</a>
+                </li>
+            </ul>
             <div class="row mb-3">
                 <div class="col-12">
                     <div class="form-group mb-3">
@@ -211,8 +226,16 @@
                         <input class="form-control"
                                :class="{'is-invalid': errors.h1}"
                                type="text"
-                               v-model="product.h1"
-                               placeholder="Укажите название товара"
+                               v-model="product.h1.ru"
+                               placeholder="Введите название товара RU"
+                               v-if="activeLang === 'ru'"
+                        >
+                        <input class="form-control"
+                               :class="{'is-invalid': errors.h1}"
+                               type="text"
+                               v-model="product.h1.ua"
+                               placeholder="Введите название товара UA"
+                               v-if="activeLang === 'ua'"
                         >
                         <div v-if="errors.title" class="invalid-feedback">Укажите название товара</div>
                     </div>
@@ -222,8 +245,15 @@
                         <label class="form-label">META Title</label>
                         <input class="form-control"
                                type="text"
-                               v-model="product.title"
-                               placeholder="Введите META Title"
+                               v-model="product.title.ru"
+                               placeholder="Введите META Title RU"
+                               v-if="activeLang === 'ru'"
+                        >
+                        <input class="form-control"
+                               type="text"
+                               v-model="product.title.ua"
+                               placeholder="Введите META Title UA"
+                               v-if="activeLang === 'ua'"
                         >
                     </div>
                     <div class="form-group">
@@ -231,8 +261,16 @@
                         <textarea class="form-control"
                                   type="text"
                                   rows="4"
-                                  v-model="product.description"
-                                  placeholder="Введите META Description"
+                                  v-model="product.description.ua"
+                                  placeholder="Введите META Description UA"
+                                  v-if="activeLang === 'ua'"
+                        ></textarea>
+                        <textarea class="form-control"
+                                  type="text"
+                                  rows="4"
+                                  v-model="product.description.ru"
+                                  placeholder="Введите META Description RU"
+                                  v-if="activeLang === 'ru'"
                         ></textarea>
                     </div>
                 </div>
@@ -241,7 +279,16 @@
                 <div class="col-12">
                     <div class="form-group">
                         <label class="form-label">Описание товара</label>
-                        <editor :api-key="this.$tinyapi" v-model="product.content" :init="$tinySettings"/>
+                        <editor :api-key="this.$tinyapi"
+                                v-model="product.content.ru"
+                                :init="this.$tinySettings"
+                                v-if="activeLang === 'ru'"
+                        />
+                        <editor :api-key="this.$tinyapi"
+                                v-model="product.content.ua"
+                                :init="this.$tinySettings"
+                                v-if="activeLang === 'ua'"
+                        />
                     </div>
                 </div>
             </div>
@@ -249,43 +296,65 @@
                 <div class="col-12">
                     <div class="form-group">
                         <label class="form-label">Характеристики</label>
-                        <editor :api-key="this.$tinyapi" v-model="product.characteristics" :init="$tinySettings"/>
+                        <editor
+                            :api-key="this.$tinyapi"
+                            v-model="product.characteristics.ua"
+                            :init="this.$tinySettings"
+                            v-if="activeLang === 'ua'"
+                        />
+                        <editor
+                            :api-key="this.$tinyapi"
+                            v-model="product.characteristics.ru"
+                            :init="this.$tinySettings"
+                            v-if="activeLang === 'ru'"
+                        />
                     </div>
                 </div>
             </div>
+            <hr class="my-3">
             <div class="row mb-3">
                 <div class="col-12">
                     <div class="form-group">
                         <label class="form-label">Таблица размеров</label>
-                        <editor :api-key="this.$tinyapi" v-model="product.size_table" :init="$tinySettings"/>
+                        <editor :api-key="this.$tinyapi" v-model="product.size_table" :init="this.$tinySettings"/>
                     </div>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-12 col-md-3">
                     <label class="form-label">Цена товара</label>
-                    <input class="form-control"
-                           :class="{'is-invalid': errors.price}"
-                           type="number"
-                           v-model="product.price"
-                           placeholder="Укажите цену"
-                    >
+                    <div class="input-group">
+                        <input class="form-control text-center"
+                               :class="{'is-invalid': errors.price}"
+                               type="number"
+                               v-model="product.price"
+                               placeholder="Укажите цену"
+                        >
+                        <div class="input-group-text">грн.</div>
+                    </div>
                     <div v-if="errors.price" class="invalid-feedback">Укажите цену товара</div>
                 </div>
                 <div class="col-12 col-md-3">
                     <label class="form-label">Цена товара со скидкой</label>
-                    <input class="form-control"
-                           type="number"
-                           v-model="product.discount_price"
-                           placeholder="Укажите цену со скидкой"
-                    >
+                    <div class="input-group">
+                        <input class="form-control text-center"
+                               type="number"
+                               v-model="product.discount_price"
+                               placeholder="Укажите цену со скидкой"
+                        >
+                        <div class="input-group-text">грн.</div>
+                    </div>
                 </div>
                 <div class="col-12 col-md-3">
                     <label class="form-label">Цена закупки</label>
-                    <input class="form-control"
-                           type="number"
-                           v-model="product.trade_price"
-                    >
+                    <div class="input-group">
+                        <input class="form-control text-center"
+                               type="number"
+                               v-model="product.trade_price"
+                               placeholder="Укажите цену закупки"
+                        >
+                        <div class="input-group-text">грн.</div>
+                    </div>
                 </div>
                 <div class="col-12 col-md-3">
                     <label class="form-label">Артикул</label>
@@ -340,6 +409,7 @@ export default {
     },
     data() {
         return {
+            activeLang: 'ua',
             isLoading: true,
             isLoadingImages: false,
             product: {
@@ -353,11 +423,26 @@ export default {
                 xxxl: null,
                 xxxxl: null,
                 xxxxxl: null,
-                title: null,
-                characteristics: null,
-                description: null,
-                h1: null,
-                content: null,
+                title: {
+                    ru: null,
+                    ua: null
+                },
+                characteristics: {
+                    ru: null,
+                    ua: null,
+                },
+                description: {
+                    ru: null,
+                    ua: null
+                },
+                h1: {
+                    ru: null,
+                    ua: null
+                },
+                content: {
+                    ru: null,
+                    ua: null
+                },
                 published: 0,
                 preview: null,
                 size_table: null,
@@ -398,6 +483,9 @@ export default {
         this.isLoading = false;
     },
     methods: {
+        customCategoriesLabel({title}) {
+            return `${title.ru}`
+        },
         destroyImage(index) {
             this.product.images.splice(index, 1)
         },

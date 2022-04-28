@@ -12,6 +12,22 @@
                     </button>
                 </div>
             </div>
+            <ul class="nav nav-tabs justify-content-center my-2" v-if="banners.length">
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="javascript:"
+                       @click="activeLang = 'ua'"
+                       :class="{'active':activeLang === 'ua'}"
+                    >UA</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="javascript:"
+                       @click="activeLang = 'ru'"
+                       :class="{'active':activeLang === 'ru'}"
+                    >RU</a>
+                </li>
+            </ul>
             <div class="row">
                 <div class="table-responsive">
                     <table class="table">
@@ -121,11 +137,26 @@
                             <td>{{ banner.id }}</td>
                             <td class="w-25">
                                 <img class="w-25"
-                                     :src="banner.image ? banner.image : '/storage/no_image.png'"
-                                     :alt="banner.title"></td>
-                            <td><a :href="'/admin/banners/edit/' + banner.id">{{ banner.title }}</a></td>
+                                     :src="banner.image.ru ? banner.image.ru : '/storage/no_image.png'"
+                                     :alt="banner.title.ru" v-if="activeLang === 'ru'">
+
+                                <img class="w-25"
+                                     :src="banner.image.ua ? banner.image.ua : '/storage/no_image.png'"
+                                     :alt="banner.title.ua" v-if="activeLang === 'ua'">
+                            </td>
+                            <td>
+                                <a :href="'/admin/banners/edit/' + banner.id" v-if="activeLang === 'ru'">
+                                    {{ banner.title.ru }}
+                                </a>
+                                <a :href="'/admin/banners/edit/' + banner.id" v-if="activeLang === 'ua'">
+                                    {{ banner.title.ua }}
+                                </a>
+                            </td>
                             <td>{{ publishedStatus(banner.published) }}</td>
-                            <td>{{ banner.link }}</td>
+                            <td>
+                                <div v-if="activeLang === 'ru'">{{ banner.link.ru ? banner.link.ru : 'Не указано' }}</div>
+                                <div v-if="activeLang === 'ua'">{{ banner.link.ua ? banner.link.ua : 'Не указано' }}</div>
+                            </td>
                             <td>
                                 <form class="d-flex justify-content-center"
                                       @submit.prevent="updateBannerSort(banner.id,banner.sort)">
@@ -187,6 +218,7 @@
 export default {
     data() {
         return {
+            activeLang: 'ua',
             checkedItems: [],
             checkedAll: false,
             checkedItemsAction: null,
@@ -202,20 +234,20 @@ export default {
     mounted() {
         this.getBanners();
     },
-    props:{
+    props: {
         destroyMassAction: String,
         publishedMassAction: String,
         notPublishedMassAction: String,
     },
     methods: {
-        getBanners(){
+        getBanners() {
             this.search = null;
             this.isLoading = true;
             axios.get('/api/banners')
                 .then(({data}) => this.getBannersListSuccessResponse(data))
                 .catch((response) => this.getBannersListErrorResponse(response));
         },
-        updateBannerSort(id,sort){
+        updateBannerSort(id, sort) {
             axios.post('/api/banners/update-sort/' + id, {sort: sort})
                 .then(() => {
                     this.$swal({

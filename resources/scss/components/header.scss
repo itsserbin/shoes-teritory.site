@@ -3,7 +3,6 @@
     top: 0;
     left: 0;
     z-index: 999;
-    padding: 5px 0;
     width: 100%;
     background: #fff;
     transition: .4s ease;
@@ -12,7 +11,7 @@
 
     &.shadow {
         transition: 0.4s ease;
-        box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.75);
+        box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.75);
     }
 
     &.active {
@@ -24,5 +23,112 @@
     }
 
     &__logo {
+    }
+
+    .header__language {
+        max-width: 55px;
+
+        .language-chooser {
+            position: relative;
+            white-space: nowrap;
+
+            &__current {
+                position: relative;
+                z-index: 5;
+
+                &-label {
+                    font-size: 18px;
+                    text-transform: uppercase;
+                    color: red;
+                    cursor: default;
+                }
+
+                &:after {
+                    content: '\2193';
+                    speak: none;
+                    font-style: normal;
+                    font-weight: 400;
+                    font-variant: normal;
+                    text-transform: none;
+                    line-height: 1;
+                    position: absolute;
+                    top: 5px;
+                    right: -10px;
+                    font-size: 10px;
+                    color: black;
+                    transition: transform 0.3s ease-in-out;
+                }
+            }
+
+            &__drop {
+                display: none;
+                position: absolute;
+                z-index: 4;
+                top: 35px;
+                left: -5px;
+                padding: 10px;
+                background-color: #fff;
+                box-shadow: 0 1px 5px rgb(0 0 0 / 18%);
+
+                &.active {
+                    display: block;
+                }
+            }
+
+            &__link {
+                display: block;
+                font-size: 18px;
+                text-decoration: none;
+                color: #db002f;
+            }
+        }
+    }
+
+    .header__menu {
+        background-color: #ffb7b7;
+        .main-menu{
+            &__item {
+                position: relative;
+                text-align: center;
+                &-link {
+                    padding: 5px 5px 0px;
+                    font-weight: 600;
+                    display: block;
+                    position: relative;
+                    z-index: 3;
+                    font-size: 10px;
+                    color: black;
+                    white-space: nowrap;
+                    text-decoration: none;
+                    border-bottom: 3px solid transparent;
+                    transition: opacity 0.2s ease-in-out;
+                    @include adaptive($md){
+                        padding: 10px 5px 5px;;
+                        font-size: 14px;
+                    }
+                    @include adaptive($lg){
+                        padding: 11px 15px 8px;
+                        font-size: 16px;
+                    }
+                }
+
+                &:before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                }
+
+            }
+
+            &__list {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+            }
+        }
+
     }
 }

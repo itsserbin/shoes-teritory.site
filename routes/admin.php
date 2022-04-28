@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdvantagesController;
 use App\Http\Controllers\Admin\BannersController;
 use App\Http\Controllers\Admin\Bookkeeping\BookkeepingController;
 use App\Http\Controllers\Admin\Bookkeeping\CostsController;
@@ -11,13 +12,15 @@ use App\Http\Controllers\Admin\Bookkeeping\ProfitController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\ClientsController;
 use App\Http\Controllers\Admin\ColorsController;
+use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\OrdersController;
+use App\Http\Controllers\Admin\PagesController;
 use App\Http\Controllers\Admin\ProductsController;
 use App\Http\Controllers\Admin\PromoCodesController;
 use App\Http\Controllers\Admin\ReviewsController;
 use App\Http\Controllers\Admin\RolesColroller;
+use App\Http\Controllers\Admin\TranslationsController;
 use App\Http\Controllers\Admin\UsersController;
-use App\Http\Controllers\Admin\Bookkeeping\DailyStatisticsController;
 use App\Http\Controllers\Admin\Bookkeeping\ProductStatisticsController;
 use App\Http\Controllers\Admin\Bookkeeping\ProvidersController;
 use App\Http\Controllers\Admin\Bookkeeping\SupplierPaymentsController;
@@ -207,6 +210,36 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
         Route::resource('colors', ColorsController::class)->names('admin.options.colors');
         Route::post('update/{id}', [OptionsController::class, 'update'])->name('admin.options.update');
         Route::resource('roles', RolesColroller::class)->names('admin.roles');
+
+        Route::prefix('translations')->group(function () {
+            Route::get('/', [TranslationsController::class, 'index'])
+                ->name('admin.options.translations.index');
+
+            Route::get('create', [TranslationsController::class, 'create'])
+                ->name('admin.options.translations.create');
+        });
+
+        Route::prefix('advantages')->group(function () {
+            Route::get('/', [AdvantagesController::class, 'index'])
+                ->name('admin.options.advantages.index');
+
+            Route::get('create', [AdvantagesController::class, 'create'])
+                ->name('admin.options.advantages.create');
+
+            Route::get('edit/{id}', [AdvantagesController::class, 'edit'])
+                ->name('admin.options.advantages.edit');
+        });
+
+        Route::prefix('faq')->group(function () {
+            Route::get('/', [FaqController::class, 'index'])
+                ->name('admin.options.faq.index');
+
+            Route::get('create', [FaqController::class, 'create'])
+                ->name('admin.options.faq.create');
+
+            Route::get('edit/{id}', [FaqController::class, 'edit'])
+                ->name('admin.options.faq.edit');
+        });
     });
 
     Route::prefix('users')->middleware('role:administrator')->group(function () {
@@ -219,6 +252,18 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
 
         Route::get('create', [UsersController::class, 'create'])
             ->name('admin.users.create');
+    });
+
+    Route::prefix('pages')->middleware('role:administrator')->group(function () {
+
+        Route::get('/', [PagesController::class, 'index'])
+            ->name('admin.pages.index');
+
+        Route::get('edit/{id}', [PagesController::class, 'edit'])
+            ->name('admin.pages.edit');
+
+        Route::get('create', [PagesController::class, 'create'])
+            ->name('admin.pages.create');
     });
 
     Route::prefix('banners')->group(function () {

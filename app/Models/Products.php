@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Bookkeeping\Providers;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -18,15 +17,12 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  *
  * @property ProductsPhoto $productsPhoto
  * @property Providers $providers
- * @property ProductsColor $productsColor
  * @property Clients $clients
  * @property Reviews $reviews
  * @property Orders $orders
  */
 class Products extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'id',
         'status',
@@ -46,12 +42,20 @@ class Products extends Model
         'total_sales',
     ];
 
+    protected $casts = [
+        'title' => 'array',
+        'h1' => 'array',
+        'description' => 'array',
+        'content' => 'array',
+        'characteristics' => 'array',
+    ];
+
     /**
      * Relations with photo.
      *
      * @return HasMany
      */
-    public function images()
+    public function images(): HasMany
     {
         return $this->hasMany('App\Models\ProductsPhoto', 'product_id', 'id');
     }

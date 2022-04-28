@@ -1,11 +1,16 @@
 <template>
     <div>
         <loader v-if="isLoading"></loader>
-        <product-cards v-if="!isLoading" :products="products"></product-cards>
+        <product-cards v-if="!isLoading"
+                       :products="products"
+                       :lang="lang"
+                       :text-go-to-product-card="textGoToProductCard"
+                       :product-route="productRoute"
+        ></product-cards>
         <div class="row d-flex justify-content-center" v-if="showLoadMore">
             <loader v-if="isLoadingMore"></loader>
             <button class="load-more__button" type="button" v-if="!isLoadingMore" @click="fetch">
-                <span>Загрузить еще</span>
+                <span>{{ textLoadMore }}</span>
             </button>
         </div>
     </div>
@@ -24,10 +29,17 @@ export default {
             endpoint: '/api/v1/product/best-selling?page='
         }
     },
+    props: {
+        lang: String,
+        textLoadMore: String,
+        textGoToProductCard: String,
+        productRoute: String,
+    },
     mounted() {
         axios.get('/api/v1/product/best-selling')
             .then(({data}) => this.deleteCartListSuccessResponse(data))
             .catch((response) => this.deleteCartListErrorResponse(response));
+
     },
     methods: {
         deleteCartListSuccessResponse(data) {

@@ -1,14 +1,14 @@
 <template>
     <section id="reviews" class="reviews">
         <div class="container">
-            <div class="reviews__block-title block-title">Отзывы</div>
+            <div class="reviews__block-title block-title">{{ textReviews }}</div>
             <VueSlickCarousel class="reviews-slider" v-bind="settings" v-if="reviews.length">
                 <div v-for="review in reviews" class="reviews-slider__slide">
                     <div class="reviews-slider__name">{{ review.name }}</div>
                     <div class="reviews-slider__text">{{ review.comment }}</div>
                 </div>
             </VueSlickCarousel>
-            <h3 v-else-if="reviews.length === 0">Отзывы отсутствуют</h3>
+            <h3 v-else-if="reviews.length === 0">{{ textNoReviews }}</h3>
         </div>
     </section>
 </template>
@@ -20,6 +20,10 @@ import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 
 export default {
     components: {VueSlickCarousel},
+    props:{
+        textReviews: String,
+        textNoReviews: String
+    },
     data() {
         return {
             reviews: [],

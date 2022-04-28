@@ -3,5 +3,11 @@
 @section('header','Редактирование отзыва')
 
 @section('content')
-    <edit-review></edit-review>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <edit-review></edit-review>
+            </div>
+        </div>
+    </div>
 @endsection

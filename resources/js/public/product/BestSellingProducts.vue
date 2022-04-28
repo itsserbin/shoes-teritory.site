@@ -2,21 +2,17 @@
     <section class="relative product-list">
         <div class="container">
             <div class="row my-5">
-                <div class="relative__title block-title">Самые продаваемые товары</div>
+                <div class="relative__title block-title">{{ textBestSelling }}</div>
                 <div class="relative-slider">
                     <VueSlickCarousel v-bind="settings" v-if="products.length">
-                        <div v-for="(product,i) in products"
-                             :key="i"
-                             class="card__product p-2"
-                        >
-                            <a :href="'/product/' + product.id"
-                               class="text-decoration-none"
-                            >
+                        <div v-for="(product,i) in products" :key="i" class="card__product p-2">
+                            <a :href="productRoute + '/' + product.id" class="text-decoration-none">
                                 <div class="card__image">
-                                    <img :src="'/storage/products/500/' +product.preview" :alt="product.h1">
+                                    <img :src="'/storage/products/500/' + product.preview"
+                                         :alt="lang === 'ru' ? product.h1.ru :product.h1.ua">
                                 </div>
                                 <div class="card__body">
-                                    <h5 class="card__label">{{ product.h1 }}</h5>
+                                    <h5 class="card__label">{{ lang === 'ru' ? product.h1.ru :product.h1.ua }}</h5>
                                     <div class="card__price">
                                         <div v-if="product.discount_price !== 0">
                                             <div class="card__old-price">{{ product.price }} грн.</div>
@@ -26,7 +22,7 @@
                                             <div class="card__price-without-discount">{{ product.price }} грн.</div>
                                         </div>
                                     </div>
-                                    <span class="card__button">Подробнее</span>
+                                    <span class="card__button">{{ textGoToProductCard }}</span>
                                 </div>
                             </a>
                         </div>
@@ -85,6 +81,12 @@ export default {
                 ]
             }
         }
+    },
+    props: {
+        lang: String,
+        textGoToProductCard: String,
+        textBestSelling: String,
+        productRoute: String
     },
     mounted() {
         axios.get('/api/v1/product/best-selling-products')

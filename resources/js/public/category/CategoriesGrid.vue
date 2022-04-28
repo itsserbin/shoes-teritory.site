@@ -1,19 +1,20 @@
 <template>
     <div>
         <loader v-if="isLoading"></loader>
-        <div class="row justify-content-center" v-if="categories != 0 && !isLoading">
-            <div class="col-12 col-xs-6 col-md-2" v-for="item in categories" :key="item.id">
-                <div class="card__product my-3">
-                    <a v-bind:href="'/category/' + item.slug" class="text-decoration-none">
-                        <div class="card__image">
-                            <img :src="item.preview" :alt="item.title">
-                        </div>
+        <div class="row justify-content-center" v-if="categories.length && !isLoading">
+            <div class="card__category my-3" v-for="item in categories" :key="item.id">
+                <a :href="categoriesRoute + '/' + item.slug" class="text-decoration-none">
+                    <div class="card__image">
+                        <img :src="item.preview"
+                             :alt="lang === 'ru' ? item.title.ru : (lang === 'ua' ? item.title.ua : null)">
+                    </div>
 
-                        <div class="card__body">
-                            <div class="card__label d-flex align-items-center m-0">{{ item.title }}</div>
+                    <div class="card__body">
+                        <div class="card__label d-flex align-items-center m-0">
+                            {{ lang === 'ru' ? item.title.ru : (lang === 'ua' ? item.title.ua : null) }}
                         </div>
-                    </a>
-                </div>
+                    </div>
+                </a>
             </div>
         </div>
     </div>
@@ -27,21 +28,21 @@ export default {
             isLoading: false,
         }
     },
+    props: {
+        lang: String,
+        categoriesRoute: String
+    },
     mounted() {
         this.isLoading = true;
         axios.get('/api/v1/category/all-on-prod')
-            .then(({data}) => this.getCategoriesProdSuccessResponse(data))
-            .catch((response) => this.getCategoriesProdErrorResponse(response));
-    },
-    methods: {
-        getCategoriesProdSuccessResponse(data) {
-            this.categories = data.result;
-            this.isLoading = false;
-        },
-        getCategoriesProdErrorResponse(response) {
-            this.isLoading = false;
-            console.log(response);
-        }
+            .then(({data}) => {
+                this.categories = data.result;
+                this.isLoading = false;
+            })
+            .catch((response) => {
+                this.isLoading = false;
+                console.log(response);
+            });
     }
 }
 </script>

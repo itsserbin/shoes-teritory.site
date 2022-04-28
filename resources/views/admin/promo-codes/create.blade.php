@@ -3,5 +3,16 @@
 @section('header','Создание промо-кода')
 
 @section('content')
-    <create-promo-code></create-promo-code>
+    <div class="container">
+        {{ Breadcrumbs::render('options.promo-codes.create') }}
+        <hr>
+        <div class="row">
+            <div class="col-12 col-md-2">
+                @include('admin.options.partials.sidebar')
+            </div>
+            <div class="col-12 col-md-10">
+                <create-promo-code></create-promo-code>
+            </div>
+        </div>
+    </div>
 @endsection
