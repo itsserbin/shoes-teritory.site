@@ -127,8 +127,8 @@ class CategoriesRepository extends CoreRepository
         return $this
             ->startConditions()
             ->select($columns)
-            ->where('published', true)
-            ->orderBy('created_at', 'desc')
+            ->where('published', 1)
+            ->orderBy('sort', 'desc')
             ->get();
     }
 
