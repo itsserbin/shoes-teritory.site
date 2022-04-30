@@ -28,8 +28,8 @@ class CreateProductsTable extends Migration
             $table->boolean('xxxxl')->default('0');
             $table->boolean('xxxxxl')->default('0');
 
-            $table->string('title')->nullable();
-            $table->string('h1')->nullable();
+            $table->json('title')->nullable();
+            $table->json('h1')->nullable();
 
             $table->text('size_table')->nullable();
 
@@ -37,9 +37,9 @@ class CreateProductsTable extends Migration
             $table->text('discount_price')->nullable();
             $table->integer('trade_price')->nullable();
 
-            $table->text('description')->nullable();
-            $table->text('content')->nullable();
-            $table->text('characteristics')->nullable();
+            $table->json('description')->nullable();
+            $table->json('content')->nullable();
+            $table->json('characteristics')->nullable();
             $table->string('vendor_code')->nullable();
             $table->string('preview')->nullable();
             $table->integer('total_sales')->nullable();

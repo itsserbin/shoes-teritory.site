@@ -43,6 +43,9 @@ class CreateOrdersTable extends Migration
             $table->boolean('sale_of_air')->default(0);
             $table->integer('sale_of_air_price')->nullable();
             $table->string('modified_by')->nullable();
+
+            $table->boolean('prepayment')->default(0);
+            $table->integer('prepayment_sum')->nullable();
             $table->timestamps();
         });
     }

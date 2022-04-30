@@ -130,11 +130,13 @@ class OrdersRepository extends CoreRepository
 
         $totalPrice = 0;
         $totalCount = 0;
+        $totalClearPrice = 0;
 
         foreach ($items as $item) {
             if ($item->product) {
                 $totalPrice += ($item->product->discount_price ?: $item->product->price) * $item->count;
                 $totalCount += $item->count;
+                $totalClearPrice += (($item->product->discount_price ?: $item->product->price) - $item->product->trade_price) * $item->count;
             }
         }
 
@@ -150,6 +152,7 @@ class OrdersRepository extends CoreRepository
 
         $order->total_count = $totalCount;
         $order->total_price = $totalPrice;
+        $order->clear_total_price = $totalClearPrice;
 
         $order->save();
 
@@ -661,5 +664,21 @@ class OrdersRepository extends CoreRepository
             ->select('prepayment', 'prepayment_sum')
             ->where('prepayment', 1)
             ->sum('prepayment_sum');
+    }
+
+    public function sumDoneOrdersClearTotalPriceByDate($date)
+    {
+        return $this->model::whereDate('created_at', $date)
+            ->where('status', OrderStatus::STATUS_DONE)
+            ->select('clear_total_price')
+            ->sum('clear_total_price');
+    }
+
+    public function averageMarginalityByDate($date)
+    {
+        return $this->model::whereDate('created_at', $date)
+            ->where('status', OrderStatus::STATUS_DONE)
+            ->select('clear_total_price')
+            ->avg('clear_total_price');
     }
 }

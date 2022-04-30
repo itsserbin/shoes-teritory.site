@@ -18,12 +18,15 @@ class CreateProfitsTable extends Migration
             $table->date('date')->nullable();
             $table->integer('refunds_sum')->nullable();
             $table->integer('cost')->nullable();
-            $table->integer('profit')->nullable();
             $table->integer('clear_profit')->nullable();
             $table->integer('turnover')->nullable();
             $table->integer('marginality')->nullable();
+            $table->integer('average_marginality')->nullable();
             $table->integer('sale_of_air_sum')->nullable();
-            $table->integer('profit_without_sale_of_air')->nullable();
+            $table->integer('additional_sales_sum')->nullable();
+            $table->integer('additional_sales_marginality_sum')->nullable();
+            $table->integer('prepayment_sum')->nullable();
+            $table->integer('debt_supplier')->nullable();
             $table->timestamps();
         });
     }

@@ -403,4 +403,12 @@ class OrderItemsRepository extends CoreRepository
             ->where('resale', 1)
             ->sum('clear_total_price');
     }
+
+    public function sumAdditionalSalesByDate($date)
+    {
+        return $this->model::whereDate('created_at', $date)
+            ->select('resale', 'discount','clear_total_price')
+            ->where('resale', 1)
+            ->sum('total_price');
+    }
 }

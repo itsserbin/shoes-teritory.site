@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateOrdersTable extends Migration
+class UpdateProfitsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class UpdateOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->boolean('prepayment')->default(0);
-            $table->integer('prepayment_sum')->nullable();
+        Schema::table('profits', function (Blueprint $table) {
+            $table->integer('marginality')->nullable();
+            $table->integer('additional_sales_marginality_sum')->nullable();
+            $table->integer('debt_supplier')->nullable();
+            $table->dropColumn('profit');
         });
     }
 

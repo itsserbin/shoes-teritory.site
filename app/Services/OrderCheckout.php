@@ -40,21 +40,14 @@ class OrderCheckout
     /** @var string */
     private $cookie;
 
-    public function __construct(
-        CartRepository       $cartRepository,
-        ProductRepository    $productRepository,
-        ClientsRepository    $clientsRepository,
-        CartItemsRepository  $cartItemsRepository,
-        OrdersRepository     $ordersRepository,
-        OrderItemsRepository $orderItemsRepository
-    )
+    public function __construct()
     {
-        $this->cartRepository = $cartRepository;
-        $this->productRepository = $productRepository;
-        $this->clientsRepository = $clientsRepository;
-        $this->cartItemsRepository = $cartItemsRepository;
-        $this->ordersRepository = $ordersRepository;
-        $this->orderItemsRepository = $orderItemsRepository;
+        $this->cartRepository = app(CartRepository::class);
+        $this->productRepository = app(ProductRepository::class);
+        $this->clientsRepository = app(ClientsRepository::class);
+        $this->cartItemsRepository = app(CartItemsRepository::class);
+        $this->ordersRepository = app(OrdersRepository::class);
+        $this->orderItemsRepository = app(OrderItemsRepository::class);
         $this->cookie = Cookie::get('cart');
     }
 
@@ -81,7 +74,7 @@ class OrderCheckout
                     $cart->promo_code
                 );
             } else {
-                $client = $this->clientsRepository->updateClient($client->id, $cart->items,$cart->promo_code);
+                $client = $this->clientsRepository->updateClient($client->id, $cart->items, $cart->promo_code);
             }
 
             $order = $this->ordersRepository->create(
@@ -94,7 +87,7 @@ class OrderCheckout
             );
 
 
-            if ($this->orderItemsRepository->create($items, $order->id,$cart->promo_code)) {
+            if ($this->orderItemsRepository->create($items, $order->id, $cart->promo_code)) {
                 foreach ($items as $item) {
                     $this->productRepository->updateProductTotalSales($item->product_id);
                 }

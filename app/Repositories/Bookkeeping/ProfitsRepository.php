@@ -59,13 +59,15 @@ class ProfitsRepository extends CoreRepository
             'id',
             'date',
             'cost',
-            'profit',
+            'marginality',
             'average_marginality',
             'clear_profit',
             'refunds_sum',
             'sale_of_air_sum',
             'prepayment_sum',
             'additional_sales_sum',
+            'additional_sales_marginality_sum',
+            'debt_supplier',
             'turnover',
         )
             ->orderBy($sort, $param)
@@ -107,14 +109,16 @@ class ProfitsRepository extends CoreRepository
             'id',
             'date',
             'cost',
-            'profit',
+            'marginality',
             'average_marginality',
             'clear_profit',
             'refunds_sum',
             'sale_of_air_sum',
-            'turnover',
-            'additional_sales_sum',
             'prepayment_sum',
+            'additional_sales_sum',
+            'additional_sales_marginality_sum',
+            'debt_supplier',
+            'turnover',
         )
             ->orderBy('date', 'desc')
             ->get();
@@ -155,13 +159,16 @@ class ProfitsRepository extends CoreRepository
         }
 
         $result['Расходы'] = $model->sum('cost');
-        $result['Прибыль без расходов'] = $model->sum('profit');
-        $result['Чистая прибыль'] = $model->sum('clear_profit');
-        $result['Сумма за возвраты'] = $model->sum('refunds_sum');
         $result['Оборот'] = $model->sum('turnover');
+        $result['Маржа'] = $model->sum('marginality');
+        $result['Чистая прибыль'] = $model->sum('clear_profit');
+        $result['Должен поставщик'] = $model->sum('debt_supplier');
         $result['Продажи воздуха'] = $model->sum('sale_of_air_sum');
         $result['Средняя маржа'] = $model->sum('average_marginality');
         $result['Сумма предоплат'] = $model->sum('prepayment_sum');
+        $result['Сумма за возвраты'] = $model->sum('refunds_sum');
+        $result['Сумма доп.продаж'] = $model->sum('additional_sales_sum');
+        $result['Маржа доп.продаж'] = $model->sum('additional_sales_marginality_sum');
 
         return $result;
     }

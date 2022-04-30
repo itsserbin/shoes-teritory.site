@@ -27,6 +27,11 @@ class CreateOrdersStatisticsTable extends Migration
             $table->integer('awaiting_dispatch')->nullable();
             $table->integer('awaiting_prepayment')->nullable();
             $table->integer('on_the_road')->nullable();
+
+            $table->integer('canceled_orders_rate')->nullable();
+            $table->integer('received_parcel_ratio')->nullable();
+            $table->integer('returned_orders_ratio')->nullable();
+
             $table->timestamps();
         });
     }

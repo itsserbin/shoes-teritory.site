@@ -158,18 +158,17 @@
                 </div>
                 <div class="col-12 col-md-6">
                     <div class="w-100">
-                        <label class="form-label">Сумма скидки (грн.)</label>
+                        <label class="form-label">Сумма доп.продажи воздуха (грн.)</label>
                         <input type="number"
                                v-model="order.sale_of_air_price"
                                class="form-control"
-                               placeholder="Укажите сумму скидки"
+                               placeholder="Укажите сумму доп.продажи"
                                v-if="order.sale_of_air === 1"
                         >
                         <input type="number"
                                v-else
                                v-model="order.sale_of_air_price"
                                class="form-control"
-                               placeholder="Укажите сумму скидки"
                                disabled
                         >
                     </div>

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DestroyOrdersDaysTable extends Migration
+class UpdateOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,9 @@ class DestroyOrdersDaysTable extends Migration
      */
     public function up()
     {
-        Schema::drop('orders_days');
+        Schema::table('orders', function (Blueprint $table) {
+            $table->integer('clear_total_price')->nullable();
+        });
     }
 
     /**

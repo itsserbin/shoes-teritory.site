@@ -16,7 +16,7 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
 
-            $table->string('title');
+            $table->json('title');
             $table->string('slug')->unique();
             $table->string('preview')->nullable();
             $table->integer('parent_id')->nullable();
@@ -25,9 +25,9 @@ class CreateCategoriesTable extends Migration
             $table->integer('modified_by')->nullable();
             $table->integer('sort')->nullable()->unsigned();
 
-            $table->string('meta_title')->nullable();
-            $table->string('meta_description')->nullable();
-            $table->string('meta_keyword')->nullable();
+            $table->json('meta_title')->nullable();
+            $table->json('meta_description')->nullable();
+            $table->json('meta_keyword')->nullable();
 
             $table->timestamps();
         });

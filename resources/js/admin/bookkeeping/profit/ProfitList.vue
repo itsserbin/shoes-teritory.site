@@ -121,7 +121,7 @@
                             </th>
                             <th>
                                 <div class="d-flex align-items-center justify-content-center">
-                                    <div class="mr-1">Сумма расходов</div>
+                                    <div class="mr-1">Расходы</div>
                                     <a href="javascript:" class="text-dark" @click="sort('cost','asc')">
                                         <arrow-up-icon></arrow-up-icon>
                                     </a>
@@ -132,22 +132,44 @@
                             </th>
                             <th>
                                 <div class="d-flex align-items-center justify-content-center">
-                                    <div class="mr-1">Сумма за возвраты</div>
-                                    <a href="javascript:" class="text-dark" @click="sort('refunds_sum','asc')">
+                                    <div class="mr-1">Оборот</div>
+                                    <a href="javascript:" class="text-dark" @click="sort('turnover','asc')">
                                         <arrow-up-icon></arrow-up-icon>
                                     </a>
-                                    <a href="javascript:" class="text-dark" @click="sort('refunds_sum','desc')">
+                                    <a href="javascript:" class="text-dark" @click="sort('turnover','desc')">
                                         <arrow-down-icon></arrow-down-icon>
                                     </a>
                                 </div>
                             </th>
                             <th>
                                 <div class="d-flex align-items-center justify-content-center">
-                                    <div class="mr-1">Прибыль без затрат</div>
-                                    <a href="javascript:" class="text-dark" @click="sort('profit','asc')">
+                                    <div class="mr-1">Маржа</div>
+                                    <a href="javascript:" class="text-dark" @click="sort('marginality','asc')">
                                         <arrow-up-icon></arrow-up-icon>
                                     </a>
-                                    <a href="javascript:" class="text-dark" @click="sort('profit','desc')">
+                                    <a href="javascript:" class="text-dark" @click="sort('marginality','desc')">
+                                        <arrow-down-icon></arrow-down-icon>
+                                    </a>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <div class="mr-1">Чистая прибыль</div>
+                                    <a href="javascript:" class="text-dark" @click="sort('clear_profit','asc')">
+                                        <arrow-up-icon></arrow-up-icon>
+                                    </a>
+                                    <a href="javascript:" class="text-dark" @click="sort('clear_profit','desc')">
+                                        <arrow-down-icon></arrow-down-icon>
+                                    </a>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <div class="mr-1">Должен поставщик</div>
+                                    <a href="javascript:" class="text-dark" @click="sort('debt_supplier','asc')">
+                                        <arrow-up-icon></arrow-up-icon>
+                                    </a>
+                                    <a href="javascript:" class="text-dark" @click="sort('debt_supplier','desc')">
                                         <arrow-down-icon></arrow-down-icon>
                                     </a>
                                 </div>
@@ -176,18 +198,6 @@
                             </th>
                             <th>
                                 <div class="d-flex align-items-center justify-content-center">
-                                    <div class="mr-1">Сумма доп.продаж</div>
-                                    <a href="javascript:" class="text-dark" @click="sort('additional_sales_sum','asc')">
-                                        <arrow-up-icon></arrow-up-icon>
-                                    </a>
-                                    <a href="javascript:" class="text-dark"
-                                       @click="sort('additional_sales_sum','desc')">
-                                        <arrow-down-icon></arrow-down-icon>
-                                    </a>
-                                </div>
-                            </th>
-                            <th>
-                                <div class="d-flex align-items-center justify-content-center">
                                     <div class="mr-1">Сумма предоплат</div>
                                     <a href="javascript:" class="text-dark" @click="sort('prepayment_sum','asc')">
                                         <arrow-up-icon></arrow-up-icon>
@@ -199,33 +209,35 @@
                             </th>
                             <th>
                                 <div class="d-flex align-items-center justify-content-center">
+                                    <div class="mr-1">Сумма за возвраты</div>
+                                    <a href="javascript:" class="text-dark" @click="sort('refunds_sum','asc')">
+                                        <arrow-up-icon></arrow-up-icon>
+                                    </a>
+                                    <a href="javascript:" class="text-dark" @click="sort('refunds_sum','desc')">
+                                        <arrow-down-icon></arrow-down-icon>
+                                    </a>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <div class="mr-1">Маржа с доп.продаж</div>
+                                    <a href="javascript:" class="text-dark" @click="sort('additional_sales_marginality_sum','asc')">
+                                        <arrow-up-icon></arrow-up-icon>
+                                    </a>
+                                    <a href="javascript:" class="text-dark"
+                                       @click="sort('additional_sales_marginality_sum','desc')">
+                                        <arrow-down-icon></arrow-down-icon>
+                                    </a>
+                                </div>
+                            </th>
+
+                            <th>
+                                <div class="d-flex align-items-center justify-content-center">
                                     <div class="mr-1">Сумма доп.продаж</div>
                                     <a href="javascript:" class="text-dark" @click="sort('additional_sales_sum','asc')">
                                         <arrow-up-icon></arrow-up-icon>
                                     </a>
                                     <a href="javascript:" class="text-dark" @click="sort('additional_sales_sum','desc')">
-                                        <arrow-down-icon></arrow-down-icon>
-                                    </a>
-                                </div>
-                            </th>
-                            <th>
-                                <div class="d-flex align-items-center justify-content-center">
-                                    <div class="mr-1">Оборот</div>
-                                    <a href="javascript:" class="text-dark" @click="sort('turnover','asc')">
-                                        <arrow-up-icon></arrow-up-icon>
-                                    </a>
-                                    <a href="javascript:" class="text-dark" @click="sort('turnover','desc')">
-                                        <arrow-down-icon></arrow-down-icon>
-                                    </a>
-                                </div>
-                            </th>
-                            <th>
-                                <div class="d-flex align-items-center justify-content-center">
-                                    <div class="mr-1">Чистая прибыль</div>
-                                    <a href="javascript:" class="text-dark" @click="sort('clear_profit','asc')">
-                                        <arrow-up-icon></arrow-up-icon>
-                                    </a>
-                                    <a href="javascript:" class="text-dark" @click="sort('clear_profit','desc')">
                                         <arrow-down-icon></arrow-down-icon>
                                     </a>
                                 </div>
@@ -236,15 +248,16 @@
                         <tr v-for="profit in profits" :key="profit.id" style="vertical-align: middle;">
                             <td>{{ dateFormat(profit.date) }}</td>
                             <td>{{ profit.cost | formatMoney }} грн.</td>
-                            <td>{{ profit.refunds_sum | formatMoney }} грн.</td>
-                            <td>{{ profit.profit | formatMoney }} грн.</td>
+                            <td>{{ profit.turnover | formatMoney }} грн.</td>
+                            <td>{{ profit.marginality | formatMoney }} грн.</td>
+                            <td>{{ profit.clear_profit | formatMoney }} грн.</td>
+                            <td>{{ profit.debt_supplier | formatMoney }} грн.</td>
                             <td>{{ profit.sale_of_air_sum | formatMoney }} грн.</td>
                             <td>{{ profit.average_marginality | formatMoney }} грн.</td>
-                            <td>{{ profit.additional_sales_sum | formatMoney }} грн.</td>
                             <td>{{ profit.prepayment_sum | formatMoney }} грн.</td>
+                            <td>{{ profit.refunds_sum | formatMoney }} грн.</td>
+                            <td>{{ profit.additional_sales_marginality_sum | formatMoney }} грн.</td>
                             <td>{{ profit.additional_sales_sum | formatMoney }} грн.</td>
-                            <td>{{ profit.turnover | formatMoney }} грн.</td>
-                            <td>{{ profit.clear_profit | formatMoney }} грн.</td>
                         </tr>
                         </tbody>
                         <tfoot v-if="profits.length !== 0">
