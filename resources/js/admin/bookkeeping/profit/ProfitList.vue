@@ -221,7 +221,8 @@
                             <th>
                                 <div class="d-flex align-items-center justify-content-center">
                                     <div class="mr-1">Маржа с доп.продаж</div>
-                                    <a href="javascript:" class="text-dark" @click="sort('additional_sales_marginality_sum','asc')">
+                                    <a href="javascript:" class="text-dark"
+                                       @click="sort('additional_sales_marginality_sum','asc')">
                                         <arrow-up-icon></arrow-up-icon>
                                     </a>
                                     <a href="javascript:" class="text-dark"
@@ -237,7 +238,8 @@
                                     <a href="javascript:" class="text-dark" @click="sort('additional_sales_sum','asc')">
                                         <arrow-up-icon></arrow-up-icon>
                                     </a>
-                                    <a href="javascript:" class="text-dark" @click="sort('additional_sales_sum','desc')">
+                                    <a href="javascript:" class="text-dark"
+                                       @click="sort('additional_sales_sum','desc')">
                                         <arrow-down-icon></arrow-down-icon>
                                     </a>
                                 </div>
@@ -405,23 +407,15 @@ export default {
 
             this.series = [
                 {
-                    name: 'Расходы',
-                    data: []
-                },
-                {
-                    name: 'Прибыль без расходов',
-                    data: []
-                },
-                {
-                    name: 'Чистая прибыль',
-                    data: []
-                },
-                {
                     name: 'Оборот',
                     data: []
                 },
                 {
-                    name: 'Сумма за возвраты',
+                    name: 'Маржа',
+                    data: []
+                },
+                {
+                    name: 'Чистая прибыль',
                     data: []
                 },
                 {
@@ -431,40 +425,25 @@ export default {
                 {
                     name: 'Средняя маржа',
                     data: []
-                },
-                {
-                    name: 'Сумма предоплат',
-                    data: []
-                },
-                {
-                    name: 'Сумма доп.продаж',
-                    data: []
-                }];
-            let costs = this.series.find((item) => item.name === 'Расходы');
-            let profits = this.series.find((item) => item.name === 'Прибыль без расходов');
-            let clear_profit = this.series.find((item) => item.name === 'Чистая прибыль');
+                }
+            ];
             let turnover = this.series.find((item) => item.name === 'Оборот');
-            let refunds_sum = this.series.find((item) => item.name === 'Сумма за возвраты');
+            let marginality = this.series.find((item) => item.name === 'Маржа');
+            let clear_profit = this.series.find((item) => item.name === 'Чистая прибыль');
             let sale_of_air_sum = this.series.find((item) => item.name === 'Продажи воздуха');
             let average_marginality = this.series.find((item) => item.name === 'Средняя маржа');
-            let prepayment_sum = this.series.find((item) => item.name === 'Сумма предоплат');
-            let additional_sales_sum = this.series.find((item) => item.name === 'Сумма доп.продаж');
 
             const self = this;
             self.options.xaxis.categories = [];
             data.chart.forEach((item) => {
-                costs.data.unshift(item.cost);
-                clear_profit.data.unshift(item.clear_profit);
-                profits.data.unshift(item.profit);
                 turnover.data.unshift(item.turnover);
-                average_marginality.data.unshift(item.average_marginality);
-                refunds_sum.data.unshift(item.refunds_sum);
+                marginality.data.unshift(item.marginality);
+                clear_profit.data.unshift(item.clear_profit);
                 sale_of_air_sum.data.unshift(item.sale_of_air_sum);
-                prepayment_sum.data.unshift(item.prepayment_sum);
-                additional_sales_sum.data.unshift(item.additional_sales_sum);
+                average_marginality.data.unshift(item.average_marginality);
                 self.options.xaxis.categories.unshift(self.dateFormat(item.date));
             })
-            self.series = [costs, clear_profit, profits, turnover, refunds_sum, sale_of_air_sum, average_marginality, prepayment_sum,additional_sales_sum];
+            self.series = [clear_profit, turnover, sale_of_air_sum, average_marginality];
             self.isLoading = false;
         },
         getProfitsListErrorResponse(response) {
