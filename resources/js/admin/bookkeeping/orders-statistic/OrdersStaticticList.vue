@@ -272,7 +272,10 @@ export default {
                     last: days
                 }
             })
-                .then(({data}) => this.getOrdersStatisticSuccessResponse(data))
+                .then(({data}) => {
+                    this.getOrdersStatisticSuccessResponse(data);
+                    this.endpoint = '/api/bookkeeping/orders-statistics?last=' + days + '&page='
+                })
                 .catch((response) => this.getOrdersStatisticErrorResponse(response));
         },
         getOrdersStatisticSuccessResponse(data) {
@@ -320,7 +323,14 @@ export default {
         },
         fetch(page = 1) {
             axios.get(this.endpoint + page)
-                .then(({data}) => this.getOrdersStatisticSuccessResponse(data));
+                .then(({data}) => {
+                    this.ordersStatistics = data.result.data;
+                    // this.generalOrderStatistics = data.generalStatistics;
+                    // this.generalIndicatorsStatistic = data.generalIndicatorsStatistic;
+                    // this.total = data.result.total;
+                    this.currentPage = data.result.current_page;
+                    this.perPage = data.result.per_page;
+                });
         },
         searchByRange() {
             this.activeLastDays = null;
@@ -330,7 +340,10 @@ export default {
                     date_end: this.date.end
                 }
             })
-                .then(({data}) => this.getOrdersStatisticSuccessResponse(data))
+                .then(({data}) => {
+                    this.getOrdersStatisticSuccessResponse(data);
+                    this.endpoint = '/api/bookkeeping/orders-statistics?date_start=' + this.date.start + '&date_end=' + this.date.end + '&page='
+                })
                 .catch((response) => this.getOrdersStatisticErrorResponse(response));
         },
         dateFormat(value) {

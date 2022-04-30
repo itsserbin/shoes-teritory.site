@@ -74,8 +74,8 @@ class MarketingStatisticConmmand extends Command
                 } else {
                     $item->average_application_price = 0;
                 }
-                if ($ordersStatisticModel->completed + $ordersStatisticModel->refunds) {
-                    $item->average_approve_application_price = $costsSum / ($ordersStatisticModel->completed + $ordersStatisticModel->refunds);
+                if ($ordersStatisticModel->completed + $ordersStatisticModel->refunds + $ordersStatisticModel->transferred_to_supplier + $ordersStatisticModel->awaiting_dispatch + $ordersStatisticModel->on_the_road + $ordersStatisticModel->at_the_post_office) {
+                    $item->average_approve_application_price = $costsSum / ($ordersStatisticModel->completed + $ordersStatisticModel->refunds + $ordersStatisticModel->transferred_to_supplier + $ordersStatisticModel->awaiting_dispatch + $ordersStatisticModel->on_the_road + $ordersStatisticModel->at_the_post_office);
                 } else {
                     $item->average_approve_application_price = 0;
                 }
