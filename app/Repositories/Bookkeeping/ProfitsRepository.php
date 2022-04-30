@@ -164,7 +164,7 @@ class ProfitsRepository extends CoreRepository
         $result['Чистая прибыль'] = $model->sum('clear_profit');
         $result['Должен поставщик'] = $model->sum('debt_supplier');
         $result['Продажи воздуха'] = $model->sum('sale_of_air_sum');
-        $result['Средняя маржа'] = $model->sum('average_marginality');
+        $result['Средняя маржа'] = $model->avg('average_marginality');
         $result['Сумма предоплат'] = $model->sum('prepayment_sum');
         $result['Сумма за возвраты'] = $model->sum('refunds_sum');
         $result['Сумма доп.продаж'] = $model->sum('additional_sales_sum');
