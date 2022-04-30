@@ -34,7 +34,7 @@
 <meta property="og:title" content="@yield('title')">
 <meta property="og:description" content="@yield('description')">
 <meta property="og:url" content="{{url()->current()}}">
-<meta property="og:site_name" content="Dabango">
+<meta property="og:site_name" content="{{env('APP_NAME')}}">
 
 @if(Route::is('product') )
     <meta property="product:price:amount"
@@ -49,8 +49,9 @@
     {
       "@context": "https://schema.org",
       "@type": "Organization",
-      "name": "Dabango",
+      "name": "{{env('APP_NAME')}}",
       "url": "{{route('home')}}",
       "logo": "{{asset('storage/img/content/logo.png')}}"
     }
+
 </script>

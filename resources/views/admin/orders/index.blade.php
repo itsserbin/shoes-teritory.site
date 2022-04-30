@@ -5,6 +5,8 @@
 
 @section('content')
     <div class="container">
+        {{ Breadcrumbs::render('orders') }}
+        <hr>
         <div class="row">
             <div class="col-12">
                 <orders-list

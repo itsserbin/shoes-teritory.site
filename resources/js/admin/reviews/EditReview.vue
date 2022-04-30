@@ -7,34 +7,34 @@
                     <div class="form-group mb-3">
                         <label class="form-label">Статус</label>
                         <select class="form-select" v-model="review.status">
-                            <option :value="0">Не опубліковано</option>
-                            <option :value="1">Опубліковано</option>
+                            <option :value="0">Не опубликовано</option>
+                            <option :value="1">Опубликовано</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-group mb-3">
-                        <label class="form-label">Імʼя</label>
+                        <label class="form-label">Имя</label>
                         <input class="form-control"
                                type="text"
                                v-model="review.name"
-                               placeholder="Введіть імʼя"
+                               placeholder="Введите имя"
                         >
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-group mb-3">
-                        <label class="form-label">Відгук</label>
+                        <label class="form-label">Отзыв</label>
                         <textarea class="form-control"
                                   type="text"
                                   v-model="review.comment"
-                                  placeholder="Введіть відгук"
+                                  placeholder="Введите отзыв"
                         ></textarea>
                     </div>
                 </div>
             </div>
             <button type="submit" class="btn btn-danger">
-                Зберегти
+                Сохранить
             </button>
         </form>
     </div>
@@ -70,7 +70,7 @@ export default {
             axios.put('/api/reviews/update/' + this.review.id, this.review)
                 .then(() => {
                     this.$swal({
-                        title: 'Оновлено!',
+                        title: 'Обновлено!',
                         icon: 'success',
                     });
                     this.isLoading = false;
@@ -80,8 +80,7 @@ export default {
                     this.errors = response.data;
                     console.log(response);
                     this.$swal({
-                        title: 'Помилка',
-                        text: 'Перевірте корректність данних або зверніться до адміністратора',
+                        title: 'Ошибка',
                         icon: 'error',
                     });
                     this.isLoading = false;

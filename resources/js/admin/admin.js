@@ -96,6 +96,10 @@ Vue.component('providers-list', require('./providers/ProvidersList').default);
 Vue.component('create-provider', require('./providers/CreateProvider').default);
 Vue.component('edit-provider', require('./providers/EditProvider').default);
 
+Vue.component('colors-list', require('./options/colors/ColorsList').default);
+Vue.component('create-color', require('./options/colors/CreateColor').default);
+Vue.component('edit-color', require('./options/colors/EditColor').default);
+
 Vue.component('promo-codes-list', require('./promo-codes/PromoCodesList').default);
 Vue.component('create-promo-code', require('./promo-codes/CreatePromoCode').default);
 Vue.component('edit-promo-code', require('./promo-codes/EditPromoCode').default);

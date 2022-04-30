@@ -103,6 +103,21 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix('colors')->group(function () {
         Route::get('list', [ColorsController::class, 'list'])
             ->name('api.colors.list');
+
+        Route::get('/', [ColorsController::class, 'index'])
+            ->name('api.colors.index');
+
+        Route::post('create', [ColorsController::class, 'create'])
+            ->name('api.colors.create');
+
+        Route::get('edit/{id}', [ColorsController::class, 'edit'])
+            ->name('api.colors.edit');
+
+        Route::put('update/{id}', [ColorsController::class, 'update'])
+            ->name('api.colors.update');
+
+        Route::delete('destroy/{id}', [ColorsController::class, 'destroy'])
+            ->name('api.colors.destroy');
     });
 
     /** Группа маршрутов для клиентского раздела */

@@ -3,9 +3,7 @@
 namespace App\Repositories\Products;
 
 use App\Models\Colors as Model;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use PhpParser\Node\Expr\AssignOp\Concat;
 
 /**
  * Class ArticleRepository
@@ -31,11 +29,47 @@ class ColorsRepository extends CoreRepository
      */
     public function getById($id)
     {
-        return $this->startConditions()->find($id);
+        return $this->model->find($id);
     }
 
     public function getList()
     {
         return $this->model->orderBy('created_at', 'desc')->get();
+    }
+
+    public function getAllWithPaginate(string $sort = 'id', string $param = 'desc', int $perPage = 15): LengthAwarePaginator
+    {
+        $columns = [
+            'id',
+            'name',
+            'hex',
+        ];
+
+        return $this
+            ->model
+            ->select($columns)
+            ->orderBy($sort, $param)
+            ->paginate($perPage);
+    }
+
+    public function create($data)
+    {
+        $model = new $this->model;
+        $model->name = $data['name'];
+        $model->hex = $data['hex'];
+        return $model->save();
+    }
+
+    public function update($id, $data)
+    {
+        $model = $this->getById($id);
+        $model->name = $data['name'];
+        $model->hex = $data['hex'];
+        return $model->update();
+    }
+
+    public function destroy($id)
+    {
+        return $this->model::destroy($id);
     }
 }

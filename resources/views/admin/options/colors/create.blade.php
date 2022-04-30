@@ -1,19 +1,18 @@
 @extends('layouts.app')
 
-@section('title','Редактирование пользователя')
-@section('header','Редактирование пользователя')
+@section('title', 'Добавление цвета')
+@section('header', 'Добавление цвета')
 
 @section('content')
     <div class="container">
-        {{ Breadcrumbs::render('options.users.edit') }}
+        {{ Breadcrumbs::render('options.colors.create') }}
         <hr>
         <div class="row">
             <div class="col-12 col-md-2">
                 @include('admin.options.partials.sidebar')
             </div>
             <div class="col-12 col-md-10">
-                <edit-user></edit-user>
+                <create-color></create-color>
             </div>
         </div>
-    </div>
 @endsection

@@ -136,7 +136,7 @@
             </div>
             <div class="row text-center my-3">
                 <div class="col-12 col-md-4">
-                    <b>Всего покупок: </b>{{ client.number_of_purchases }} грн.
+                    <b>Всего покупок: </b>{{ client.number_of_purchases }}
                 </div>
                 <div class="col-12 col-md-4">
                     <b>Средний чек: </b>{{ client.average_check | formatMoney }} грн.

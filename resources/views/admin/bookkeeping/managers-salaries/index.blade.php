@@ -6,11 +6,7 @@
 @section('content')
     <div class="container">
 
-        @component('admin.components.breadcrumbs')
-            @slot('active')Бухгалтерия@endslot
-            @slot('active_link'){{route('admin.bookkeeping.index')}}@endslot
-            @slot('subsidiary')Статистика для менеджеров@endslot
-        @endcomponent
+        {{ Breadcrumbs::render('bookkeeping.managers-salaries') }}
         <hr>
 
         <div class="row ">

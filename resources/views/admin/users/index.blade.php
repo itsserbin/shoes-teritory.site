@@ -5,6 +5,8 @@
 
 @section('content')
     <div class="container">
+        {{ Breadcrumbs::render('options.users') }}
+        <hr>
         <div class="row">
             <div class="col-12 col-md-2">
                 @include('admin.options.partials.sidebar')

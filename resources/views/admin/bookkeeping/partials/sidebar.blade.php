@@ -30,11 +30,11 @@
            href="{{route('admin.bookkeeping.marketing-statistic.index')}}">Маркетинговая статистика</a>
     </li>
 
-    <li class="nav-item w-100">
-        <a class="nav-link {{ request()->is('admin/bookkeeping/product-statistics*') ? 'active' : null }}"
-           aria-current="page"
-           href="{{route('admin.bookkeeping.product-statistics.index')}}">Статистика продаж товаров</a>
-    </li>
+{{--    <li class="nav-item w-100">--}}
+{{--        <a class="nav-link {{ request()->is('admin/bookkeeping/product-statistics*') ? 'active' : null }}"--}}
+{{--           aria-current="page"--}}
+{{--           href="{{route('admin.bookkeeping.product-statistics.index')}}">Статистика продаж товаров</a>--}}
+{{--    </li>--}}
 
     <li class="nav-item w-100">
         <a class="nav-link {{ request()->is('admin/bookkeeping/providers*') ? 'active' : null }}"
@@ -42,11 +42,11 @@
            href="{{route('admin.bookkeeping.providers.index')}}">Поставщики</a>
     </li>
 
-    <li class="nav-item w-100">
-        <a class="nav-link {{ request()->is('admin/bookkeeping/supplier-payments*') ? 'active' : null }}"
-           aria-current="page"
-           href="{{route('admin.bookkeeping.supplier-payments.index')}}">Выплаты поставщика</a>
-    </li>
+{{--    <li class="nav-item w-100">--}}
+{{--        <a class="nav-link {{ request()->is('admin/bookkeeping/supplier-payments*') ? 'active' : null }}"--}}
+{{--           aria-current="page"--}}
+{{--           href="{{route('admin.bookkeeping.supplier-payments.index')}}">Выплаты поставщика</a>--}}
+{{--    </li>--}}
     @endrole
 
     <li class="nav-item w-100">

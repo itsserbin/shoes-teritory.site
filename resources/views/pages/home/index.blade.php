@@ -1,7 +1,12 @@
 @extends('layouts.master')
-@section('title'){{ app()->getLocale() == 'ua' ? $options['meta_title_ua']->value : $options['meta_title_ru']->value }}@endsection
-@section('description'){{ app()->getLocale() == 'ua' ? $options['meta_description_ua']->value : $options['meta_description_ru']->value }}@endsection
 
+@if($options['meta_title_ua'] || $options['meta_title_ru'])
+@section('title'){{ app()->getLocale() == 'ua' ? $options['meta_title_ua']->value : $options['meta_title_ru']->value }}@endsection
+@endif
+
+@if($options['meta_description_ua'] || $options['meta_description_ru'])
+@section('description'){{ app()->getLocale() == 'ua' ? $options['meta_description_ua']->value : $options['meta_description_ru']->value }}@endsection
+@endif
 @section('content')
     <section class="product-list card pt-3">
         <div class="container">

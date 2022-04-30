@@ -59,7 +59,7 @@
             <div class="row">
                 <div class="col-12 col-md-4">
                     <div class="form-group my-3">
-                        <label class="form-label">Статус клиента:</label>
+                        <label class="form-label">Статус заказа:</label>
                         <select class="form-control" id="status" v-model="order.status">
                             <option :value="statusNew">{{ statusNew }}</option>
                             <option :value="statusAwaitingDispatch">{{ statusAwaitingDispatch }}</option>
@@ -311,7 +311,7 @@
                             <tr v-for="(item,index) in order.items" :key="item.id" style="vertical-align: middle;">
                                 <td>
                                     <a :href="'/product/' + item.product_id"
-                                       target="_blank">{{ item.product.h1 }}</a>
+                                       target="_blank">{{ item.product.h1.ru ? item.product.h1.ru : item.product.h1.ua }}</a>
                                 </td>
                                 <td>
                                     <img :src="'/storage/products/55/' + item.product.preview"

@@ -207,9 +207,20 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
     Route::group(['middleware' => 'role:administrator', 'prefix' => '/options'], function () {
         Route::get('/', [OptionsController::class, 'index'])->name('admin.options.index');
         Route::get('scripts', [OptionsController::class, 'scripts'])->name('admin.options.scripts');
-        Route::resource('colors', ColorsController::class)->names('admin.options.colors');
+//        Route::resource('colors', ColorsController::class)->names('admin.options.colors');
         Route::post('update/{id}', [OptionsController::class, 'update'])->name('admin.options.update');
         Route::resource('roles', RolesColroller::class)->names('admin.roles');
+
+        Route::prefix('colors')->group(function () {
+            Route::get('/', [ColorsController::class, 'index'])
+                ->name('admin.options.colors.index');
+
+            Route::get('create', [ColorsController::class, 'create'])
+                ->name('admin.options.colors.create');
+
+            Route::get('edit/{id}', [ColorsController::class, 'edit'])
+                ->name('admin.options.colors.edit');
+        });
 
         Route::prefix('translations')->group(function () {
             Route::get('/', [TranslationsController::class, 'index'])

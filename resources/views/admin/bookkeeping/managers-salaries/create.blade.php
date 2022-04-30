@@ -5,11 +5,7 @@
 @section('content')
     <div class="container">
 
-        @component('admin.components.breadcrumbs')
-            @slot('active')Бухгалтерия@endslot
-            @slot('active_link'){{route('admin.bookkeeping.managers-salaries.index')}}@endslot
-            @slot('subsidiary')Подсчитать зарплату менеджера за день@endslot
-        @endcomponent
+        {{ Breadcrumbs::render('bookkeeping.managers-salaries.create') }}
         <hr>
 
         <div class="row ">

@@ -2,9 +2,9 @@
 <html lang="RU">
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# product: http://ogp.me/ns/product#">
 @include('components.head')
-{!! $options['head_scripts']->value !!}
+{!! $options['head_scripts']?->value !!}
 <body>
-{!! $options['after_body_scripts']->value !!}
+{!! $options['after_body_scripts']?->value !!}
 <div id="app" class="wrapper">
     <button onclick="topFunction()" id="myBtn" class="arrow-to-top">
         <span class="icon-arrow-up2"></span>
@@ -16,13 +16,13 @@
             privacy-policy-route="{{route('privacy-policy')}}"
             logo-app="{{asset('storage/img/content/logo.png')}}"
             app-name="{{env('APP_NAME')}}"
-            app-phone="{{$options['phone']->value}}"
-            app-email="{{$options['email']->value}}"
-            app-facebook="{{$options['facebook']->value}}"
-            app-instagram="{{$options['instagram']->value}}"
-            app-schedule="{!! $options['schedule']->value !!}"
-            app-telegram="{{$options['telegram']->value}}"
-            app-viber="{{$options['viber']->value}}"
+            app-phone="{{$options['phone']?->value}}"
+            app-email="{{$options['email']?->value}}"
+            app-facebook="{{$options['facebook']?->value}}"
+            app-instagram="{{$options['instagram']?->value}}"
+            app-schedule="{!! $options['schedule']?->value !!}"
+            app-telegram="{{$options['telegram']?->value}}"
+            app-viber="{{$options['viber']?->value}}"
             pages="{{json_encode($pages)}}"
             lang="{{app()->getLocale()}}"
             categories="{{$categories}}"
@@ -84,15 +84,17 @@
         s.parentNode.insertBefore(t, s)
     }(window, document, 'script',
         'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '2420788534721287');
+    fbq('init', {{env('FB_PIXEL_ID')}});
     fbq('track', 'PageView');
 </script>
-<noscript><img height="1" width="1" style="display:none"
-               src="https://www.facebook.com/tr?id=2420788534721287&ev=PageView&noscript=1"
-    /></noscript>
+<noscript>
+    <img height="1" width="1" style="display:none"
+         src="'https://www.facebook.com/tr?id={{env('FB_PIXEL_ID')}}&ev=PageView&noscript=1'"
+    />
+</noscript>
 <!-- End Facebook Pixel Code -->
 <script src="https://unpkg.com/smoothscroll-anchor-polyfill"></script>
 @include('components.footer-scripts')
-{!! $options['footer_scripts']->value !!}
+{!! $options['footer_scripts']?->value !!}
 </body>
 </html>

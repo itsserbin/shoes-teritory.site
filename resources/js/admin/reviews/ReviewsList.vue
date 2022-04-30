@@ -5,9 +5,9 @@
             <div class="row mb-3">
                 <div class="col">
                     <div class="d-flex">
-                        <button class="btn btn-danger" @click.prevent="getReviews">Очистити</button>
+                        <button class="btn btn-danger" @click.prevent="getReviews">Очистить</button>
                         <input type="text" v-model="search" class="form-control mx-1">
-                        <button @click.prevent="getSearchList" type="submit" class="btn btn-danger">Пошук</button>
+                        <button @click.prevent="getSearchList" type="submit" class="btn btn-danger">Поиск</button>
                     </div>
                 </div>
             </div>
@@ -35,7 +35,7 @@
                         </th>
                         <th>
                             <div class="d-flex align-items-center justify-content-center">
-                                <div class="mr-1">Ім`я</div>
+                                <div class="mr-1">Имя</div>
                                 <a href="javascript:" class="text-dark" @click="sort('name','asc')">
                                     <arrow-up-icon></arrow-up-icon>
                                 </a>
@@ -57,7 +57,7 @@
                         </th>
                         <th>
                             <div class="d-flex align-items-center justify-content-center">
-                                <div class="mr-1">ID товару</div>
+                                <div class="mr-1">ID товара</div>
                                 <a href="javascript:" class="text-dark" @click="sort('product_id','asc')">
                                     <arrow-up-icon></arrow-up-icon>
                                 </a>
@@ -67,11 +67,11 @@
                             </div>
                         </th>
                         <th>
-                            Назва товару
+                            Название товара
                         </th>
                         <th>
                             <div class="d-flex align-items-center justify-content-center">
-                                <div class="mr-1">Створено</div>
+                                <div class="mr-1">Создано</div>
                                 <a href="javascript:" class="text-dark" @click="sort('created_at','asc')">
                                     <arrow-up-icon></arrow-up-icon>
                                 </a>
@@ -81,14 +81,14 @@
                             </div>
                         </th>
                         <th>Статус</th>
-                        <th>Дії</th>
+                        <th>Действия</th>
                     </tr>
                     </thead>
                     <tbody class="text-center">
                     <tr v-if="reviews.length === 0">
                         <td colspan="10">
                             <div class="row justify-content-center flex-column align-content-center">
-                                <div class="h2">Відгуки ще не створені</div>
+                                <div class="h2">Отзывы еще не добавлены</div>
                             </div>
                         </td>
                     </tr>
@@ -110,15 +110,15 @@
                             {{ review.products.id }}
                             </a>
                         </td>
-                        <td>{{ review.products.h1 }}</td>
+                        <td>{{ review.products.h1.ru ? review.products.h1.ru : review.products.h1.ua }}</td>
                         <td>
                             {{ dateFormat(review.created_at) }}
                         </td>
                         <td>
-                            <span v-if="review.status === 1">Опубліковано</span>
+                            <span v-if="review.status === 1">Опубликовано</span>
                             <div v-else>
-                                На модерації <br>
-                                <a href="javascript:" @click="publishReview(review.id,index)">Опублікувати</a>
+                                На модерации <br>
+                                <a href="javascript:" @click="publishReview(review.id,index)">Опубликовать</a>
                             </div>
                         </td>
                         <td>
@@ -138,10 +138,10 @@
                                     @change="selectedAction"
                                     v-model="checkedItemsAction"
                             >
-                                <option :value="null">Виберіть дію</option>
-                                <option :value="publishedMassAction">Опублікувати</option>
-                                <option :value="notPublishedMassAction">Зняти з публікації</option>
-                                <option :value="destroyMassAction">Видалити</option>
+                                <option :value="null">Выберите действие</option>
+                                <option :value="publishedMassAction">Опубликовать</option>
+                                <option :value="notPublishedMassAction">Снять с публикации</option>
+                                <option :value="destroyMassAction">Удалить</option>
                             </select>
                         </th>
                     </tr>
@@ -273,7 +273,7 @@ export default {
         },
         onDelete(id) {
             this.$swal({
-                title: 'Видалити?',
+                title: 'Удалить?',
                 icon: 'warning',
                 showCancelButton: true,
             }).then((result) => {
@@ -282,7 +282,7 @@ export default {
                         .then(() => {
                             this.fetch(1);
                             this.$swal({
-                                title: 'Видалено',
+                                title: 'Удалено',
                                 icon: 'success',
                                 showCancelButton: false,
                             });
@@ -290,7 +290,7 @@ export default {
                         .catch((response) => {
                             console.log(response);
                             this.$swal({
-                                title: 'Помилка',
+                                title: 'Ошибка',
                                 icon: 'error',
                                 showCancelButton: false,
                             });

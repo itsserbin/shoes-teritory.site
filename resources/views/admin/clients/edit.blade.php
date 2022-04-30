@@ -4,6 +4,8 @@
 
 @section('content')
     <div class="container">
+        {{ Breadcrumbs::render('clients.edit') }}
+        <hr>
         <div class="row">
             <div class="col-12">
                 <edit-client

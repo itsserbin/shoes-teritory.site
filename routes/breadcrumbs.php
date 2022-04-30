@@ -22,11 +22,6 @@ Breadcrumbs::for('categories.edit', function ($trail) {
     $trail->push('Редактирование категории');
 });
 
-Breadcrumbs::for('bookkeeping', function ($trail) {
-    $trail->parent('dashboard');
-    $trail->push('Бухгалтерия', route('admin.bookkeeping.index'));
-});
-
 Breadcrumbs::for('pages', function ($trail) {
     $trail->parent('dashboard');
     $trail->push('Страницы', route('admin.pages.index'));
@@ -65,6 +60,46 @@ Breadcrumbs::for('options', function ($trail) {
 Breadcrumbs::for('options.promo-codes', function ($trail) {
     $trail->parent('options');
     $trail->push('Промо-коды', route('admin.promo-codes.index'));
+});
+
+Breadcrumbs::for('options.scripts', function ($trail) {
+    $trail->parent('options');
+    $trail->push('Скрипты', route('admin.options.scripts'));
+});
+
+Breadcrumbs::for('options.roles', function ($trail) {
+    $trail->parent('options');
+    $trail->push('Роли', route('admin.roles.index'));
+});
+
+Breadcrumbs::for('options.users', function ($trail) {
+    $trail->parent('options');
+    $trail->push('Пользователи', route('admin.users.index'));
+});
+
+Breadcrumbs::for('options.users.create', function ($trail) {
+    $trail->parent('options.users');
+    $trail->push('Добавление пользователя', route('admin.users.create'));
+});
+
+Breadcrumbs::for('options.users.edit', function ($trail) {
+    $trail->parent('options.users');
+    $trail->push('Редактирование пользователя');
+});
+
+Breadcrumbs::for('options.colors', function ($trail) {
+    $trail->parent('options');
+    $trail->push('Цвета', route('admin.options.colors.index'));
+});
+
+Breadcrumbs::for('options.colors.create', function ($trail) {
+    $trail->parent('options.colors');
+    $trail->push('Добавление цвета', route('admin.options.colors.create'));
+});
+
+Breadcrumbs::for('options.colors.edit', function ($trail) {
+    $trail->parent('options.colors');
+    $trail->push('Редактирование цвета');
 });
 
 Breadcrumbs::for('options.promo-codes.create', function ($trail) {
@@ -130,6 +165,61 @@ Breadcrumbs::for('options.banners.edit', function ($trail) {
 Breadcrumbs::for('options.banners.create', function ($trail) {
     $trail->parent('options.banners');
     $trail->push('Создание баннера');
+});
+
+Breadcrumbs::for('orders', function ($trail) {
+    $trail->parent('dashboard');
+    $trail->push('Заказы', route('admin.orders.index'));
+});
+
+Breadcrumbs::for('orders.edit', function ($trail) {
+    $trail->parent('orders');
+    $trail->push('Редактирование заказа');
+});
+
+Breadcrumbs::for('clients', function ($trail) {
+    $trail->parent('dashboard');
+    $trail->push('Клиенты', route('admin.clients.index'));
+});
+
+Breadcrumbs::for('clients.edit', function ($trail) {
+    $trail->parent('clients');
+    $trail->push('Редактирование клиента');
+});
+
+Breadcrumbs::for('reviews', function ($trail) {
+    $trail->parent('dashboard');
+    $trail->push('Отзывы', route('admin.reviews.index'));
+});
+
+Breadcrumbs::for('reviews.edit', function ($trail) {
+    $trail->parent('reviews');
+    $trail->push('Редактирование отзыва');
+});
+
+Breadcrumbs::for('bookkeeping', function ($trail) {
+    $trail->parent('dashboard');
+    $trail->push('Бухгалтерия', route('admin.bookkeeping.index'));
+});
+
+Breadcrumbs::for('bookkeeping.managers-salaries', function ($trail) {
+    $trail->parent('bookkeeping');
+    $trail->push('Статистика для менеджеров', route('admin.bookkeeping.managers-salaries.index'));
+});
+
+Breadcrumbs::for('bookkeeping.managers-salaries.create', function ($trail) {
+    $trail->parent('bookkeeping.managers-salaries');
+    $trail->push('Добавление дня', route('admin.bookkeeping.managers-salaries.create'));
+});
+
+Breadcrumbs::for('bookkeeping.profits', function ($trail) {
+    $trail->parent('bookkeeping');
+    $trail->push('Прибыль', route('admin.bookkeeping.profits.index'));
+});
+
+Breadcrumbs::for('bookkeeping.profits.create', function ($trail) {
+    $trail->parent('bookkeeping.profits');
+    $trail->push('Добавление дня', route('admin.bookkeeping.profits.create'));
 });
 
 Breadcrumbs::for('bookkeeping.marketing-statistic', function ($trail) {

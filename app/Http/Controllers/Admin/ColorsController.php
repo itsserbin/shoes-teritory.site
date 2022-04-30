@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Colors;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 
 class ColorsController extends BaseController
 {
@@ -12,27 +13,18 @@ class ColorsController extends BaseController
         parent::__construct();
     }
 
-   public function index()
-   {
-       $colors = Colors::all();
-       return view('admin.options.colors.index', [
-           'colors' => $colors
-       ]);
-   }
+    public function index(): Factory|View|Application
+    {
+        return view('admin.options.colors.index');
+    }
 
-   public function store(Request $request)
-   {
-        $colors = new Colors();
-        $data = $request->all();
-        $colors->create($data);
+    public function create(): Factory|View|Application
+    {
+        return view('admin.options.colors.create');
+    }
 
-        return back();
-   }
-
-   public function destroy($id)
-   {
-       Colors::destroy($id);
-
-       return back();
-   }
+    public function edit(): Factory|View|Application
+    {
+        return view('admin.options.colors.edit');
+    }
 }
