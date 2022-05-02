@@ -120,7 +120,7 @@
 
                     .item.discount .label {
                         font-size: .875rem;
-                        color: $red;
+                        color: $blue;
                         text-transform: capitalize;
                     }
                 }
@@ -137,8 +137,8 @@
                         align-items: center;
                         justify-content: center;
                         color: #fff;
-                        border: 1px solid $red;
-                        background-color: $red;
+                        border: 1px solid $blue;
+                        background-color: $blue;
                         transition: .25s;
                         text-decoration: none;
                         font-size: .75rem;
@@ -446,7 +446,7 @@
                 width: 0.625rem;
                 height: 0.625rem;
                 display: block;
-                background-color: $red;
+                background-color: $blue;
                 transition: .25s;
                 border-radius: 50%;
                 left: 50%;
@@ -458,7 +458,7 @@
     }
 
     label input:checked + span {
-        border: 2px solid $red;
+        border: 2px solid $blue;
     }
 
     label input:checked + span:after {

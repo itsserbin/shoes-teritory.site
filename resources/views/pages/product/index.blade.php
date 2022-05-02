@@ -11,10 +11,12 @@
       "description": "{{app()->getLocale() == 'ua' ? $product->description['ua'] : $product->description['ru']}}",
       "sku": "{{$product->vendor_code}}",
       "mpn": "{{$product->id}}",
+      @if($options['brand'])
       "brand": {
         "@type": "Brand",
         "name": {{$options['brand']['value']}}
         },
+        @endif
 
         "review": [
         @foreach($product->Reviews as $review_item)

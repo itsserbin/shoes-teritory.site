@@ -3,7 +3,7 @@
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb m-0">
                 <li class="breadcrumb-item">
-                    <a href="{{route('home')}}">Dabango</a>
+                    <a href="{{route('home')}}">{{env('APP_NAME')}}</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
                     @if(isset($subsidiary))
@@ -26,7 +26,7 @@
       "itemListElement": [{
         "@type": "ListItem",
         "position": 1,
-        "name": "Dabango",
+        "name": "{{env('APP_NAME')}}",
         "item": "{{route('home')}}"
       },
       @if(isset($subsidiary))

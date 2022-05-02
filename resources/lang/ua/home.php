@@ -13,7 +13,7 @@ return [
     'text_reviews' => $translationRepository->getBySlug('text_reviews') ? $translationRepository->getBySlug('text_reviews')->ua : 'text_reviews',
     'text_no_reviews' => $translationRepository->getBySlug('text_no_reviews') ? $translationRepository->getBySlug('text_no_reviews')->ua : 'text_no_reviews',
     'text_faq_heading' => $translationRepository->getBySlug('text_faq_heading') ? $translationRepository->getBySlug('text_faq_heading')->ua : 'text_faq_heading',
-    'text_relative_products' => $translationRepository->getBySlug('text_relative_products') ? $translationRepository->getBySlug('text_relative_products') : 'text_relative_products',
+    'text_relative_products' => $translationRepository->getBySlug('text_relative_products') ? $translationRepository->getBySlug('text_relative_products')->ua : 'text_relative_products',
     'text_latest_products' => $translationRepository->getBySlug('text_latest_products') ? $translationRepository->getBySlug('text_latest_products')->ua : 'text_latest_products',
     'text_return_and_exchange' => $translationRepository->getBySlug('text_return_and_exchange') ? $translationRepository->getBySlug('text_return_and_exchange')->ua : 'text_return_and_exchange',
     'text_delivery_and_payment' => $translationRepository->getBySlug('text_delivery_and_payment') ? $translationRepository->getBySlug('text_delivery_and_payment')->ua : 'text_delivery_and_payment',

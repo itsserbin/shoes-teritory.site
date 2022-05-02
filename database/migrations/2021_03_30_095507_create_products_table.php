@@ -18,15 +18,18 @@ class CreateProductsTable extends Migration
             $table->boolean('published')->default('0');
             $table->string('status');
 
-            $table->boolean('xs')->default('0');
-            $table->boolean('s')->default('0');
-            $table->boolean('m')->default('0');
-            $table->boolean('l')->default('0');
-            $table->boolean('xl')->default('0');
-            $table->boolean('xxl')->default('0');
-            $table->boolean('xxxl')->default('0');
-            $table->boolean('xxxxl')->default('0');
-            $table->boolean('xxxxxl')->default('0');
+            $table->boolean('size_35')->default('0');
+            $table->boolean('size_36')->default('0');
+            $table->boolean('size_37')->default('0');
+            $table->boolean('size_38')->default('0');
+            $table->boolean('size_39')->default('0');
+            $table->boolean('size_40')->default('0');
+            $table->boolean('size_41')->default('0');
+            $table->boolean('size_42')->default('0');
+            $table->boolean('size_43')->default('0');
+            $table->boolean('size_44')->default('0');
+            $table->boolean('size_45')->default('0');
+            $table->boolean('size_46')->default('0');
 
             $table->json('title')->nullable();
             $table->json('h1')->nullable();

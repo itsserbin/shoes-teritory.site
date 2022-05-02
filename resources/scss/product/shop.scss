@@ -117,7 +117,7 @@
         }
 
         &:hover {
-            color: #E02424;
+            color: $blue;
         }
     }
 
@@ -144,7 +144,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        border: 3px solid #E02424;
+        border: 3px solid $blue;
         padding: 5px 0;
         border-radius: 10px;
         max-width: 230px;

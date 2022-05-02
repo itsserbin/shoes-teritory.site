@@ -72,10 +72,10 @@
                         lang="{{app()->getLocale()}}"
                         text-delivery-and-payment="@lang('home.text_delivery_and_payment')"
                         text-return-and-exchange="@lang('home.text_return_and_exchange')"
-                        text-return-and-exchange-ua="{{$options['text_return_and_exchange_ua']->value}}"
-                        text-return-and-exchange-ru="{{$options['text_return_and_exchange_ru']->value}}"
-                        text-delivery-and-payment-ru="{{$options['text_delivery_and_payment_ru']->value}}"
-                        text-delivery-and-payment-ua="{{$options['text_delivery_and_payment_ua']->value}}"
+                        text-return-and-exchange-ua="{{$options['text_return_and_exchange_ua']?->value}}"
+                        text-return-and-exchange-ru="{{$options['text_return_and_exchange_ru']?->value}}"
+                        text-delivery-and-payment-ru="{{$options['text_delivery_and_payment_ru']?->value}}"
+                        text-delivery-and-payment-ua="{{$options['text_delivery_and_payment_ua']?->value}}"
                     ></delivery-and-return-accordion>
                 </div>
                 <div class="mt-2">

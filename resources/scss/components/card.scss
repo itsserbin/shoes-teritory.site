@@ -104,7 +104,7 @@
         text-align: center;
         font-weight: 500;
         color: #fff;
-        background: #ff0000;
+        background: $blue;
 
         @include adaptive($sm) {
             font-size: 16px;

@@ -4,29 +4,30 @@
             <div class="row align-items-center">
                 <div class="col-4 header__logo logo">
                     <a :href="indexRoute">
-                        <img :src="logoApp" :alt="appName">
+<!--                        <img :src="logoApp" :alt="appName" v-if="logoApp">-->
+                        <span class="h1">{{appName}}</span>
                     </a>
                 </div>
                 <div class="col-4 d-flex justify-content-center">
                     <cart-icon-component :cart-route="cartRoute"></cart-icon-component>
                 </div>
-                <div class="col-2 d-flex justify-content-end">
-                    <div class="header__language" @click="setLangActiveClass">
-                        <div class="language-chooser">
-                            <div class="language-chooser__current">
-                                <div class="language-chooser__current-label">{{ lang === 'ru' ? 'RU' : 'UA' }}</div>
-                            </div>
-                            <div class="language-chooser__drop" :class="{'active': langActiveClass}">
-                                <div class="language-chooser__drop-item lang-switcher">
-                                    <a class="language-chooser__link" :href="setlocateUa">UA</a>
-                                </div>
-                                <div class="language-chooser__drop-item lang-switcher">
-                                    <a class="language-chooser__link" :href="setlocateRu">RU</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<!--                <div class="col-2 d-flex justify-content-end">-->
+<!--                    <div class="header__language" @click="setLangActiveClass">-->
+<!--                        <div class="language-chooser">-->
+<!--                            <div class="language-chooser__current">-->
+<!--                                <div class="language-chooser__current-label">{{ lang === 'ru' ? 'RU' : 'UA' }}</div>-->
+<!--                            </div>-->
+<!--                            <div class="language-chooser__drop" :class="{'active': langActiveClass}">-->
+<!--                                <div class="language-chooser__drop-item lang-switcher">-->
+<!--                                    <a class="language-chooser__link" :href="setlocateUa">UA</a>-->
+<!--                                </div>-->
+<!--                                <div class="language-chooser__drop-item lang-switcher">-->
+<!--                                    <a class="language-chooser__link" :href="setlocateRu">RU</a>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <div class="col-2 d-flex justify-content-end">
                     <div class="header-burger p-0"
                          @click="showBurgerMenu"

@@ -30,110 +30,143 @@
                 <div class="shop__available-sizes available-sizes">
                     <div class="shop__available-sizes__label w-100 mb-2">{{ textAvailableSizes }}</div>
 
-                    <div v-if="size.xs" class="size__element me-1 mb-2">
+                    <div v-if="size.size_35" class="size__element me-1 mb-2">
                         <label class="mycheckbox">
-                            <input v-model="item.size"
+                            <input v-model="item.size_35"
                                    value="xs"
                                    class="mycheckbox__default"
                                    type="checkbox"
                             >
-                            <span class="mycheckbox__new">XS</span>
+                            <span class="mycheckbox__new">35</span>
                             <span class="mycheckbox__descr"></span>
                         </label>
                     </div>
 
-                    <div v-if="size.s" class="size__element me-1 mb-2">
+                    <div v-if="size.size_36" class="size__element me-1 mb-2">
                         <label class="mycheckbox">
-                            <input v-model="item.size"
-                                   value="s"
+                            <input v-model="item.size_36"
+                                   value="36"
                                    class="mycheckbox__default"
                                    type="checkbox"
                             >
-                            <span class="mycheckbox__new">S</span>
+                            <span class="mycheckbox__new">36</span>
                             <span class="mycheckbox__descr"></span>
                         </label>
                     </div>
 
-                    <div v-if="size.m" class="size__element me-1 mb-2">
+                    <div v-if="size.size_37" class="size__element me-1 mb-2">
                         <label class="mycheckbox">
-                            <input v-model="item.size"
-                                   value="m"
+                            <input v-model="item.size_37"
+                                   value="37"
                                    class="mycheckbox__default"
                                    type="checkbox"
                             >
-                            <span class="mycheckbox__new">M</span>
+                            <span class="mycheckbox__new">37</span>
                             <span class="mycheckbox__descr"></span>
                         </label>
                     </div>
 
-                    <div v-if="size.l" class="size__element me-1 mb-2">
+                    <div v-if="size.size_38" class="size__element me-1 mb-2">
                         <label class="mycheckbox">
-                            <input v-model="item.size"
-                                   value="l"
+                            <input v-model="item.size_38"
+                                   value="38"
                                    class="mycheckbox__default"
                                    type="checkbox"
                             >
-                            <span class="mycheckbox__new">L</span>
+                            <span class="mycheckbox__new">38</span>
                             <span class="mycheckbox__descr"></span>
                         </label>
                     </div>
 
-                    <div v-if="size.xl" class="size__element me-1 mb-2">
+                    <div v-if="size.size_39" class="size__element me-1 mb-2">
                         <label class="mycheckbox">
-                            <input value="xl"
+                            <input value="39"
                                    class="mycheckbox__default"
                                    type="checkbox"
-                                   v-model="item.size"
+                                   v-model="item.size_39"
                             >
-                            <span class="mycheckbox__new">XL</span>
+                            <span class="mycheckbox__new">39</span>
                             <span class="mycheckbox__descr"></span>
                         </label>
                     </div>
 
-                    <div v-if="size.xxl" class="size__element me-1 mb-2">
+                    <div v-if="size.size_40" class="size__element me-1 mb-2">
                         <label class="mycheckbox">
-                            <input value="2xl"
+                            <input value="40"
                                    class="mycheckbox__default"
                                    type="checkbox"
-                                   v-model="item.size"
+                                   v-model="item.size_40"
                             >
-                            <span class="mycheckbox__new">2XL</span>
+                            <span class="mycheckbox__new">40</span>
                             <span class="mycheckbox__descr"></span>
                         </label>
 
                     </div>
 
-                    <div v-if="size.xxxl" class="size__element me-1 mb-2">
+                    <div v-if="size.size_41" class="size__element me-1 mb-2">
                         <label class="mycheckbox">
-                            <input value="3xl"
+                            <input value="41"
                                    class="mycheckbox__default"
                                    type="checkbox"
-                                   v-model="item.size"
+                                   v-model="item.size_41"
                             >
-                            <span class="mycheckbox__new">3XL</span>
+                            <span class="mycheckbox__new">41</span>
                             <span class="mycheckbox__descr"></span>
                         </label>
                     </div>
-                    <div v-if="size.xxxxl" class="size__element me-1 mb-2">
+                    <div v-if="size.size_42" class="size__element me-1 mb-2">
                         <label class="mycheckbox">
-                            <input value="4xl"
+                            <input value="size_42"
                                    class="mycheckbox__default"
                                    type="checkbox"
-                                   v-model="item.size"
+                                   v-model="item.size_42"
                             >
-                            <span class="mycheckbox__new">4XL</span>
+                            <span class="mycheckbox__new">42</span>
                             <span class="mycheckbox__descr"></span>
                         </label>
                     </div>
 
-                    <div v-if="size.xxxxxl" class="size__element me-1 mb-2">
+                    <div v-if="size.size_43" class="size__element me-1 mb-2">
                         <label class="mycheckbox">
-                            <input value="5xl"
+                            <input value="size_43"
                                    class="mycheckbox__default"
                                    type="checkbox"
-                                   v-model="item.size"
+                                   v-model="item.size_43"
                             >
-                            <span class="mycheckbox__new">5XL</span>
+                            <span class="mycheckbox__new">43</span>
+                            <span class="mycheckbox__descr"></span>
+                        </label>
+                    </div>
+                    <div v-if="size.size_44" class="size__element me-1 mb-2">
+                        <label class="mycheckbox">
+                            <input value="44"
+                                   class="mycheckbox__default"
+                                   type="checkbox"
+                                   v-model="item.size_44"
+                            >
+                            <span class="mycheckbox__new">44</span>
+                            <span class="mycheckbox__descr"></span>
+                        </label>
+                    </div>
+                    <div v-if="size.size_45" class="size__element me-1 mb-2">
+                        <label class="mycheckbox">
+                            <input value="45"
+                                   class="mycheckbox__default"
+                                   type="checkbox"
+                                   v-model="item.size_45"
+                            >
+                            <span class="mycheckbox__new">45</span>
+                            <span class="mycheckbox__descr"></span>
+                        </label>
+                    </div>
+                    <div v-if="size.size_46" class="size__element me-1 mb-2">
+                        <label class="mycheckbox">
+                            <input value="46"
+                                   class="mycheckbox__default"
+                                   type="checkbox"
+                                   v-model="item.size_46"
+                            >
+                            <span class="mycheckbox__new">46</span>
                             <span class="mycheckbox__descr"></span>
                         </label>
                     </div>
