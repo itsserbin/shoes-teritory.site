@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Permission;
 use App\Models\User as Model;
 
 /**
@@ -84,7 +85,10 @@ class UsersRepository extends CoreRepository
         $model->password = bcrypt($data['password']);
         $model->save();
         $model->roles()->sync($data['role']);
-
+        if ($data['role'] == 1) {
+            $admin = Permission::where('slug', 'admin')->first();
+            $model->permissions()->attach($admin);
+        }
         return $model;
     }
 

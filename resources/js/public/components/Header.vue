@@ -5,7 +5,7 @@
                 <div class="col-4 header__logo logo">
                     <a :href="indexRoute">
 <!--                        <img :src="logoApp" :alt="appName" v-if="logoApp">-->
-                        <span class="h1">{{appName}}</span>
+                        <span class="h3">{{appName}}</span>
                     </a>
                 </div>
                 <div class="col-4 d-flex justify-content-center">
@@ -28,7 +28,7 @@
 <!--                        </div>-->
 <!--                    </div>-->
 <!--                </div>-->
-                <div class="col-2 d-flex justify-content-end">
+                <div class="col-4 d-flex justify-content-end">
                     <div class="header-burger p-0"
                          @click="showBurgerMenu"
                          :class="{'active': showBurger}"
