@@ -33,7 +33,7 @@
         </div>
         <div class="col-12 col-md-3">
             @if(isset($options['schedule']->value))
-                <div class="footer__title">График работы</div>
+                <div class="footer__title">@lang('home.text_schedule')</div>
                 <div class="footer__schedule schedule">
                     <span>{!! $options['schedule']->value !!}</span>
                 </div>

@@ -42,4 +42,5 @@ return [
     'text_order' => $translationRepository->getBySlug('text_order') ? $translationRepository->getBySlug('text_order')->ua : 'text_order',
     'text_send_order' => $translationRepository->getBySlug('text_send_order') ? $translationRepository->getBySlug('text_send_order')->ua : 'text_send_order',
     'text_success_send_order' => $translationRepository->getBySlug('text_success_send_order') ? $translationRepository->getBySlug('text_success_send_order')->ua : 'text_success_send_order',
+    'text_schedule' => $translationRepository->getBySlug('text_schedule') ? $translationRepository->getBySlug('text_schedule')->ua : 'text_schedule',
 ];
