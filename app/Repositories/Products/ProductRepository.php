@@ -269,21 +269,20 @@ class ProductRepository extends CoreRepository
         $model->published = $data['published'];
         $model->status = $data['status'];
 
-        $model->xs = $data['xs'];
-        $model->s = $data['s'];
-        $model->m = $data['m'];
-        $model->l = $data['l'];
-        $model->xl = $data['xl'];
-        $model->xxl = $data['xxl'];
-        $model->xxxl = $data['xxxl'];
-        $model->xxxxl = $data['xxxxl'];
-        $model->xxxxxl = $data['xxxxxl'];
+        $model->size_35 = $data['size_35'];
+        $model->size_36 = $data['size_36'];
+        $model->size_37 = $data['size_37'];
+        $model->size_38 = $data['size_38'];
+        $model->size_39 = $data['size_39'];
+        $model->size_40 = $data['size_40'];
+        $model->size_41 = $data['size_41'];
+        $model->size_42 = $data['size_42'];
+        $model->size_43 = $data['size_43'];
+        $model->size_44 = $data['size_44'];
+        $model->size_45 = $data['size_45'];
+        $model->size_46 = $data['size_46'];
 
         $model->h1 = $data['h1'];
-//        $model->title = ['ru' => $data['title']['ru'], 'ua' => $data['title']['ua']];
-//        $model->description = ['ru' => $data['description']['ru'], 'ua' => $data['description']['ua']];
-//        $model->content = ['ru' => $data['content']['ru'], 'ua' => $data['content']['ua']];
-//        $model->characteristics = ['ru' => $data['characteristics']['ru'], 'ua' => $data['characteristics']['ua']];
         $model->title = $data['title'];
         $model->description = $data['description'];
         $model->content = $data['content'];
@@ -313,20 +312,20 @@ class ProductRepository extends CoreRepository
         $model->published = $data['published'];
         $model->status = $data['status'];
 
-        $model->xs = $data['xs'];
-        $model->s = $data['s'];
-        $model->m = $data['m'];
-        $model->l = $data['l'];
-        $model->xl = $data['xl'];
-        $model->xxl = $data['xxl'];
-        $model->xxxl = $data['xxxl'];
+        $model->size_35 = $data['size_35'];
+        $model->size_36 = $data['size_36'];
+        $model->size_37 = $data['size_37'];
+        $model->size_38 = $data['size_38'];
+        $model->size_39 = $data['size_39'];
+        $model->size_40 = $data['size_40'];
+        $model->size_41 = $data['size_41'];
+        $model->size_42 = $data['size_42'];
+        $model->size_43 = $data['size_43'];
+        $model->size_44 = $data['size_44'];
+        $model->size_45 = $data['size_45'];
+        $model->size_46 = $data['size_46'];
 
         $model->h1 = $data['h1'];
-//        $model->title = ['ru' => $data['title']['ru'], 'ua' => $data['title']['ua']];
-//        $model->description = ['ru' => $data['description']['ru'], 'ua' => $data['description']['ua']];
-//        $model->content = ['ru' => $data['content']['ru'], 'ua' => $data['content']['ua']];
-//        $model->characteristics = ['ru' => $data['characteristics']['ru'], 'ua' => $data['characteristics']['ua']];
-
         $model->title = $data['title'];
         $model->description = $data['description'];
         $model->content = $data['content'];
