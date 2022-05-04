@@ -64,7 +64,7 @@ class UploadImageService
             mkdir($dir, 0755, true);
         }
 
-        Image::make($image)->save(Storage::path('storage/products/' . $filename));
+        Image::make($image)->save(public_path('storage/products/' . $filename));
 
 
         $dir1 = $root . '/storage/products/55/';
