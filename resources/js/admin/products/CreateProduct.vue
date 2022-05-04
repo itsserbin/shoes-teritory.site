@@ -51,93 +51,123 @@
                         <div class="btn-group" role="group">
                             <input type="checkbox"
                                    class="btn-check"
-                                   id="xs"
-                                   v-model="product.xs"
+                                   id="size_35"
+                                   v-model="product.size_35"
                                    autocomplete="off"
                             >
                             <label class="btn btn-outline-primary"
-                                   for="xs"
-                            >XS</label>
+                                   for="size_35"
+                            >35</label>
 
                             <input type="checkbox"
                                    class="btn-check"
-                                   id="s"
-                                   v-model="product.s"
+                                   id="size_36"
+                                   v-model="product.size_36"
                                    autocomplete="off"
                             >
                             <label class="btn btn-outline-primary"
-                                   for="s"
-                            >S</label>
+                                   for="size_36"
+                            >36</label>
 
                             <input type="checkbox"
                                    class="btn-check"
-                                   id="m"
-                                   v-model="product.m"
+                                   id="size_37"
+                                   v-model="product.size_37"
                                    autocomplete="off"
                             >
                             <label class="btn btn-outline-primary"
-                                   for="m"
-                            >M</label>
+                                   for="size_37"
+                            >37</label>
 
                             <input type="checkbox"
                                    class="btn-check"
-                                   id="l"
-                                   v-model="product.l"
+                                   id="size_38"
+                                   v-model="product.size_38"
                                    autocomplete="off"
                             >
                             <label class="btn btn-outline-primary"
-                                   for="l"
-                            >L</label>
+                                   for="size_38"
+                            >38</label>
 
                             <input type="checkbox"
                                    class="btn-check"
-                                   id="xl"
-                                   v-model="product.xl"
+                                   id="size_39"
+                                   v-model="product.size_39"
                                    autocomplete="off"
                             >
                             <label class="btn btn-outline-primary"
-                                   for="xl"
-                            >XL</label>
+                                   for="size_39"
+                            >39</label>
 
                             <input type="checkbox"
                                    class="btn-check"
-                                   id="xxl"
-                                   v-model="product.xxl"
+                                   id="size_40"
+                                   v-model="product.size_40"
                                    autocomplete="off"
                             >
                             <label class="btn btn-outline-primary"
-                                   for="xxl"
-                            >2XL</label>
+                                   for="size_40"
+                            >40</label>
 
                             <input type="checkbox"
                                    class="btn-check"
-                                   id="xxxl"
-                                   v-model="product.xxxl"
+                                   id="size_41"
+                                   v-model="product.size_41"
                                    autocomplete="off"
                             >
                             <label class="btn btn-outline-primary"
-                                   for="xxxl"
-                            >3XL</label>
+                                   for="size_41"
+                            >41</label>
 
                             <input type="checkbox"
                                    class="btn-check"
-                                   id="xxxxl"
-                                   v-model="product.xxxxl"
+                                   id="size_42"
+                                   v-model="product.size_42"
                                    autocomplete="off"
                             >
                             <label class="btn btn-outline-primary"
-                                   for="xxxxl"
-                            >4XL</label>
+                                   for="size_42"
+                            >42</label>
 
                             <input type="checkbox"
                                    class="btn-check"
-                                   id="xxxxxl"
-                                   v-model="product.xxxxxl"
+                                   id="size_43"
+                                   v-model="product.size_43"
                                    autocomplete="off"
                             >
                             <label class="btn btn-outline-primary"
-                                   for="xxxxxl"
-                            >5XL</label>
+                                   for="size_43"
+                            >43</label>
+
+                            <input type="checkbox"
+                                   class="btn-check"
+                                   id="size_44"
+                                   v-model="product.size_44"
+                                   autocomplete="off"
+                            >
+                            <label class="btn btn-outline-primary"
+                                   for="size_44"
+                            >44</label>
+
+                            <input type="checkbox"
+                                   class="btn-check"
+                                   id="size_45"
+                                   v-model="product.size_45"
+                                   autocomplete="off"
+                            >
+                            <label class="btn btn-outline-primary"
+                                   for="size_45"
+                            >45</label>
+
+                            <input type="checkbox"
+                                   class="btn-check"
+                                   id="size_46"
+                                   v-model="product.size_46"
+                                   autocomplete="off"
+                            >
+                            <label class="btn btn-outline-primary"
+                                   for="size_46"
+                            >46</label>
                         </div>
                     </div>
                     <div class="col-12 mb-3">
@@ -414,15 +444,18 @@ export default {
             isLoadingImages: false,
             product: {
                 status: this.inStockAvailability,
-                xs: null,
-                s: null,
-                m: null,
-                l: null,
-                xl: null,
-                xxl: null,
-                xxxl: null,
-                xxxxl: null,
-                xxxxxl: null,
+                size_35: 0,
+                size_36: 0,
+                size_37: 0,
+                size_38: 0,
+                size_39: 0,
+                size_40: 0,
+                size_41: 0,
+                size_42: 0,
+                size_43: 0,
+                size_44: 0,
+                size_45: 0,
+                size_46: 0,
                 title: {
                     ru: null,
                     ua: null
